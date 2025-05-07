@@ -6,16 +6,22 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gen": "npx supabase gen types typescript --project-id fiihuvrsxqxlxzijgdkb > src/types/supabase.d.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.49.4",
+    "@tanstack/react-query": "^5.75.5",
+    "@tanstack/react-query-devtools": "^5.75.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.507.0",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.2.0"
+    "tailwind-merge": "^3.2.0",
+    "zustand": "^5.0.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
