@@ -1,7 +1,104 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-pretendard: 'Pretendard', 'sans-serif';
+  --font-prompt: 'Prompt', 'sans-serif';
+  --font-untitled: 'Untitled Sans', 'sans-serif';
+
+  --breakpoint-web: 769px;
+
+  --color-light-50: '#F5F5F6';
+  --color-light-100: '#E5E6E8';
+  --color-light-200: '#CDCFD4';
+  --color-light-300: '#ABAFB5';
+  --color-light-400: '#81858F';
+  --color-light-500: '#6D727D';
+  --color-light-600: '#575A63';
+  --color-light-700: '#4A4D54';
+  --color-light-950: '#242528';
+
+  --color-primary-50: '#F5F5F6';
+  --color-primary-100: '#E5E6E8';
+  --color-primary-200: '#CDCFD4';
+  --color-primary-300: '#A8AFB5';
+  --color-primary-400: '#81858F';
+  --color-primary-500: '#6D727D';
+  --color-primary-600: '#575A63';
+  --color-primary-700: '#4A4D54';
+  --color-primary-800: '#424448';
+  --color-primary-900: '#3A3B3F';
+  --color-primary-950: '#242528';
+
+  --color-success-50: '#F0FDF4';
+  --color-success-100: '#DCFCE7';
+  --color-success-200: '#BBF7D0';
+  --color-success-300: '#86EFAC';
+  --color-success-400: '#4ADE80';
+  --color-success-500: '#22C55E';
+  --color-success-600: '#16A34A';
+  --color-success-700: '#15803D';
+  --color-success-800: '#166534';
+  --color-success-900: '#14532D';
+  --color-success-950: '#052F14';
+
+  --color-warning-50: '#FEFCE8';
+  --color-warning-100: '#FEF9C3';
+  --color-warning-200: '#FEF08A';
+  --color-warning-300: '#FDE047';
+  --color-warning-400: '#FACC15';
+  --color-warning-500: '#EAB308';
+  --color-warning-600: '#CA8A04';
+  --color-warning-700: '#A16207';
+  --color-warning-800: '#854D0E';
+  --color-warning-900: '#713F12';
+  --color-warning-950: '#422006';
+
+  --color-error-50: '#FEF2F2';
+  --color-error-100: '#FEE2E2';
+  --color-error-200: '#FECACA';
+  --color-error-300: '#FCA5A5';
+  --color-error-400: '#F87171';
+  --color-error-500: '#EF4444';
+  --color-error-600: '#DC2626';
+  --color-error-700: '#B91C1C';
+  --color-error-800: '#991B1B';
+  --color-error-900: '#7F1D1D';
+  --color-error-950: '#450A0A';
+
+  --color-info-50: '#EFF6FF';
+  --color-info-100: '#DBEAFE';
+  --color-info-200: '#BFDBFE';
+  --color-info-300: '#93C5FD';
+  --color-info-400: '#60A5FA';
+  --color-info-500: '#3B82F6';
+  --color-info-600: '#2563EB';
+  --color-info-700: '#1D4ED8';
+  --color-info-800: '#1E40AF';
+  --color-info-900: '#1E3A8A';
+  --color-info-950: '#172554';
+
+  /* font-size */
+  --font-size-2xl: '32px';
+  --font-size-xl: '28px';
+  --font-size-lg: '24px';
+  --font-size-md: '22px';
+  --font-size-sm: '20px';
+  --font-size-text-2xl: '18px';
+  --font-size-text-xl: '17px';
+  --font-size-text-lg: '16px';
+  --font-size-text-md: '16px';
+  --font-size-text-sm: '14px';
+  --font-size-text-xs: '12px';
+  --font-size-text-2xs: '11px';
+
+  /* leading (line-height) */
+  --leading-sm: 130%;
+  --leading-md: 135%;
+  --leading-lg: 150%;
+}
 
 @theme inline {
   --color-background: var(--background);
