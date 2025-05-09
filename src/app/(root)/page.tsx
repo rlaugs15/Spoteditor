@@ -1,11 +1,5 @@
-import Header from '@/components/common/Header';
-
 const MainPage = () => {
-  return (
-    <div>
-      <Header />
-    </div>
-  );
+  return <div className="bg-pink-300">메인페이지</div>;
 };
 
 export default MainPage;
