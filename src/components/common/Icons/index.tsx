@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 
 interface IconProps {
@@ -85,6 +86,52 @@ export const CheckedCircleIcon = ({ className }: IconProps) => {
       width={20}
       height={20}
       alt="선택된 장소 타켓 아이콘"
+      className={className}
+    />
+  );
+};
+export const TrashIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/trash.svg"
+      width={20}
+      height={20}
+      alt="휴지통 아이콘"
+      className={className}
+    />
+  );
+};
+
+/* arrow */
+export const ArrowLeftIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/arrow-left.svg"
+      width={20}
+      height={20}
+      alt="왼쪽 화살표 아이콘"
+      className={className}
+    />
+  );
+};
+export const ArrowUpIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/arrow-up.svg"
+      width={20}
+      height={20}
+      alt="위쪽 화살표 아이콘"
+      className={className}
+    />
+  );
+};
+export const ArrowDownIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/arrow-down.svg"
+      width={20}
+      height={20}
+      alt="아래쪽 화살표 아이콘"
       className={className}
     />
   );

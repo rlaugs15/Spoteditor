@@ -1,7 +1,7 @@
 'use client';
-import { ArrowLeftIcon } from '@/app/_components/icons';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { ArrowLeftIcon } from '../Icons';
 
 const Header3 = () => {
   const router = useRouter();
