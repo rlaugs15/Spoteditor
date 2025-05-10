@@ -5,13 +5,13 @@ import { REGISTER_PATHS } from '@/constants/pathname';
 
 const CitySelectionPage = () => {
   return (
-    <div className="h-full flex flex-col">
+    <>
       <PageIntro title="도시를 선택해주세요." des="메인 도시를 선택해주세요." />
       <div className="grow">
         <TagGroup title="도시" type="city" />
       </div>
       <RegisterFooter nextPath={REGISTER_PATHS.SIGUNGU} />
-    </div>
+    </>
   );
 };
 

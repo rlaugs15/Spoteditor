@@ -8,7 +8,6 @@ const Header = async () => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
   return (
     <header className="flex items-center justify-between sticky w-full z-50 bg-black px-4 web:px-[50px] py-4 web:py-5 left-0 top-0 web:h-[60px] h-12">
       <Logo />

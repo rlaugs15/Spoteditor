@@ -33,19 +33,59 @@ export const UserIcon = ({ className }: IconProps) => {
 };
 
 /* register header */
-export const ArrowLeftIcon = ({ className }: IconProps) => {
+export const HomeIcon = ({ className }: IconProps) => {
+  return (
+    <Image src="/icons/home.svg" width={20} height={20} alt="홈 아이콘" className={className} />
+  );
+};
+
+/* log */
+export const AddCameraIcon = ({ className }: IconProps) => {
   return (
     <Image
-      src="/icons/arrow-left.svg"
+      src="/icons/add-camera.svg"
       width={20}
       height={20}
-      alt="왼쪽 화살표 아이콘"
+      alt="이미지 추가 아이콘"
       className={className}
     />
   );
 };
-export const HomeIcon = ({ className }: IconProps) => {
+export const ClockIcon = ({ className }: IconProps) => {
   return (
-    <Image src="/icons/home.svg" width={20} height={20} alt="홈 아이콘" className={className} />
+    <Image src="/icons/clock.svg" width={20} height={20} alt="시계 아이콘" className={className} />
+  );
+};
+export const LocationIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/location.svg"
+      width={20}
+      height={20}
+      alt="장소 아이콘"
+      className={className}
+    />
+  );
+};
+export const CircleIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/circle.svg"
+      width={20}
+      height={20}
+      alt="장소 타겟 아이콘"
+      className={className}
+    />
+  );
+};
+export const CheckedCircleIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/circle-checked.svg"
+      width={20}
+      height={20}
+      alt="선택된 장소 타켓 아이콘"
+      className={className}
+    />
   );
 };
