@@ -3,13 +3,14 @@ import TextForm from './TextForm';
 
 interface PhotoTextSectionProps {
   thumbnail?: boolean;
+  formFieldName: string;
 }
 
-const PhotoTextSection = ({ thumbnail }: PhotoTextSectionProps) => {
+const PhotoTextSection = ({ thumbnail, formFieldName }: PhotoTextSectionProps) => {
   return (
     <div className="mb-2.5">
       <PhotoForm thumbnail={thumbnail} />
-      <TextForm />
+      <TextForm formFieldName={formFieldName} />
     </div>
   );
 };

@@ -1,6 +1,8 @@
 'use client';
 import { CheckedCircleIcon, CircleIcon, ClockIcon, LocationIcon } from '@/components/common/Icons';
+import { FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useFormContext } from 'react-hook-form';
 import PhotoTextSection from './PhotoTextSection';
 
 interface PlaceFormProps {
@@ -10,6 +12,7 @@ interface PlaceFormProps {
 }
 
 const PlaceForm = ({ isChecked, idx, onDeletePlace }: PlaceFormProps) => {
+  const { control } = useFormContext();
   return (
     <div>
       <div className="flex justify-between">
@@ -18,24 +21,53 @@ const PlaceForm = ({ isChecked, idx, onDeletePlace }: PlaceFormProps) => {
           {isChecked ? <CheckedCircleIcon /> : <CircleIcon />}
         </button>
       </div>
-      <Input
-        type="text"
-        placeholder="장소명을 적어주세요 *"
-        className="placeholder:text-light-300 font-bold !text-text-lg"
+      <FormField
+        control={control}
+        name={`places.${idx}.placeName`}
+        render={({ field }) => (
+          <Input
+            {...field}
+            type="text"
+            placeholder="장소명을 적어주세요 *"
+            className="placeholder:text-light-300 font-bold !text-text-lg"
+          />
+        )}
       />
 
       <div>
         <div className="flex items-center gap-1.5">
           <ClockIcon />
-          <Input type="text" placeholder="장소 카테고리 *" className="!text-text-sm" />
+          <FormField
+            control={control}
+            name={`places.${idx}.category`}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="text"
+                placeholder="장소 카테고리 *"
+                className="!text-text-sm"
+              />
+            )}
+          />
         </div>
         <div className="flex items-center gap-1.5">
           <LocationIcon />
-          <Input type="text" placeholder="위치를 적어주세요. *" className="!text-text-sm" />
+          <FormField
+            control={control}
+            name={`places.${idx}.location`}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="text"
+                placeholder="위치를 적어주세요. *"
+                className="!text-text-sm"
+              />
+            )}
+          />
         </div>
       </div>
 
-      <PhotoTextSection />
+      <PhotoTextSection formFieldName={`places.${idx}.description`} />
     </div>
   );
 };

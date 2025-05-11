@@ -4,9 +4,9 @@ import { XInputClearIcon } from '@/components/common/Icons';
 import PhotoTextSection from '@/components/features/register/log/PhotoTextSection';
 import PlaceForm from '@/components/features/register/log/PlaceForm';
 import { Button } from '@/components/ui/button';
-import { Form } from '@/components/ui/form';
+import { Form, FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 
 // 1. 장소추가 클릭 시 placeform 추가
 const LogPage = () => {
@@ -16,28 +16,33 @@ const LogPage = () => {
     defaultValues: {
       logTitle: '',
       thumbnail: '',
+      logDescription: '',
       places: [
         {
           placeName: '',
           category: '',
-          address: '',
+          location: '',
           description: '',
           placeImages: [{ path: '', order: 1 }],
         },
       ],
     },
   });
+
+  //
   const { fields, append, remove } = useFieldArray({ control: form.control, name: 'places' });
   const handleAddNewPlace = () =>
     append({
       placeName: '',
       category: '',
-      address: '',
+      location: '',
       description: '',
       placeImages: [{ path: '', order: 1 }],
     });
   const handleDeletePlace = (idx: number) => remove(idx);
-  console.log(fields);
+  const onSubmit = (values: FieldValues) => {
+    console.log('제출', values);
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -47,17 +52,25 @@ const LogPage = () => {
           {/* thumbnail */}
           <>
             <div className="flex items-center border-b border-light-100">
-              <Input
-                id="logTitle"
-                type="text"
-                placeholder="제목을 입력해주세요.(최대 30자) *"
-                className="!text-text-md my-2"
-                maxLength={30}
-                minLength={1}
+              <FormField
+                control={form.control}
+                name="logTitle"
+                render={({ field }) => (
+                  <>
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="제목을 입력해주세요.(최대 30자) *"
+                      className="!text-text-md my-2"
+                      maxLength={30}
+                      required
+                    />
+                    <XInputClearIcon className="cursor-pointer" />
+                  </>
+                )}
               />
-              <XInputClearIcon className="cursor-pointer" />
             </div>
-            <PhotoTextSection thumbnail />
+            <PhotoTextSection thumbnail formFieldName="logDescription" />
           </>
 
           {/* places */}
@@ -73,7 +86,11 @@ const LogPage = () => {
       <div className="text-text-sm w-full h-12 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
         부적절한 이미지 적발시 로그가 삭제될 수 있습니다.
       </div>
-      <Button size={'xl'} className="font-bold w-full mt-2 mb-6">
+      <Button
+        size={'xl'}
+        className="font-bold w-full mt-2 mb-6"
+        onClick={form.handleSubmit(onSubmit)}
+      >
         완료
       </Button>
     </div>
