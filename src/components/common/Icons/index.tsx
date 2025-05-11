@@ -1,4 +1,3 @@
-'use client';
 import Image from 'next/image';
 
 interface IconProps {
@@ -176,6 +175,41 @@ export const ArrowDownIcon = ({ className }: IconProps) => {
       width={20}
       height={20}
       alt="아래쪽 화살표 아이콘"
+      className={className}
+    />
+  );
+};
+
+/* x */
+export const XInputClearIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/x-clear-input.svg"
+      width={20}
+      height={20}
+      alt="입력창 클리어 아이콘"
+      className={className}
+    />
+  );
+};
+export const XRemovePlaceImageIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/x-remove-placeImage.svg"
+      width={20}
+      height={20}
+      alt="장소 이미지 삭제 아이콘"
+      className={className}
+    />
+  );
+};
+export const XRemoveThumbnailIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/x-remove-thumbnail.svg"
+      width={20}
+      height={20}
+      alt="썸네일 이미지 삭제 아이콘"
       className={className}
     />
   );
