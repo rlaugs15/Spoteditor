@@ -1,4 +1,4 @@
-import { upsertGoogleUser } from '@/lib/auth';
+import { upsertGoogleUser } from '@/actions/auth';
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 

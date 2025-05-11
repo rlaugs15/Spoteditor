@@ -33,6 +33,13 @@ export const UserIcon = ({ className }: IconProps) => {
   );
 };
 
+/* modal header */
+export const XIcon = ({ className }: IconProps) => {
+  return (
+    <Image src="/icons/x.svg" width={20} height={20} alt="엑스 아이콘" className={className} />
+  );
+};
+
 /* register header */
 export const HomeIcon = ({ className }: IconProps) => {
   return (

@@ -2,9 +2,14 @@ import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
 import { PropsWithChildren } from 'react';
 
-const MainLayout = ({ children }: PropsWithChildren) => {
+interface MainLayoutProps extends PropsWithChildren {
+  modal: React.ReactNode;
+}
+
+const MainLayout = ({ modal, children }: MainLayoutProps) => {
   return (
     <div className="w-dvw h-dvh flex flex-col font-pretendard">
+      {modal}
       <Header />
       <div className="grow">{children}</div>
       <Footer />
