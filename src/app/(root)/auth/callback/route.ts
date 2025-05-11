@@ -1,6 +1,6 @@
-import { upsertGoogleUser } from '@/actions/auth';
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { upsertGoogleUser } from './auth';
 
 /* OAuth 로그인 후 리디렉션된 사용자를 처리하는 서버 핸들러 */
 export async function GET(request: NextRequest) {
