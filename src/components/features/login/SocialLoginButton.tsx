@@ -1,15 +1,16 @@
 'use client';
 
 import Image from 'next/image';
+import { ButtonHTMLAttributes } from 'react';
 
-interface SocialLoginButtonProps {
+interface SocialLoginButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   imgSrc: string;
   alt: string;
 }
-/* w-auto h-12.5 */
-export default function SocialLoginButton({ imgSrc, alt }: SocialLoginButtonProps) {
+
+export default function SocialLoginButton({ imgSrc, alt, ...rest }: SocialLoginButtonProps) {
   return (
-    <button className="px-1 py-0 w-[329px] h-12.5 relative hover:cursor-pointer">
+    <button {...rest} className="px-1 py-0 w-[329px] h-12.5 relative hover:cursor-pointer">
       <Image src={imgSrc} alt={alt} fill className="object-contain" />
     </button>
   );
