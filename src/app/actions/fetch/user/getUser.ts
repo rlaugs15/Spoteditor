@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { unstable_cache } from 'next/cache';
-import { prisma } from '../../../../prisma/prisma';
 import { userKeys } from './userKeys';
-import { cacheTags } from '../tags';
+import { cacheTags } from '../../tags';
+import { prisma } from '../../../../../prisma/prisma';
 
 export async function fetchUserSupabase() {
   const supabase = await createClient();

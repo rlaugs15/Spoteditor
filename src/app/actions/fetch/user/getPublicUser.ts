@@ -1,6 +1,6 @@
 import { unstable_cache } from 'next/cache';
 import { prisma } from '../../../../prisma/prisma';
-import { cacheTags } from '../tags';
+import { cacheTags } from '../../tags';
 import { userKeys } from './userKeys';
 
 async function fetchPublicUser(userId: string) {

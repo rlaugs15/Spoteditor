@@ -1,8 +1,8 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
-import { prisma } from '../../../../prisma/prisma';
-import { cacheTags } from '../../fetch/tags';
+import { prisma } from '../../../../../prisma/prisma';
+import { cacheTags } from '../../../../actions/fetch/tags';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export async function deleteUser(userId: string) {
