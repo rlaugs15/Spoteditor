@@ -12,10 +12,14 @@ import {
 import MyProfileButton from './components/MyProfileButton';
 import Link from 'next/link';
 import useUser from '@/hooks/queries/user/useUser';
-import LogoutButton from '../../../../Button/LogoutButton';
+import LogoutButton from '@/components/common/Button/LogoutButton';
+import { IUser } from '@/types/api/user';
 
-export default function UserProfileButton() {
-  const { data: user } = useUser();
+interface UserProfileButtonProps {
+  user: IUser;
+}
+
+export default function UserProfileButton({ user }: UserProfileButtonProps) {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger className="focus:outline-none" asChild>

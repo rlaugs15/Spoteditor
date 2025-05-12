@@ -6,7 +6,7 @@ import { LogoutIcon } from '@/components/common/Icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useActionState } from 'react';
 
-async function logoutWithState(_: any, __: FormData) {
+async function logoutWithState() {
   await logout();
   return { success: true };
 }

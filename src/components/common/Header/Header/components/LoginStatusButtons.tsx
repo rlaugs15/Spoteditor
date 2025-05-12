@@ -20,7 +20,7 @@ export default function LoginStatusButtons({ user }: LoginStatusButtonsProps) {
         </Link>
       ) : (
         <>
-          <UserProfileButton />
+          <UserProfileButton user={user} />
         </>
       )}
     </>
