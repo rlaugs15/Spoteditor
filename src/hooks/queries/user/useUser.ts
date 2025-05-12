@@ -10,6 +10,5 @@ export default function useUser() {
       return data.user;
     },
     staleTime: Infinity,
-    refetchOnWindowFocus: false,
   });
 }
