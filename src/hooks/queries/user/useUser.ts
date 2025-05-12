@@ -1,4 +1,4 @@
-import { userKeys } from '@/app/actions/fetch/user/userKeys';
+import { userKeys } from '@/app/actions/userKeys';
 import { useQuery } from '@tanstack/react-query';
 
 export default function useUser() {

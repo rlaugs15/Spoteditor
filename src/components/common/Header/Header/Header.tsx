@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { GlobeIcon, SearchIcon } from '../../Icons';
 import Logo from '../Logo';
 import LoginStatusButtons from './components/LoginStatusButtons';
-import { getUser } from '@/app/actions/fetch/user/getUser';
+import { getUser } from '@/app/actions/user';
 
 const Header = async () => {
   /* const supabase = await createClient();
