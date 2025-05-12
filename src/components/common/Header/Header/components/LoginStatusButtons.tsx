@@ -1,12 +1,15 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import useUser from '@/hooks/queries/user/useUser';
 import Link from 'next/link';
 import UserProfileButton from './UserProfileButton/UserProfileButton';
+import { IUser } from '@/types/api/user';
 
-export default function LoginStatusButtons() {
-  const { data: user } = useUser();
+interface LoginStatusButtonsProps {
+  user: IUser;
+}
+
+export default function LoginStatusButtons({ user }: LoginStatusButtonsProps) {
   return (
     <>
       {!user ? (
