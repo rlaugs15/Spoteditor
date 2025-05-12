@@ -1,6 +1,6 @@
 'use client';
 
-import { AddImageIcon, HeadPhoneIcon, LogoutIcon, UserIcon } from '@/components/common/Icons';
+import { AddImageIcon, HeadPhoneIcon, UserIcon } from '@/components/common/Icons';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import {
 import MyProfileButton from './components/MyProfileButton';
 import Link from 'next/link';
 import useUser from '@/hooks/queries/user/useUser';
+import LogoutButton from '../../../../Button/LogoutButton';
 
 export default function UserProfileButton() {
   const { data: user } = useUser();
@@ -50,10 +51,7 @@ export default function UserProfileButton() {
         <DropdownMenuSeparator />
         <div className="m-1">
           <DropdownMenuItem asChild className="flex items-center justify-start text-text-sm">
-            <button className="flex items-center justify-start w-full gap-2 px-4 py-3 rounded-sm cursor-default text-text-sm hover:bg-neutral-100 focus:bg-neutral-100 focus:text-neutral-900">
-              <LogoutIcon />
-              <p>로그아웃</p>
-            </button>
+            <LogoutButton />
           </DropdownMenuItem>
         </div>
         <DropdownMenuSeparator />

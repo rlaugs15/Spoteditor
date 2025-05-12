@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { prisma } from '../../../prisma/prisma';
-import { userKeys } from './userKeys';
+import { userKeys } from './keys';
 import { cacheTags } from './tags';
 
 interface PatchUserProps {
@@ -82,7 +82,7 @@ async function fetchPublicUser(userId: string) {
   }
 }
 
-export function getPublicUser(userId: string) {
+export async function getPublicUser(userId: string) {
   return unstable_cache(() => fetchPublicUser(userId), [...userKeys.publicUser(userId)], {
     tags: [cacheTags.publicUser(userId)],
     revalidate: 300,

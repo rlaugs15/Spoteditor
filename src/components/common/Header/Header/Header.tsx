@@ -2,16 +2,8 @@ import { Button } from '@/components/ui/button';
 import { GlobeIcon, SearchIcon } from '../../Icons';
 import Logo from '../Logo';
 import LoginStatusButtons from './components/LoginStatusButtons';
-import { getUser } from '@/app/actions/user';
 
 const Header = async () => {
-  /* const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser(); */
-  const user = await getUser();
-  console.log('getuser', user);
-
   return (
     <header className="flex items-center justify-between sticky w-full z-50 bg-black px-4 web:px-[50px] py-4 web:py-5 left-0 top-0 web:h-[60px] h-12">
       <Logo />

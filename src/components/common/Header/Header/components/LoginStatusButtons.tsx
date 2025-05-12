@@ -17,9 +17,6 @@ export default function LoginStatusButtons() {
         </Link>
       ) : (
         <>
-          {/* <Button variant={'ghost'} size={'icon'}>
-            <AlertIcon />
-          </Button> */}
           <UserProfileButton />
         </>
       )}
