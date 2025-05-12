@@ -23,7 +23,7 @@ const LogPage = () => {
           category: '',
           location: '',
           description: '',
-          placeImages: [{ path: '', order: 1 }],
+          placeImages: [{ file: '', order: 1 }], // 파일 객체, 순서
         },
       ],
     },
@@ -37,7 +37,7 @@ const LogPage = () => {
       category: '',
       location: '',
       description: '',
-      placeImages: [{ path: '', order: 1 }],
+      placeImages: [{ file: '', order: 1 }],
     });
   const handleDeletePlace = (idx: number) => remove(idx);
   const onSubmit = (values: FieldValues) => {
@@ -65,7 +65,9 @@ const LogPage = () => {
                       maxLength={30}
                       required
                     />
-                    <XInputClearIcon className="cursor-pointer" />
+                    <button className="p-2">
+                      <XInputClearIcon className="cursor-pointer hover:brightness-95" />
+                    </button>
                   </>
                 )}
               />

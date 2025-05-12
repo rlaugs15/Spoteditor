@@ -15,9 +15,11 @@ function returnFileSize(number) {
 }
 
 function useImageUpload() {
+  const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /* 입력 */
+  const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;
     for (const imageFile of e.target.files) {
       console.log(imageFile);
@@ -26,8 +28,10 @@ function useImageUpload() {
       setPreviews((prev) => [...prev, URL.createObjectURL(imageFile)]);
     }
   };
+  /* 삭제 (임시) */
+  const handleRemoveFile = () => setPreviews([]);
 
-  return { previews, handleChange };
+  return { files, previews, handleChangeFile, handleRemoveFile };
 }
 
 export default useImageUpload;
