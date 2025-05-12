@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Prompt } from 'next/font/google';
 import localFont from 'next/font/local';
 import '../styles/globals.css';
+import { Providers } from './providers';
 
 const prompt = Prompt({
   subsets: ['latin'],
@@ -65,7 +66,7 @@ export default function RootLayout({
       <body
         className={`${pretendard.variable} ${untitled.variable} ${prompt.variable} antialiased`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
