@@ -67,7 +67,7 @@ const PlaceForm = ({ isChecked, idx, onDeletePlace }: PlaceFormProps) => {
         </div>
       </div>
 
-      <PhotoTextSection formFieldName={`places.${idx}.description`} />
+      <PhotoTextSection formFieldTarget="places" idx={idx} />
     </div>
   );
 };

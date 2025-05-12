@@ -6,16 +6,20 @@ import PlaceForm from '@/components/features/register/log/PlaceForm';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import { formSchema } from '@/lib/zod/logSchema';
+import { LogFormValues } from '@/types/schema/log';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 
-// 1. 장소추가 클릭 시 placeform 추가
 const LogPage = () => {
   const form = useForm({
+    resolver: zodResolver(formSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
     defaultValues: {
       logTitle: '',
-      thumbnail: '',
+      thumbnail: undefined,
       logDescription: '',
       places: [
         {
@@ -23,21 +27,23 @@ const LogPage = () => {
           category: '',
           location: '',
           description: '',
-          placeImages: [{ file: '', order: 1 }], // 파일 객체, 순서
+          placeImages: [], // 파일 객체, 순서
         },
       ],
     },
   });
 
-  //
-  const { fields, append, remove } = useFieldArray({ control: form.control, name: 'places' });
+  const { fields, append, remove } = useFieldArray<LogFormValues>({
+    control: form.control,
+    name: 'places',
+  });
   const handleAddNewPlace = () =>
     append({
       placeName: '',
       category: '',
       location: '',
       description: '',
-      placeImages: [{ file: '', order: 1 }],
+      placeImages: [],
     });
   const handleDeletePlace = (idx: number) => remove(idx);
   const onSubmit = (values: FieldValues) => {
@@ -65,14 +71,22 @@ const LogPage = () => {
                       maxLength={30}
                       required
                     />
-                    <button className="p-2">
+                    <button
+                      className={cn(
+                        'p-2 transition-opacity duration-300',
+                        form.watch('logTitle').length
+                          ? 'opacity-100 pointer-events-auto'
+                          : 'opacity-0 pointer-events-none'
+                      )}
+                      onClick={() => form.setValue('logTitle', '')}
+                    >
                       <XInputClearIcon className="cursor-pointer hover:brightness-95" />
                     </button>
                   </>
                 )}
               />
             </div>
-            <PhotoTextSection thumbnail formFieldName="logDescription" />
+            <PhotoTextSection thumbnail />
           </>
 
           {/* places */}
@@ -88,6 +102,14 @@ const LogPage = () => {
       <div className="text-text-sm w-full h-12 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
         부적절한 이미지 적발시 로그가 삭제될 수 있습니다.
       </div>
+      <Button
+        variant={'destructive'}
+        size={'xl'}
+        className="font-bold w-full mt-2 mb-6"
+        onClick={() => console.log(form.formState.errors)}
+      >
+        확인용
+      </Button>
       <Button
         size={'xl'}
         className="font-bold w-full mt-2 mb-6"

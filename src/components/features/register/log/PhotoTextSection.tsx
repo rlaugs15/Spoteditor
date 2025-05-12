@@ -1,22 +1,28 @@
-import PhotoForm from './PhotoForm';
+import MultiImageForm from './MultiImageForm';
 import SingleImageForm from './SingleImageForm';
 import TextForm from './TextForm';
 
 interface PhotoTextSectionProps {
   thumbnail?: boolean;
-  formFieldName: string;
+  formFieldTarget?: string;
   idx?: number;
 }
 
-const PhotoTextSection = ({ thumbnail, formFieldName, idx }: PhotoTextSectionProps) => {
+const PhotoTextSection = ({
+  thumbnail,
+  formFieldTarget = 'logDescription',
+  idx = 1,
+}: PhotoTextSectionProps) => {
   return (
     <div className="mb-2.5">
       {thumbnail ? (
         <SingleImageForm name="thumbnail" label="커버 이미지" />
       ) : (
-        <PhotoForm thumbnail={thumbnail} idx={idx} />
+        <MultiImageForm formFieldTarget={formFieldTarget} idx={idx} />
       )}
-      <TextForm formFieldName={formFieldName} />
+      <TextForm
+        formFieldName={thumbnail ? 'logDescription' : `${formFieldTarget}.${idx}.description`}
+      />
     </div>
   );
 };

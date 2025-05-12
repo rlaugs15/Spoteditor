@@ -2,9 +2,9 @@
 import { AddCameraIcon, XRemoveThumbnailIcon } from '@/components/common/Icons';
 import { FormField, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import useImageUpload from '@/hooks/useImageUpload';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 interface SingleImageFormProps {
@@ -14,11 +14,11 @@ interface SingleImageFormProps {
 
 const SingleImageForm = ({ name, label }: SingleImageFormProps) => {
   const { control } = useFormContext();
-  const { previews, handleChangeFile, handleRemoveFile } = useImageUpload();
+  const [preview, setPreview] = useState<string | null>(null);
 
   return (
     <div className="flex flex-col">
-      <FormLabel htmlFor="single-upload" className={cn(previews.length && 'hidden')}>
+      <FormLabel htmlFor="single-upload" className={cn(preview && 'hidden')}>
         <div className="cursor-pointer text-text-sm w-full h-12 rounded-md flex items-center justify-center border border-dashed my-2.5 font-bold space-x-1.5 hover:bg-accent hover:text-accent-foreground">
           <AddCameraIcon />
           <span>
@@ -35,8 +35,10 @@ const SingleImageForm = ({ name, label }: SingleImageFormProps) => {
             id="single-upload"
             type="file"
             onChange={(e) => {
-              handleChangeFile(e);
-              onChange(e.target.files?.[0]); // 단일 파일
+              const file = e.target.files?.[0];
+              if (!file) return;
+              onChange(file);
+              setPreview(URL.createObjectURL(file));
             }}
             className="hidden"
             multiple
@@ -47,10 +49,10 @@ const SingleImageForm = ({ name, label }: SingleImageFormProps) => {
         )}
       />
       <div className="flex max-h-[320px] overflow-x-auto gap-1">
-        {previews[0] && (
-          <div key={previews[0]} className="relative w-full h-[300px] mb-2.5">
-            <Image src={previews[0]} fill alt="업로드한 장소 이미지" className="object-cover" />
-            <button onClick={handleRemoveFile}>
+        {preview && (
+          <div key={preview} className="relative w-full h-[300px] mb-2.5">
+            <Image src={preview} fill alt="업로드한 장소 이미지" className="object-cover" />
+            <button onClick={() => setPreview(null)}>
               <XRemoveThumbnailIcon className="absolute top-2 right-2 cursor-pointer hover:brightness-90" />
             </button>
           </div>
