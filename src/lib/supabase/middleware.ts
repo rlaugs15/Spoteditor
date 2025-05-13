@@ -2,6 +2,7 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {
+  // 응답 객체를 생성해서 이 안에 쿠키 정보 등을 저장할 예정
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -11,11 +12,12 @@ export async function updateSession(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
+        // 브라우저에서 받은 쿠키를 요청과 응답 모두에 반영해서 세션 유지
         getAll() {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
           supabaseResponse = NextResponse.next({
             request,
           });
@@ -27,39 +29,28 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // Do not run code between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
+  // 주의: createServerClient 다음에 getUser를 바로 호출해야 함
+  // 그 사이에 다른 코드를 넣으면 세션이 꼬이거나 로그아웃 문제가 발생할 수 있음
 
-  // IMPORTANT: DO NOT REMOVE auth.getUser()
+  // auth.getUser() 절대 지우지 말 것: 이 함수는 단순히 유저 정보를 가져오는 것 외에도
+  // 만료된 세션을 자동으로 갱신(refresh)해주는 역할을 함
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // if (
-  //   !user &&
-  //   !request.nextUrl.pathname.startsWith('/login') &&
-  //   !request.nextUrl.pathname.startsWith('/auth')
-  // ) {
-  //   // no user, potentially respond by redirecting the user to the login page
-  //   const url = request.nextUrl.clone();
-  //   url.pathname = '/login';
-  //   return NextResponse.redirect(url);
-  // }
+  if (!user) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    return NextResponse.redirect(url);
+  }
 
-  // IMPORTANT: You *must* return the supabaseResponse object as it is.
-  // If you're creating a new response object with NextResponse.next() make sure to:
-  // 1. Pass the request in it, like so:
-  //    const myNewResponse = NextResponse.next({ request })
-  // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Change the myNewResponse object to fit your needs, but avoid changing
-  //    the cookies!
-  // 4. Finally:
-  //    return myNewResponse
-  // If this is not done, you may be causing the browser and server to go out
-  // of sync and terminate the user's session prematurely!
+  // 반드시 supabaseResponse를 그대로 반환해야 함
+  // 만약 새로운 응답 객체를 만들 경우 다음을 지켜야 함:
+  // 1. request 객체를 넣을 것 → const res = NextResponse.next({ request })
+  // 2. supabaseResponse의 쿠키를 그대로 복사할 것 → res.cookies.setAll(...)
+  // 3. 쿠키 정보는 절대 누락되지 않게 주의할 것
+  // 4. 최종적으로 새로 만든 응답(res)을 반환할 것
 
   return supabaseResponse;
 }

@@ -33,6 +33,50 @@ export const UserIcon = ({ className }: IconProps) => {
   );
 };
 
+/* modal header */
+export const XIcon = ({ className }: IconProps) => {
+  return (
+    <Image src="/icons/x.svg" width={20} height={20} alt="엑스 아이콘" className={className} />
+  );
+};
+
+/* profile */
+export const HeadPhoneIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/Headphone.svg"
+      width={14}
+      height={15}
+      alt="헤드폰 아이콘"
+      className={className}
+    />
+  );
+};
+
+export const LogoutIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/log-out.svg"
+      width={14}
+      height={15}
+      alt="헤드폰 아이콘"
+      className={className}
+    />
+  );
+};
+
+export const AddImageIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/add-image.svg"
+      width={14}
+      height={15}
+      alt="로그 작성 아이콘"
+      className={className}
+    />
+  );
+};
+
 /* register header */
 export const HomeIcon = ({ className }: IconProps) => {
   return (

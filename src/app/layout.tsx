@@ -1,54 +1,7 @@
 import type { Metadata } from 'next';
-import { Prompt } from 'next/font/google';
-import localFont from 'next/font/local';
 import '../styles/globals.css';
-
-const prompt = Prompt({
-  subsets: ['latin'],
-  weight: '700',
-  display: 'swap',
-  variable: '--font-prompt',
-});
-
-const untitled = localFont({
-  src: [
-    {
-      path: './assets/fonts/untitled/test-untitled-sans-light.woff2',
-      weight: '300',
-      style: 'normal',
-    },
-    {
-      path: './assets/fonts/untitled/test-untitled-sans-regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: './assets/fonts/untitled/test-untitled-sans-medium.woff2',
-      weight: '500',
-      style: 'normal',
-    },
-    {
-      path: './assets/fonts/untitled/test-untitled-sans-bold.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-    {
-      path: './assets/fonts/untitled/test-untitled-sans-black.woff2',
-      weight: '900',
-      style: 'normal',
-    },
-  ],
-  variable: '--font-untitled',
-  display: 'swap',
-});
-
-const pretendard = localFont({
-  src: './assets/fonts/pretendard/PretendardVariable.woff2',
-  display: 'swap',
-  weight: '45 920',
-  style: 'normal',
-  variable: '--font-pretendard',
-});
+import { Providers } from './providers';
+import { pretendard, prompt, untitled } from '@/lib/fonts';
 
 export const metadata: Metadata = {
   title: 'Spoteditor',
@@ -65,7 +18,7 @@ export default function RootLayout({
       <body
         className={`${pretendard.variable} ${untitled.variable} ${prompt.variable} antialiased`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
