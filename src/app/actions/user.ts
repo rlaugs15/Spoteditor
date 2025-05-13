@@ -50,7 +50,7 @@ const cacheUser = unstable_cache(
   async (userId: string) => await fetchUserPrisma(userId),
   [...userKeys.me()],
   {
-    tags: [cacheTags.user],
+    tags: [...cacheTags.me()],
     revalidate: false,
   }
 );
@@ -84,7 +84,7 @@ async function fetchPublicUser(userId: string) {
 
 export async function getPublicUser(userId: string) {
   return unstable_cache(() => fetchPublicUser(userId), [...userKeys.publicUser(userId)], {
-    tags: [cacheTags.publicUser(userId)],
+    tags: [...cacheTags.publicUser(userId)],
     revalidate: 300,
   });
 }
@@ -113,7 +113,7 @@ export async function patchUser({
       },
     });
 
-    revalidateTag(cacheTags.user);
+    revalidateTag(cacheTags.me());
     return updated;
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
@@ -135,7 +135,7 @@ export async function deleteUser(userId: string) {
       },
     });
 
-    revalidateTag(cacheTags.user);
+    revalidateTag(cacheTags.me());
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
       // 이미 삭제되었거나 존재하지 않는 유저는 조용히 처리
@@ -155,7 +155,7 @@ export async function logout() {
   try {
     await supabase.auth.signOut();
     // 서버 캐시 무효화
-    revalidateTag(cacheTags.user);
+    revalidateTag(cacheTags.me());
   } catch (error) {
     console.error('로그아웃 실패:', error);
   }
