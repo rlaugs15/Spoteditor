@@ -6,6 +6,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { prisma } from '../../../prisma/prisma';
 import { userKeys } from './keys';
 import { cacheTags } from './tags';
+import { PublicUser } from '@/types/api/user';
 
 interface PatchUserProps {
   userId: string;
@@ -64,7 +65,7 @@ export async function getUser() {
 // ===================================================================
 // 퍼블릭 유저 정보 가져오기
 // ===================================================================
-async function fetchPublicUser(userId: string) {
+async function fetchPublicUser(userId: string): Promise<PublicUser | null> {
   try {
     const user = await prisma.public_users.findUnique({
       where: { user_id: userId },
@@ -76,6 +77,8 @@ async function fetchPublicUser(userId: string) {
         description: true,
       },
     });
+
+    if (!user) return null;
 
     /* 팔로워 수: 나를 팔로우하는 사람 수 */
     const followerCount = await prisma.follow.count({
