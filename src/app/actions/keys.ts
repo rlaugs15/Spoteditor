@@ -15,12 +15,12 @@ export const followKeys = {
   publicUser: (userId: string) => [...followKeys.all, 'user', userId] as const,
 
   follower: (userId: string) => [...followKeys.publicUser(userId), 'followers'] as const,
-  followerList: (userId: string, params: FollowParams) =>
-    [...followKeys.follower(userId), { params }] as const,
+  followerList: (params: FollowParams) =>
+    [...followKeys.follower(params.userId), params.currentPage, params.pageSize] as const,
 
   following: (userId: string) => [...followKeys.publicUser(userId), 'followings'] as const,
-  followingList: (userId: string, params: FollowParams) =>
-    [...followKeys.following(userId), { params }] as const,
+  followingList: (params: FollowParams) =>
+    [...followKeys.following(params.userId), params.currentPage, params.pageSize] as const,
 };
 
 /* 로그 */
