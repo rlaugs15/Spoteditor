@@ -86,7 +86,7 @@ export async function getPublicUser(userId: string) {
   return unstable_cache(() => fetchPublicUser(userId), [...userKeys.publicUser(userId)], {
     tags: [...cacheTags.publicUser(userId)],
     revalidate: 300,
-  });
+  })();
 }
 
 //----------------------------------------------------서버액션--------------------------------------
