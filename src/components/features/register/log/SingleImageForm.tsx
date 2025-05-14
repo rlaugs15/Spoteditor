@@ -3,6 +3,7 @@ import { AddCameraIcon, XRemoveThumbnailIcon } from '@/components/common/Icons';
 import { FormField, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -34,11 +35,15 @@ const SingleImageForm = ({ name, label }: SingleImageFormProps) => {
           <Input
             id="single-upload"
             type="file"
-            onChange={(e) => {
+            onChange={async (e) => {
               const file = e.target.files?.[0];
               if (!file) return;
-              onChange(file);
-              setPreview(URL.createObjectURL(file));
+              const compressImg = await compressImageToWebp(file);
+
+              if (compressImg) {
+                onChange(compressImg);
+                setPreview(URL.createObjectURL(compressImg));
+              }
             }}
             className="hidden"
             multiple

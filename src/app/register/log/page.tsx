@@ -1,4 +1,5 @@
 'use client';
+import { createLog } from '@/app/actions/log-register';
 import { Header3 } from '@/components/common/Header';
 import { XInputClearIcon } from '@/components/common/Icons';
 import PhotoTextSection from '@/components/features/register/log/PhotoTextSection';
@@ -9,8 +10,10 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { formSchema } from '@/lib/zod/logSchema';
 import { LogFormValues } from '@/types/schema/log';
+import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 const LogPage = () => {
   const form = useForm({
@@ -46,9 +49,17 @@ const LogPage = () => {
       placeImages: [],
     });
   const handleDeletePlace = (idx: number) => remove(idx);
-  const onSubmit = (values: FieldValues) => {
-    console.log('제출', values);
+  const onSubmit = async (values: LogFormValues) => {
+    // console.log('제출', values);
+
+    const formData = createFormData(values);
+    const uploadResult = await createLog(formData);
+
+    if (uploadResult.success) toast.success('업로드 성공');
+    else toast.error('업로드 실패');
   };
+  // const rawFormData = Object.fromEntries(formData);
+  // console.log(rawFormData);
 
   return (
     <div className="flex flex-col h-full">
@@ -102,14 +113,14 @@ const LogPage = () => {
       <div className="text-text-sm w-full h-12 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
         부적절한 이미지 적발시 로그가 삭제될 수 있습니다.
       </div>
-      <Button
+      {/* <Button
         variant={'destructive'}
         size={'xl'}
         className="font-bold w-full mt-2 mb-6"
         onClick={() => console.log(form.formState.errors)}
       >
         확인용
-      </Button>
+      </Button> */}
       <Button
         size={'xl'}
         className="font-bold w-full mt-2 mb-6"

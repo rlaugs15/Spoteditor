@@ -3,29 +3,23 @@ import { AddCameraIcon, XRemovePlaceImageIcon } from '@/components/common/Icons'
 import { FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { LogFormValues } from '@/types/schema/log';
+import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import Image from 'next/image';
-import { useController, useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 interface MultiImageFormProps {
-  formFieldTarget: string;
   idx: number;
 }
 
 const MAX_IMAGES_LENGTH = 3;
 
-const MultiImageForm = ({ formFieldTarget, idx }: MultiImageFormProps) => {
-  const { control } = useFormContext();
-  const {
-    field: { ref },
-  } = useController({
-    name: `${formFieldTarget}.${idx}.placeImages`,
-    control,
-  });
-  const { fields, append, remove } = useFieldArray<LogFormValues>({
+const MultiImageForm = ({ idx }: MultiImageFormProps) => {
+  const { control } = useFormContext<LogFormValues>();
+  const { fields, append, remove } = useFieldArray({
     control: control,
-    name: `${formFieldTarget}.${idx}.placeImages`,
+    name: `places.${idx}.placeImages`,
   });
-  const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files; // 유사 배열 객체
     if (!fileList) return;
     if (fields.length >= MAX_IMAGES_LENGTH) {
@@ -33,9 +27,15 @@ const MultiImageForm = ({ formFieldTarget, idx }: MultiImageFormProps) => {
       return;
     }
     const files = Array.from(fileList).slice(0, 3);
-    files.forEach((file, idx) => append({ file, order: idx + 1 }));
-    console.log(fields);
+    const compressedFiles = await Promise.all(files.map((file) => compressImageToWebp(file)));
+
+    compressedFiles
+      .filter((compressedImg) => compressedImg !== undefined)
+      .forEach((compressedImg, idx) =>
+        append({ file: compressedImg, order: fields.length + idx + 1 })
+      );
   };
+
   return (
     <div className="flex flex-col">
       <FormLabel htmlFor={`file-upload-${idx}`}>
@@ -54,7 +54,6 @@ const MultiImageForm = ({ formFieldTarget, idx }: MultiImageFormProps) => {
         multiple
         maxLength={3}
         accept=".jpg,.jpeg,.png,.webp,.avif"
-        ref={ref}
       />
       <div className="flex max-h-[320px] overflow-x-auto gap-1">
         {fields.map((field, imageIdx) => {
