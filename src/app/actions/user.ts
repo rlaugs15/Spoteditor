@@ -66,7 +66,7 @@ export async function getUser() {
 // ===================================================================
 async function fetchPublicUser(userId: string) {
   try {
-    return await prisma.public_users.findUnique({
+    const user = await prisma.public_users.findUnique({
       where: { user_id: userId },
       select: {
         user_id: true,
@@ -76,6 +76,26 @@ async function fetchPublicUser(userId: string) {
         description: true,
       },
     });
+
+    /* 팔로워 수: 나를 팔로우하는 사람 수 */
+    const followerCount = await prisma.follow.count({
+      where: {
+        following_id: userId,
+      },
+    });
+
+    /* 팔로잉 수: 내가 팔로우하는 사람 수 */
+    const followingCount = await prisma.follow.count({
+      where: {
+        follower_id: userId,
+      },
+    });
+
+    return {
+      ...user,
+      followerCount,
+      followingCount,
+    };
   } catch (error) {
     console.error(`퍼블릭 유저 조회 실패 (${userId})`, error);
     return null;
