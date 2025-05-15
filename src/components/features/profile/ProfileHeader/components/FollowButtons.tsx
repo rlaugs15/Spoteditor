@@ -3,12 +3,15 @@
 import { Separator } from '@/components/ui/separator';
 import FollowerListButton from './FollowerListButton';
 import usePublicUser from '@/hooks/queries/user/usePublicUser';
+import { IUser } from '@/types/api/user';
+import FollowingListButton from './FollowingListButton';
 
 interface FollowButtonsProps {
   userId: string;
+  me: IUser;
 }
 
-export default function FollowButtons({ userId }: FollowButtonsProps) {
+export default function FollowButtons({ userId, me }: FollowButtonsProps) {
   const { data: user } = usePublicUser(userId);
   return (
     <>
@@ -16,7 +19,7 @@ export default function FollowButtons({ userId }: FollowButtonsProps) {
       <div className="flex items-center">
         <Separator orientation="vertical" className="h-3 bg-light-300" />
       </div>
-      {/*  <FollowingListButton isMe={isMe} otherUserId={Number(userId)} count={data?.following || 0} /> */}
+      <FollowingListButton me={me} userId={userId} totalCount={user?.followingCount ?? 0} />
     </>
   );
 }

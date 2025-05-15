@@ -6,5 +6,6 @@ export interface FollowParams extends Partial<Pick<PaginationParams, 'currentPag
 }
 
 export type Follower = Pick<IUserBase, 'user_id' | 'nickname' | 'image_url'>;
+export type Following = Pick<IUserBase, 'user_id' | 'nickname' | 'image_url'>;
 
 export type FollwersResponse = ApiResponse<Follower[]>;
