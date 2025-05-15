@@ -6,6 +6,7 @@ import { LogFormValues } from '@/types/schema/log';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import Image from 'next/image';
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import { toast } from 'sonner';
 
 interface MultiImageFormProps {
   idx: number;
@@ -22,11 +23,12 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
   const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files; // 유사 배열 객체
     if (!fileList) return;
+
     if (fields.length >= MAX_IMAGES_LENGTH) {
-      alert('사진은 최대 3장만 가능합니다');
+      toast.error('사진은 최대 3장만 가능합니다.');
       return;
     }
-    const files = Array.from(fileList).slice(0, 3);
+    const files = Array.from(fileList).slice(0, MAX_IMAGES_LENGTH - fields.length);
     const compressedFiles = await Promise.all(files.map((file) => compressImageToWebp(file)));
 
     compressedFiles
