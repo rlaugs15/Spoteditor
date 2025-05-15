@@ -1,8 +1,5 @@
-import { Separator } from '@/components/ui/separator';
 import { PublicUser, IUser } from '@/types/api/user';
 import FollowButtons from './components/FollowButtons';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import UserImage from '@/components/common/UserImage';
 
 interface ProfileHeaderProps {
@@ -24,6 +21,18 @@ export default function ProfileHeader({ me, user }: ProfileHeaderProps) {
       <section className="flex gap-[15px] py-1 text-text-lg web:text-text-2xl">
       </section>
       <section className="flex my-[7px] flex-col gap-[10px] web:gap-[15px] items-center text-light-300 font-medium text-center text-text-xs web:text-text-sm">
+        <h3>
+          {user?.description ? (
+            user?.description
+          ) : (
+            <>
+              소소한 하루, 특별한 순간들을 기록하는 공간 ☕️ <br /> 일상의 작은 행복부터 여행의
+              찰나까지 🏞️
+            </>
+          )}
+        </h3>
+        <h3>{user?.insta_id ? user?.insta_id : '@spoteditorofficial'}</h3>
+      </section>
     </section>
   );
 }

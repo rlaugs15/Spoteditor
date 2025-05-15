@@ -1,4 +1,4 @@
-interface IUserBase {
+export interface IUserBase {
   user_id: string;
   nickname: string | null;
   image_url: string | null;

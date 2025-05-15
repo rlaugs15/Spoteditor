@@ -7,7 +7,7 @@ export type ApiResponse<T> = {
       currentPage: number;
       pageSize: number;
       totalPages: number;
-      sort: Sort;
+      sort?: Sort;
     };
     httpStatus?: number;
   };
