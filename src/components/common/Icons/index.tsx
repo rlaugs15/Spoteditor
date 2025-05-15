@@ -34,9 +34,11 @@ export const UserIcon = ({ className }: IconProps) => {
 };
 
 /* modal header */
-export const XIcon = ({ className }: IconProps) => {
+export const XIcon = ({ className }: { className?: string }) => {
   return (
-    <Image src="/icons/x.svg" width={20} height={20} alt="엑스 아이콘" className={className} />
+    <div className={`relative w-5 h-5 ${className ?? ''}`}>
+      <Image src="/icons/x.svg" alt="엑스 아이콘" fill className="object-contain" />
+    </div>
   );
 };
 
