@@ -15,14 +15,20 @@ export async function createLog(formData: FormData) {
     if (!user) throw new Error('유저 없음');
 
     const logId = crypto.randomUUID();
+    console.time('📦 FormData 파싱');
     const parseResult = parseFormData<LogFormValues>(formData);
+    console.timeEnd('📦 FormData 파싱');
 
     /* 썸네일 업로드 */
+    console.time('🖼️ 썸네일 업로드');
     const thumbnailUploadResult = await uploadThumbnail(parseResult.thumbnail, logId);
+    console.timeEnd('🖼️ 썸네일 업로드');
     if (!thumbnailUploadResult?.success) throw new Error(thumbnailUploadResult?.msg);
 
     /* 장소 이미지 업로드 */
+    console.time('📍 장소 이미지 업로드');
     const { placeDataList, placeImageDataList } = await uploadPlaces(parseResult.places, logId);
+    console.timeEnd('📍 장소 이미지 업로드');
 
     const logData = {
       log_id: logId,
@@ -30,10 +36,12 @@ export async function createLog(formData: FormData) {
       description: parseResult.logDescription,
       thumbnail_url: thumbnailUploadResult.fullPath,
     };
-
+    console.time('🗃️ DB 삽입');
     await insertLogToDB({ logData, placeDataList, placeImageDataList });
+    console.timeEnd('🗃️ DB 삽입');
+    console.timeEnd('🕒 전체 createLog 실행 시간');
 
-    return { success: true };
+    return { success: true, data: logId };
   } catch (e) {
     console.error(e);
     return { success: false, msg: '로그 등록 실패' };
@@ -68,9 +76,7 @@ async function uploadPlaces(places: LogFormValues['places'], logId: string) {
       category: category,
     });
 
-    for (let imgIdx = 0; imgIdx < placeImages.length; imgIdx++) {
-      const { file, order } = placeImages[imgIdx];
-
+    const uploads = placeImages.map(async ({ file, order }, imgIdx) => {
       const uploadResult = await uploadFile('places', file, {
         folder: logId,
         subfolder: placeId,
@@ -78,12 +84,15 @@ async function uploadPlaces(places: LogFormValues['places'], logId: string) {
       });
       if (!uploadResult?.success) throw new Error(uploadResult?.msg);
 
-      placeImageDataList.push({
+      return {
         image_path: uploadResult.fullPath as string,
         order,
         place_id: placeId,
-      });
-    }
+      };
+    });
+
+    const uploadedImages = await Promise.all(uploads);
+    placeImageDataList.push(...uploadedImages);
   }
 
   return { placeDataList, placeImageDataList };

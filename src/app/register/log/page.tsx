@@ -12,10 +12,12 @@ import { formSchema } from '@/lib/zod/logSchema';
 import { LogFormValues } from '@/types/schema/log';
 import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 const LogPage = () => {
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(formSchema),
     mode: 'onBlur',
@@ -50,16 +52,16 @@ const LogPage = () => {
     });
   const handleDeletePlace = (idx: number) => remove(idx);
   const onSubmit = async (values: LogFormValues) => {
-    // console.log('제출', values);
-
     const formData = createFormData(values);
     const uploadResult = await createLog(formData);
 
-    if (uploadResult.success) toast.success('업로드 성공');
-    else toast.error('업로드 실패');
+    if (uploadResult.success) {
+      toast.success('업로드 성공');
+      router.replace(`/log/${uploadResult.data}`);
+    } else {
+      toast.error('업로드 실패');
+    }
   };
-  // const rawFormData = Object.fromEntries(formData);
-  // console.log(rawFormData);
 
   return (
     <div className="flex flex-col h-full">
@@ -125,8 +127,9 @@ const LogPage = () => {
         size={'xl'}
         className="font-bold w-full mt-2 mb-6"
         onClick={form.handleSubmit(onSubmit)}
+        disabled={!form.formState.isValid || form.formState.isSubmitting}
       >
-        완료
+        {form.formState.isSubmitting ? '제출 중...' : '제출'}
       </Button>
     </div>
   );
