@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import MyProfileButton from './components/MyProfileButton';
 import Link from 'next/link';
-import useUser from '@/hooks/queries/user/useUser';
 import LogoutButton from '@/components/common/Button/LogoutButton';
 import { IUser } from '@/types/api/user';
 
@@ -34,7 +33,7 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
           {/* {!isTruncated && <VerifiedLabelIcon />} */}
         </DropdownMenuItem>
         <DropdownMenuItem className="px-4 py-5 focus:bg-white">
-          <MyProfileButton />
+          <MyProfileButton user={user} />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <div className="m-1">
