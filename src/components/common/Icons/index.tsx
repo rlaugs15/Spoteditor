@@ -43,7 +43,7 @@ export const XIcon = ({ className }: IconProps) => {
 export const HeadPhoneIcon = ({ className }: IconProps) => {
   return (
     <Image
-      src="/icons/Headphone.svg"
+      src="/icons/head-phone.svg.svg"
       width={14}
       height={15}
       alt="헤드폰 아이콘"
@@ -111,6 +111,17 @@ export const LocationIcon = ({ className }: IconProps) => {
     />
   );
 };
+export const WhiteLocationIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/location-white.svg"
+      width={20}
+      height={20}
+      alt="장소 아이콘"
+      className={className}
+    />
+  );
+};
 export const CircleIcon = ({ className }: IconProps) => {
   return (
     <Image
@@ -140,6 +151,55 @@ export const TrashIcon = ({ className }: IconProps) => {
       width={20}
       height={20}
       alt="휴지통 아이콘"
+      className={className}
+    />
+  );
+};
+export const TableIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/table.svg"
+      width={20}
+      height={20}
+      alt="테이블 아이콘"
+      className={className}
+    />
+  );
+};
+export const BookMarkIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/bookmark.svg"
+      width={20}
+      height={20}
+      alt="북마크 아이콘"
+      className={className}
+    />
+  );
+};
+export const ShareIcon = ({ className }: IconProps) => {
+  return (
+    <Image src="/icons/share.svg" width={24} height={24} alt="공유 아이콘" className={className} />
+  );
+};
+export const PenIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/pen.svg"
+      width={24}
+      height={24}
+      alt="로그 수정 아이콘"
+      className={className}
+    />
+  );
+};
+export const PenBlackIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/pen-black.svg"
+      width={24}
+      height={24}
+      alt="로그 수정 아이콘"
       className={className}
     />
   );
