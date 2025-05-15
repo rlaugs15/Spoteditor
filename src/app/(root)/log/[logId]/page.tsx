@@ -14,8 +14,8 @@ import { Badge } from '@/components/ui/badge';
 const LogDetailPage = () => {
   return (
     <div>
-      <section className="bg-pink-200 h-[488px] flex flex-col justify-between">
-        <div className="flex justify-between pl-[50px] pr-5 pt-[14px]">
+      <section className="bg-pink-200 h-[488px] flex flex-col justify-between px-4 web:pl-[50px] pt-4 pb-8">
+        <div className="flex justify-between">
           <ExtraActionButton>
             <ArrowLeftIcon />
           </ExtraActionButton>
@@ -28,8 +28,8 @@ const LogDetailPage = () => {
             </ExtraActionButton>
           </div>
         </div>
-        <div className="flex flex-col gap-2 p-[50px]">
-          <h3 className="text-2xl font-bold text-white">
+        <div className="flex flex-col gap-2">
+          <h3 className="text-lg web:text-2xl font-bold text-white">
             혼자 보내는 하루, 골목골목 숨어있는 용산 원효로 카페
           </h3>
           <div className="flex gap-1">
@@ -40,14 +40,14 @@ const LogDetailPage = () => {
           </div>
         </div>
       </section>
-      <main className="flex flex-col px-[50px]">
+      <main className="flex flex-col px-4 web:px-[50px]">
         <LogProfile />
         <div>
           <LogContent />
           <LogContent />
         </div>
       </main>
-      <div className="flex flex-col gap-2 fixed z-10 bottom-10 right-5">
+      <div className="flex flex-col gap-2 fixed z-10 bottom-10 right-4">
         <ExtraActionButton className="bg-white w-11 h-11">
           <PenBlackIcon />
         </ExtraActionButton>
