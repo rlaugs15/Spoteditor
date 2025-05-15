@@ -1,8 +1,8 @@
 import { Toaster } from '@/components/ui/sonner';
 import { pretendard, prompt, untitled } from '@/lib/fonts';
+import Providers from '@/providers';
 import type { Metadata } from 'next';
 import '../styles/globals.css';
-import { Providers } from './providers';
 
 export const metadata: Metadata = {
   title: 'Spoteditor',
