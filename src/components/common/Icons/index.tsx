@@ -1,4 +1,5 @@
 'use client';
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
 interface IconProps {
@@ -36,8 +37,8 @@ export const UserIcon = ({ className }: IconProps) => {
 /* modal header */
 export const XIcon = ({ className }: { className?: string }) => {
   return (
-    <div className={`relative w-5 h-5 ${className ?? ''}`}>
-      <Image src="/icons/x.svg" alt="엑스 아이콘" fill className="object-contain" />
+    <div className={cn('relative', className ? className : 'w-5 h-5')}>
+      <Image src="/icons/x.svg" alt="엑스 아이콘" fill className="object-contain object-center" />
     </div>
   );
 };
