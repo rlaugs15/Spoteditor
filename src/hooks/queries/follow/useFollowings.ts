@@ -4,7 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 
 async function fetchFollowing({ userId, currentPage, pageSize }: FollowListParams) {
   const res = await fetch(
-    `/api/followeings?userId=${userId}&currentPage=${currentPage}&pageSize=${pageSize}`
+    `/api/followings?userId=${userId}&currentPage=${currentPage}&pageSize=${pageSize}`
   );
   const data = await res.json();
   return data;
