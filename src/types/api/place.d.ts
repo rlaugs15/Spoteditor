@@ -53,7 +53,3 @@ export interface PlaceBookmarkParams {
   placeId: string;
   isBookmark: boolean;
 }
-
-export interface PlaceBookmarkResponse {
-  success: boolean;
-}

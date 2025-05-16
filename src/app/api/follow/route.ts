@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
         following_id: userId,
       },
     });
-    return NextResponse.json({ success: true, msg: '팔로우 성공' });
+    return NextResponse.json({ success: true, isFollowing: true }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ success: false, msg: '서버 오류로 팔로우 실패' }, { status: 500 });
   }
@@ -116,7 +116,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ success: false, msg: '팔로우 상태가 아닙니다.' }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, msg: '언팔로우 완료' });
+    return NextResponse.json({ success: true, isFollowing: false });
   } catch (error) {
     console.error('언팔로우 실패:', error);
     return NextResponse.json({ success: false, msg: '서버 오류로 언팔로우 실패' }, { status: 500 });

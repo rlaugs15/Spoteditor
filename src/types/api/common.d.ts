@@ -23,3 +23,9 @@ export interface PaginationParams {
   pageSize: number;
   sort?: Sort;
 }
+
+export interface BookmarkResponse {
+  success: boolean;
+  isBookmark: boolean;
+  msg?: string;
+}
