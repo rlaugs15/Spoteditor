@@ -26,7 +26,11 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
           <UserIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[264px]">
+      <DropdownMenuContent
+        // autoFocus를 끄면 포커스를 잡지 않음(에러방지)
+        onCloseAutoFocus={(event) => event.preventDefault()}
+        className="w-[264px]"
+      >
         <DropdownMenuItem className="font-bold text-text-lg flex justify-start gap-[5px] px-4 items-center">
           {/* 체크 아이콘 추가 시 span에 ref={textRef} 추가 */}
           <span className="truncate">{user?.nickname}</span>

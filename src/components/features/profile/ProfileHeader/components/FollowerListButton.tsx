@@ -30,8 +30,6 @@ export default function FollowerListButton({ userId, totalCount }: FollowerListB
   const queryClient = useQueryClient();
 
   const { data, isLoading, fetchNextPage, isFetchingNextPage } = useFollowers({ userId });
-  console.log('data', data);
-
   const scrollRef = useBottomScrollTrigger(fetchNextPage, isFetchingNextPage, 20);
 
   /* 팔로우 리스트 열닫 시 팔로우 유저 리스트 최신화 */

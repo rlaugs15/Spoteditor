@@ -25,8 +25,7 @@ export default function FollowingButton({ userId, className = '' }: FollowingBut
       onClick={onFollowClick}
       variant={isFollowing ? 'ghost' : 'outline'}
       size="s"
-      className={cn('font-medium', className)}
-      fullRounded
+      className={cn('font-medium rounded-[60px]', className)}
     >
       {isFollowing ? '팔로잉' : '팔로우'}
     </Button>

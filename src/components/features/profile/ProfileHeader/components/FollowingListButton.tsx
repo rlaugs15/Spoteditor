@@ -1,6 +1,7 @@
 'use client';
 
 import { followKeys } from '@/app/actions/keys';
+import FollowingButton from '@/components/common/Button/FollowingButton';
 import useBottomScrollTrigger from '@/components/common/Header/Header/components/pagenation/useBottomScrollTrigger';
 import { XIcon } from '@/components/common/Icons';
 import UserImage from '@/components/common/UserImage';
@@ -103,6 +104,14 @@ export default function FollowingListButton({ userId, totalCount, me }: Followin
                           </figure>
                         </Link>
                       </DialogClose>
+                      {me?.user_id === userId && (
+                        <div className="z-20">
+                          <FollowingButton userId={following.user_id} />
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
                 {isFetchingNextPage && <Loading className="w-full h-5" />}
               </>
             )}
