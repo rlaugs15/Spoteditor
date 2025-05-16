@@ -349,12 +349,13 @@ model follow {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model log {
-  log_id        BigInt         @id @default(autoincrement())
   created_at    DateTime       @default(now()) @db.Timestamptz(6)
-  user_id       String?        @db.Uuid
+  user_id       String?        @default(dbgenerated("auth.uid()")) @db.Uuid
   title         String?
   description   String?
   thumbnail_url String?
+  log_id        String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  address       address[]
   users         public_users?  @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
   log_bookmark  log_bookmark[]
   log_tag       log_tag[]
@@ -366,8 +367,8 @@ model log {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model log_bookmark {
   log_bookmark_id BigInt        @id @default(autoincrement())
-  log_id          BigInt?
   user_id         String?       @db.Uuid
+  log_id          String?       @db.Uuid
   log             log?          @relation(fields: [log_id], references: [log_id], onDelete: Cascade, onUpdate: NoAction)
   users           public_users? @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
 
@@ -376,23 +377,23 @@ model log_bookmark {
 
 model log_tag {
   log_tag_id BigInt  @id @default(autoincrement())
-  log_id     BigInt?
   tag        String?
   category   String?
+  log_id     String? @db.Uuid
   log        log?    @relation(fields: [log_id], references: [log_id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
 }
 
 model place {
-  place_id       BigInt           @id @default(autoincrement())
   created_at     DateTime         @default(now()) @db.Timestamptz(6)
   name           String?
   description    String?
   address        String?
   category       String?
   updated_at     DateTime?        @db.Timestamptz(6)
-  log_id         BigInt?
+  log_id         String?          @db.Uuid
+  place_id       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   log            log?             @relation(fields: [log_id], references: [log_id], onDelete: Cascade, onUpdate: NoAction)
   place_bookmark place_bookmark[]
   place_images   place_images[]
@@ -403,7 +404,7 @@ model place {
 model place_bookmark {
   place_bookmark_id BigInt        @id @default(autoincrement())
   user_id           String?       @db.Uuid
-  place_id          BigInt?
+  place_id          String?       @db.Uuid
   place             place?        @relation(fields: [place_id], references: [place_id], onDelete: Cascade, onUpdate: NoAction)
   users             public_users? @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
 
@@ -412,9 +413,9 @@ model place_bookmark {
 
 model place_images {
   place_image_id BigInt  @id @default(autoincrement())
-  place_id       BigInt?
   image_path     String?
   order          Int?
+  place_id       String? @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   place          place?  @relation(fields: [place_id], references: [place_id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
@@ -440,6 +441,19 @@ model public_users {
   users                             auth_users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@map("users")
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model address {
+  address_id String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  country    String?
+  city       String?
+  sigungu    String?
+  log_id     String?  @db.Uuid
+  log        log?     @relation(fields: [log_id], references: [log_id], onDelete: Cascade, onUpdate: NoAction)
+
   @@schema("public")
 }
 

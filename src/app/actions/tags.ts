@@ -17,10 +17,14 @@ export const cacheTags = {
   /* 로그 */
   logDetail: (logId: string) => cacheTags.fromKey([...logKeys.detail(logId), 'single']),
   logList: () => cacheTags.fromKey([...logKeys.log, 'list']),
+  logBookmarkList: (userId: string) =>
+    cacheTags.fromKey([...logKeys.log, 'bookmark', userId, 'list']),
 
   /* 장소 */
   placeDetail: (placeId: string) => cacheTags.fromKey([...placeKeys.detail(placeId), 'single']),
   placeList: () => cacheTags.fromKey([...placeKeys.place, 'list']),
+  placeBookmarkList: (userId: string) =>
+    cacheTags.fromKey([...placeKeys.place, 'bookmark', userId, 'list']),
 
   /* 북마크 */
   placeBookmark: (placeId: string) =>
