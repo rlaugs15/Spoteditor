@@ -13,6 +13,11 @@ export type ApiResponse<T> = {
   };
 };
 
+export type ActionResponse = {
+  success: boolean;
+  msg?: string;
+};
+
 export interface PaginationParams {
   currentPage: number;
   pageSize: number;

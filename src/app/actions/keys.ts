@@ -1,5 +1,5 @@
 import { PaginationParams } from '@/types/api/common';
-import { FollowParams } from '@/types/api/follow';
+import { FollowListParams } from '@/types/api/follow';
 
 /* 유저 */
 export const userKeys = {
@@ -14,12 +14,17 @@ export const followKeys = {
 
   publicUser: (userId: string) => [...followKeys.all, 'user', userId] as const,
 
+  /* 상태 확인용(단일 팔로우) */
+  status: (userId: string) => [...followKeys.publicUser(userId), 'status'] as const,
+
+  /* 팔로워 목록 */
   follower: (userId: string) => [...followKeys.publicUser(userId), 'followers'] as const,
-  followerList: (params: FollowParams) =>
+  followerList: (params: FollowListParams) =>
     [...followKeys.follower(params.userId), params.currentPage, params.pageSize] as const,
 
+  /* 팔로잉 목록 */
   following: (userId: string) => [...followKeys.publicUser(userId), 'followings'] as const,
-  followingList: (params: FollowParams) =>
+  followingList: (params: FollowListParams) =>
     [...followKeys.following(params.userId), params.currentPage, params.pageSize] as const,
 };
 

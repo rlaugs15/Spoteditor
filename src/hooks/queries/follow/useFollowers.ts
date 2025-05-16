@@ -1,8 +1,7 @@
 import { followKeys } from '@/app/actions/keys';
-import { FollowParams } from '@/types/api/follow';
+import { FollowListParams } from '@/types/api/follow';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-async function fetchFollowers({ userId, currentPage, pageSize }: FollowParams) {
   const res = await fetch(
     `/api/followers?userId=${userId}&currentPage=${currentPage}&pageSize=${pageSize}`
   );
@@ -10,7 +9,6 @@ async function fetchFollowers({ userId, currentPage, pageSize }: FollowParams) {
   return data;
 }
 
-export default function useFollowers({ userId, currentPage = 1, pageSize = 10 }: FollowParams) {
   return useInfiniteQuery({
     queryKey: followKeys.followerList({ userId, currentPage, pageSize }),
     queryFn: async ({ pageParam }) =>
