@@ -2,23 +2,21 @@
 
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'motion/react';
-import { usePathname, useRouter } from 'next/navigation';
 
-interface TabNavButtonProps {
+interface TabButtonProps {
   userId: string;
-  tabKey: string;
+  tabKey: 'myLog' | 'savedSpaces' | 'savedLog';
   tabName: string;
+  tab: 'myLog' | 'savedSpaces' | 'savedLog';
+  onTabClick: (tab: 'myLog' | 'savedSpaces' | 'savedLog') => void;
 }
 
-export default function TabNavButton({ userId, tabKey, tabName }: TabNavButtonProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const isActive = pathname === `/profile/${userId}/${tabKey}`;
+export default function TabButton({ tabKey, tabName, tab, onTabClick }: TabButtonProps) {
+  const isActive = tab === tabKey;
   return (
     <div className="relative">
       <button
-        onClick={() => router.push(`/profile/${userId}/${tabKey}`)}
+        onClick={() => onTabClick(tabKey)}
         className={cn(
           'py-2 web:py-3 font-bold text-text-sm web:text-text-xl',
           isActive ? 'text-black' : 'text-light-200'
