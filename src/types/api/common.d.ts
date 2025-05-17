@@ -29,3 +29,7 @@ export interface BookmarkResponse {
   isBookmark: boolean;
   msg?: string;
 }
+
+export interface BookmarkParams extends Pick<PaginationParams, 'currentPage' | 'pageSize'> {
+  userId: string;
+}
