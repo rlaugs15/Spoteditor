@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 interface PostCardImageProps {
   imageUrl?: string | null;
   lable?: boolean;
@@ -16,10 +17,13 @@ function PostCardImage({ imageUrl, lable, author, className }: PostCardImageProp
       )}
     >
       {imageUrl && (
-        <img
+        <Image
           src={imageUrl}
           alt="Post Thumbnail"
-          className="object-cover object-center w-full h-full"
+          fill
+          sizes="100%"
+          className="object-cover object-center"
+          placeholder="blur"
         />
       )}
       {lable && (

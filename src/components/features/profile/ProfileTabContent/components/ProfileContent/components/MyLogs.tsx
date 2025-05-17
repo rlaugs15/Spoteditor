@@ -1,5 +1,6 @@
 'use client';
 
+import LogBookMarkButton from '@/components/common/Button/Bookmark/LogBookMarkButton';
 import MotionCard from '@/components/common/Card/MotionCard';
 import {
   PostCardImage,
@@ -15,13 +16,16 @@ import useUser from '@/hooks/queries/user/useUser';
 import usePagination from '@/hooks/usePagination';
 import Link from 'next/link';
 
-export default function MyLogs() {
-  const { currentPage, handlePageChange } = usePagination();
+interface MyLogsProps {
+  userId: string;
+}
 
+export default function MyLogs({ userId }: MyLogsProps) {
+  const { currentPage, handlePageChange } = usePagination();
   const { data: me } = useUser();
 
   const { data, isPending } = useLogsBookmark({
-    userId: String(me?.user_id),
+    userId,
     currentPage: Number(currentPage),
   });
   return (
@@ -46,6 +50,9 @@ export default function MyLogs() {
                     sigungu={log.address.sigungu}
                   />
                 </Link>
+                {me?.user_id !== userId && (
+                  <LogBookMarkButton logId={log.log_id} userId={String(me?.user_id)} />
+                )}
               </MotionCard>
             ))}
           </PostCardWrapper>

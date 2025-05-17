@@ -1,6 +1,6 @@
+import { getUser } from '@/app/actions/user';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../../../../prisma/prisma';
-import { getUser } from '@/app/actions/user';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
   const logBookmark = await prisma.log_bookmark.findFirst({
     where: {
       user_id: me?.user_id,
-      log_id: BigInt(logId),
+      log_id: String(logId),
     },
   });
 
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
   const existing = await prisma.log_bookmark.findFirst({
     where: {
       user_id: me.user_id,
-      log_id: parsedLogId,
+      log_id: String(parsedLogId),
     },
   });
 
@@ -67,11 +67,11 @@ export async function POST(req: NextRequest) {
     await prisma.log_bookmark.create({
       data: {
         user_id: me.user_id,
-        log_id: parsedLogId,
+        log_id: String(parsedLogId),
       },
     });
     return NextResponse.json({ success: true, isBookmark: true }, { status: 200 });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ success: false, msg: '서버 오류로 북마크 실패' }, { status: 500 });
   }
 }
@@ -103,7 +103,7 @@ export async function DELETE(req: NextRequest) {
     const deleted = await prisma.log_bookmark.deleteMany({
       where: {
         user_id: me.user_id,
-        log_id: parsedLogId,
+        log_id: String(parsedLogId),
       },
     });
 
@@ -114,7 +114,7 @@ export async function DELETE(req: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, msg: '서버 오류로 북마크 취소 실패' },
       { status: 500 }

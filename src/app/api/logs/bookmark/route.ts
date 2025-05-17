@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
   try {
     const result = await getBookmarkedLogs({ userId, currentPage, pageSize });
     return NextResponse.json(result, { status: result.meta?.httpStatus ?? 200 });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ success: false, message: '서버 오류로 조회 실패' }, { status: 500 });
   }
 }

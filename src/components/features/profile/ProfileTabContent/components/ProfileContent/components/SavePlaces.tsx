@@ -14,16 +14,18 @@ import usePlacesBookmark from '@/hooks/queries/place/usePlacesBookmark';
 import usePagination from '@/hooks/usePagination';
 import Link from 'next/link';
 import PlaceBookMarkButton from './../../../../../../common/Button/Bookmark/PlaceBookMarkButton';
+import useUser from '@/hooks/queries/user/useUser';
 
 interface SavePlacesProps {
   userId: string;
 }
 
 export default function SavePlaces({ userId }: SavePlacesProps) {
+  const { data: me } = useUser();
   const { currentPage, handlePageChange } = usePagination();
 
   const { data, isPending } = usePlacesBookmark({
-    userId: String(userId),
+    userId,
     currentPage: Number(currentPage),
   });
   return (
@@ -44,7 +46,7 @@ export default function SavePlaces({ userId }: SavePlacesProps) {
                   <PostCardTitle title={place.name} />
                   <PostCardPlaceLocation address={place.address} />
                 </Link>
-                <PlaceBookMarkButton placeId={place.place_id} userId={place.user.user_id} />
+                <PlaceBookMarkButton placeId={place.place_id} userId={String(me?.user_id)} />
               </MotionCard>
             ))}
           </PostCardWrapper>

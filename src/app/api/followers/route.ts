@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
         httpStatus: 200,
       },
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       {
         success: false,

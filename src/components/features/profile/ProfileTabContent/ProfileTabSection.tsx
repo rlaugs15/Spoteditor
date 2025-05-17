@@ -13,7 +13,7 @@ export default function ProfileTabSection({ me, userId }: ProfileTabSectionProps
     <>
       <ProfileTabs me={me} userId={userId} />
       <section className="w-full">
-        <ProfileContent />
+        <ProfileContent userId={userId} />
       </section>
     </>
   );

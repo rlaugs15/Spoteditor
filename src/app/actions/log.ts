@@ -20,8 +20,11 @@ async function fetchLogs({ currentPage = 1, pageSize = 10, sort = 'latest' }: Pa
     // 정렬 기준 설정: 인기순이면 북마크 개수 기준(연결된 테이블의 개수를 기준으로 정렬), 기본은 최신순
     orderBy: sort === 'popular' ? { log_bookmark: { _count: 'desc' } } : { created_at: 'desc' },
 
-    // 작성자 정보도 함께 포함시키되, 필요한 필드만 선택
-    include: {
+    select: {
+      log_id: true,
+      title: true,
+      description: true,
+      thumbnail_url: true,
       users: {
         select: {
           user_id: true,

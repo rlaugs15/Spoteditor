@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { IUser } from '@/types/api/user';
 import TabButton from './TabButton';
-import { Dispatch, SetStateAction } from 'react';
 import { useProfileTabStore } from '@/stores/profileStore';
 
 interface ProfileTabsProps {

@@ -3,7 +3,7 @@ import { ApiResponse, PaginationParams } from './common';
 
 type User = Pick<Tables<'users'>, 'nickname' | 'image_url'>;
 
-type Log = Tables<'log'>;
+type Log = Pick<Tables<'log'>, 'log_id' | 'title' | 'description' | 'thumbnail_url'>;
 
 type Address = Pick<Tables<'address'>, 'city' | 'country' | 'sigungu'>;
 

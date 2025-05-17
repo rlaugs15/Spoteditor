@@ -1,6 +1,6 @@
+import { getUser } from '@/app/actions/user';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../../prisma/prisma';
-import { getUser } from '@/app/actions/user';
 
 /*
   팔로우 관계 설명:
@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
       success: true,
       isFollowing: !!follow,
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, msg: '서버 오류로 팔로우 확인 실패' },
       { status: 500 }
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
       },
     });
     return NextResponse.json({ success: true, isFollowing: true }, { status: 200 });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ success: false, msg: '서버 오류로 팔로우 실패' }, { status: 500 });
   }
 }
