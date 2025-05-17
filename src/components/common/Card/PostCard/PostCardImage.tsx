@@ -27,7 +27,6 @@ function PostCardImage({ imageUrl, lable, author, className }: PostCardImageProp
           <span className="text-[11px] font-semibold leading-[130%] tracking-[-0.22px]">
             {author}
           </span>
-          {/* <VerifiedLabelIcon className="w-[10.474px] h-[10.378px] fill-white" /> */}
         </div>
       )}
       <div className="absolute inset-0 transition-colors group-hover:bg-black/25" />
