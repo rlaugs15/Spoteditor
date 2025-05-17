@@ -34,7 +34,7 @@ export default function ProfileTabs({ me, userId }: ProfileTabsProps) {
       <TabButton
         tabKey="savedSpaces"
         userId={userId}
-        tabName="저장된 공간"
+        tabName="저장된 장소"
         tab={tab}
         onTabClick={onTabClick}
       />

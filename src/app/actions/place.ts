@@ -48,6 +48,7 @@ export async function fetchBookmarkedPlaces({
               log_id: true,
               users: {
                 select: {
+                  user_id: true,
                   nickname: true, // 작성자 이름
                 },
               },
@@ -69,6 +70,7 @@ export async function fetchBookmarkedPlaces({
       place_id: place?.place_id?.toString() ?? '',
       log_id: place?.log?.log_id?.toString() ?? null,
       user: {
+        user_id: place?.log?.users?.user_id ?? '',
         nickname: place?.log?.users?.nickname ?? null,
       },
       name: place?.name ?? '',

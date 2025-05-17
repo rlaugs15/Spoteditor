@@ -6,7 +6,7 @@ type IPlace = Pick<
   'place_id' | 'log_id' | 'name' | 'description' | 'address' | 'category'
 >;
 type PlaceImage = Tables<'place_images'>;
-type User = Pick<Tables<'users'>, 'nickname'>;
+type User = Pick<Tables<'users'>, 'nickname' | 'user_id'>;
 
 interface Place extends IPlace {
   user: User;
