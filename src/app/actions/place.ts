@@ -33,8 +33,6 @@ export async function fetchBookmarkedPlaces({
           description: true,
           address: true,
           category: true,
-          created_at: true,
-          updated_at: true,
           place_images: {
             orderBy: { order: 'asc' },
             take: 1, // 대표 이미지 한 장만
@@ -70,7 +68,9 @@ export async function fetchBookmarkedPlaces({
     return {
       place_id: place?.place_id?.toString() ?? '',
       log_id: place?.log?.log_id?.toString() ?? null,
-      nickname: place?.log?.users?.nickname ?? null,
+      user: {
+        nickname: place?.log?.users?.nickname ?? null,
+      },
       name: place?.name ?? '',
       description: place?.description ?? '',
       address: place?.address ?? '',
@@ -81,8 +81,6 @@ export async function fetchBookmarkedPlaces({
         place_id: image?.place_id?.toString() ?? null,
         place_image_id: image?.place_image_id ? Number(image.place_image_id) : 0,
       },
-      created_at: place?.created_at?.toISOString() ?? '',
-      updated_at: place?.updated_at?.toISOString() ?? '',
     };
   });
   return {

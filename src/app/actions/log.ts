@@ -1,6 +1,6 @@
 import { PaginationParams } from '@/types/api/common';
 import { prisma } from '../../../prisma/prisma';
-import { logBookmarkListParmas, LogReseponse } from '@/types/api/log';
+import { logBookmarkListParmas } from '@/types/api/log';
 import { unstable_cache } from 'next/cache';
 import { cacheTags } from './tags';
 import { logKeys } from './keys';
@@ -8,11 +8,7 @@ import { logKeys } from './keys';
 // ===================================================================
 // 로그 리스트
 // ===================================================================
-async function fetchLogs({
-  currentPage = 1,
-  pageSize = 10,
-  sort = 'latest',
-}: PaginationParams): Promise<LogReseponse> {
+async function fetchLogs({ currentPage = 1, pageSize = 10, sort = 'latest' }: PaginationParams) {
   const safePage = Math.max(1, currentPage);
   const safeSize = Math.min(Math.max(1, pageSize), 30);
   const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
@@ -68,7 +64,7 @@ export async function fetchBookmarkedLogs({
   userId,
   currentPage = 1,
   pageSize = 10,
-}: logBookmarkListParmas): Promise<LogReseponse> {
+}: logBookmarkListParmas) {
   const safePage = Math.max(1, currentPage);
   const safeSize = Math.min(Math.max(1, pageSize), 30);
   const skip = (safePage - 1) * safeSize;
@@ -87,9 +83,15 @@ export async function fetchBookmarkedLogs({
         include: {
           users: {
             select: {
-              user_id: true,
               nickname: true,
               image_url: true,
+            },
+          },
+          address: {
+            select: {
+              country: true,
+              city: true,
+              sigungu: true,
             },
           },
         },

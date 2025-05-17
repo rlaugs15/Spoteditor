@@ -1,5 +1,9 @@
 type Sort = 'popular' | 'latest';
 
+export type NullableFields<T> = {
+  [K in keyof T]: T[K] | null;
+};
+
 export type ApiResponse<T> = {
   data: T;
   meta?: {
@@ -20,7 +24,7 @@ export type ActionResponse = {
 
 export interface PaginationParams {
   currentPage: number;
-  pageSize: number;
+  pageSize?: number;
   sort?: Sort;
 }
 
