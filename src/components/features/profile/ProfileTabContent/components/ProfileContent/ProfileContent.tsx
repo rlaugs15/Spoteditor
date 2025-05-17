@@ -3,6 +3,7 @@
 import { useProfileTabStore } from '@/stores/profileStore';
 import { useParams } from 'next/navigation';
 import SaveLogs from './components/SaveLogs';
+import MyLogs from './components/MyLogs';
 
 export default function ProfileContent() {
   const { userId } = useParams();
@@ -10,6 +11,7 @@ export default function ProfileContent() {
 
   return (
     <>
+      {tab === 'myLog' && <MyLogs />}
       {tab === 'savedLog' && <SaveLogs userId={String(userId)} />}
     </>
   );

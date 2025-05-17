@@ -72,11 +72,17 @@ export const AddImageIcon = ({ className }: IconProps) => {
   return (
     <Image
       src="/icons/add-image.svg"
-      width={14}
-      height={15}
+      width={4}
+      height={4}
       alt="로그 작성 아이콘"
       className={className}
     />
+  );
+};
+
+export const PlusIcon = ({ className }: IconProps) => {
+  return (
+    <Image src="/icons/Plus.svg" width={14} height={15} alt="더하기 아이콘" className={className} />
   );
 };
 
