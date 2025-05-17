@@ -1,4 +1,5 @@
 import { placeKeys } from '@/app/actions/keys';
+import { useProfileTabStore } from '@/stores/profileStore';
 import { BookmarkParams } from '@/types/api/common';
 import { PlaceReseponse } from '@/types/api/place';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
@@ -25,10 +26,11 @@ export default function usePlacesBookmark({
     currentPage,
     pageSize,
   };
+  const tab = useProfileTabStore((state) => state.tab);
   return useQuery({
     queryKey: placeKeys.bookmarkList(params),
     queryFn: () => fetchUsePlacesBookmark(params),
-    enabled: !!userId,
+    enabled: !!userId && tab === 'savedSpaces',
     placeholderData: keepPreviousData,
   });
 }

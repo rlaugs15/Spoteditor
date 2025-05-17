@@ -10,7 +10,7 @@ interface ProfileHeaderProps {
 
 export default function ProfileHeader({ me, user }: ProfileHeaderProps) {
   return (
-    <section className="flex flex-col items-center justify-start w-full pb-7.5 web:pb-10 bg-red-300">
+    <section className="flex flex-col items-center justify-start w-full pb-7.5 web:pb-10">
       <section>
         <UserImage imgSrc={String(user?.image_url)} />
       </section>

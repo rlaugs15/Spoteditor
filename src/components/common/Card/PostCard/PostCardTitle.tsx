@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 
 interface PostCardTitleProps {
   className?: string;
-  title: string;
+  title: string | null;
 }
 
 function PostCardTitle({ className, title }: PostCardTitleProps) {

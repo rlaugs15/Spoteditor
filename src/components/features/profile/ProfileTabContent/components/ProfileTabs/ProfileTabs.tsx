@@ -5,15 +5,15 @@ import { Separator } from '@/components/ui/separator';
 import { IUser } from '@/types/api/user';
 import TabButton from './TabButton';
 import { Dispatch, SetStateAction } from 'react';
+import { useProfileTabStore } from '@/stores/profileStore';
 
 interface ProfileTabsProps {
   me: IUser;
   userId: string;
-  tab: 'myLog' | 'savedSpaces' | 'savedLog';
-  setTab: Dispatch<SetStateAction<'myLog' | 'savedSpaces' | 'savedLog'>>;
 }
 
-export default function ProfileTabs({ me, userId, tab, setTab }: ProfileTabsProps) {
+export default function ProfileTabs({ me, userId }: ProfileTabsProps) {
+  const { tab, setTab } = useProfileTabStore();
   /*  const touter = useRouter();
   const handleGotoRegisterPage = () =>
     touter(REGISTER_SELECT, {

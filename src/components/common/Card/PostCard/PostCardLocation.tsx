@@ -1,19 +1,20 @@
 import { Separator } from '@/components/ui/separator';
+import { NullableFields } from '@/types/api/common';
 
-interface PostCardLocationProps {
-  sido: string;
-  bname: string;
+type PostCardLocationProps = NullableFields<{
+  city: string;
+  country: string;
   sigungu: string;
-}
+}>;
 
-function PostCardLocation({ sido, bname, sigungu }: PostCardLocationProps) {
+function PostCardLocation({ city, country, sigungu }: PostCardLocationProps) {
   return (
     <h4 className="flex items-center text-text-sm web:text-text-md text-light-300">
-      <span>{sido}</span>
+      <span>{city}</span>
       <div className="mx-2 h-3">
         <Separator orientation="vertical" className="h-3 bg-light-300" />
       </div>
-      <span>{`${bname} ${sigungu}`}</span>
+      <span>{`${country} ${sigungu}`}</span>
     </h4>
   );
 }

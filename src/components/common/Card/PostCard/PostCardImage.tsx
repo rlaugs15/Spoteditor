@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils';
 interface PostCardImageProps {
-  imageUrl?: string;
+  imageUrl?: string | null;
   lable?: boolean;
-  author: string;
+  author: string | null;
   className?: string;
 }
 
