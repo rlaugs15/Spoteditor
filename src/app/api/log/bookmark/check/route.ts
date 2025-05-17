@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '../../../../../prisma/prisma';
+import { prisma } from '../../../../../../prisma/prisma';
 import { getUser } from '@/app/actions/user';
 
 export async function GET(req: NextRequest) {
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: false, msg: '로그 id가 필요합니다.' }, { status: 400 });
   }
 
-  const placeBookmark = await prisma.log_bookmark.findFirst({
+  const logBookmark = await prisma.log_bookmark.findFirst({
     where: {
       user_id: me?.user_id,
       log_id: BigInt(logId),
@@ -23,8 +23,8 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(
     {
-      success: !!placeBookmark,
-      isBookmark: !!placeBookmark,
+      success: !!logBookmark,
+      isBookmark: !!logBookmark,
     },
     { status: 200 }
   );

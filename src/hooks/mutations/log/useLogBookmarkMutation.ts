@@ -1,14 +1,14 @@
 import { logKeys } from '@/app/actions/keys';
 import useUser from '@/hooks/queries/user/useUser';
 import { BookmarkResponse } from '@/types/api/common';
-import { LogBookmarkParams } from '@/types/api/log';
+import { LogBookmarkCheckParams } from '@/types/api/log';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 async function fetchLogBookmark({
   logId,
   isBookmark,
-}: LogBookmarkParams): Promise<BookmarkResponse> {
-  const res = await fetch(`/api/log/bookmark?logId=${logId}`, {
+}: LogBookmarkCheckParams): Promise<BookmarkResponse> {
+  const res = await fetch(`/api/log/bookmark/check?logId=${logId}`, {
     method: isBookmark ? 'DELETE' : 'POST',
   });
   const data = await res.json();
@@ -21,7 +21,7 @@ export default function useLogBookmarkMutation() {
 
   return useMutation({
     mutationFn: fetchLogBookmark,
-    onMutate: async ({ logId, isBookmark }: LogBookmarkParams) => {
+    onMutate: async ({ logId, isBookmark }: LogBookmarkCheckParams) => {
       await queryClient.cancelQueries({
         queryKey: logKeys.bookmarkStatus(logId, String(user?.user_id)),
       });

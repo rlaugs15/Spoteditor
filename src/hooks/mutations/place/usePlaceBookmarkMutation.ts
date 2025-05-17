@@ -8,7 +8,7 @@ async function fetchPlaceBookmark({
   placeId,
   isBookmark,
 }: PlaceBookmarkParams): Promise<BookmarkResponse> {
-  const res = await fetch(`/api/place/bookmark?placeId=${placeId}`, {
+  const res = await fetch(`/api/place/bookmark/check?placeId=${placeId}`, {
     method: isBookmark ? 'DELETE' : 'POST',
   });
   const data = await res.json();

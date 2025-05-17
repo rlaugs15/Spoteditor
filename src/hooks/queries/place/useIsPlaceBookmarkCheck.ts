@@ -7,15 +7,15 @@ interface UseIsPlaceBookmarkProps {
   userId: string;
 }
 
-async function fetchIsPlaceBookmark(placeId: string): Promise<BookmarkResponse> {
-  const res = await fetch(`/api/place/bookmark?placeId=${placeId}`);
+async function fetchPlaceBookmarkCheck(placeId: string): Promise<BookmarkResponse> {
+  const res = await fetch(`/api/place/bookmark/check?placeId=${placeId}`);
   return res.json();
 }
 
-export default function useIsPlaceBookmark({ placeId, userId }: UseIsPlaceBookmarkProps) {
+export default function usePlaceBookmarkCheck({ placeId, userId }: UseIsPlaceBookmarkProps) {
   return useQuery<BookmarkResponse>({
     queryKey: placeKeys.bookmarkStatus(placeId, String(userId)),
-    queryFn: () => fetchIsPlaceBookmark(placeId),
+    queryFn: () => fetchPlaceBookmarkCheck(placeId),
     enabled: !!placeId && !!userId,
   });
 }
