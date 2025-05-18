@@ -8,7 +8,7 @@ interface MainLayoutProps extends PropsWithChildren {
 
 const MainLayout = ({ modal, children }: MainLayoutProps) => {
   return (
-    <div className="w-dvw h-dvh flex flex-col font-pretendard">
+    <div className="w-full h-dvh flex flex-col font-pretendard">
       {modal}
       <Header />
       <div className="grow">{children}</div>

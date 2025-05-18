@@ -1,4 +1,3 @@
-'use client';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
@@ -47,7 +46,7 @@ export const XIcon = ({ className }: { className?: string }) => {
 export const HeadPhoneIcon = ({ className }: IconProps) => {
   return (
     <Image
-      src="/icons/Headphone.svg"
+      src="/icons/head-phone.svg"
       width={14}
       height={15}
       alt="헤드폰 아이콘"
@@ -82,7 +81,7 @@ export const AddImageIcon = ({ className }: IconProps) => {
 
 export const PlusIcon = ({ className }: IconProps) => {
   return (
-    <Image src="/icons/Plus.svg" width={14} height={15} alt="더하기 아이콘" className={className} />
+    <Image src="/icons/plus.svg" width={14} height={15} alt="더하기 아이콘" className={className} />
   );
 };
 
@@ -114,6 +113,17 @@ export const LocationIcon = ({ className }: IconProps) => {
   return (
     <Image
       src="/icons/location.svg"
+      width={20}
+      height={20}
+      alt="장소 아이콘"
+      className={className}
+    />
+  );
+};
+export const WhiteLocationIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/location-white.svg"
       width={20}
       height={20}
       alt="장소 아이콘"
@@ -154,6 +164,55 @@ export const TrashIcon = ({ className }: IconProps) => {
     />
   );
 };
+export const TableIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/table.svg"
+      width={20}
+      height={20}
+      alt="테이블 아이콘"
+      className={className}
+    />
+  );
+};
+export const BookMarkIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/bookmark.svg"
+      width={20}
+      height={20}
+      alt="북마크 아이콘"
+      className={className}
+    />
+  );
+};
+export const ShareIcon = ({ className }: IconProps) => {
+  return (
+    <Image src="/icons/share.svg" width={24} height={24} alt="공유 아이콘" className={className} />
+  );
+};
+export const PenIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/pen.svg"
+      width={24}
+      height={24}
+      alt="로그 수정 아이콘"
+      className={className}
+    />
+  );
+};
+export const PenBlackIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/pen-black.svg"
+      width={24}
+      height={24}
+      alt="로그 수정 아이콘"
+      className={className}
+    />
+  );
+};
 
 /* arrow */
 export const ArrowLeftIcon = ({ className }: IconProps) => {
@@ -185,6 +244,41 @@ export const ArrowDownIcon = ({ className }: IconProps) => {
       width={20}
       height={20}
       alt="아래쪽 화살표 아이콘"
+      className={className}
+    />
+  );
+};
+
+/* x */
+export const XInputClearIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/x-clear-input.svg"
+      width={20}
+      height={20}
+      alt="입력창 클리어 아이콘"
+      className={className}
+    />
+  );
+};
+export const XRemovePlaceImageIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/x-remove-placeImage.svg"
+      width={20}
+      height={20}
+      alt="장소 이미지 삭제 아이콘"
+      className={className}
+    />
+  );
+};
+export const XRemoveThumbnailIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/x-remove-thumbnail.svg"
+      width={20}
+      height={20}
+      alt="썸네일 이미지 삭제 아이콘"
       className={className}
     />
   );
