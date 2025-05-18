@@ -1,5 +1,5 @@
 import { PaginationParams } from '@/types/api/common';
-import { logBookmarkListParmas } from '@/types/api/log';
+import { logBookmarkListParmas, LogsReseponse } from '@/types/api/log';
 import { unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { logKeys } from './keys';
@@ -12,7 +12,7 @@ async function fetchLogs({
   currentPage = 1,
   pageSize = 10,
   sort = 'latest',
-}: PaginationParams) {
+}: PaginationParams): Promise<LogsReseponse> {
   const safePage = Math.max(1, currentPage);
   const safeSize = Math.min(Math.max(1, pageSize), 30);
   const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
@@ -76,7 +76,7 @@ export async function fetchBookmarkedLogs({
   userId,
   currentPage = 1,
   pageSize = 10,
-}: logBookmarkListParmas) {
+}: logBookmarkListParmas): Promise<LogsReseponse> {
   const safePage = Math.max(1, currentPage);
   const safeSize = Math.min(Math.max(1, pageSize), 30);
   const skip = (safePage - 1) * safeSize;

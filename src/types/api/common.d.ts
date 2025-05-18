@@ -43,10 +43,12 @@ export interface BookmarkParams extends Pick<PaginationParams, 'currentPage' | '
 }
 
 /* 검색, 로그 응답에 사용되는 공통 타입 */
-export type User = Pick<Tables<'users'>, 'nickname' | 'user_id'>;
+export type User = Pick<Tables<'users'>, 'nickname' | 'user_id'> | null;
 export type Address = Pick<Tables<'address'>, 'city' | 'country' | 'sigungu'>;
 export type Log = Omit<Tables<'log'>, 'created_at' | 'user_id'>;
-export type LogWithUserAndAddress = Log & {
-  users: User;
-  address: Address;
-};
+export type LogWithUserAndAddress =
+  | (Log & {
+      users: User;
+      address: Address[];
+    })
+  | null;

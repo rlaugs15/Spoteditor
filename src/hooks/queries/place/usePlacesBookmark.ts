@@ -1,14 +1,14 @@
 import { placeKeys } from '@/app/actions/keys';
 import { useProfileTabStore } from '@/stores/profileStore';
 import { BookmarkParams } from '@/types/api/common';
-import { PlaceReseponse } from '@/types/api/place';
+import { PlacesReseponse } from '@/types/api/place';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 async function fetchUsePlacesBookmark({
   userId,
   currentPage,
   pageSize,
-}: BookmarkParams): Promise<PlaceReseponse> {
+}: BookmarkParams): Promise<PlacesReseponse> {
   const res = await fetch(
     `/api/places/bookmark?userId=${userId}&currentPage=${currentPage}&pageSize=${pageSize}`
   );
