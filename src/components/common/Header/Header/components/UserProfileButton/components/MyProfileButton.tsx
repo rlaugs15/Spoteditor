@@ -1,23 +1,19 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import useUser from '@/hooks/queries/user/useUser';
-import { useRouter } from 'next/navigation';
+import { IUser } from '@/types/api/user';
+import Link from 'next/link';
 
-export default function MyProfileButton() {
-  const router = useRouter();
-  const { data: user } = useUser();
+interface MyProfileButtonProps {
+  user: IUser;
+}
 
-  const onProfileClick = () => {
-    const params = user?.userId;
-    router.push(`/profile/${params}/my-logs`);
-  };
+export default function MyProfileButton({ user }: MyProfileButtonProps) {
   return (
-    <Button
-      onClick={onProfileClick}
-      className="w-full h-full rounded-[60px] bg-[#F7F7F7] hover:bg-[#F7F7F7]"
-    >
-      <span className="font-medium text-black text-text-sm">프로필 보기</span>
-    </Button>
+    <Link href={`/profile/${user?.user_id}`} className="w-full">
+      <Button className="w-full h-full rounded-[60px] bg-[#F7F7F7] hover:bg-[#F7F7F7]">
+        <span className="font-medium text-black text-text-sm">프로필 보기</span>
+      </Button>
+    </Link>
   );
 }

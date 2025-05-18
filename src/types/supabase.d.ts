@@ -9,6 +9,41 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      address: {
+        Row: {
+          address_id: string
+          city: string | null
+          country: string | null
+          created_at: string
+          log_id: string | null
+          sigungu: string | null
+        }
+        Insert: {
+          address_id?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          log_id?: string | null
+          sigungu?: string | null
+        }
+        Update: {
+          address_id?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          log_id?: string | null
+          sigungu?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "address_log_id_fkey"
+            columns: ["log_id"]
+            isOneToOne: false
+            referencedRelation: "log"
+            referencedColumns: ["log_id"]
+          },
+        ]
+      }
       follow: {
         Row: {
           follow_id: number
@@ -46,7 +81,7 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
-          log_id: number
+          log_id: string
           thumbnail_url: string | null
           title: string | null
           user_id: string | null
@@ -54,7 +89,7 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string | null
-          log_id?: number
+          log_id?: string
           thumbnail_url?: string | null
           title?: string | null
           user_id?: string | null
@@ -62,7 +97,7 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string | null
-          log_id?: number
+          log_id?: string
           thumbnail_url?: string | null
           title?: string | null
           user_id?: string | null
@@ -80,17 +115,17 @@ export type Database = {
       log_bookmark: {
         Row: {
           log_bookmark_id: number
-          log_id: number | null
+          log_id: string | null
           user_id: string | null
         }
         Insert: {
           log_bookmark_id?: number
-          log_id?: number | null
+          log_id?: string | null
           user_id?: string | null
         }
         Update: {
           log_bookmark_id?: number
-          log_id?: number | null
+          log_id?: string | null
           user_id?: string | null
         }
         Relationships: [
@@ -112,19 +147,22 @@ export type Database = {
       }
       log_tag: {
         Row: {
-          log_id: number | null
+          category: string | null
+          log_id: string | null
           log_tag_id: number
-          tag_id: number | null
+          tag: string | null
         }
         Insert: {
-          log_id?: number | null
+          category?: string | null
+          log_id?: string | null
           log_tag_id?: number
-          tag_id?: number | null
+          tag?: string | null
         }
         Update: {
-          log_id?: number | null
+          category?: string | null
+          log_id?: string | null
           log_tag_id?: number
-          tag_id?: number | null
+          tag?: string | null
         }
         Relationships: [
           {
@@ -134,13 +172,6 @@ export type Database = {
             referencedRelation: "log"
             referencedColumns: ["log_id"]
           },
-          {
-            foreignKeyName: "log_tag_tag_id_fkey"
-            columns: ["tag_id"]
-            isOneToOne: false
-            referencedRelation: "tags"
-            referencedColumns: ["tag_id"]
-          },
         ]
       }
       place: {
@@ -149,9 +180,9 @@ export type Database = {
           category: string | null
           created_at: string
           description: string | null
-          log_id: number | null
+          log_id: string | null
           name: string | null
-          place_id: number
+          place_id: string
           updated_at: string | null
         }
         Insert: {
@@ -159,9 +190,9 @@ export type Database = {
           category?: string | null
           created_at?: string
           description?: string | null
-          log_id?: number | null
+          log_id?: string | null
           name?: string | null
-          place_id?: number
+          place_id?: string
           updated_at?: string | null
         }
         Update: {
@@ -169,9 +200,9 @@ export type Database = {
           category?: string | null
           created_at?: string
           description?: string | null
-          log_id?: number | null
+          log_id?: string | null
           name?: string | null
-          place_id?: number
+          place_id?: string
           updated_at?: string | null
         }
         Relationships: [
@@ -187,17 +218,17 @@ export type Database = {
       place_bookmark: {
         Row: {
           place_bookmark_id: number
-          place_id: number | null
+          place_id: string | null
           user_id: string | null
         }
         Insert: {
           place_bookmark_id?: number
-          place_id?: number | null
+          place_id?: string | null
           user_id?: string | null
         }
         Update: {
           place_bookmark_id?: number
-          place_id?: number | null
+          place_id?: string | null
           user_id?: string | null
         }
         Relationships: [
@@ -221,19 +252,19 @@ export type Database = {
         Row: {
           image_path: string | null
           order: number | null
-          place_id: number | null
+          place_id: string | null
           place_image_id: number
         }
         Insert: {
           image_path?: string | null
           order?: number | null
-          place_id?: number | null
+          place_id?: string | null
           place_image_id?: number
         }
         Update: {
           image_path?: string | null
           order?: number | null
-          place_id?: number | null
+          place_id?: string | null
           place_image_id?: number
         }
         Relationships: [
@@ -246,24 +277,6 @@ export type Database = {
           },
         ]
       }
-      tags: {
-        Row: {
-          name: string | null
-          tag_id: number
-          type: string | null
-        }
-        Insert: {
-          name?: string | null
-          tag_id?: number
-          type?: string | null
-        }
-        Update: {
-          name?: string | null
-          tag_id?: number
-          type?: string | null
-        }
-        Relationships: []
-      }
       users: {
         Row: {
           created_at: string | null
@@ -272,7 +285,7 @@ export type Database = {
           email: string | null
           image_url: string | null
           insta_id: string | null
-          is_deleted: string | null
+          is_deleted: boolean | null
           nickname: string | null
           provider: string | null
           user_id: string
@@ -284,7 +297,7 @@ export type Database = {
           email?: string | null
           image_url?: string | null
           insta_id?: string | null
-          is_deleted?: string | null
+          is_deleted?: boolean | null
           nickname?: string | null
           provider?: string | null
           user_id: string
@@ -296,7 +309,7 @@ export type Database = {
           email?: string | null
           image_url?: string | null
           insta_id?: string | null
-          is_deleted?: string | null
+          is_deleted?: boolean | null
           nickname?: string | null
           provider?: string | null
           user_id?: string

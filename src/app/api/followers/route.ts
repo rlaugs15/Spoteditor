@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '../../../../prisma/prisma';
-import { getUser } from '@/app/actions/user';
+import { prisma } from 'prisma/prisma';
 
 export async function GET(req: NextRequest) {
   try {
@@ -53,7 +52,7 @@ export async function GET(req: NextRequest) {
         httpStatus: 200,
       },
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       {
         success: false,

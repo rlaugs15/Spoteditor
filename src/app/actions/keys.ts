@@ -1,5 +1,6 @@
 import { PaginationParams } from '@/types/api/common';
-import { FollowParams } from '@/types/api/follow';
+import { FollowListParams } from '@/types/api/follow';
+import { logBookmarkListParmas } from '@/types/api/log';
 
 /* 유저 */
 export const userKeys = {
@@ -14,12 +15,17 @@ export const followKeys = {
 
   publicUser: (userId: string) => [...followKeys.all, 'user', userId] as const,
 
+  /* 상태 확인용(단일 팔로우) */
+  status: (userId: string) => [...followKeys.publicUser(userId), 'status'] as const,
+
+  /* 팔로워 목록 */
   follower: (userId: string) => [...followKeys.publicUser(userId), 'followers'] as const,
-  followerList: (params: FollowParams) =>
+  followerList: (params: FollowListParams) =>
     [...followKeys.follower(params.userId), params.currentPage, params.pageSize] as const,
 
+  /* 팔로잉 목록 */
   following: (userId: string) => [...followKeys.publicUser(userId), 'followings'] as const,
-  followingList: (params: FollowParams) =>
+  followingList: (params: FollowListParams) =>
     [...followKeys.following(params.userId), params.currentPage, params.pageSize] as const,
 };
 
@@ -27,7 +33,20 @@ export const followKeys = {
 export const logKeys = {
   log: ['log'] as const,
   detail: (logId: string) => [...logKeys.log, logId] as const,
-  list: (params: PaginationParams) => [...logKeys.log, 'list', params] as const,
+  list: (params: PaginationParams) =>
+    [
+      ...logKeys.log,
+      'list',
+      `${params.currentPage}`,
+      `${params.pageSize}`,
+      `${params.sort}`,
+    ] as const,
+  bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParmas) =>
+    [...logKeys.log, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
+
+  // 단일 로그 북마크
+  bookmarkStatus: (logId: string, userId: string) =>
+    [...logKeys.log, 'bookmark', 'status', logId, userId] as const,
 };
 
 /* 장소 */
@@ -35,10 +54,10 @@ export const placeKeys = {
   place: ['place'] as const,
   detail: (placeId: string) => [...placeKeys.place, placeId] as const,
   list: (params: PaginationParams) => [...placeKeys.place, 'list', params] as const,
-};
+  bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParmas) =>
+    [...placeKeys.place, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
 
-/* 북마크 */
-export const bookmark = {
-  placeBookMark: (placeId: string) => [...placeKeys.detail(placeId), 'place_bookmark'],
-  logBookMark: (logId: string) => [...logKeys.detail(logId), 'log_bookmark'],
+  // 단일 장소 북마크
+  bookmarkStatus: (placeId: string, userId: string) =>
+    [...placeKeys.place, 'bookmark', 'status', placeId, userId] as const,
 };

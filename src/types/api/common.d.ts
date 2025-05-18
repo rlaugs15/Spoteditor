@@ -1,5 +1,9 @@
 type Sort = 'popular' | 'latest';
 
+export type NullableFields<T> = {
+  [K in keyof T]: T[K] | null;
+};
+
 export type ApiResponse<T> = {
   data: T;
   meta?: {
@@ -7,14 +11,29 @@ export type ApiResponse<T> = {
       currentPage: number;
       pageSize: number;
       totalPages: number;
-      sort: Sort;
+      sort?: Sort;
     };
     httpStatus?: number;
   };
 };
 
+export type ActionResponse = {
+  success: boolean;
+  msg?: string;
+};
+
 export interface PaginationParams {
   currentPage: number;
-  pageSize: number;
+  pageSize?: number;
   sort?: Sort;
+}
+
+export interface BookmarkResponse {
+  success: boolean;
+  isBookmark: boolean;
+  msg?: string;
+}
+
+export interface BookmarkParams extends Pick<PaginationParams, 'currentPage' | 'pageSize'> {
+  userId: string;
 }

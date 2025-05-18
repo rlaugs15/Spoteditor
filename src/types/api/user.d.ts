@@ -1,4 +1,4 @@
-export interface IUser {
+export interface IUserBase {
   user_id: string;
   nickname: string | null;
   image_url: string | null;
@@ -6,7 +6,10 @@ export interface IUser {
   insta_id: string | null;
 }
 
-export interface PublicUser extends IUser {
+export type IUser = IUserBase | null;
+
+interface PublicUserBase extends IUserBase {
   followerCount: number;
   followingCount: number;
 }
+export type PublicUser = PublicUserBase | null;

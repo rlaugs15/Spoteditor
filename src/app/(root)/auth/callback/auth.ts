@@ -1,5 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import { prisma } from '../../../../../prisma/prisma';
+import { prisma } from 'prisma/prisma';
 
 export async function upsertGoogleUser(supabase: SupabaseClient<any, 'public', any>) {
   /* 로그인된 유저 정보 가져오기 (auth.users 기준) */

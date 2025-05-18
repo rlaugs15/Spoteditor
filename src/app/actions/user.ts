@@ -1,12 +1,12 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { revalidateTag, unstable_cache } from 'next/cache';
+import { PublicUser } from '@/types/api/user';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { prisma } from '../../../prisma/prisma';
+import { revalidateTag, unstable_cache } from 'next/cache';
+import { prisma } from 'prisma/prisma';
 import { userKeys } from './keys';
 import { cacheTags } from './tags';
-import { PublicUser } from '@/types/api/user';
 
 interface PatchUserProps {
   userId: string;
@@ -25,7 +25,6 @@ export async function fetchUserSupabase() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
   return user?.id ?? null;
 }
 
@@ -48,10 +47,13 @@ async function fetchUserPrisma(userId: string) {
 }
 
 const cacheUser = unstable_cache(
-  async (userId: string) => await fetchUserPrisma(userId),
+  async (userId: string) => {
+    //console.log('캐시 제대로 되나', userId);
+    return await fetchUserPrisma(userId);
+  },
   [...userKeys.me()],
   {
-    tags: [...cacheTags.me()],
+    tags: [cacheTags.me()],
     revalidate: false,
   }
 );
@@ -107,7 +109,7 @@ async function fetchPublicUser(userId: string): Promise<PublicUser | null> {
 
 export async function getPublicUser(userId: string) {
   return unstable_cache(() => fetchPublicUser(userId), [...userKeys.publicUser(userId)], {
-    tags: [...cacheTags.publicUser(userId)],
+    tags: [cacheTags.publicUser(userId)],
     revalidate: 300,
   })();
 }

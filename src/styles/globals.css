@@ -219,3 +219,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* 스크롤바 넓이 지정 */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* 스크롤바 트랙 꾸미기 */
+::-webkit-scrollbar-track {
+  border-radius: 5px;
+}
+
+/* 스크롤바 손잡이 꾸미기 */
+::-webkit-scrollbar-thumb {
+  background: #e5e6e8;
+  border-radius: 5px;
+}
+
+.scroll-container {
+  overflow-y: auto; /* 스크롤 가능하도록 설정 */
+  padding-right: 4px; /* 콘텐츠와 스크롤바 사이의 간격 추가 */
+}
