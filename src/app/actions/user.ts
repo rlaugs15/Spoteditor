@@ -1,9 +1,10 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { revalidateTag, unstable_cache } from 'next/cache';
+import { PublicUser } from '@/types/api/user';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { prisma } from '../../../prisma/prisma';
+import { revalidateTag, unstable_cache } from 'next/cache';
+import { prisma } from 'prisma/prisma';
 import { userKeys } from './keys';
 import { cacheTags } from './tags';
 
@@ -24,7 +25,6 @@ export async function fetchUserSupabase() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
   return user?.id ?? null;
 }
 
@@ -47,10 +47,13 @@ async function fetchUserPrisma(userId: string) {
 }
 
 const cacheUser = unstable_cache(
-  async (userId: string) => await fetchUserPrisma(userId),
+  async (userId: string) => {
+    //console.log('캐시 제대로 되나', userId);
+    return await fetchUserPrisma(userId);
+  },
   [...userKeys.me()],
   {
-    tags: [cacheTags.user],
+    tags: [cacheTags.me()],
     revalidate: false,
   }
 );
@@ -64,9 +67,9 @@ export async function getUser() {
 // ===================================================================
 // 퍼블릭 유저 정보 가져오기
 // ===================================================================
-async function fetchPublicUser(userId: string) {
+async function fetchPublicUser(userId: string): Promise<PublicUser | null> {
   try {
-    return await prisma.public_users.findUnique({
+    const user = await prisma.public_users.findUnique({
       where: { user_id: userId },
       select: {
         user_id: true,
@@ -76,6 +79,28 @@ async function fetchPublicUser(userId: string) {
         description: true,
       },
     });
+
+    if (!user) return null;
+
+    /* 팔로워 수: 나를 팔로우하는 사람 수 */
+    const followerCount = await prisma.follow.count({
+      where: {
+        following_id: userId,
+      },
+    });
+
+    /* 팔로잉 수: 내가 팔로우하는 사람 수 */
+    const followingCount = await prisma.follow.count({
+      where: {
+        follower_id: userId,
+      },
+    });
+
+    return {
+      ...user,
+      followerCount,
+      followingCount,
+    };
   } catch (error) {
     console.error(`퍼블릭 유저 조회 실패 (${userId})`, error);
     return null;
@@ -86,7 +111,7 @@ export async function getPublicUser(userId: string) {
   return unstable_cache(() => fetchPublicUser(userId), [...userKeys.publicUser(userId)], {
     tags: [cacheTags.publicUser(userId)],
     revalidate: 300,
-  });
+  })();
 }
 
 //----------------------------------------------------서버액션--------------------------------------
@@ -113,7 +138,7 @@ export async function patchUser({
       },
     });
 
-    revalidateTag(cacheTags.user);
+    revalidateTag(cacheTags.me());
     return updated;
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
@@ -135,7 +160,7 @@ export async function deleteUser(userId: string) {
       },
     });
 
-    revalidateTag(cacheTags.user);
+    revalidateTag(cacheTags.me());
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
       // 이미 삭제되었거나 존재하지 않는 유저는 조용히 처리
@@ -155,7 +180,7 @@ export async function logout() {
   try {
     await supabase.auth.signOut();
     // 서버 캐시 무효화
-    revalidateTag(cacheTags.user);
+    revalidateTag(cacheTags.me());
   } catch (error) {
     console.error('로그아웃 실패:', error);
   }

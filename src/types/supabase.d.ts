@@ -9,6 +9,41 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      address: {
+        Row: {
+          address_id: string
+          city: string | null
+          country: string | null
+          created_at: string
+          log_id: string | null
+          sigungu: string | null
+        }
+        Insert: {
+          address_id?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          log_id?: string | null
+          sigungu?: string | null
+        }
+        Update: {
+          address_id?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          log_id?: string | null
+          sigungu?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "address_log_id_fkey"
+            columns: ["log_id"]
+            isOneToOne: false
+            referencedRelation: "log"
+            referencedColumns: ["log_id"]
+          },
+        ]
+      }
       follow: {
         Row: {
           follow_id: number
