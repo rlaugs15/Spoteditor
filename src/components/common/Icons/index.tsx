@@ -46,7 +46,7 @@ export const XIcon = ({ className }: { className?: string }) => {
 export const HeadPhoneIcon = ({ className }: IconProps) => {
   return (
     <Image
-      src="/icons/head-phone.svg.svg"
+      src="/icons/head-phone.svg"
       width={14}
       height={15}
       alt="헤드폰 아이콘"
