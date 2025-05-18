@@ -39,11 +39,13 @@ const mockLogsBookmarks = (currentPage: number = 1, pageSize: number = 10) => {
         nickname: '네임임',
         image_url: '/profile/user-default-avatar.webp',
       },
-      address: {
-        city: '시티',
-        country: '컨츄리리',
-        sigungu: '시군구',
-      },
+      address: [
+        {
+          city: '시티',
+          country: '컨츄리리',
+          sigungu: '시군구',
+        },
+      ],
     };
   });
 

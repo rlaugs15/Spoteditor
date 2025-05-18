@@ -1,4 +1,4 @@
-import { PlaceBookmarkListParmas, PlaceReseponse } from '@/types/api/place';
+import { PlaceBookmarkListParmas, PlacesReseponse } from '@/types/api/place';
 import { unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { logKeys } from './keys';
@@ -11,7 +11,7 @@ export async function fetchBookmarkedPlaces({
   userId,
   currentPage = 1,
   pageSize = 10,
-}: PlaceBookmarkListParmas): Promise<PlaceReseponse> {
+}: PlaceBookmarkListParmas): Promise<PlacesReseponse> {
   const safePage = Math.max(1, currentPage);
   const safeSize = Math.min(Math.max(1, pageSize), 30);
   const skip = (safePage - 1) * safeSize;
@@ -86,12 +86,14 @@ export async function fetchBookmarkedPlaces({
     };
   });
   return {
+    success: true,
     data: filteredPlaces,
     meta: {
       pagination: {
         currentPage: safePage,
         pageSize: safeSize,
         totalPages: Math.ceil(totalCount / safeSize),
+        totalItems: totalCount,
       },
       httpStatus: 200,
     },

@@ -13,7 +13,7 @@ interface Place extends IPlace {
   image: PlaceImage;
 }
 
-export type PlaceReseponse = ApiResponse<Place[]>;
+export type PlacesReseponse = ApiResponse<Place[]>;
 
 export interface PlaceBookmarkListParmas extends PaginationParams {
   userId: string;
