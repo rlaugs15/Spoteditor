@@ -86,12 +86,14 @@ export async function fetchBookmarkedPlaces({
     };
   });
   return {
+    success: true,
     data: filteredPlaces,
     meta: {
       pagination: {
         currentPage: safePage,
         pageSize: safeSize,
         totalPages: Math.ceil(totalCount / safeSize),
+        totalItems: totalCount,
       },
       httpStatus: 200,
     },

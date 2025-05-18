@@ -1,14 +1,14 @@
 import { logKeys } from '@/app/actions/keys';
 import { useProfileTabStore } from '@/stores/profileStore';
 import { BookmarkParams } from '@/types/api/common';
-import { LogReseponse } from '@/types/api/log';
+import { LogsReseponse } from '@/types/api/log';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 async function fetchUseLogsBookmark({
   userId,
   currentPage,
   pageSize,
-}: BookmarkParams): Promise<LogReseponse> {
+}: BookmarkParams): Promise<LogsReseponse> {
   const res = await fetch(
     `/api/v1/logs/bookmark?userId=${userId}&currentPage=${currentPage}&pageSize=${pageSize}`
   );
