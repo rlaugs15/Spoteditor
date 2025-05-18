@@ -1,7 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { StorageBucket } from './types/storage';
+import { StorageBucket } from '../../types/api/storage';
 
 /*
  * 스토리지에 파일 업로드
