@@ -1,5 +1,5 @@
 import { PaginationParams } from '@/types/api/common';
-import { logBookmarkListParmas } from '@/types/api/log';
+import { logBookmarkListParmas, LogsReseponse } from '@/types/api/log';
 import { unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { logKeys } from './keys';
@@ -8,7 +8,11 @@ import { cacheTags } from './tags';
 // ===================================================================
 // 로그 리스트
 // ===================================================================
-async function fetchLogs({ currentPage = 1, pageSize = 10, sort = 'latest' }: PaginationParams) {
+async function fetchLogs({
+  currentPage = 1,
+  pageSize = 10,
+  sort = 'latest',
+}: PaginationParams): Promise<LogsReseponse> {
   const safePage = Math.max(1, currentPage);
   const safeSize = Math.min(Math.max(1, pageSize), 30);
   const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
@@ -19,7 +23,6 @@ async function fetchLogs({ currentPage = 1, pageSize = 10, sort = 'latest' }: Pa
 
     // 정렬 기준 설정: 인기순이면 북마크 개수 기준(연결된 테이블의 개수를 기준으로 정렬), 기본은 최신순
     orderBy: sort === 'popular' ? { log_bookmark: { _count: 'desc' } } : { created_at: 'desc' },
-
     select: {
       log_id: true,
       title: true,
@@ -29,7 +32,13 @@ async function fetchLogs({ currentPage = 1, pageSize = 10, sort = 'latest' }: Pa
         select: {
           user_id: true,
           nickname: true,
-          image_url: true,
+        },
+      },
+      address: {
+        select: {
+          country: true,
+          city: true,
+          sigungu: true,
         },
       },
     },
@@ -67,7 +76,7 @@ export async function fetchBookmarkedLogs({
   userId,
   currentPage = 1,
   pageSize = 10,
-}: logBookmarkListParmas) {
+}: logBookmarkListParmas): Promise<LogsReseponse> {
   const safePage = Math.max(1, currentPage);
   const safeSize = Math.min(Math.max(1, pageSize), 30);
   const skip = (safePage - 1) * safeSize;
@@ -83,11 +92,15 @@ export async function fetchBookmarkedLogs({
     },
     include: {
       log: {
-        include: {
+        select: {
+          log_id: true,
+          title: true,
+          description: true,
+          thumbnail_url: true,
           users: {
             select: {
+              user_id: true,
               nickname: true,
-              image_url: true,
             },
           },
           address: {

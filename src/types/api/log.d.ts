@@ -1,18 +1,7 @@
-import { Tables } from '../supabase';
-import { ApiResponse, PaginationParams } from './common';
+import { ApiResponse, LogWithUserAndAddress, PaginationParams } from './common';
 
-type User = Pick<Tables<'users'>, 'nickname' | 'image_url'>;
-
-type Log = Pick<Tables<'log'>, 'log_id' | 'title' | 'description' | 'thumbnail_url'>;
-
-type Address = Pick<Tables<'address'>, 'city' | 'country' | 'sigungu'>;
-
-type LogWithUser = Log & {
-  users: User;
-  address: Address;
-};
-
-export type LogReseponse = ApiResponse<LogWithUser[]>;
+/* 로그리스트 */
+export type LogsReseponse = ApiResponse<LogWithUserAndAddress[]>;
 
 export interface logBookmarkListParmas extends PaginationParams {
   userId: string;

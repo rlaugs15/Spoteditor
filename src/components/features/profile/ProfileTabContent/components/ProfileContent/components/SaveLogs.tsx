@@ -36,21 +36,21 @@ export default function SaveLogs({ userId }: SavaLogsProps) {
         <>
           <PostCardWrapper className="mb-[50px]">
             {data?.data.map((log) => (
-              <MotionCard key={log.log_id} className="relative group">
-                <Link href={`/log/${log.log_id}`} className="hover:cursor-default">
+              <MotionCard key={log?.log_id} className="relative group">
+                <Link href={`/log/${log?.log_id}`} className="hover:cursor-default">
                   <PostCardImage
                     lable
-                    author={String(log.users.nickname)}
-                    imageUrl={String(log.thumbnail_url)}
+                    author={String(log?.users?.nickname)}
+                    imageUrl={String(log?.thumbnail_url)}
                   />
-                  <PostCardTitle title={log.title} />
+                  <PostCardTitle title={String(log?.title)} />
                   <PostCardLocation
-                    city={log.address.city}
-                    country={log.address.country}
-                    sigungu={log.address.sigungu}
+                    city={String(log?.address[0].city)}
+                    country={String(log?.address[0].country)}
+                    sigungu={String(log?.address[0].sigungu)}
                   />
                 </Link>
-                <LogBookMarkButton logId={log.log_id} userId={String(me?.user_id)} />
+                <LogBookMarkButton logId={String(log?.log_id)} userId={String(me?.user_id)} />
               </MotionCard>
             ))}
           </PostCardWrapper>
