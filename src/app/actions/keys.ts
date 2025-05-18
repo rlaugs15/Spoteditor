@@ -1,6 +1,7 @@
 import { PaginationParams } from '@/types/api/common';
 import { FollowListParams } from '@/types/api/follow';
 import { logBookmarkListParmas } from '@/types/api/log';
+import { SearchParams } from '@/types/api/search';
 
 /* 유저 */
 export const userKeys = {
@@ -60,4 +61,20 @@ export const placeKeys = {
   // 단일 장소 북마크
   bookmarkStatus: (placeId: string, userId: string) =>
     [...placeKeys.place, 'bookmark', 'status', placeId, userId] as const,
+};
+
+export const searchKeys = {
+  all: ['search'] as const,
+
+  list: (params: SearchParams) =>
+    [
+      ...searchKeys.all,
+      'list',
+      params.currentPage,
+      params.pageSize ?? '',
+      params.sort ?? '',
+      params.keyword ?? '',
+      params.city ?? '',
+      params.sigungu ?? '',
+    ] as const,
 };
