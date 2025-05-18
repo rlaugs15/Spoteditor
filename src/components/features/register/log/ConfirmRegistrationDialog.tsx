@@ -1,5 +1,5 @@
 'use client';
-import Loading from '@/components/Loading';
+import Loading from '@/components/common/Loading/Loading';
 import {
   AlertDialog,
   AlertDialogAction,

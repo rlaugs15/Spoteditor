@@ -9,8 +9,8 @@ import {
   PostCardWrapper,
 } from '@/components/common/Card/PostCard';
 import CustomPagination from '@/components/common/CustomPagination';
+import Loading from '@/components/common/Loading/Loading';
 import ProfileFallbackMessage from '@/components/features/profile/fallback/ProfileFallbackMessage';
-import Loading from '@/components/Loading';
 import useLogsBookmark from '@/hooks/queries/log/useLogsBookmark';
 import useUser from '@/hooks/queries/user/useUser';
 import usePagination from '@/hooks/usePagination';
