@@ -2,9 +2,9 @@
 import { createLog } from '@/app/actions/log-register';
 import { Header3 } from '@/components/common/Header';
 import { XInputClearIcon } from '@/components/common/Icons';
+import ConfirmRegistrationDialog from '@/components/features/register/log/ConfirmRegistrationDialog';
 import PhotoTextSection from '@/components/features/register/log/PhotoTextSection';
 import PlaceForm from '@/components/features/register/log/PlaceForm';
-import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -123,14 +123,13 @@ const LogPage = () => {
       >
         확인용
       </Button> */}
-      <Button
-        size={'xl'}
-        className="font-bold w-full mt-2 mb-6"
-        onClick={form.handleSubmit(onSubmit)}
+
+      <ConfirmRegistrationDialog
+        logTitle={form.getValues('logTitle')}
         disabled={!form.formState.isValid || form.formState.isSubmitting}
-      >
-        {form.formState.isSubmitting ? '제출 중...' : '제출'}
-      </Button>
+        loading={form.formState.isSubmitting}
+        onSubmitLogForm={form.handleSubmit(onSubmit)}
+      />
     </div>
   );
 };
