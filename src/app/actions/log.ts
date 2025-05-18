@@ -1,9 +1,9 @@
 import { PaginationParams } from '@/types/api/common';
-import { prisma } from '../../../prisma/prisma';
 import { logBookmarkListParmas } from '@/types/api/log';
 import { unstable_cache } from 'next/cache';
-import { cacheTags } from './tags';
+import { prisma } from 'prisma/prisma';
 import { logKeys } from './keys';
+import { cacheTags } from './tags';
 
 // ===================================================================
 // 로그 리스트

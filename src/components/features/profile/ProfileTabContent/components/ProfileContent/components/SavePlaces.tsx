@@ -1,5 +1,6 @@
 'use client';
 
+import PlaceBookMarkButton from '@/components/common/Button/Bookmark/PlaceBookMarkButton';
 import MotionCard from '@/components/common/Card/MotionCard';
 import {
   PostCardImage,
@@ -11,10 +12,9 @@ import CustomPagination from '@/components/common/CustomPagination';
 import ProfileFallbackMessage from '@/components/features/profile/fallback/ProfileFallbackMessage';
 import Loading from '@/components/Loading';
 import usePlacesBookmark from '@/hooks/queries/place/usePlacesBookmark';
+import useUser from '@/hooks/queries/user/useUser';
 import usePagination from '@/hooks/usePagination';
 import Link from 'next/link';
-import PlaceBookMarkButton from './../../../../../../common/Button/Bookmark/PlaceBookMarkButton';
-import useUser from '@/hooks/queries/user/useUser';
 
 interface SavePlacesProps {
   userId: string;

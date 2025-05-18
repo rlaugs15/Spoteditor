@@ -1,12 +1,12 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { revalidateTag, unstable_cache } from 'next/cache';
+import { PublicUser } from '@/types/api/user';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { prisma } from '../../../prisma/prisma';
+import { revalidateTag, unstable_cache } from 'next/cache';
+import { prisma } from 'prisma/prisma';
 import { userKeys } from './keys';
 import { cacheTags } from './tags';
-import { PublicUser } from '@/types/api/user';
 
 interface PatchUserProps {
   userId: string;

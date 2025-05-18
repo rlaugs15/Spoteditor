@@ -1,10 +1,10 @@
 'use client';
 
+import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLogBookmarkCheck from '@/hooks/queries/log/useLogBookmarkCheck';
-import useLogBookmarkMutation from './../../../../hooks/mutations/log/useLogBookmarkMutation';
+import useUser from '@/hooks/queries/user/useUser';
 import { cn } from '@/lib/utils';
 import { Bookmark } from 'lucide-react';
-import useUser from '@/hooks/queries/user/useUser';
 import { useRouter } from 'next/navigation';
 
 interface LogBookMarkButtonProps {

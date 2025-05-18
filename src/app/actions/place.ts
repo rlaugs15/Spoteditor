@@ -1,8 +1,8 @@
 import { PlaceBookmarkListParmas, PlaceReseponse } from '@/types/api/place';
-import { prisma } from '../../../prisma/prisma';
+import { unstable_cache } from 'next/cache';
+import { prisma } from 'prisma/prisma';
 import { logKeys } from './keys';
 import { cacheTags } from './tags';
-import { unstable_cache } from 'next/cache';
 
 // ===================================================================
 // 북마크 장소 리스트

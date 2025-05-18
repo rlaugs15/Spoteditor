@@ -1,6 +1,6 @@
 import { getUser } from '@/app/actions/user';
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '../../../../prisma/prisma';
+import { prisma } from 'prisma/prisma';
 
 /*
   팔로우 관계 설명:

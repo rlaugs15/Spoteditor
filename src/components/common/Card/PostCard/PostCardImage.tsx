@@ -23,7 +23,6 @@ function PostCardImage({ imageUrl, lable, author, className }: PostCardImageProp
           fill
           sizes="100%"
           className="object-cover object-center"
-          placeholder="blur"
         />
       )}
       {lable && (

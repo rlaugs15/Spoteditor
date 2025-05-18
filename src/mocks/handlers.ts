@@ -1,4 +1,3 @@
-import { LogReseponse } from '@/types/api/log';
 import { http, HttpResponse } from 'msw';
 
 const mockFollowers: {
@@ -10,7 +9,7 @@ const mockFollowers: {
   return {
     user_id: id.toString(),
     nickname: `팔로워${id}`,
-    image_url: '',
+    image_url: '/profile/user-default-avatar.webp',
   };
 });
 
@@ -35,10 +34,10 @@ const mockLogsBookmarks = (currentPage: number = 1, pageSize: number = 10) => {
       created_at: new Date().toISOString(),
       title: `로그 제목 ${id}`,
       description: `로그 설명 ${id}`,
-      thumbnail_url: `이미지지`,
+      thumbnail_url: `/profile/user-default-avatar.webp`,
       users: {
         nickname: '네임임',
-        image_url: '이미지',
+        image_url: '/profile/user-default-avatar.webp',
       },
       address: {
         city: '시티',
