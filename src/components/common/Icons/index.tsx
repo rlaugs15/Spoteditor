@@ -81,7 +81,7 @@ export const AddImageIcon = ({ className }: IconProps) => {
 
 export const PlusIcon = ({ className }: IconProps) => {
   return (
-    <Image src="/icons/Plus.svg" width={14} height={15} alt="더하기 아이콘" className={className} />
+    <Image src="/icons/plus.svg" width={14} height={15} alt="더하기 아이콘" className={className} />
   );
 };
 
