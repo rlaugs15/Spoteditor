@@ -1,4 +1,4 @@
-import CitySearchForm from './CitySearchForm';
+import CitySearchForm from './CitySearchForm/CitySearchForm';
 import HeroCategoryList from './HeroCategoryList';
 
 const Hero = () => {
