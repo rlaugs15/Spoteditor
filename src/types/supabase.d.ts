@@ -82,25 +82,25 @@ export type Database = {
           created_at: string
           description: string | null
           log_id: string
-          thumbnail_url: string | null
-          title: string | null
-          user_id: string | null
+          thumbnail_url: string
+          title: string
+          user_id: string
         }
         Insert: {
           created_at?: string
           description?: string | null
           log_id?: string
-          thumbnail_url?: string | null
-          title?: string | null
-          user_id?: string | null
+          thumbnail_url: string
+          title: string
+          user_id?: string
         }
         Update: {
           created_at?: string
           description?: string | null
           log_id?: string
-          thumbnail_url?: string | null
-          title?: string | null
-          user_id?: string | null
+          thumbnail_url?: string
+          title?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -176,32 +176,32 @@ export type Database = {
       }
       place: {
         Row: {
-          address: string | null
-          category: string | null
+          address: string
+          category: string
           created_at: string
           description: string | null
-          log_id: string | null
-          name: string | null
+          log_id: string
+          name: string
           place_id: string
           updated_at: string | null
         }
         Insert: {
-          address?: string | null
-          category?: string | null
+          address: string
+          category: string
           created_at?: string
           description?: string | null
-          log_id?: string | null
-          name?: string | null
+          log_id: string
+          name: string
           place_id?: string
           updated_at?: string | null
         }
         Update: {
-          address?: string | null
-          category?: string | null
+          address?: string
+          category?: string
           created_at?: string
           description?: string | null
-          log_id?: string | null
-          name?: string | null
+          log_id?: string
+          name?: string
           place_id?: string
           updated_at?: string | null
         }
@@ -250,21 +250,21 @@ export type Database = {
       }
       place_images: {
         Row: {
-          image_path: string | null
-          order: number | null
-          place_id: string | null
+          image_path: string
+          order: number
+          place_id: string
           place_image_id: number
         }
         Insert: {
-          image_path?: string | null
-          order?: number | null
-          place_id?: string | null
+          image_path: string
+          order: number
+          place_id?: string
           place_image_id?: number
         }
         Update: {
-          image_path?: string | null
-          order?: number | null
-          place_id?: string | null
+          image_path?: string
+          order?: number
+          place_id?: string
           place_image_id?: number
         }
         Relationships: [
