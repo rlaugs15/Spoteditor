@@ -29,7 +29,7 @@ export default function CitySearchDropbox() {
     toggleSigunguDropBox();
   };
   return (
-    <>
+    <div className="will-change-transform">
       <header className="flex items-center justify-between py-3">
         <div className="flex justify-start gap-1 web:gap-2.5 flex-col font-pretendard web:flex-row web:justify-between web:items-center">
           <h3 className="font-bold text-sm">도시선택</h3>
@@ -61,6 +61,6 @@ export default function CitySearchDropbox() {
           className="fixed top-0 left-0 w-screen h-screen -z-10"
         />
       </div>
-    </>
+    </div>
   );
 }
