@@ -218,6 +218,9 @@
   body {
     @apply bg-background text-foreground;
   }
+  button {
+    cursor: pointer;
+  }
 }
 
 /* 스크롤바 넓이 지정 */

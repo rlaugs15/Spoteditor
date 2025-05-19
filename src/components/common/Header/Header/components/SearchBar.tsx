@@ -3,7 +3,7 @@
 import { SearchIcon } from '@/components/common/Icons';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { SearchForm, searchSchema } from '@/schemas/searchSchema';
+import { SearchForm, searchSchema } from '@/lib/zod/searchSchema';
 import { useSearchStore } from '@/stores/searchStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AnimatePresence, motion } from 'motion/react';
