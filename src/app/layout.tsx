@@ -1,8 +1,8 @@
+import { Toaster } from '@/components/ui/sonner';
+import { pretendard, prompt, untitled } from '@/lib/fonts';
+import Providers from '@/providers';
 import type { Metadata } from 'next';
 import '../styles/globals.css';
-import { Providers } from './providers';
-import { pretendard, prompt, untitled } from '@/lib/fonts';
-import MSWProvider from './msw';
 
 export const metadata: Metadata = {
   title: 'Spoteditor',
@@ -19,8 +19,8 @@ export default function RootLayout({
       <body
         className={`${pretendard.variable} ${untitled.variable} ${prompt.variable} antialiased`}
       >
-        <MSWProvider />
         <Providers>{children}</Providers>
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );

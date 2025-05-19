@@ -2,8 +2,8 @@
 
 import { followKeys } from '@/app/actions/keys';
 import { XIcon } from '@/components/common/Icons';
+import Loading from '@/components/common/Loading/Loading';
 import UserImage from '@/components/common/UserImage';
-import Loading from '@/components/Loading';
 import {
   Dialog,
   DialogClose,
