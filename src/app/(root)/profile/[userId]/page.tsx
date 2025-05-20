@@ -8,7 +8,8 @@ interface ProfilepageProps {
   };
 }
 
-export default async function Page({ params: { userId } }: ProfilepageProps) {
+export default async function Page({ params }: ProfilepageProps) {
+  const { userId } = await params;
   const me = await getUser();
   const user = await getPublicUser(userId);
 
