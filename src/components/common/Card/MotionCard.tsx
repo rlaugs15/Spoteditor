@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
-import { motion, Variants } from 'motion/react';
+import { Variants } from 'motion/react';
+import * as motion from 'motion/react-client';
 
 interface MotionCardProps {
   className?: string;
@@ -13,6 +14,11 @@ const cardVar: Variants = {
     opacity: 1,
     transition: {
       duration: 0.5,
+    },
+  },
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
     },
   },
 };
