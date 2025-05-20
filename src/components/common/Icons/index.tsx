@@ -248,6 +248,17 @@ export const ArrowDownIcon = ({ className }: IconProps) => {
     />
   );
 };
+export const ArrowUpRightIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/arrow-up-right.svg"
+      width={20}
+      height={20}
+      alt="오른쪽 위 아이콘"
+      className={className}
+    />
+  );
+};
 
 /* x */
 export const XInputClearIcon = ({ className }: IconProps) => {
