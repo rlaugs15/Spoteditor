@@ -5,15 +5,17 @@ interface PostCardImageProps {
   lable?: boolean;
   author: string | null;
   className?: string;
+  vertical?: boolean;
 }
 
-function PostCardImage({ imageUrl, lable, author, className }: PostCardImageProps) {
+function PostCardImage({ imageUrl, lable, author, className, vertical }: PostCardImageProps) {
   return (
     <div
       className={cn(
         'relative flex-1 w-full group',
-        className,
-        'aspect-[1.5/1] overflow-hidden mb-1.5 web:mb-2.5'
+        'aspect-[324/218] overflow-hidden mb-1.5 web:mb-2.5',
+        vertical && 'aspect-[324/425]',
+        className
       )}
     >
       {imageUrl && (
@@ -24,6 +26,7 @@ function PostCardImage({ imageUrl, lable, author, className }: PostCardImageProp
             fill
             sizes="100%"
             className="object-cover object-center"
+            loading="lazy"
           />
           <div className="absolute inset-0 card-id-gradient" />
           <div className="absolute inset-0 transition-colors group-hover:bg-black/25" />
