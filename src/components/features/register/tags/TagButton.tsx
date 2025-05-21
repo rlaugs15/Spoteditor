@@ -4,7 +4,7 @@ import React from 'react';
 interface TagButtonProps {
   value: string;
   isSelected: boolean;
-  onClick: (tag: string) => void;
+  onClick: (value: string) => void;
 }
 
 const TagButton = ({ value, isSelected, onClick }: TagButtonProps) => {
