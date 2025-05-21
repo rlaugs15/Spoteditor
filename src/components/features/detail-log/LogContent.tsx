@@ -47,7 +47,9 @@ const LogContent = ({ place, idx }: LogContentProps) => {
               </div>
             ))}
         </div>
-        <p className="text-text-sm web:text-text-lg text-light-400">{place.description || ''}</p>
+        <pre className="text-text-sm web:text-text-lg text-light-400 pre">
+          {place.description || ''}
+        </pre>
       </section>
     </div>
   );

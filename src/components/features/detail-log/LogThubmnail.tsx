@@ -13,7 +13,7 @@ const LogThubmnail = ({ logData }: LogThubmnailProps) => {
     <section className="relative bg-pink-200 h-[488px] flex flex-col justify-between px-4 web:pl-[50px] pt-4 pb-8">
       <Image
         src={getStoragePublicImage(logData.thumbnail_url as string)}
-        alt=""
+        alt="로그 썸네일 이미지"
         fill
         className="object-cover"
       />

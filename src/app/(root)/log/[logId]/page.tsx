@@ -1,8 +1,8 @@
 import { fetchLog } from '@/app/actions/log';
 import { PenBlackIcon, TableIcon } from '@/components/common/Icons';
 import ExtraActionButton from '@/components/features/detail-log/ExtraActionButton';
+import LogAuthorIntro from '@/components/features/detail-log/LogAuthorIntro';
 import LogContent from '@/components/features/detail-log/LogContent';
-import LogProfile from '@/components/features/detail-log/LogProfile';
 import LogThubmnail from '@/components/features/detail-log/LogThubmnail';
 
 interface LogDetailPageProps {
@@ -20,7 +20,8 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
     <div>
       <LogThubmnail logData={logData} />
       <main className="flex flex-col px-4 web:px-[50px]">
-        <LogProfile />
+        <LogAuthorIntro userId={logData.user_id} logDescription={logData.description ?? ''} />
+
         <div>
           {logData.place.map((place, idx) => (
             <LogContent key={place.place_id} place={place} idx={idx + 1} />

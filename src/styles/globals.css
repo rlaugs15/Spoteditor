@@ -227,6 +227,10 @@
   .card-id-gradient {
     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 74.97%, rgba(0, 0, 0, 0.7) 94.58%);
   }
+
+  .pre {
+    @apply !font-pretendard whitespace-pre-wrap;
+  }
 }
 
 /* 스크롤바 넓이 지정 */
