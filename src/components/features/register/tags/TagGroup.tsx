@@ -20,7 +20,7 @@ const TagGroup = ({ title, type }: TagGroupProps) => {
   const setSingleTag = useLogCreationStore((state) => state.setSingleTag);
   const selectedCity = useLogCreationStore((state) => state['city']);
 
-  const tags = type === 'sigungu' ? cityDistricts[selectedCity] : TAG_SETS[type];
+  const tags = type === 'sigungu' ? cityDistricts[selectedCity || '서울'] : TAG_SETS[type];
   const handleTagClick = useCallback((value: string) => {
     if (isMultiType(type)) toggleMultiTag(type, value);
     else setSingleTag(type, value);
