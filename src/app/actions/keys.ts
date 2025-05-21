@@ -70,8 +70,8 @@ export const searchKeys = {
     [
       ...searchKeys.all,
       'list',
-      params.currentPage,
-      params.pageSize ?? '',
+      String(params.currentPage ?? 1),
+      String(params.pageSize ?? 10),
       params.sort ?? '',
       params.keyword ?? '',
       params.city ?? '',
