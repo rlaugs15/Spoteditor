@@ -12,10 +12,6 @@ import { cacheTags } from './tags';
 export async function fetchLog(logId: string): Promise<LogResponse> {
   try {
     const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) throw new Error('유저 없음');
 
     const { data, error } = await supabase
       .from('log')
