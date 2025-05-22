@@ -37,11 +37,11 @@ export async function createLog(formData: FormData) {
       thumbnail_url: thumbnailUploadResult.fullPath,
     };
 
-    const tagsData = Object.entries(parseResult.tags).map(([category, tag]) => ({
-      log_id: logId,
-      category,
-      tag: Array.isArray(tag) ? tag : [tag],
-    }));
+    const tagsData = Object.entries(parseResult.tags).flatMap(([category, tag]) =>
+      Array.isArray(tag)
+        ? tag.map((t) => ({ category, tag: t, log_id: logId }))
+        : [{ category, tag, log_id: logId }]
+    );
 
     console.time('🗃️ DB 삽입');
     await insertLogToDB({ logData, tagsData, placeDataList, placeImageDataList });

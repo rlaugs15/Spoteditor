@@ -40,18 +40,11 @@ const LogThubmnail = ({ logData }: LogThubmnailProps) => {
       <div className="flex flex-col gap-2 z-10">
         <h3 className="text-lg web:text-2xl font-bold text-white">{title}</h3>
         <div className="flex gap-1">
-          {result.map((item) => {
-            const tags = JSON.parse(item.tag) as string[];
-            return (
-              <div key={item.tag} className="flex gap-2 flex-wrap">
-                {tags.map((tag, idx) => (
-                  <Badge key={idx} className="bg-white/30 px-4 py-1.5 rounded-full">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            );
-          })}
+          {result.map((item) => (
+            <div key={item.tag} className="flex gap-2 flex-wrap">
+              <Badge className="bg-white/30 px-4 py-1.5 rounded-full">{item.tag}</Badge>
+            </div>
+          ))}
           <Badge className="bg-white/30 px-4 py-1.5 rounded-full">
             <WhiteLocationIcon />
             {place.length}

@@ -13,15 +13,13 @@ interface LogDetailPageProps {
 
 const LogDetailPage = async ({ params }: LogDetailPageProps) => {
   const { logId } = await params;
-  const { success, data: logData } = await fetchLog(logId);
-  console.log(logData);
+  const { data: logData } = await fetchLog(logId);
 
   return (
     <div>
       <LogThubmnail logData={logData} />
       <main className="flex flex-col px-4 web:px-[50px]">
         <LogAuthorIntro userId={logData.user_id} logDescription={logData.description ?? ''} />
-
         <div>
           {logData.place.map((place, idx) => (
             <LogContent key={place.place_id} place={place} idx={idx + 1} />

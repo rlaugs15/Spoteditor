@@ -17,6 +17,14 @@ import { useRouter } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
+const initialPlace = {
+  placeName: '',
+  category: '',
+  location: '',
+  description: '',
+  placeImages: [],
+};
+
 const LogPage = () => {
   const router = useRouter();
   const form = useForm({
@@ -27,15 +35,7 @@ const LogPage = () => {
       logTitle: '',
       thumbnail: undefined,
       logDescription: '',
-      places: [
-        {
-          placeName: '',
-          category: '',
-          location: '',
-          description: '',
-          placeImages: [], // 파일 객체, 순서
-        },
-      ],
+      places: [initialPlace],
       tags: {
         mood: useLogCreationStore.getState().mood,
         activity: useLogCreationStore.getState().activity,
@@ -45,35 +45,27 @@ const LogPage = () => {
       },
     },
   });
-
   const { fields, append, remove } = useFieldArray<LogFormValues>({
     control: form.control,
     name: 'places',
   });
-  const handleAddNewPlace = () =>
-    append({
-      placeName: '',
-      category: '',
-      location: '',
-      description: '',
-      placeImages: [],
-    });
+
+  const handleAddNewPlace = () => append(initialPlace);
   const handleDeletePlace = (idx: number) => remove(idx);
   const onSubmit = async (values: LogFormValues) => {
     const formData = createFormData(values);
     // const parseResult = parseFormData<LogFormValues>(formData);
 
-    // const rowsToInsert = Object.entries(parseResult.tags).map(([category, tag]) => ({
-    //   category,
-    //   tag,
-    // }));
+    // const rowsToInsert = Object.entries(parseResult.tags).flatMap(([category, tag]) =>
+    //   Array.isArray(tag) ? tag.map((t) => ({ category, tag: t })) : [{ category, tag }]
+    // );
     // console.log(rowsToInsert);
 
     const uploadResult = await createLog(formData);
 
     if (uploadResult.success) {
-      toast.success('업로드 성공');
       router.replace(`/log/${uploadResult.data}`);
+      toast.success('업로드 성공');
     } else {
       toast.error('업로드 실패');
     }
@@ -84,7 +76,6 @@ const LogPage = () => {
       <Header3 onAddNewPlace={handleAddNewPlace} />
       <Form {...form}>
         <main className="grow bg-white">
-          {/* thumbnail */}
           <>
             <div className="flex items-center border-b border-light-100">
               <FormField
@@ -131,14 +122,6 @@ const LogPage = () => {
       <div className="text-text-sm w-full h-12 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
         부적절한 이미지 적발시 로그가 삭제될 수 있습니다.
       </div>
-      {/* <Button
-        variant={'destructive'}
-        size={'xl'}
-        className="font-bold w-full mt-2 mb-6"
-        onClick={() => console.log(form.formState.errors)}
-      >
-        확인용
-      </Button> */}
 
       <ConfirmRegistrationDialog
         logTitle={form.getValues('logTitle')}
