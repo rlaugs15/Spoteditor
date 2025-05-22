@@ -4,7 +4,7 @@ import PlaceBookMarkButton from '@/components/common/Button/Bookmark/PlaceBookMa
 import MotionCard from '@/components/common/Card/MotionCard';
 import {
   PostCardImage,
-  PostCardPlaceLocation,
+  PostCardLocation,
   PostCardTitle,
   PostCardWrapper,
 } from '@/components/common/Card/PostCard';
@@ -44,7 +44,7 @@ export default function SavePlaces({ userId }: SavePlacesProps) {
                     imageUrl={place.image.image_path}
                   />
                   <PostCardTitle title={place.name} />
-                  <PostCardPlaceLocation address={place.address} />
+                  <PostCardLocation category={place.category} />
                 </Link>
                 <PlaceBookMarkButton placeId={place.place_id} userId={String(me?.user_id)} />
               </MotionCard>

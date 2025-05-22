@@ -19,9 +19,18 @@ export const placeSchema = z.object({
     .min(1, '장소 최소 1장은 필수입니다.'),
 });
 
-export const formSchema = z.object({
+export const tagsSchema = z.object({
+  mood: z.array(z.string()).optional(),
+  activity: z.array(z.string()).optional(),
+  country: z.string(),
+  city: z.string(),
+  sigungu: z.string(),
+});
+
+export const LogformSchema = z.object({
   logTitle: z.string().max(30).min(1, '로그 제목은 필수입니다.'),
   thumbnail: imageFileSchema,
   logDescription: z.string(),
   places: z.array(placeSchema),
+  tags: tagsSchema,
 });

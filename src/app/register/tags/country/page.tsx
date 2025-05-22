@@ -10,7 +10,7 @@ const CountrySelectionPage = () => {
       <div className="grow">
         <TagGroup title="국가" type="country" />
       </div>
-      <RegisterFooter nextPath={REGISTER_PATHS.CITY} />
+      <RegisterFooter tagTargets={['country']} nextPath={REGISTER_PATHS.CITY} />
     </>
   );
 };
