@@ -1,4 +1,5 @@
-import { ArrowLeftIcon, PenIcon, ShareIcon, WhiteLocationIcon } from '@/components/common/Icons';
+import ClipboardButton from '@/components/common/Button/ClipboardButton';
+import { ArrowLeftIcon, PenIcon, WhiteLocationIcon } from '@/components/common/Icons';
 import ExtraActionButton from '@/components/features/detail-log/ExtraActionButton';
 import { Badge } from '@/components/ui/badge';
 import { DetailLog } from '@/types/api/log';
@@ -25,9 +26,7 @@ const LogThubmnail = ({ logData }: LogThubmnailProps) => {
           <ArrowLeftIcon />
         </ExtraActionButton>
         <div className="flex flex-col gap-2">
-          <ExtraActionButton>
-            <ShareIcon />
-          </ExtraActionButton>
+          <ClipboardButton />
           {
             // user &&
             <ExtraActionButton>

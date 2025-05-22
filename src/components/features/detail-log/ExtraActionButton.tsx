@@ -4,9 +4,10 @@ import { PropsWithChildren } from 'react';
 
 interface ExtraActionButtonProps extends PropsWithChildren {
   className?: string;
+  onClick?: () => void;
 }
 
-const ExtraActionButton = ({ children, className }: ExtraActionButtonProps) => {
+const ExtraActionButton = ({ children, className, onClick }: ExtraActionButtonProps) => {
   return (
     <Button
       size={'icon'}
@@ -14,6 +15,7 @@ const ExtraActionButton = ({ children, className }: ExtraActionButtonProps) => {
         'flex items-center justify-center bg-white/70 border border-light-100 w-9 h-9 rounded-full',
         className
       )}
+      onClick={onClick}
     >
       {children}
     </Button>
