@@ -1,0 +1,71 @@
+'use client';
+
+import LogBookMarkButton from '@/components/common/Button/Bookmark/LogBookMarkButton';
+import MotionCard from '@/components/common/Card/MotionCard';
+import { PostCardImage, PostCardLocation, PostCardTitle } from '@/components/common/Card/PostCard';
+import CustomPagination from '@/components/common/CustomPagination';
+import Loading from '@/components/common/Loading/Loading';
+import { SectionTitle } from '@/components/common/SectionBlock';
+import useSearch from '@/hooks/queries/search/useSearch';
+import usePagination from '@/hooks/usePagination';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useRef } from 'react';
+
+interface SearchContentProps {
+  userId: string;
+}
+
+export default function SearchContent({ userId }: SearchContentProps) {
+  const contentRef = useRef<HTMLElement | null>(null);
+  const searchParams = useSearchParams();
+  const keyword = searchParams.get('keyword') ?? '';
+  const { currentPage, handlePageChange } = usePagination(1, contentRef);
+  const { data, isLoading } = useSearch({ currentPage, keyword });
+  return (
+    <section
+      ref={contentRef}
+      className="pt-10 web:pt-12.5 pb-12.5 flex flex-col gap-10 web:gap-12.5"
+    >
+      <div>
+        {data?.data.length === 0 || !data ? (
+          <p className="text-light-300 text-text-lg web:text-text-xl">검색 결과가 없습니다.</p>
+        ) : (
+          <div>
+            <SectionTitle title="Sort by" subTitle="Popularity" />
+            <div className="h-0 mt-[-32px] pt-[32px]" />
+            <div className="flex flex-col gap-y-[34px] web:grid web:grid-cols-4 web:gap-x-[15px] web:gap-y-10 mt-6 web:mt-12.5 mb-12.5">
+              {isLoading ? (
+                <Loading />
+              ) : (
+                data?.data?.map((log) => (
+                  <MotionCard key={log?.log_id} className="relative group">
+                    <Link href={`/log/${log?.log_id}`}>
+                      <PostCardImage
+                        lable
+                        author={String(log?.users?.nickname)}
+                        imageUrl={String(log?.thumbnail_url)}
+                      />
+                      <PostCardTitle title={String(log?.title)} />
+                      <PostCardLocation
+                        city={String(log?.address[0].city)}
+                        country={String(log?.address[0].country)}
+                        sigungu={String(log?.address[0].sigungu)}
+                      />
+                    </Link>
+                    <LogBookMarkButton logId={String(log?.log_id)} userId={userId} />
+                  </MotionCard>
+                ))
+              )}
+            </div>
+            <CustomPagination
+              currentPage={currentPage}
+              totalPages={Number(data?.meta?.pagination?.totalPages)}
+              onChangePage={handlePageChange}
+            />
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
