@@ -1,7 +1,7 @@
 import { cityCategories } from './cityData';
 
 export const TAG_SETS = {
-  mood: ['혼자', '친구랑', '연인과', '가족과', '동료와', '반려동물과'],
+  mood: ['혼자', '친구랑', '연인과', '가족과', '동료와', '반려동물과'] as const,
   activity: [
     'SNS 핫플레이스',
     '체험 · 액티비티',
@@ -19,8 +19,8 @@ export const TAG_SETS = {
     '독서하며 잔잔하게',
     '모임 · 동호회',
     '가성비 굿',
-  ],
-  country: ['국내', '국외'],
+  ] as const,
+  country: ['국내', '국외'] as const,
   city: cityCategories,
   sigungu: [],
 };

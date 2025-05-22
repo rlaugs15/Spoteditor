@@ -10,7 +10,7 @@ const CitySelectionPage = () => {
       <div className="grow">
         <TagGroup title="도시" type="city" />
       </div>
-      <RegisterFooter nextPath={REGISTER_PATHS.SIGUNGU} />
+      <RegisterFooter tagTargets={['city']} nextPath={REGISTER_PATHS.SIGUNGU} />
     </>
   );
 };

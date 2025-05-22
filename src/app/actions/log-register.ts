@@ -1,7 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { LogFormValues, NewLog, NewPlace, NewPlaceImage } from '@/types/schema/log';
+import { LogFormValues, NewLog, NewPlace, NewPlaceImage, NewTags } from '@/types/schema/log';
 import { parseFormData } from '@/utils/formatLog';
 import { uploadFile } from './storage';
 
@@ -36,8 +36,15 @@ export async function createLog(formData: FormData) {
       description: parseResult.logDescription,
       thumbnail_url: thumbnailUploadResult.fullPath,
     };
+
+    const tagsData = Object.entries(parseResult.tags).map(([category, tag]) => ({
+      log_id: logId,
+      category,
+      tag: Array.isArray(tag) ? tag : [tag],
+    }));
+
     console.time('🗃️ DB 삽입');
-    await insertLogToDB({ logData, placeDataList, placeImageDataList });
+    await insertLogToDB({ logData, tagsData, placeDataList, placeImageDataList });
     console.timeEnd('🗃️ DB 삽입');
     console.timeEnd('🕒 전체 createLog 실행 시간');
 
@@ -76,20 +83,22 @@ async function uploadPlaces(places: LogFormValues['places'], logId: string) {
       category: category,
     });
 
-    const uploads = placeImages.map(async ({ file, order }, imgIdx) => {
-      const uploadResult = await uploadFile('places', file, {
-        folder: logId,
-        subfolder: placeId,
-        filename: `${imgIdx}.webp`,
-      });
-      if (!uploadResult?.success) throw new Error(uploadResult?.msg);
+    const uploads = placeImages.map(
+      async ({ file, order }: { file: Blob; order: number }, imgIdx: number) => {
+        const uploadResult = await uploadFile('places', file, {
+          folder: logId,
+          subfolder: placeId,
+          filename: `${imgIdx}.webp`,
+        });
+        if (!uploadResult?.success) throw new Error(uploadResult?.msg);
 
-      return {
-        image_path: uploadResult.fullPath as string,
-        order,
-        place_id: placeId,
-      };
-    });
+        return {
+          image_path: uploadResult.fullPath as string,
+          order,
+          place_id: placeId,
+        };
+      }
+    );
 
     const uploadedImages = await Promise.all(uploads);
     placeImageDataList.push(...uploadedImages);
@@ -101,10 +110,12 @@ async function uploadPlaces(places: LogFormValues['places'], logId: string) {
 /* 테이블에 데이터 삽입 */
 async function insertLogToDB({
   logData,
+  tagsData,
   placeDataList,
   placeImageDataList,
 }: {
   logData: NewLog;
+  tagsData: NewTags;
   placeDataList: NewPlace[];
   placeImageDataList: NewPlaceImage[];
 }) {
@@ -114,6 +125,12 @@ async function insertLogToDB({
   if (logError) {
     console.error(logError);
     throw new Error('로그 테이블 업데이트 실패');
+  }
+
+  const { error: tagError } = await supabase.from('log_tag').insert(tagsData);
+  if (tagError) {
+    console.error(tagError);
+    throw new Error('태그 테이블 업데이트 실패');
   }
 
   const { error: placeError } = await supabase.from('place').insert(placeDataList);

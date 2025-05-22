@@ -1,9 +1,41 @@
+import { createClient } from '@/lib/supabase/server';
 import { PaginationParams } from '@/types/api/common';
-import { logBookmarkListParmas, LogsReseponse } from '@/types/api/log';
+import { logBookmarkListParmas, LogResponse, LogsReseponse } from '@/types/api/log';
 import { unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { logKeys } from './keys';
 import { cacheTags } from './tags';
+
+// ===================================================================
+// 단일 로그
+// ===================================================================
+export async function fetchLog(logId: string): Promise<LogResponse> {
+  try {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from('log')
+      .select(
+        `
+        *,
+         place(*,
+         place_images(*)
+         ),
+         log_tag(
+          category, tag
+         )
+      `
+      )
+      .eq('log_id', logId)
+      .single();
+
+    if (error) throw new Error(error.message);
+    return { success: true, data: data };
+  } catch (e) {
+    console.error(e);
+    return { success: false, msg: '에러' };
+  }
+}
 
 // ===================================================================
 // 로그 리스트

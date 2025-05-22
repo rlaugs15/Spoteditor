@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" className="web:min-w-[1440px]">
       <body
         className={`${pretendard.variable} ${untitled.variable} ${prompt.variable} antialiased`}
       >

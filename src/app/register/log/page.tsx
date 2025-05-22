@@ -8,7 +8,8 @@ import PlaceForm from '@/components/features/register/log/PlaceForm';
 import { Form, FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { formSchema } from '@/lib/zod/logSchema';
+import { LogformSchema } from '@/lib/zod/logSchema';
+import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/schema/log';
 import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,7 +20,7 @@ import { toast } from 'sonner';
 const LogPage = () => {
   const router = useRouter();
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(LogformSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
     defaultValues: {
@@ -35,6 +36,13 @@ const LogPage = () => {
           placeImages: [], // 파일 객체, 순서
         },
       ],
+      tags: {
+        mood: useLogCreationStore.getState().mood,
+        activity: useLogCreationStore.getState().activity,
+        country: useLogCreationStore.getState().country,
+        city: useLogCreationStore.getState().city,
+        sigungu: useLogCreationStore.getState().sigungu,
+      },
     },
   });
 
@@ -53,6 +61,14 @@ const LogPage = () => {
   const handleDeletePlace = (idx: number) => remove(idx);
   const onSubmit = async (values: LogFormValues) => {
     const formData = createFormData(values);
+    // const parseResult = parseFormData<LogFormValues>(formData);
+
+    // const rowsToInsert = Object.entries(parseResult.tags).map(([category, tag]) => ({
+    //   category,
+    //   tag,
+    // }));
+    // console.log(rowsToInsert);
+
     const uploadResult = await createLog(formData);
 
     if (uploadResult.success) {
