@@ -12,27 +12,27 @@ export type Database = {
       address: {
         Row: {
           address_id: string
-          city: string | null
-          country: string | null
+          city: string
+          country: string
           created_at: string
-          log_id: string | null
-          sigungu: string | null
+          log_id: string
+          sigungu: string
         }
         Insert: {
           address_id?: string
-          city?: string | null
-          country?: string | null
+          city: string
+          country: string
           created_at?: string
-          log_id?: string | null
-          sigungu?: string | null
+          log_id: string
+          sigungu: string
         }
         Update: {
           address_id?: string
-          city?: string | null
-          country?: string | null
+          city?: string
+          country?: string
           created_at?: string
-          log_id?: string | null
-          sigungu?: string | null
+          log_id?: string
+          sigungu?: string
         }
         Relationships: [
           {
@@ -47,18 +47,18 @@ export type Database = {
       follow: {
         Row: {
           follow_id: number
-          follower_id: string | null
-          following_id: string | null
+          follower_id: string
+          following_id: string
         }
         Insert: {
           follow_id?: number
-          follower_id?: string | null
-          following_id?: string | null
+          follower_id: string
+          following_id: string
         }
         Update: {
           follow_id?: number
-          follower_id?: string | null
-          following_id?: string | null
+          follower_id?: string
+          following_id?: string
         }
         Relationships: [
           {
@@ -115,18 +115,18 @@ export type Database = {
       log_bookmark: {
         Row: {
           log_bookmark_id: number
-          log_id: string | null
-          user_id: string | null
+          log_id: string
+          user_id: string
         }
         Insert: {
           log_bookmark_id?: number
-          log_id?: string | null
-          user_id?: string | null
+          log_id: string
+          user_id: string
         }
         Update: {
           log_bookmark_id?: number
-          log_id?: string | null
-          user_id?: string | null
+          log_id?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -147,22 +147,22 @@ export type Database = {
       }
       log_tag: {
         Row: {
-          category: string | null
-          log_id: string | null
+          category: string
+          log_id: string
           log_tag_id: number
-          tag: string | null
+          tag: string
         }
         Insert: {
-          category?: string | null
-          log_id?: string | null
+          category: string
+          log_id: string
           log_tag_id?: number
-          tag?: string | null
+          tag: string
         }
         Update: {
-          category?: string | null
-          log_id?: string | null
+          category?: string
+          log_id?: string
           log_tag_id?: number
-          tag?: string | null
+          tag?: string
         }
         Relationships: [
           {
@@ -218,18 +218,18 @@ export type Database = {
       place_bookmark: {
         Row: {
           place_bookmark_id: number
-          place_id: string | null
-          user_id: string | null
+          place_id: string
+          user_id: string
         }
         Insert: {
           place_bookmark_id?: number
-          place_id?: string | null
-          user_id?: string | null
+          place_id: string
+          user_id: string
         }
         Update: {
           place_bookmark_id?: number
-          place_id?: string | null
-          user_id?: string | null
+          place_id?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -282,7 +282,7 @@ export type Database = {
           created_at: string | null
           deleted_at: string | null
           description: string | null
-          email: string | null
+          email: string
           image_url: string | null
           insta_id: string | null
           is_deleted: boolean | null
@@ -294,7 +294,7 @@ export type Database = {
           created_at?: string | null
           deleted_at?: string | null
           description?: string | null
-          email?: string | null
+          email: string
           image_url?: string | null
           insta_id?: string | null
           is_deleted?: boolean | null
@@ -306,7 +306,7 @@ export type Database = {
           created_at?: string | null
           deleted_at?: string | null
           description?: string | null
-          email?: string | null
+          email?: string
           image_url?: string | null
           insta_id?: string | null
           is_deleted?: boolean | null

@@ -20,6 +20,9 @@ export async function fetchLog(logId: string): Promise<LogResponse> {
         *,
          place(*,
          place_images(*)
+         ),
+         log_tag(
+          category, tag
          )
       `
       )
