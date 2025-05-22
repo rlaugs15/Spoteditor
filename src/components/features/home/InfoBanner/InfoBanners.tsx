@@ -3,12 +3,13 @@ import { Button } from '@/components/ui/button';
 import { REGISTER_PATHS } from '@/constants/pathname';
 import Link from 'next/link';
 import InfoBanner from './InfoBanner';
+import TypingText from './TypingText';
 
 const InfoBanners = () => {
   return (
     <div className="grid grid-cols-2 gap-[30px]">
       <InfoBanner>
-        <p className="font-bold text-xl text-black">모든 유저가 특별한 “에디터"가 될 수 있어요!</p>
+        <TypingText />
         <div className="flex items-center">
           <Button className="rounded-full !text-text-md font-medium text-white" size={'lg'} asChild>
             <Link href={REGISTER_PATHS.MOOD}>나의 추천 코스 등록하기</Link>
