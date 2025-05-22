@@ -1,7 +1,7 @@
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { RefObject, useEffect, useState } from 'react';
 
-const usePagination = (initialPage = 1) => {
+const usePagination = (initialPage = 1, scrollTargetRef?: RefObject<HTMLElement | null>) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -15,9 +15,11 @@ const usePagination = (initialPage = 1) => {
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.set('currentPage', String(currentPage));
 
-      router.push(`${pathname}?${newParams.toString()}`);
+      router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
+      /* 페이지네이션 시 ref가 들어간 태그로 부드럽게 이동 */
+      scrollTargetRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }, [currentPage, isClickedPagination, pathname, router, searchParams]);
+  }, [currentPage, isClickedPagination, pathname, router, searchParams, scrollTargetRef]);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
