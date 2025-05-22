@@ -1,5 +1,6 @@
+import BackButton from '@/components/common/Button/BackButton';
 import ClipboardButton from '@/components/common/Button/ClipboardButton';
-import { ArrowLeftIcon, PenIcon, WhiteLocationIcon } from '@/components/common/Icons';
+import { PenIcon, WhiteLocationIcon } from '@/components/common/Icons';
 import ExtraActionButton from '@/components/features/detail-log/ExtraActionButton';
 import { Badge } from '@/components/ui/badge';
 import { DetailLog } from '@/types/api/log';
@@ -12,7 +13,6 @@ interface LogThubmnailProps {
 const LogThubmnail = ({ logData }: LogThubmnailProps) => {
   const { thumbnail_url, title, place, log_tag } = logData;
   const result = log_tag.filter((item) => ['mood', 'activity'].includes(item.category));
-  console.log(result);
   return (
     <section className="relative bg-pink-200 h-[488px] flex flex-col justify-between px-4 web:pl-[50px] pt-4 pb-8">
       <Image
@@ -22,9 +22,10 @@ const LogThubmnail = ({ logData }: LogThubmnailProps) => {
         className="object-cover"
       />
       <div className="flex justify-between z-10">
-        <ExtraActionButton>
-          <ArrowLeftIcon />
+        <ExtraActionButton asChild>
+          <BackButton circle />
         </ExtraActionButton>
+
         <div className="flex flex-col gap-2">
           <ClipboardButton />
           {
