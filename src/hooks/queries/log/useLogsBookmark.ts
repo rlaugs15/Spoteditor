@@ -10,7 +10,7 @@ async function fetchUseLogsBookmark({
   pageSize,
 }: BookmarkParams): Promise<LogsReseponse> {
   const res = await fetch(
-    `/api/v1/logs/bookmark?userId=${userId}&currentPage=${currentPage}&pageSize=${pageSize}`
+    `/api/logs/bookmark?userId=${userId}&currentPage=${currentPage}&pageSize=${pageSize}`
   );
   const data = await res.json();
   return data;

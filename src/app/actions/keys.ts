@@ -1,6 +1,6 @@
 import { PaginationParams } from '@/types/api/common';
 import { FollowListParams } from '@/types/api/follow';
-import { logBookmarkListParmas } from '@/types/api/log';
+import { logBookmarkListParmas, LogsParams } from '@/types/api/log';
 import { SearchParams } from '@/types/api/search';
 
 /* 유저 */
@@ -34,7 +34,7 @@ export const followKeys = {
 export const logKeys = {
   log: ['log'] as const,
   detail: (logId: string) => [...logKeys.log, logId] as const,
-  list: (params: PaginationParams) =>
+  list: (params: LogsParams) =>
     [
       ...logKeys.log,
       'list',
@@ -42,6 +42,8 @@ export const logKeys = {
       `${params.pageSize}`,
       `${params.sort}`,
     ] as const,
+  listByUser: ({ userId, currentPage, pageSize }: LogsParams) =>
+    [...logKeys.log, 'byUser', userId, currentPage, pageSize] as const,
   bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParmas) =>
     [...logKeys.log, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
 

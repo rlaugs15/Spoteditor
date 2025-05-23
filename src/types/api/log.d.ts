@@ -16,7 +16,9 @@ export type LogResponse = ApiResponse<DetailLog>;
 
 /* 로그리스트 */
 export type LogsReseponse = ApiResponse<LogWithUserAndAddress[]>;
-
+export interface LogsParams extends PaginationParams {
+  userId?: string;
+}
 export interface logBookmarkListParmas extends PaginationParams {
   userId: string;
 }
