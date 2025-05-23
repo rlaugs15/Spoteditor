@@ -4,6 +4,7 @@ import ExtraActionButton from '@/components/features/detail-log/ExtraActionButto
 import LogAuthorIntro from '@/components/features/detail-log/LogAuthorIntro';
 import LogContent from '@/components/features/detail-log/LogContent';
 import LogThubmnail from '@/components/features/detail-log/LogThubmnail';
+import Link from 'next/link';
 
 interface LogDetailPageProps {
   params: {
@@ -30,8 +31,10 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
         <ExtraActionButton className="bg-white w-11 h-11">
           <PenBlackIcon />
         </ExtraActionButton>
-        <ExtraActionButton className="bg-white w-11 h-11">
-          <TableIcon />
+        <ExtraActionButton className="bg-white w-11 h-11" asChild>
+          <Link href={`/log/${logData.log_id}/placeCollect`}>
+            <TableIcon />
+          </Link>
         </ExtraActionButton>
       </div>
     </div>

@@ -1,18 +1,23 @@
 import { Separator } from '@/components/ui/separator';
-import { NullableFields } from '@/types/api/common';
+import { cn } from '@/lib/utils';
 
-type PostCardLocationProps = NullableFields<
-  Partial<{
-    city: string;
-    country: string;
-    sigungu: string;
-    category?: string;
-  }>
->;
+type PostCardLocationProps = Partial<{
+  city: string;
+  country: string;
+  sigungu: string;
+  category?: string;
+}> & {
+  modal?: boolean;
+};
 
-function PostCardLocation({ city, country = '', sigungu, category }: PostCardLocationProps) {
+function PostCardLocation({ city, country = '', sigungu, category, modal }: PostCardLocationProps) {
   return (
-    <h4 className="flex items-center text-text-sm web:text-text-md text-light-300 gap-2">
+    <h4
+      className={cn(
+        'flex items-center text-text-sm web:text-text-md text-light-300 gap-2',
+        modal && '!text-text-xs'
+      )}
+    >
       {category ? (
         <span>{category}</span>
       ) : (
