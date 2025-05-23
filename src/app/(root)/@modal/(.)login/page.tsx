@@ -1,7 +1,6 @@
 import XButton from '@/components/common/Button/XButton';
+import { ModalContent, ModalHeader } from '@/components/common/Modal';
 import SocialLoginButtons from '@/components/features/login/SocialLoginButtons';
-import ModalContent from '../_components/modal/ModalContent';
-import ModalHeader from '../_components/modal/ModalHeader';
 
 export default function LoginModal() {
   return (
