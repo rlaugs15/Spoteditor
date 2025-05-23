@@ -11,7 +11,7 @@ import {
 import CustomPagination from '@/components/common/CustomPagination';
 import Loading from '@/components/common/Loading/Loading';
 import ProfileMyLogFallback from '@/components/features/profile/fallback/ProfileMyLogFallback';
-import useLogsBookmark from '@/hooks/queries/log/useLogsBookmark';
+import useLogs from '@/hooks/queries/log/useLogs';
 import useUser from '@/hooks/queries/user/useUser';
 import usePagination from '@/hooks/usePagination';
 import Link from 'next/link';
@@ -24,10 +24,12 @@ export default function MyLogs({ userId }: MyLogsProps) {
   const { currentPage, handlePageChange } = usePagination();
   const { data: me } = useUser();
 
-  const { data, isPending } = useLogsBookmark({
+  const { data, isPending } = useLogs({
     userId,
     currentPage: Number(currentPage),
   });
+  console.log('asdf', data);
+
   return (
     <>
       {isPending ? (
@@ -45,9 +47,9 @@ export default function MyLogs({ userId }: MyLogsProps) {
                   />
                   <PostCardTitle title={String(log?.title)} />
                   <PostCardLocation
-                    city={String(log?.address[0].city)}
-                    country={String(log?.address[0].country)}
-                    sigungu={String(log?.address[0].sigungu)}
+                    city={String(log?.address[0]?.city)}
+                    country={String(log?.address[0]?.country)}
+                    sigungu={String(log?.address[0]?.sigungu)}
                   />
                 </Link>
                 {me?.user_id !== userId && (

@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { getStoragePublicImage } from '@/utils/getStorageImage';
 import Image from 'next/image';
 interface PostCardImageProps {
   imageUrl?: string | null;
@@ -21,7 +22,7 @@ function PostCardImage({ imageUrl, lable, author, className, vertical }: PostCar
       {imageUrl && (
         <>
           <Image
-            src={imageUrl}
+            src={getStoragePublicImage(imageUrl as string)}
             alt="Post Thumbnail"
             fill
             sizes="100%"
