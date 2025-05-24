@@ -1,11 +1,11 @@
 import { logKeys } from '@/app/actions/keys';
+import { toQueryString } from '@/lib/utils';
 import { LogsParams, LogsReseponse } from '@/types/api/log';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
-async function fetchUseLogs({ userId, currentPage, pageSize }: LogsParams): Promise<LogsReseponse> {
-  const res = await fetch(
-    `/api/logs?userId=${userId}&currentPage=${currentPage}&pageSize=${pageSize}`
-  );
+async function fetchUseLogs(params: LogsParams): Promise<LogsReseponse> {
+  const query = toQueryString(params);
+  const res = await fetch(`/api/logs?${query}`);
   const data = await res.json();
   return data;
 }
