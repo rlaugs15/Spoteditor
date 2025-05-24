@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { DetailLog } from '@/types/api/log';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface LogThubmnailProps {
   logData: DetailLog;
@@ -14,7 +15,7 @@ const LogThubmnail = ({ logData }: LogThubmnailProps) => {
   const { thumbnail_url, title, place, log_tag } = logData;
   const result = log_tag.filter((item) => ['mood', 'activity'].includes(item.category));
   return (
-    <section className="relative bg-pink-200 h-[488px] flex flex-col justify-between px-4 web:pl-[50px] pt-4 pb-8">
+    <section className="relative h-[488px] flex flex-col justify-between px-4 web:pl-[50px] pt-4 pb-8">
       <Image
         src={getStoragePublicImage(thumbnail_url as string)}
         alt="로그 썸네일 이미지"
@@ -31,7 +32,9 @@ const LogThubmnail = ({ logData }: LogThubmnailProps) => {
           {
             // user &&
             <ExtraActionButton>
-              <PenIcon />
+              <Link href={`/${logData.log_id}/edit`}>
+                <PenIcon />
+              </Link>
             </ExtraActionButton>
           }
         </div>

@@ -29,7 +29,9 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
       </main>
       <div className="flex flex-col gap-2 fixed z-10 bottom-10 right-4">
         <ExtraActionButton className="bg-white w-11 h-11">
-          <PenBlackIcon />
+          <Link href={`/${logData.log_id}/edit`}>
+            <PenBlackIcon />
+          </Link>
         </ExtraActionButton>
         <ExtraActionButton className="bg-white w-11 h-11" asChild>
           <Link href={`/log/${logData.log_id}/placeCollect`}>
