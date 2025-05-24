@@ -22,6 +22,9 @@ export const placeSchema = z.object({
 export const tagsSchema = z.object({
   mood: z.array(z.string()).optional(),
   activity: z.array(z.string()).optional(),
+});
+
+export const addressSchema = z.object({
   country: z.string(),
   city: z.string(),
   sigungu: z.string(),
@@ -33,4 +36,5 @@ export const LogformSchema = z.object({
   logDescription: z.string(),
   places: z.array(placeSchema),
   tags: tagsSchema,
+  address: addressSchema,
 });

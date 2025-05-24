@@ -11,11 +11,12 @@ interface Header3Props {
 }
 const Header3 = ({ onAddNewPlace }: Header3Props) => {
   const router = useRouter();
+  const country = useLogCreationStore((state) => state.country);
   const city = useLogCreationStore((state) => state.city);
   const sigungu = useLogCreationStore((state) => state.sigungu);
 
   useEffect(() => {
-    if (!city || !sigungu) router.replace(REGISTER_PATHS.CITY);
+    if (!country || !city || !sigungu) router.replace(REGISTER_PATHS.COUNTRY);
   }, []);
 
   return (

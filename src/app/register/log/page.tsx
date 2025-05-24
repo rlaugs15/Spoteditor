@@ -1,13 +1,11 @@
 'use client';
 import { createLog } from '@/app/actions/log-register';
 import { Header3 } from '@/components/common/Header';
-import { XInputClearIcon } from '@/components/common/Icons';
 import ConfirmRegistrationDialog from '@/components/features/register/log/ConfirmRegistrationDialog';
 import PhotoTextSection from '@/components/features/register/log/PhotoTextSection';
 import PlaceForm from '@/components/features/register/log/PlaceForm';
-import { Form, FormField } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import TitledInput from '@/components/features/register/log/TitledInput';
+import { Form } from '@/components/ui/form';
 import { LogformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/schema/log';
@@ -26,6 +24,8 @@ const initialPlace = {
 };
 
 const LogPage = () => {
+  const clearTag = useLogCreationStore((state) => state.clearTag);
+  console.log('logpage 리렌더링');
   const router = useRouter();
   const form = useForm({
     resolver: zodResolver(LogformSchema),
@@ -39,6 +39,8 @@ const LogPage = () => {
       tags: {
         mood: useLogCreationStore.getState().mood,
         activity: useLogCreationStore.getState().activity,
+      },
+      address: {
         country: useLogCreationStore.getState().country,
         city: useLogCreationStore.getState().city,
         sigungu: useLogCreationStore.getState().sigungu,
@@ -54,18 +56,12 @@ const LogPage = () => {
   const handleDeletePlace = (idx: number) => remove(idx);
   const onSubmit = async (values: LogFormValues) => {
     const formData = createFormData(values);
-    // const parseResult = parseFormData<LogFormValues>(formData);
-
-    // const rowsToInsert = Object.entries(parseResult.tags).flatMap(([category, tag]) =>
-    //   Array.isArray(tag) ? tag.map((t) => ({ category, tag: t })) : [{ category, tag }]
-    // );
-    // console.log(rowsToInsert);
-
     const uploadResult = await createLog(formData);
 
     if (uploadResult.success) {
       router.replace(`/log/${uploadResult.data}`);
       toast.success('업로드 성공');
+      clearTag();
     } else {
       toast.error('업로드 실패');
     }
@@ -76,40 +72,8 @@ const LogPage = () => {
       <Header3 onAddNewPlace={handleAddNewPlace} />
       <Form {...form}>
         <main className="grow bg-white">
-          <>
-            <div className="flex items-center border-b border-light-100">
-              <FormField
-                control={form.control}
-                name="logTitle"
-                render={({ field }) => (
-                  <>
-                    <Input
-                      {...field}
-                      type="text"
-                      placeholder="제목을 입력해주세요.(최대 30자) *"
-                      className="!text-text-md my-2"
-                      maxLength={30}
-                      required
-                    />
-                    <button
-                      className={cn(
-                        'p-2 transition-opacity duration-300',
-                        form.watch('logTitle').length
-                          ? 'opacity-100 pointer-events-auto'
-                          : 'opacity-0 pointer-events-none'
-                      )}
-                      onClick={() => form.setValue('logTitle', '')}
-                    >
-                      <XInputClearIcon className="cursor-pointer hover:brightness-95" />
-                    </button>
-                  </>
-                )}
-              />
-            </div>
-            <PhotoTextSection thumbnail />
-          </>
-
-          {/* places */}
+          <TitledInput />
+          <PhotoTextSection thumbnail />
           <div className="flex flex-col gap-4">
             {fields.map((field, idx) => (
               <PlaceForm key={field.id} idx={idx} onDeletePlace={handleDeletePlace} />

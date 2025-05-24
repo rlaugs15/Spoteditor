@@ -18,6 +18,7 @@ type TagStates = {
 type TagActions = {
   toggleMultiTag: (key: MultiKeys, tag: string) => void;
   setSingleTag: (key: SingleKeys, tag: string) => void;
+  clearTag: () => void;
 };
 
 type LogCreationStoreType = TagStates & TagActions;
@@ -48,6 +49,14 @@ export const useLogCreationStore = create<LogCreationStoreType>()(
       setSingleTag: (key, tag) =>
         set((state) => {
           state[key] = tag;
+        }),
+      clearTag: () =>
+        set((state) => {
+          state.mood = [];
+          state.activity = [];
+          state.country = '';
+          state.city = '';
+          state.sigungu = '';
         }),
     })),
     { name: 'logCreation' }
