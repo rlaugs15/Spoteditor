@@ -15,7 +15,7 @@ export function toQueryString(params: Record<string, any>): string {
   const query = new URLSearchParams();
 
   Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== '') {
+    if (value !== undefined && value !== null) {
       query.set(key, String(value));
     }
   });

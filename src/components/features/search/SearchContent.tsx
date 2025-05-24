@@ -6,29 +6,28 @@ import { PostCardImage, PostCardLocation, PostCardTitle } from '@/components/com
 import CustomPagination from '@/components/common/CustomPagination';
 import Loading from '@/components/common/Loading/Loading';
 import { SectionTitle } from '@/components/common/SectionBlock';
-import useSearch from '@/hooks/queries/search/useSearch';
+import useSearchLogs from '@/hooks/queries/search/useSearchLogs';
 import usePagination from '@/hooks/usePagination';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { useRef } from 'react';
 
 interface SearchContentProps {
   userId: string;
+  keyword: string;
 }
 
-export default function SearchContent({ userId }: SearchContentProps) {
+export default function SearchContent({ userId, keyword }: SearchContentProps) {
   const contentRef = useRef<HTMLElement | null>(null);
-  const searchParams = useSearchParams();
-  const keyword = searchParams.get('keyword') ?? '';
+
   const { currentPage, handlePageChange } = usePagination(1, contentRef);
-  const { data, isLoading } = useSearch({ currentPage, keyword });
+  const { data, isLoading } = useSearchLogs({ currentPage, keyword });
   return (
     <section
       ref={contentRef}
       className="pt-10 web:pt-12.5 pb-12.5 flex flex-col gap-10 web:gap-12.5"
     >
       <div>
-        {data?.data.length === 0 || !data ? (
+        {!Array.isArray(data?.data) || data.data.length === 0 ? (
           <p className="text-light-300 text-text-lg web:text-text-xl">검색 결과가 없습니다.</p>
         ) : (
           <div>
