@@ -2,9 +2,11 @@
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { IUser } from '@/types/api/user';
-import TabButton from './TabButton';
+import { REGISTER_PATHS } from '@/constants/pathname';
 import { useProfileTabStore } from '@/stores/profileStore';
+import { IUser } from '@/types/api/user';
+import { useRouter } from 'next/navigation';
+import TabButton from './TabButton';
 
 interface ProfileTabsProps {
   me: IUser;
@@ -13,11 +15,8 @@ interface ProfileTabsProps {
 
 export default function ProfileTabs({ me, userId }: ProfileTabsProps) {
   const { tab, setTab } = useProfileTabStore();
-  /*  const touter = useRouter();
-  const handleGotoRegisterPage = () =>
-    touter(REGISTER_SELECT, {
-      state: { from: location.pathname },
-    }); */
+  const router = useRouter();
+  const handleGotoRegisterPage = () => router.push(`${REGISTER_PATHS.MOOD}`);
   const onTabClick = (tab: 'myLog' | 'savedSpaces' | 'savedLog') => {
     setTab(tab);
   };
@@ -52,7 +51,7 @@ export default function ProfileTabs({ me, userId }: ProfileTabsProps) {
           <Button
             size="s"
             className="rounded-[60px] px-4 py-[11px] h-7 web:h-9 web:text-text-sm font-untitled text-white"
-            //onClick={handleGotoRegisterPage}
+            onClick={handleGotoRegisterPage}
           >
             Upload
           </Button>

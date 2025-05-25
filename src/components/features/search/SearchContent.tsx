@@ -7,20 +7,21 @@ import CustomPagination from '@/components/common/CustomPagination';
 import Loading from '@/components/common/Loading/Loading';
 import { SectionTitle } from '@/components/common/SectionBlock';
 import useSearchLogs from '@/hooks/queries/search/useSearchLogs';
-import usePagination from '@/hooks/usePagination';
+import useQueryPagination from '@/hooks/useQueryPagination';
 import Link from 'next/link';
 import { useRef } from 'react';
 
 interface SearchContentProps {
   userId: string;
   keyword: string;
+  currentPage: number;
 }
 
-export default function SearchContent({ userId, keyword }: SearchContentProps) {
+export default function SearchContent({ userId, keyword, currentPage }: SearchContentProps) {
   const contentRef = useRef<HTMLElement | null>(null);
 
-  const { currentPage, handlePageChange } = usePagination(1, contentRef);
-  const { data, isLoading } = useSearchLogs({ currentPage, keyword });
+  const { handlePageChange } = useQueryPagination('page', currentPage, contentRef);
+  const { data, isLoading } = useSearchLogs({ currentPage, keyword, pageSize: 16 });
   return (
     <section
       ref={contentRef}
