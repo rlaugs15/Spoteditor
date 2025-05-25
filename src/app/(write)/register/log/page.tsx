@@ -1,10 +1,10 @@
 'use client';
 import { createLog } from '@/app/actions/log-register';
 import { Header3 } from '@/components/common/Header';
-import ConfirmRegistrationDialog from '@/components/features/register/log/ConfirmRegistrationDialog';
-import PhotoTextSection from '@/components/features/register/log/PhotoTextSection';
-import PlaceForm from '@/components/features/register/log/PlaceForm';
-import TitledInput from '@/components/features/register/log/TitledInput';
+import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
+import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
+import PlaceForm from '@/components/features/log/register/PlaceForm';
+import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
 import { LogformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
@@ -25,7 +25,6 @@ const initialPlace = {
 
 const LogPage = () => {
   const clearTag = useLogCreationStore((state) => state.clearTag);
-  console.log('logpage 리렌더링');
   const router = useRouter();
   const form = useForm({
     resolver: zodResolver(LogformSchema),

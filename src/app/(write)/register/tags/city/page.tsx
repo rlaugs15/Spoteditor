@@ -1,6 +1,5 @@
 import { RegisterFooter } from '@/components/common/Footer';
-import PageIntro from '@/components/features/register/tags/PageIntro';
-import TagGroup from '@/components/features/register/tags/TagGroup';
+import { PageIntro, TagGroup } from '@/components/features/log/register/tags';
 import { REGISTER_PATHS } from '@/constants/pathname';
 
 const CitySelectionPage = () => {

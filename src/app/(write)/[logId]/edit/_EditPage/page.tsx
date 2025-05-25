@@ -1,10 +1,10 @@
 'use client';
 import { LogEditHeader } from '@/components/common/Header';
-import ConfirmRegistrationDialog from '@/components/features/register/log/ConfirmRegistrationDialog';
-import PhotoTextSection from '@/components/features/register/log/PhotoTextSection';
-import PlaceForm from '@/components/features/register/log/PlaceForm';
-import TitledInput from '@/components/features/register/log/TitledInput';
-import TagGroup from '@/components/features/register/tags/TagGroup';
+import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
+import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
+import PlaceForm from '@/components/features/log/register/PlaceForm';
+import { TagGroup } from '@/components/features/log/register/tags';
+import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
 import { LogEditformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
@@ -16,7 +16,6 @@ import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
-  console.log(logData);
   const { title, thumbnail_url, description, place: places, log_tag, address } = logData;
   const initializeTags = useLogCreationStore((state) => state.initializeTags);
   const moodTags = log_tag.filter((t) => t.category === 'mood').map((t) => t.tag);
@@ -72,7 +71,6 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
             ))}
           </div>
         </main>
-
         <>
           <TagGroup title="누구와" type="mood" />
           <TagGroup title="어떤 느낌으로" type="activity" />
