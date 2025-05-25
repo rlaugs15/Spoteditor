@@ -25,7 +25,7 @@ const PostCard = ({ log, vertical }: PostCardProps) => {
       />
       <PostCardTitle title={String(log?.title)} />
       <PostCardLocation city={log?.address[0]?.city} sigungu={log?.address[0]?.sigungu} />
-      <LogBookMarkButton logId={String(log?.log_id)} userId={String(log?.users?.user_id)} />
+      <LogBookMarkButton logId={String(log?.log_id)} />
     </div>
   );
 };

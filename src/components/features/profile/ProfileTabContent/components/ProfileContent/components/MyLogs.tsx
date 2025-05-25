@@ -28,8 +28,6 @@ export default function MyLogs({ userId }: MyLogsProps) {
     userId,
     currentPage: Number(currentPage),
   });
-  console.log('asdf', data);
-
   return (
     <>
       {isPending ? (
@@ -52,9 +50,7 @@ export default function MyLogs({ userId }: MyLogsProps) {
                     sigungu={String(log?.address[0]?.sigungu)}
                   />
                 </Link>
-                {me?.user_id !== userId && (
-                  <LogBookMarkButton logId={String(log?.log_id)} userId={String(me?.user_id)} />
-                )}
+                {me?.user_id !== userId && <LogBookMarkButton logId={String(log?.log_id)} />}
               </MotionCard>
             ))}
           </PostCardWrapper>

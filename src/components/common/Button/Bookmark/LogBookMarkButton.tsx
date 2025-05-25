@@ -9,13 +9,12 @@ import { useRouter } from 'next/navigation';
 
 interface LogBookMarkButtonProps {
   logId: string;
-  userId: string;
 }
 
-export default function LogBookMarkButton({ logId, userId }: LogBookMarkButtonProps) {
+export default function LogBookMarkButton({ logId }: LogBookMarkButtonProps) {
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
-  const { data, isLoading } = useLogBookmarkCheck({ logId, userId });
+  const { data, isLoading } = useLogBookmarkCheck({ logId, userId: String(user?.user_id) });
   const { mutate } = useLogBookmarkMutation();
 
   const onBookMarkClick = () => {

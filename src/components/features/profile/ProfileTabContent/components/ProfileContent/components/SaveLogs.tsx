@@ -12,7 +12,6 @@ import CustomPagination from '@/components/common/CustomPagination';
 import Loading from '@/components/common/Loading/Loading';
 import ProfileFallbackMessage from '@/components/features/profile/fallback/ProfileFallbackMessage';
 import useLogsBookmark from '@/hooks/queries/log/useLogsBookmark';
-import useUser from '@/hooks/queries/user/useUser';
 import usePagination from '@/hooks/usePagination';
 import Link from 'next/link';
 
@@ -21,7 +20,6 @@ interface SavaLogsProps {
 }
 
 export default function SaveLogs({ userId }: SavaLogsProps) {
-  const { data: me } = useUser();
   const { currentPage, handlePageChange } = usePagination();
 
   const { data, isPending } = useLogsBookmark({
@@ -50,7 +48,7 @@ export default function SaveLogs({ userId }: SavaLogsProps) {
                     sigungu={String(log?.address[0].sigungu)}
                   />
                 </Link>
-                <LogBookMarkButton logId={String(log?.log_id)} userId={String(me?.user_id)} />
+                <LogBookMarkButton logId={String(log?.log_id)} />
               </MotionCard>
             ))}
           </PostCardWrapper>

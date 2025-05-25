@@ -1,21 +1,20 @@
 'use client';
 
+import usePlaceBookmarkMutation from '@/hooks/mutations/place/usePlaceBookmarkMutation';
+import usePlaceBookmarkCheck from '@/hooks/queries/place/useIsPlaceBookmarkCheck';
+import useUser from '@/hooks/queries/user/useUser';
 import { cn } from '@/lib/utils';
 import { Bookmark } from 'lucide-react';
-import usePlaceBookmarkCheck from '@/hooks/queries/place/useIsPlaceBookmarkCheck';
-import usePlaceBookmarkMutation from '@/hooks/mutations/place/usePlaceBookmarkMutation';
-import useUser from '@/hooks/queries/user/useUser';
 import { useRouter } from 'next/navigation';
 
 interface PlaceBookMarkButtonProps {
   placeId: string;
-  userId: string;
 }
 
-export default function PlaceBookMarkButton({ placeId, userId }: PlaceBookMarkButtonProps) {
+export default function PlaceBookMarkButton({ placeId }: PlaceBookMarkButtonProps) {
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
-  const { data, isLoading } = usePlaceBookmarkCheck({ placeId, userId });
+  const { data, isLoading } = usePlaceBookmarkCheck({ placeId, userId: String(user?.user_id) });
   const { mutate } = usePlaceBookmarkMutation();
 
   const onBookMarkClick = () => {

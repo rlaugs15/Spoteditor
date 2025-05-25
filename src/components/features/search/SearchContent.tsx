@@ -12,12 +12,11 @@ import Link from 'next/link';
 import { useRef } from 'react';
 
 interface SearchContentProps {
-  userId: string;
   keyword: string;
   currentPage: number;
 }
 
-export default function SearchContent({ userId, keyword, currentPage }: SearchContentProps) {
+export default function SearchContent({ keyword, currentPage }: SearchContentProps) {
   const contentRef = useRef<HTMLElement | null>(null);
 
   const { handlePageChange } = useQueryPagination('page', currentPage, contentRef);
@@ -53,7 +52,7 @@ export default function SearchContent({ userId, keyword, currentPage }: SearchCo
                         sigungu={String(log?.address[0].sigungu)}
                       />
                     </Link>
-                    <LogBookMarkButton logId={String(log?.log_id)} userId={userId} />
+                    <LogBookMarkButton logId={String(log?.log_id)} />
                   </MotionCard>
                 ))
               )}

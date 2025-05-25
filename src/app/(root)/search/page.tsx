@@ -1,6 +1,5 @@
 import { searchKeys } from '@/app/actions/keys';
 import { getSearchLogs } from '@/app/actions/log';
-import { getUser } from '@/app/actions/user';
 import { SectionTitle } from '@/components/common/SectionBlock';
 import SearchContent from '@/components/features/search/SearchContent';
 import { getQueryClient } from '@/lib/utils';
@@ -15,8 +14,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const parsedPage = Number(page);
   const currentPage = isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage;
 
-  const me = await getUser();
-
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery({
     queryKey: searchKeys.list({ keyword, currentPage, pageSize: 16 }),
@@ -29,7 +26,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <SectionTitle title="Searching for" subTitle={keyword} />
       </section>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <SearchContent userId={String(me?.user_id)} keyword={keyword} currentPage={currentPage} />
+        <SearchContent keyword={keyword} currentPage={currentPage} />
       </HydrationBoundary>
     </div>
   );
