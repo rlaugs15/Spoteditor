@@ -14,13 +14,15 @@ import {
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 interface ConfirmRegistrationDialogProps {
-  logTitle: string;
+  edit?: boolean;
+  logTitle?: string;
   onSubmitLogForm: () => Promise<void>;
   disabled?: boolean;
   loading?: boolean;
 }
 
 const ConfirmRegistrationDialog = ({
+  edit,
   logTitle,
   onSubmitLogForm,
   disabled,
@@ -45,7 +47,7 @@ const ConfirmRegistrationDialog = ({
         <AlertDialogHeader>
           <AlertDialogTitle className="text-text-2xl font-bold">
             <span className="text-info-500">{logTitle} </span>
-            로그를 등록하시겠어요?
+            로그를 {edit ? '수정' : '등록'}하시겠어요?
           </AlertDialogTitle>
           <AlertDialogDescription hidden>{logTitle}로그를 등록하시겠어요?</AlertDialogDescription>
         </AlertDialogHeader>

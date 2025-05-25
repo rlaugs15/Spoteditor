@@ -1,4 +1,5 @@
 'use client';
+import { updateLog } from '@/app/actions/log-update';
 import { LogEditHeader } from '@/components/common/Header';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
@@ -12,10 +13,13 @@ import { DetailLog } from '@/types/api/log';
 import { LogEditFormValues } from '@/types/schema/log';
 import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
+  const router = useRouter();
   const { title, thumbnail_url, description, place: places, log_tag, address } = logData;
   const initializeTags = useLogCreationStore((state) => state.initializeTags);
   const moodTags = log_tag.filter((t) => t.category === 'mood').map((t) => t.tag);
@@ -34,6 +38,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
       thumbnail: thumbnail_url,
       logDescription: description ?? '',
       places: places.map((place) => ({
+        id: place.place_id,
         placeName: place.name,
         category: place.category,
         location: place.address,
@@ -54,8 +59,42 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   const handleDeletePlace = (idx: number) => remove(idx);
 
   const onSubmit = async (values: LogEditFormValues) => {
-    const formData = createFormData(values);
-    console.log(formData);
+    const dirtyFields = form.formState.dirtyFields;
+    const dirtyValues = extractDirtyValues(dirtyFields, values);
+
+    console.log(dirtyValues);
+
+    const originalPlaces = form.getValues('places');
+    const patchedPlaces = dirtyValues.places?.map(
+      (place: LogEditFormValues['places'][number], idx: number) => {
+        const original = originalPlaces[idx];
+        return {
+          ...place,
+          id: original?.id,
+        };
+      }
+    );
+
+    const patchedDirtyValues = {
+      ...dirtyValues,
+      places: patchedPlaces,
+    };
+
+    // console.log('변경된 값만:', dirtyValues, patchedDirtyValues);
+
+    const formData = createFormData(patchedDirtyValues);
+    // const parseResult = parseFormData<LogEditFormValues>(formData);
+
+    const uploadResult = await updateLog(formData, logData.log_id);
+    if (uploadResult.success) {
+      router.replace(`/log/${logData.log_id}`);
+      toast.success('로그 수정 성공');
+    } else {
+      toast.error('로그 수정  실패');
+    }
+
+    // console.log(uploadResult);
+    // console.log(formData);
   };
 
   return (
@@ -83,7 +122,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
       </div>
 
       <ConfirmRegistrationDialog
-        logTitle={form.getValues('logTitle')}
+        edit
         disabled={!form.formState.isValid || form.formState.isSubmitting}
         loading={form.formState.isSubmitting}
         onSubmitLogForm={form.handleSubmit(onSubmit)}
@@ -93,3 +132,15 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 };
 
 export default LogEditPage;
+
+function extractDirtyValues(dirtyFields: any, allValues: any) {
+  if (typeof dirtyFields !== 'object' || dirtyFields === true) return allValues;
+
+  const result: any = Array.isArray(dirtyFields) ? [] : {};
+  for (const key in dirtyFields) {
+    if (dirtyFields[key]) {
+      result[key] = extractDirtyValues(dirtyFields[key], allValues[key]);
+    }
+  }
+  return result;
+}
