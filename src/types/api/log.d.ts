@@ -10,6 +10,7 @@ export type DetailLog = Tables<'log'> & {
   >;
 } & {
   log_tag: Array<Pick<Tables<'log_tag'>, 'category' | 'tag'>>;
+  address: Array<Pick<Tables<'address'>, 'country' | 'city' | 'sigungu'>>;
 };
 
 export type LogResponse = ApiResponse<DetailLog>;

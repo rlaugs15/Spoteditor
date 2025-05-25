@@ -1,7 +1,8 @@
-import { formSchema } from '@/lib/zod/logSchema';
+import { LogEditformSchema, LogformSchema } from '@/lib/zod/logSchema';
 import { z } from 'zod';
 
-export type LogFormValues = z.infer<typeof formSchema>;
+export type LogFormValues = z.infer<typeof LogformSchema>;
+export type LogEditFormValues = z.infer<typeof LogEditformSchema>;
 export type NewPlace = Omit<Tables<'place'>, 'created_at'>;
 export type NewTag = {
   category: string;

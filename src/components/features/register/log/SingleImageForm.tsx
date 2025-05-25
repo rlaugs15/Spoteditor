@@ -4,6 +4,7 @@ import { FormField, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
+import { getStoragePublicImage } from '@/utils/getStorageImage';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -14,9 +15,10 @@ interface SingleImageFormProps {
 }
 
 const SingleImageForm = ({ name, label }: SingleImageFormProps) => {
-  const { control } = useFormContext();
-  const [preview, setPreview] = useState<string | null>(null);
-
+  const { control, getValues } = useFormContext();
+  const [preview, setPreview] = useState<string | null>(getValues(name) || null);
+  const displayImage =
+    typeof getValues(name) === 'string' ? getStoragePublicImage(preview as string) : preview;
   return (
     <div className="flex flex-col">
       <FormLabel htmlFor="single-upload" className={cn(preview && 'hidden')}>
@@ -56,7 +58,12 @@ const SingleImageForm = ({ name, label }: SingleImageFormProps) => {
       <div className="flex max-h-[320px] overflow-x-auto gap-1">
         {preview && (
           <div key={preview} className="relative w-full h-[300px] mb-2.5">
-            <Image src={preview} fill alt="업로드한 장소 이미지" className="object-cover" />
+            <Image
+              src={displayImage ?? ''}
+              fill
+              alt="업로드한 장소 이미지"
+              className="object-cover"
+            />
             <button onClick={() => setPreview(null)}>
               <XRemoveThumbnailIcon className="absolute top-2 right-2 cursor-pointer hover:brightness-90" />
             </button>

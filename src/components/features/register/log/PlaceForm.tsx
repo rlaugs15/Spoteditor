@@ -9,9 +9,10 @@ interface PlaceFormProps {
   isChecked?: boolean;
   idx: number;
   onDeletePlace: (idx: number) => void;
+  edit?: boolean;
 }
 
-const PlaceForm = ({ isChecked, idx, onDeletePlace }: PlaceFormProps) => {
+const PlaceForm = ({ isChecked, idx, onDeletePlace, edit }: PlaceFormProps) => {
   const { control } = useFormContext();
   return (
     <div>
@@ -67,7 +68,7 @@ const PlaceForm = ({ isChecked, idx, onDeletePlace }: PlaceFormProps) => {
         </div>
       </div>
 
-      <PhotoTextSection idx={idx} />
+      <PhotoTextSection idx={idx} edit={edit} />
     </div>
   );
 };
