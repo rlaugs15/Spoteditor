@@ -24,10 +24,8 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   const initializeTags = useLogCreationStore((state) => state.initializeTags);
   const moodTags = log_tag.filter((t) => t.category === 'mood').map((t) => t.tag);
   const activityTags = log_tag.filter((t) => t.category === 'activity').map((t) => t.tag);
-
-  useEffect(() => {
-    initializeTags({ mood: moodTags, activity: activityTags });
-  }, []);
+  const mood = useLogCreationStore((state) => state.mood);
+  const activity = useLogCreationStore((state) => state.activity);
 
   const form = useForm({
     resolver: zodResolver(LogEditformSchema),
@@ -51,50 +49,47 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
       },
     },
   });
+
   const { fields, remove } = useFieldArray<LogEditFormValues>({
     control: form.control,
     name: 'places',
   });
 
+  useEffect(() => {
+    initializeTags({ mood: moodTags, activity: activityTags });
+  }, []);
+
+  useEffect(() => {
+    form.setValue('tags.mood', mood, { shouldDirty: true });
+  }, [mood]);
+
+  useEffect(() => {
+    form.setValue('tags.activity', activity, { shouldDirty: true });
+  }, [activity]);
+
   const handleDeletePlace = (idx: number) => remove(idx);
 
   const onSubmit = async (values: LogEditFormValues) => {
-    const dirtyFields = form.formState.dirtyFields;
-    const dirtyValues = extractDirtyValues(dirtyFields, values);
-
-    console.log(dirtyValues);
-
-    const originalPlaces = form.getValues('places');
-    const patchedPlaces = dirtyValues.places?.map(
-      (place: LogEditFormValues['places'][number], idx: number) => {
-        const original = originalPlaces[idx];
-        return {
-          ...place,
-          id: original?.id,
-        };
-      }
-    );
+    const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
+    const patchedPlaces = dirtyValues.places?.map((place, idx) => ({
+      ...place,
+      id: form.getValues('places')[idx]?.id,
+    }));
 
     const patchedDirtyValues = {
       ...dirtyValues,
-      places: patchedPlaces,
+      ...(dirtyValues.places ? { places: patchedPlaces } : {}),
     };
 
-    // console.log('변경된 값만:', dirtyValues, patchedDirtyValues);
-
     const formData = createFormData(patchedDirtyValues);
-    // const parseResult = parseFormData<LogEditFormValues>(formData);
-
     const uploadResult = await updateLog(formData, logData.log_id);
+
     if (uploadResult.success) {
       router.replace(`/log/${logData.log_id}`);
       toast.success('로그 수정 성공');
     } else {
       toast.error('로그 수정  실패');
     }
-
-    // console.log(uploadResult);
-    // console.log(formData);
   };
 
   return (
@@ -133,11 +128,12 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 
 export default LogEditPage;
 
-function extractDirtyValues(dirtyFields: any, allValues: any) {
+function extractDirtyValues<T>(dirtyFields: any, allValues: T): Partial<T> {
   if (typeof dirtyFields !== 'object' || dirtyFields === true) return allValues;
 
   const result: any = Array.isArray(dirtyFields) ? [] : {};
   for (const key in dirtyFields) {
+    // 재귀
     if (dirtyFields[key]) {
       result[key] = extractDirtyValues(dirtyFields[key], allValues[key]);
     }
