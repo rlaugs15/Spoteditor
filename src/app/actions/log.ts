@@ -23,6 +23,9 @@ export async function fetchLog(logId: string): Promise<LogResponse> {
          ),
          log_tag(
           category, tag
+         ),
+         address(
+         country, city, sigungu
          )
       `
       )

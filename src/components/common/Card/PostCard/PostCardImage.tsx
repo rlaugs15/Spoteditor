@@ -1,14 +1,14 @@
 import { cn } from '@/lib/utils';
+import { getStoragePublicImage } from '@/utils/getStorageImage';
 import Image from 'next/image';
 interface PostCardImageProps {
   imageUrl?: string | null;
-  lable?: boolean;
-  author: string | null;
+  author?: string | null;
   className?: string;
   vertical?: boolean;
 }
 
-function PostCardImage({ imageUrl, lable, author, className, vertical }: PostCardImageProps) {
+function PostCardImage({ imageUrl, author, className, vertical }: PostCardImageProps) {
   return (
     <div
       className={cn(
@@ -21,7 +21,8 @@ function PostCardImage({ imageUrl, lable, author, className, vertical }: PostCar
       {imageUrl && (
         <>
           <Image
-            src={imageUrl}
+            // src={imageUrl}
+            src={getStoragePublicImage(imageUrl)}
             alt="Post Thumbnail"
             fill
             sizes="100%"
@@ -32,7 +33,7 @@ function PostCardImage({ imageUrl, lable, author, className, vertical }: PostCar
           <div className="absolute inset-0 transition-colors group-hover:bg-black/25" />
         </>
       )}
-      {lable && (
+      {author && (
         <div className="flex items-center gap-[3px] absolute bottom-0 p-2.5 text-white">
           <span className="text-[11px] font-semibold leading-[130%] tracking-[-0.22px]">
             {author}

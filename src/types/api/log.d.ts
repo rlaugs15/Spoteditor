@@ -2,14 +2,15 @@ import { Tables } from '../supabase';
 import { ApiResponse, LogWithUserAndAddress, PaginationParams } from './common';
 
 /* 로그 */
+type PlaceWithImages = Tables<'place'> & {
+  place_images: Tables<'place_images'>[];
+};
+
 export type DetailLog = Tables<'log'> & {
-  place: Array<
-    Tables<'place'> & {
-      place_images: Tables<'place_images'>[];
-    }
-  >;
+  place: PlaceWithImages[];
 } & {
   log_tag: Array<Pick<Tables<'log_tag'>, 'category' | 'tag'>>;
+  address: Array<Pick<Tables<'address'>, 'country' | 'city' | 'sigungu'>>;
 };
 
 export type LogResponse = ApiResponse<DetailLog>;

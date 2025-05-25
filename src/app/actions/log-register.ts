@@ -1,7 +1,14 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { LogFormValues, NewLog, NewPlace, NewPlaceImage, NewTags } from '@/types/schema/log';
+import {
+  LogFormValues,
+  NewAddress,
+  NewLog,
+  NewPlace,
+  NewPlaceImage,
+  NewTag,
+} from '@/types/schema/log';
 import { parseFormData } from '@/utils/formatLog';
 import { uploadFile } from './storage';
 
@@ -37,16 +44,23 @@ export async function createLog(formData: FormData) {
       thumbnail_url: thumbnailUploadResult.fullPath,
     };
 
-    const tagsData = Object.entries(parseResult.tags).map(([category, tag]) => ({
+    const tagsData =
+      parseResult.tags &&
+      (Object.entries(parseResult.tags).flatMap(([category, tag]) =>
+        Array.isArray(tag)
+          ? tag.map((t) => ({ category, tag: t, log_id: logId }))
+          : [{ category, tag, log_id: logId }]
+      ) ??
+        []);
+
+    const addressData = {
       log_id: logId,
-      category,
-      tag: Array.isArray(tag) ? tag : [tag],
-    }));
+      ...parseResult.address,
+    };
 
     console.time('🗃️ DB 삽입');
-    await insertLogToDB({ logData, tagsData, placeDataList, placeImageDataList });
+    await insertLogToDB({ logData, tagsData, placeDataList, placeImageDataList, addressData });
     console.timeEnd('🗃️ DB 삽입');
-    console.timeEnd('🕒 전체 createLog 실행 시간');
 
     return { success: true, data: logId };
   } catch (e) {
@@ -113,11 +127,13 @@ async function insertLogToDB({
   tagsData,
   placeDataList,
   placeImageDataList,
+  addressData,
 }: {
   logData: NewLog;
-  tagsData: NewTags;
+  tagsData?: NewTag[];
   placeDataList: NewPlace[];
   placeImageDataList: NewPlaceImage[];
+  addressData: NewAddress;
 }) {
   const supabase = await createClient();
 
@@ -127,16 +143,24 @@ async function insertLogToDB({
     throw new Error('로그 테이블 업데이트 실패');
   }
 
-  const { error: tagError } = await supabase.from('log_tag').insert(tagsData);
-  if (tagError) {
-    console.error(tagError);
-    throw new Error('태그 테이블 업데이트 실패');
+  if (tagsData) {
+    const { error: tagError } = await supabase.from('log_tag').insert(tagsData);
+    if (tagError) {
+      console.error(tagError);
+      throw new Error('태그 테이블 업데이트 실패');
+    }
   }
 
   const { error: placeError } = await supabase.from('place').insert(placeDataList);
   if (placeError) {
     console.error(placeError);
     throw new Error('장소 테이블 업데이트 실패');
+  }
+
+  const { error: addressError } = await supabase.from('address').insert(addressData);
+  if (addressError) {
+    console.error(addressError);
+    throw new Error('주소 테이블 업데이트 실패');
   }
 
   const { error: imageError } = await supabase.from('place_images').insert(placeImageDataList);

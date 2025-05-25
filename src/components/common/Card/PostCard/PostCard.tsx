@@ -16,15 +16,16 @@ interface PostCardProps {
     sigungu: string;
   };
   vertical?: boolean;
+  modal?: boolean;
 }
 
-const PostCard = ({ log, vertical }: PostCardProps) => {
+const PostCard = ({ log, vertical, modal }: PostCardProps) => {
   return (
-    <div className="cursor-pointer">
-      <PostCardImage lable author={log.author.name} imageUrl={log.imageUrl} vertical={vertical} />
-      <PostCardTitle title={log.title} />
-      <PostCardLocation city={log.city} sigungu={log.sigungu} />
-      <LogBookMarkButton logId={log.logId} userId={log.author.userId} />
+    <div className="cursor-pointer relative">
+      <PostCardImage author={log.author.name} imageUrl={log.imageUrl} vertical={vertical} />
+      <PostCardTitle title={log.title} modal={modal} />
+      <PostCardLocation city={log.city} sigungu={log.sigungu} modal={modal} />
+      <LogBookMarkButton logId={log.logId} userId={log.author.userId} modal={modal} />
     </div>
   );
 };

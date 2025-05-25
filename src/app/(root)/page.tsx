@@ -9,6 +9,7 @@ import { mockLog } from '@/mocks/mockLog';
 const MainPage = () => {
   return (
     <div className="h-full">
+      {/* <Login /> */}
       <Hero />
 
       <div className="pt-[60px] pb-[140px] px-4 web:px-[50px] space-y-20">

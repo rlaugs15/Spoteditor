@@ -4,26 +4,25 @@ import { REGISTER_PATHS } from '@/constants/pathname';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { ArrowLeftIcon } from '../Icons';
+import BackButton from '../Button/BackButton';
 
 interface Header3Props {
   onAddNewPlace: () => void;
 }
 const Header3 = ({ onAddNewPlace }: Header3Props) => {
   const router = useRouter();
+  const country = useLogCreationStore((state) => state.country);
   const city = useLogCreationStore((state) => state.city);
   const sigungu = useLogCreationStore((state) => state.sigungu);
 
   useEffect(() => {
-    if (!city || !sigungu) router.replace(REGISTER_PATHS.CITY);
+    if (!country || !city || !sigungu) router.replace(REGISTER_PATHS.COUNTRY);
   }, []);
 
   return (
     <header className="py-[15px] bg-white flex items-center justify-between">
       <div className="flex items-center gap-2.5">
-        <Button variant={'ghost'} size={'icon'} onClick={() => router.back()}>
-          <ArrowLeftIcon />
-        </Button>
+        <BackButton />
         <p className="text-text-2xl font-bold">
           {city} · {sigungu}
         </p>
