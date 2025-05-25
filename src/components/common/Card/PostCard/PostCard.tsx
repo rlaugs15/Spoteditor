@@ -1,8 +1,14 @@
 import { LogWithUserAndAddress } from '@/types/api/common';
-import LogBookMarkButton from '../../Button/Bookmark/LogBookMarkButton';
+import dynamic from 'next/dynamic';
 import PostCardImage from './PostCardImage';
 import PostCardLocation from './PostCardLocation';
 import PostCardTitle from './PostCardTitle';
+
+const LogBookMarkButton = dynamic(
+  () => import('@/components/common/Button/Bookmark/LogBookMarkButton'),
+  { ssr: false }
+);
+
 interface PostCardProps {
   log: LogWithUserAndAddress;
   vertical?: boolean;

@@ -22,12 +22,16 @@ export const followKeys = {
   /* 팔로워 목록 */
   follower: (userId: string) => [...followKeys.publicUser(userId), 'followers'] as const,
   followerList: (params: FollowListParams) =>
-    [...followKeys.follower(params.userId), params.currentPage, params.pageSize] as const,
+    [...followKeys.follower(params.userId), `${params.currentPage}`, `${params.pageSize}`] as const,
 
   /* 팔로잉 목록 */
   following: (userId: string) => [...followKeys.publicUser(userId), 'followings'] as const,
   followingList: (params: FollowListParams) =>
-    [...followKeys.following(params.userId), params.currentPage, params.pageSize] as const,
+    [
+      ...followKeys.following(params.userId),
+      `${params.currentPage}`,
+      `${params.pageSize}`,
+    ] as const,
 };
 
 /* 로그 */
@@ -43,7 +47,7 @@ export const logKeys = {
       `${params.sort}`,
     ] as const,
   listByUser: ({ userId, currentPage, pageSize }: LogsParams) =>
-    [...logKeys.log, 'byUser', userId, currentPage, pageSize] as const,
+    [...logKeys.log, 'byUser', userId, `${currentPage}`, `${pageSize}`] as const,
   bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParmas) =>
     [...logKeys.log, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
 
