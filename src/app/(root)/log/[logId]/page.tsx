@@ -21,11 +21,9 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
       <LogThubmnail logData={logData} />
       <main className="flex flex-col px-4 web:px-[50px]">
         <LogAuthorIntro userId={logData.user_id} logDescription={logData.description ?? ''} />
-        <div>
-          {logData.place.map((place, idx) => (
-            <LogContent key={place.place_id} place={place} idx={idx + 1} />
-          ))}
-        </div>
+        {logData.place.map((place, idx) => (
+          <LogContent key={place.place_id} place={place} idx={idx + 1} />
+        ))}
       </main>
       <div className="flex flex-col gap-2 fixed z-10 bottom-10 right-4">
         <ExtraActionButton className="bg-white w-11 h-11">

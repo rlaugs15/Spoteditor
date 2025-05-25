@@ -1,8 +1,7 @@
 import { BookMarkIcon, ClockIcon, LocationIcon } from '@/components/common/Icons';
 import { Button } from '@/components/ui/button';
 import { DetailLog } from '@/types/api/log';
-import { getStoragePublicImage } from '@/utils/getStorageImage';
-import Image from 'next/image';
+import PlaceImageSlider from './PlaceImageSlider';
 
 interface LogContentProps {
   place: DetailLog['place'][number];
@@ -33,20 +32,7 @@ const LogContent = ({ place, idx }: LogContentProps) => {
       </section>
 
       <section className="flex flex-col gap-4">
-        <div className="grid grid-cols-3 gap-[15px] h-[424px]">
-          {place.place_images
-            .sort((a, b) => a.order - b.order)
-            .map((img) => (
-              <div key={img.place_image_id} className="relative w-full h-full">
-                <Image
-                  src={getStoragePublicImage(img.image_path as string)}
-                  alt=""
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            ))}
-        </div>
+        <PlaceImageSlider placeImages={place.place_images} />
         <pre className="text-text-sm web:text-text-lg text-light-400 pre">
           {place.description || ''}
         </pre>
