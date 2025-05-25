@@ -6,10 +6,11 @@ import LogContent from '@/components/features/detail-log/LogContent';
 import LogThubmnail from '@/components/features/detail-log/LogThubmnail';
 import Link from 'next/link';
 
+export interface LogIdParams {
+  logId: string;
+}
 interface LogDetailPageProps {
-  params: {
-    logId: string;
-  };
+  params: LogIdParams;
 }
 
 const LogDetailPage = async ({ params }: LogDetailPageProps) => {

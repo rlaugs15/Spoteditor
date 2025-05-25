@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 type PostCardLocationProps = Partial<{
   city: string;
   country: string;
-  sigungu: string;
+  sigungu?: string;
   category?: string;
 }> & {
   modal?: boolean;
@@ -23,10 +23,18 @@ function PostCardLocation({ city, country = '', sigungu, category, modal }: Post
       ) : (
         <>
           <span>{city}</span>
-          <div className="h-3">
-            <Separator orientation="vertical" className="h-3 bg-light-300" />
-          </div>
-          <span>{`${country} ${sigungu}`}</span>
+          <span>{country}</span>
+
+          <span>
+            {sigungu && (
+              <>
+                <div className="h-3 inline-block align-middle">
+                  <Separator orientation="vertical" className="h-3 bg-light-300" />
+                </div>
+                <span className="ml-1">{sigungu}</span>
+              </>
+            )}
+          </span>
         </>
       )}
     </h4>

@@ -22,12 +22,7 @@ interface PostCardProps {
 const PostCard = ({ log, vertical, modal }: PostCardProps) => {
   return (
     <div className="cursor-pointer relative">
-      <PostCardImage
-        lable={!modal}
-        author={log.author.name}
-        imageUrl={log.imageUrl}
-        vertical={vertical}
-      />
+      <PostCardImage author={log.author.name} imageUrl={log.imageUrl} vertical={vertical} />
       <PostCardTitle title={log.title} modal={modal} />
       <PostCardLocation city={log.city} sigungu={log.sigungu} modal={modal} />
       <LogBookMarkButton logId={log.logId} userId={log.author.userId} modal={modal} />
