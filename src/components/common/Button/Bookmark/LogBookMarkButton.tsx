@@ -10,11 +10,10 @@ import { useRouter } from 'next/navigation';
 
 interface LogBookMarkButtonProps {
   logId: string;
-  userId: string;
   modal?: boolean;
 }
 
-export default function LogBookMarkButton({ logId, userId, modal }: LogBookMarkButtonProps) {
+export default function LogBookMarkButton({ logId, modal }: LogBookMarkButtonProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: user, isLoading: userIsLoading } = useUser();

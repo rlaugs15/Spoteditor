@@ -1,5 +1,6 @@
 'use client';
 
+import LogoutButton from '@/components/common/Button/LogoutButton';
 import { AddImageIcon, HeadPhoneIcon, UserIcon } from '@/components/common/Icons';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,10 +10,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import MyProfileButton from './components/MyProfileButton';
-import Link from 'next/link';
-import LogoutButton from '@/components/common/Button/LogoutButton';
 import { IUser } from '@/types/api/user';
+import Link from 'next/link';
+import MyProfileButton from './components/MyProfileButton';
 
 interface UserProfileButtonProps {
   user: IUser;

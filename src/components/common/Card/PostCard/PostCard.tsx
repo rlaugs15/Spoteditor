@@ -19,14 +19,17 @@ const PostCard = ({ log, vertical, modal }: PostCardProps) => {
   return (
     <div className="cursor-pointer relative">
       <PostCardImage
-        lable
         author={String(log?.users?.nickname)}
         imageUrl={log?.thumbnail_url}
         vertical={vertical}
       />
-      <PostCardTitle title={String(log?.title)} />
-      <PostCardLocation city={log?.address[0]?.city} sigungu={log?.address[0]?.sigungu} />
-      <LogBookMarkButton logId={String(log?.log_id)} />
+      <PostCardTitle title={String(log?.title)} modal={modal} />
+      <PostCardLocation
+        city={log?.address[0]?.city}
+        sigungu={log?.address[0]?.sigungu}
+        modal={modal}
+      />
+      <LogBookMarkButton logId={String(log?.log_id)} modal={modal} />
     </div>
   );
 };
