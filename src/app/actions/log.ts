@@ -1,8 +1,6 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { stringifyQueryKey } from '@/lib/utils';
-import { ActionResponse } from '@/types/api/common';
 import { logBookmarkListParmas, LogResponse, LogsParams, LogsReseponse } from '@/types/api/log';
 import { SearchParams, SearchReseponse } from '@/types/api/search';
 import { Prisma } from '@prisma/client';
@@ -14,7 +12,7 @@ import { cacheTags } from './tags';
 // ===================================================================
 // 단일 로그
 // ===================================================================
-export async function fetchLog(logId: string): Promise<ActionResponse | LogResponse> {
+export async function fetchLog(logId: string): Promise<LogResponse> {
   try {
     const supabase = await createClient();
 
@@ -111,18 +109,20 @@ async function fetchLogs({
 export async function getLogs(params: LogsParams) {
   const { userId, currentPage = 1, pageSize = 10, sort = 'latest' } = params;
 
-  const rawQueryKey = userId
+  const queryKey = userId
     ? logKeys.listByUser({ userId, currentPage, pageSize })
     : logKeys.list({ currentPage, pageSize, sort });
 
-  const queryKey = stringifyQueryKey(rawQueryKey);
-
   const tagKey = userId ? cacheTags.logListByUser(userId) : cacheTags.logList();
 
-  return unstable_cache(() => fetchLogs(params), [...queryKey], {
-    tags: [tagKey],
-    revalidate: 300,
-  })();
+  return unstable_cache(
+    () => fetchLogs(params),
+    [...queryKey].map((v) => v ?? ''),
+    {
+      tags: [tagKey],
+      revalidate: 300,
+    }
+  )();
 }
 
 // ===================================================================
