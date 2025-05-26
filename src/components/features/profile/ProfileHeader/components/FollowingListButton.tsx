@@ -2,7 +2,6 @@
 
 import { followKeys } from '@/app/actions/keys';
 import FollowingButton from '@/components/common/Button/FollowingButton';
-import useBottomScrollTrigger from '@/components/common/Header/Header/components/pagenation/useBottomScrollTrigger';
 import { XIcon } from '@/components/common/Icons';
 import Loading from '@/components/common/Loading/Loading';
 import UserImage from '@/components/common/UserImage';
@@ -15,6 +14,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import useFollowings from '@/hooks/queries/follow/useFollowings';
+import useBottomScrollTrigger from '@/hooks/useBottomScrollTrigger';
 import { cn } from '@/lib/utils';
 import { Following } from '@/types/api/follow';
 import { IUser } from '@/types/api/user';

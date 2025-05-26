@@ -21,8 +21,7 @@ function PostCardImage({ imageUrl, author, className, vertical }: PostCardImageP
       {imageUrl && (
         <>
           <Image
-            // src={imageUrl}
-            src={getStoragePublicImage(imageUrl)}
+            src={getStoragePublicImage(imageUrl as string)}
             alt="Post Thumbnail"
             fill
             sizes="100%"

@@ -1,4 +1,5 @@
-import { followKeys, logKeys, placeKeys, userKeys } from './keys';
+import { SearchParams } from '@/types/api/search';
+import { followKeys, logKeys, placeKeys, searchKeys, userKeys } from './keys';
 
 export const cacheTags = {
   // 캐시키 배열을 문자열로 변환
@@ -17,8 +18,10 @@ export const cacheTags = {
   /* 로그 */
   logDetail: (logId: string) => cacheTags.fromKey([...logKeys.detail(logId), 'single']),
   logList: () => cacheTags.fromKey([...logKeys.log, 'list']),
+  logListByUser: (userId: string) => cacheTags.fromKey([...logKeys.log, 'byUser', userId, 'list']),
   logBookmarkList: (userId: string) =>
     cacheTags.fromKey([...logKeys.log, 'bookmark', userId, 'list']),
+  logMyList: (userId: string) => cacheTags.fromKey([...logKeys.log, 'myList', userId, 'list']),
 
   /* 장소 */
   placeDetail: (placeId: string) => cacheTags.fromKey([...placeKeys.detail(placeId), 'single']),
@@ -30,4 +33,7 @@ export const cacheTags = {
   placeBookmark: (placeId: string) =>
     cacheTags.fromKey([...placeKeys.detail(placeId), 'place_bookmark']),
   logBookmark: (logId: string) => cacheTags.fromKey([...logKeys.detail(logId), 'log_bookmark']),
+
+  /* 검색 */
+  searchList: (params: SearchParams) => cacheTags.fromKey(searchKeys.list(params)),
 } as const;

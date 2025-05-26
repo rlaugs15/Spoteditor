@@ -1,7 +1,6 @@
 'use client';
 
 import { followKeys } from '@/app/actions/keys';
-import useBottomScrollTrigger from '@/components/common/Header/Header/components/pagenation/useBottomScrollTrigger';
 import { XIcon } from '@/components/common/Icons';
 import Loading from '@/components/common/Loading/Loading';
 import UserImage from '@/components/common/UserImage';
@@ -14,6 +13,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import useFollowers from '@/hooks/queries/follow/useFollowers';
+import useBottomScrollTrigger from '@/hooks/useBottomScrollTrigger';
 import { cn } from '@/lib/utils';
 import { Follower } from '@/types/api/follow';
 import { useQueryClient } from '@tanstack/react-query';

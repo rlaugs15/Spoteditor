@@ -16,6 +16,5 @@ export default function useLogBookmarkCheck({ logId, userId }: UseLogBookmarkChe
   return useQuery<BookmarkResponse>({
     queryKey: logKeys.bookmarkStatus(logId, String(userId)),
     queryFn: () => fetchLogBookmarkCheck(logId),
-    enabled: false, //!!logId && !!userId,
   });
 }

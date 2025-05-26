@@ -1,6 +1,7 @@
 import { PaginationParams } from '@/types/api/common';
 import { FollowListParams } from '@/types/api/follow';
-import { logBookmarkListParmas } from '@/types/api/log';
+import { logBookmarkListParmas, LogsParams } from '@/types/api/log';
+import { SearchParams } from '@/types/api/search';
 
 /* 유저 */
 export const userKeys = {
@@ -21,19 +22,23 @@ export const followKeys = {
   /* 팔로워 목록 */
   follower: (userId: string) => [...followKeys.publicUser(userId), 'followers'] as const,
   followerList: (params: FollowListParams) =>
-    [...followKeys.follower(params.userId), params.currentPage, params.pageSize] as const,
+    [...followKeys.follower(params.userId), `${params.currentPage}`, `${params.pageSize}`] as const,
 
   /* 팔로잉 목록 */
   following: (userId: string) => [...followKeys.publicUser(userId), 'followings'] as const,
   followingList: (params: FollowListParams) =>
-    [...followKeys.following(params.userId), params.currentPage, params.pageSize] as const,
+    [
+      ...followKeys.following(params.userId),
+      `${params.currentPage}`,
+      `${params.pageSize}`,
+    ] as const,
 };
 
 /* 로그 */
 export const logKeys = {
   log: ['log'] as const,
   detail: (logId: string) => [...logKeys.log, logId] as const,
-  list: (params: PaginationParams) =>
+  list: (params: LogsParams) =>
     [
       ...logKeys.log,
       'list',
@@ -41,6 +46,8 @@ export const logKeys = {
       `${params.pageSize}`,
       `${params.sort}`,
     ] as const,
+  listByUser: ({ userId, currentPage, pageSize }: LogsParams) =>
+    [...logKeys.log, 'byUser', userId, `${currentPage}`, `${pageSize}`] as const,
   bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParmas) =>
     [...logKeys.log, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
 
@@ -60,4 +67,20 @@ export const placeKeys = {
   // 단일 장소 북마크
   bookmarkStatus: (placeId: string, userId: string) =>
     [...placeKeys.place, 'bookmark', 'status', placeId, userId] as const,
+};
+
+export const searchKeys = {
+  all: ['search'] as const,
+
+  list: (params: SearchParams) =>
+    [
+      ...searchKeys.all,
+      'list',
+      String(params.currentPage ?? 1),
+      String(params.pageSize ?? 10),
+      params.sort ?? '',
+      params.keyword ?? '',
+      params.city ?? '',
+      params.sigungu ?? '',
+    ] as const,
 };

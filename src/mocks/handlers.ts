@@ -24,6 +24,44 @@ const mockFollowers: {
     users: User;
 } */
 
+const mockSearchLogs = (currentPage = 1, pageSize = 10, keyword = '') => {
+  const totalItems = 42;
+  const data = Array.from({ length: pageSize }).map((_, i) => {
+    const id = (currentPage - 1) * pageSize + i + 1;
+    return {
+      log_id: id.toString(),
+      title: `${keyword ? `[${keyword}] ` : ''}로그 제목 ${id}`,
+      description: `설명 ${id}`,
+      thumbnail_url: '/profile/user-default-avatar.webp',
+      users: {
+        user_id: `user_${id}`,
+        nickname: `작성자${id}`,
+      },
+      address: [
+        {
+          country: '대한민국',
+          city: '서울',
+          sigungu: '강남구',
+        },
+      ],
+    };
+  });
+
+  return {
+    success: true,
+    data,
+    meta: {
+      pagination: {
+        currentPage,
+        pageSize,
+        totalPages: Math.ceil(totalItems / pageSize),
+        totalItems,
+      },
+      httpStatus: 200,
+    },
+  };
+};
+
 const mockLogsBookmarks = (currentPage: number = 1, pageSize: number = 10) => {
   const totalPages = 20;
   const data = Array.from({ length: pageSize }).map((_, idx) => {
@@ -111,5 +149,24 @@ export const handlers = [
       return HttpResponse.json({ success: false, msg: '유저id가 필요합니다.' }, { status: 400 });
     }
     return HttpResponse.json(mockLogsBookmarks(currentPage, pageSize));
+  }),
+
+  http.get('/api/v1/search', ({ request }) => {
+    const url = new URL(request.url);
+    const keyword = url.searchParams.get('keyword') || '';
+
+    const city = url.searchParams?.get('city') || '';
+    const sigungu = url.searchParams?.get('sigungu') || '';
+    const sort = url.searchParams?.get('sort') || 'latest';
+    const currentPage = parseInt(url.searchParams.get('currentPage') || '1');
+    const pageSize = parseInt(url.searchParams.get('pageSize') || '10');
+    console.log('serverkeyword', keyword);
+    console.log('servercurrentPage', currentPage);
+    console.log('serverpageSize', pageSize);
+
+    // 테스트에서는 keyword, city, sigungu, sort는 단순 표시용으로만 활용
+    const mockData = mockSearchLogs(currentPage, pageSize, keyword);
+
+    return HttpResponse.json(mockData);
   }),
 ];

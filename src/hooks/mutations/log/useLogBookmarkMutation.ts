@@ -14,7 +14,6 @@ async function fetchLogBookmark({
   const data = await res.json();
   return data;
 }
-
 export default function useLogBookmarkMutation() {
   const { data: user } = useUser();
   const queryClient = useQueryClient();
@@ -26,7 +25,7 @@ export default function useLogBookmarkMutation() {
         queryKey: logKeys.bookmarkStatus(logId, String(user?.user_id)),
       });
 
-      const previousData = queryClient.getQueryData(
+      const previousbookmarkStatus = queryClient.getQueryData(
         logKeys.bookmarkStatus(logId, String(user?.user_id))
       );
 
@@ -38,13 +37,13 @@ export default function useLogBookmarkMutation() {
         })
       );
 
-      return { previousData };
+      return { previousbookmarkStatus };
     },
     onError: (_error, variables, context) => {
-      if (context?.previousData) {
+      if (context?.previousbookmarkStatus) {
         queryClient.setQueryData(
           logKeys.bookmarkStatus(variables.logId, String(user?.user_id)),
-          context.previousData
+          context.previousbookmarkStatus
         );
       }
     },

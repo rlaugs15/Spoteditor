@@ -1,5 +1,6 @@
 'use client';
 
+import { revalidateBookmarkPlaces } from '@/app/actions/place';
 import PlaceBookMarkButton from '@/components/common/Button/Bookmark/PlaceBookMarkButton';
 import MotionCard from '@/components/common/Card/MotionCard';
 import {
@@ -15,6 +16,7 @@ import usePlacesBookmark from '@/hooks/queries/place/usePlacesBookmark';
 import useUser from '@/hooks/queries/user/useUser';
 import usePagination from '@/hooks/usePagination';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 interface SavePlacesProps {
   userId: string;
@@ -24,10 +26,20 @@ export default function SavePlaces({ userId }: SavePlacesProps) {
   const { data: me } = useUser();
   const { currentPage, handlePageChange } = usePagination();
 
-  const { data, isPending } = usePlacesBookmark({
+  const { data, isPending, refetch } = usePlacesBookmark({
     userId,
     currentPage: Number(currentPage),
   });
+  useEffect(() => {
+    if (!me?.user_id) return;
+
+    const revalidateAndRefetch = async () => {
+      await revalidateBookmarkPlaces(String(me.user_id));
+      refetch();
+    };
+
+    revalidateAndRefetch();
+  }, [me?.user_id]);
   return (
     <>
       {isPending ? (
@@ -42,7 +54,7 @@ export default function SavePlaces({ userId }: SavePlacesProps) {
                   <PostCardTitle title={place.name} />
                   <PostCardLocation category={place.category} />
                 </Link>
-                <PlaceBookMarkButton placeId={place.place_id} userId={String(me?.user_id)} />
+                <PlaceBookMarkButton placeId={place.place_id} />
               </MotionCard>
             ))}
           </PostCardWrapper>

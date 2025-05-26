@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(
     {
-      success: !!logBookmark,
+      success: true,
       isBookmark: !!logBookmark,
     },
     { status: 200 }
@@ -42,20 +42,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, msg: '로그 id가 필요합니다.' }, { status: 400 });
   }
 
-  let parsedLogId: bigint;
-  try {
-    parsedLogId = BigInt(logId);
-  } catch {
-    return NextResponse.json(
-      { success: false, msg: '유효하지 않은 로그 ID입니다.' },
-      { status: 400 }
-    );
-  }
-
   const existing = await prisma.log_bookmark.findFirst({
     where: {
       user_id: me.user_id,
-      log_id: String(parsedLogId),
+      log_id: String(logId),
     },
   });
 
@@ -67,7 +57,7 @@ export async function POST(req: NextRequest) {
     await prisma.log_bookmark.create({
       data: {
         user_id: me.user_id,
-        log_id: String(parsedLogId),
+        log_id: String(logId),
       },
     });
     return NextResponse.json({ success: true, isBookmark: true }, { status: 200 });
@@ -89,21 +79,11 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ success: false, msg: '로그 id가 필요합니다.' }, { status: 400 });
   }
 
-  let parsedLogId: bigint;
-  try {
-    parsedLogId = BigInt(logId);
-  } catch {
-    return NextResponse.json(
-      { success: false, msg: '유효하지 않은 로그 ID입니다.' },
-      { status: 400 }
-    );
-  }
-
   try {
     const deleted = await prisma.log_bookmark.deleteMany({
       where: {
         user_id: me.user_id,
-        log_id: String(parsedLogId),
+        log_id: String(logId),
       },
     });
 

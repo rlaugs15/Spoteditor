@@ -1,0 +1,109 @@
+'use client';
+
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { citySearchSchema } from '@/lib/zod/searchSchema';
+import { useCitySearchStore } from '@/stores/searchStore';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import SearchDropBox from './SearchDropBox/SearchDropBox';
+
+export default function CitySearchForm() {
+  const router = useRouter();
+  const { city, sigungu, toggleCityDropBox, toggleSigunguDropBox } = useCitySearchStore();
+
+  const defaultValues = {
+    city: '서울',
+    sigungu: '송파구',
+  };
+
+  const form = useForm({
+    resolver: zodResolver(citySearchSchema),
+    defaultValues,
+  });
+
+  // 쥬스탄드 값이 변경되었을 때 form 상태 업데이트
+  useEffect(() => {
+    if (city) {
+      form.setValue('city', city);
+    }
+    if (sigungu) {
+      form.setValue('sigungu', sigungu);
+    }
+  }, [city, sigungu, form]);
+
+  const onSearchSubmit = async ({ sigungu }: z.infer<typeof citySearchSchema>) => {
+    /* 추후 모달창 닫혔을 경우 검색할 수 있는 기능 추가 */
+    router.push(`/search?keyword=${sigungu}`);
+  };
+
+  const opencityDropBoxClick = () => {
+    toggleCityDropBox();
+  };
+
+  const opensigunguDropBoxClick = () => {
+    toggleSigunguDropBox();
+  };
+
+  return (
+    <>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSearchSubmit)}
+          className="flex flex-col gap-2.5 web:grid web:grid-cols-[3fr_70px] relative bottom-0 web:z-30"
+        >
+          <div className="grid grid-cols-2 gap-1.5">
+            <FormField
+              control={form.control}
+              name="city"
+              render={({ field }) => (
+                <FormItem className="flex flex-col bg-white web:px-4 px-3 web:py-3 py-2.5 gap-2">
+                  <FormLabel className="!text-light-400 text-text-sm">어디로 놀러갈까요?</FormLabel>
+                  <FormControl>
+                    <Input
+                      onClick={opencityDropBoxClick}
+                      placeholder="서울"
+                      readOnly
+                      {...field}
+                      className="p-0 font-bold text-black grow text-text-md placeholder:text-black web:text-sm"
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="sigungu"
+              render={({ field }) => (
+                <FormItem className="flex flex-col bg-white web:px-4 px-3 web:py-3 py-2.5 gap-2">
+                  <FormLabel className="!text-light-400 text-text-sm">더 상세히 검색!</FormLabel>
+                  <FormControl>
+                    <Input
+                      onClick={opensigunguDropBoxClick}
+                      placeholder="송파구"
+                      readOnly
+                      {...field}
+                      className="p-0 font-bold text-black grow text-text-md placeholder:text-black web:text-sm"
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          <Button
+            type="submit"
+            className="h-full font-medium text-white rounded-none bg-light-950 !text-text-md hover:bg-primary-900"
+          >
+            검색
+          </Button>
+          <SearchDropBox />
+        </form>
+      </Form>
+    </>
+  );
+}

@@ -1,20 +1,16 @@
-import LogBookMarkButton from '../../Button/Bookmark/LogBookMarkButton';
+import { LogWithUserAndAddress } from '@/types/api/common';
+import dynamic from 'next/dynamic';
 import PostCardImage from './PostCardImage';
 import PostCardLocation from './PostCardLocation';
 import PostCardTitle from './PostCardTitle';
 
+const LogBookMarkButton = dynamic(
+  () => import('@/components/common/Button/Bookmark/LogBookMarkButton'),
+  { ssr: false }
+);
+
 interface PostCardProps {
-  log: {
-    logId: string;
-    author: {
-      name: string;
-      userId: string;
-    };
-    imageUrl: string;
-    title: string;
-    city: string;
-    sigungu: string;
-  };
+  log: LogWithUserAndAddress;
   vertical?: boolean;
   modal?: boolean;
 }
@@ -22,10 +18,18 @@ interface PostCardProps {
 const PostCard = ({ log, vertical, modal }: PostCardProps) => {
   return (
     <div className="cursor-pointer relative">
-      <PostCardImage author={log.author.name} imageUrl={log.imageUrl} vertical={vertical} />
-      <PostCardTitle title={log.title} modal={modal} />
-      <PostCardLocation city={log.city} sigungu={log.sigungu} modal={modal} />
-      <LogBookMarkButton logId={log.logId} userId={log.author.userId} modal={modal} />
+      <PostCardImage
+        author={String(log?.users?.nickname)}
+        imageUrl={log?.thumbnail_url}
+        vertical={vertical}
+      />
+      <PostCardTitle title={String(log?.title)} modal={modal} />
+      <PostCardLocation
+        city={log?.address[0]?.city}
+        sigungu={log?.address[0]?.sigungu}
+        modal={modal}
+      />
+      <LogBookMarkButton logId={String(log?.log_id)} modal={modal} />
     </div>
   );
 };

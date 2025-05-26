@@ -4,19 +4,20 @@ import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation
 import useLogBookmarkCheck from '@/hooks/queries/log/useLogBookmarkCheck';
 import useUser from '@/hooks/queries/user/useUser';
 import { cn } from '@/lib/utils';
+import { useQueryClient } from '@tanstack/react-query';
 import { Bookmark } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface LogBookMarkButtonProps {
   logId: string;
-  userId: string;
   modal?: boolean;
 }
 
-export default function LogBookMarkButton({ logId, userId, modal }: LogBookMarkButtonProps) {
+export default function LogBookMarkButton({ logId, modal }: LogBookMarkButtonProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { data: user, isLoading: userIsLoading } = useUser();
-  const { data, isLoading } = useLogBookmarkCheck({ logId, userId });
+  const { data, isLoading } = useLogBookmarkCheck({ logId, userId: String(user?.user_id) });
   const { mutate } = useLogBookmarkMutation();
 
   const onBookMarkClick = () => {
@@ -25,10 +26,7 @@ export default function LogBookMarkButton({ logId, userId, modal }: LogBookMarkB
       router.push('/login');
     }
     if (!data) return;
-    mutate({
-      logId,
-      isBookmark: data.isBookmark,
-    });
+    mutate({ logId, isBookmark: data.isBookmark });
   };
   return (
     <button

@@ -338,11 +338,11 @@ model auth_users {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model follow {
-  follow_id                        BigInt        @id @default(autoincrement())
-  follower_id                      String?       @db.Uuid
-  following_id                     String?       @db.Uuid
-  users_follow_follower_idTousers  public_users? @relation("follow_follower_idTousers", fields: [follower_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-  users_follow_following_idTousers public_users? @relation("follow_following_idTousers", fields: [following_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  follow_id                        BigInt       @id @default(autoincrement())
+  follower_id                      String       @db.Uuid
+  following_id                     String       @db.Uuid
+  users_follow_follower_idTousers  public_users @relation("follow_follower_idTousers", fields: [follower_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  users_follow_following_idTousers public_users @relation("follow_following_idTousers", fields: [following_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 
   @@schema("public")
 }
@@ -350,13 +350,13 @@ model follow {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model log {
   created_at    DateTime       @default(now()) @db.Timestamptz(6)
-  user_id       String?        @default(dbgenerated("auth.uid()")) @db.Uuid
-  title         String?
+  user_id       String         @default(dbgenerated("auth.uid()")) @db.Uuid
+  title         String
   description   String?
-  thumbnail_url String?
+  thumbnail_url String
   log_id        String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   address       address[]
-  users         public_users?  @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  users         public_users   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
   log_bookmark  log_bookmark[]
   log_tag       log_tag[]
   place         place[]
@@ -366,35 +366,35 @@ model log {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model log_bookmark {
-  log_bookmark_id BigInt        @id @default(autoincrement())
-  user_id         String?       @db.Uuid
-  log_id          String?       @db.Uuid
-  log             log?          @relation(fields: [log_id], references: [log_id], onDelete: Cascade, onUpdate: NoAction)
-  users           public_users? @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
+  log_bookmark_id BigInt       @id @default(autoincrement())
+  user_id         String       @db.Uuid
+  log_id          String       @db.Uuid
+  log             log          @relation(fields: [log_id], references: [log_id], onDelete: Cascade, onUpdate: NoAction)
+  users           public_users @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
 }
 
 model log_tag {
-  log_tag_id BigInt  @id @default(autoincrement())
-  tag        String?
-  category   String?
-  log_id     String? @db.Uuid
-  log        log?    @relation(fields: [log_id], references: [log_id], onDelete: Cascade, onUpdate: NoAction)
+  log_tag_id BigInt @id @default(autoincrement())
+  tag        String
+  category   String
+  log_id     String @db.Uuid
+  log        log    @relation(fields: [log_id], references: [log_id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
 }
 
 model place {
   created_at     DateTime         @default(now()) @db.Timestamptz(6)
-  name           String?
+  name           String
   description    String?
-  address        String?
-  category       String?
+  address        String
+  category       String
   updated_at     DateTime?        @db.Timestamptz(6)
-  log_id         String?          @db.Uuid
+  log_id         String           @db.Uuid
   place_id       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  log            log?             @relation(fields: [log_id], references: [log_id], onDelete: Cascade, onUpdate: NoAction)
+  log            log              @relation(fields: [log_id], references: [log_id], onDelete: Cascade, onUpdate: NoAction)
   place_bookmark place_bookmark[]
   place_images   place_images[]
 
@@ -402,21 +402,21 @@ model place {
 }
 
 model place_bookmark {
-  place_bookmark_id BigInt        @id @default(autoincrement())
-  user_id           String?       @db.Uuid
-  place_id          String?       @db.Uuid
-  place             place?        @relation(fields: [place_id], references: [place_id], onDelete: Cascade, onUpdate: NoAction)
-  users             public_users? @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
+  place_bookmark_id BigInt       @id @default(autoincrement())
+  user_id           String       @db.Uuid
+  place_id          String       @db.Uuid
+  place             place        @relation(fields: [place_id], references: [place_id], onDelete: Cascade, onUpdate: NoAction)
+  users             public_users @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
 }
 
 model place_images {
-  place_image_id BigInt  @id @default(autoincrement())
-  image_path     String?
-  order          Int?
-  place_id       String? @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  place          place?  @relation(fields: [place_id], references: [place_id], onDelete: Cascade, onUpdate: NoAction)
+  place_image_id BigInt @id @default(autoincrement())
+  image_path     String
+  order          Int
+  place_id       String @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  place          place  @relation(fields: [place_id], references: [place_id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
 }
@@ -424,7 +424,7 @@ model place_images {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model public_users {
   user_id                           String           @id @db.Uuid
-  email                             String?
+  email                             String
   provider                          String?
   nickname                          String?
   image_url                         String?
@@ -448,11 +448,11 @@ model public_users {
 model address {
   address_id String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at DateTime @default(now()) @db.Timestamptz(6)
-  country    String?
-  city       String?
-  sigungu    String?
-  log_id     String?  @db.Uuid
-  log        log?     @relation(fields: [log_id], references: [log_id], onDelete: Cascade, onUpdate: NoAction)
+  country    String
+  city       String
+  sigungu    String
+  log_id     String   @db.Uuid
+  log        log      @relation(fields: [log_id], references: [log_id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
 }
