@@ -16,6 +16,5 @@ export default function usePlaceBookmarkCheck({ placeId, userId }: UseIsPlaceBoo
   return useQuery<BookmarkResponse>({
     queryKey: placeKeys.bookmarkStatus(placeId, String(userId)),
     queryFn: () => fetchPlaceBookmarkCheck(placeId),
-    enabled: false, //!!placeId && !!userId,
   });
 }

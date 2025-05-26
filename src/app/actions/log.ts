@@ -1,9 +1,12 @@
+'use server';
+
 import { createClient } from '@/lib/supabase/server';
 import { stringifyQueryKey } from '@/lib/utils';
+import { ActionResponse } from '@/types/api/common';
 import { logBookmarkListParmas, LogResponse, LogsParams, LogsReseponse } from '@/types/api/log';
 import { SearchParams, SearchReseponse } from '@/types/api/search';
 import { Prisma } from '@prisma/client';
-import { unstable_cache } from 'next/cache';
+import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { logKeys, searchKeys } from './keys';
 import { cacheTags } from './tags';
@@ -11,7 +14,7 @@ import { cacheTags } from './tags';
 // ===================================================================
 // 단일 로그
 // ===================================================================
-export async function fetchLog(logId: string): Promise<LogResponse> {
+export async function fetchLog(logId: string): Promise<ActionResponse | LogResponse> {
   try {
     const supabase = await createClient();
 
@@ -192,6 +195,11 @@ export async function getBookmarkedLogs(params: logBookmarkListParmas) {
     tags: [cacheTags.logBookmarkList(params.userId)],
     revalidate: 300,
   })();
+}
+
+/* 북마크 시 서버캐시 무효화 */
+export async function revalidateBookmarkLogs(userId: string) {
+  revalidateTag(cacheTags.logBookmarkList(userId));
 }
 
 // ===================================================================

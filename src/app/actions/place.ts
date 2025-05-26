@@ -1,5 +1,7 @@
+'use server';
+
 import { PlaceBookmarkListParmas, PlacesReseponse } from '@/types/api/place';
-import { unstable_cache } from 'next/cache';
+import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { logKeys } from './keys';
 import { cacheTags } from './tags';
@@ -102,7 +104,12 @@ export async function fetchBookmarkedPlaces({
 
 export async function getBookmarkedPlaces(params: PlaceBookmarkListParmas) {
   return unstable_cache(() => fetchBookmarkedPlaces(params), [...logKeys.bookmarkList(params)], {
-    tags: [cacheTags.logBookmarkList(params.userId)],
+    tags: [cacheTags.placeBookmarkList(params.userId)],
     revalidate: 300,
   })();
+}
+
+/* 북마크 시 서버캐시 무효화 */
+export async function revalidateBookmarkPlaces(userId: string) {
+  revalidateTag(cacheTags.placeBookmarkList(userId));
 }
