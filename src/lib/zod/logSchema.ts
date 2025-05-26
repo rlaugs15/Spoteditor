@@ -34,7 +34,7 @@ export const LogformSchema = z.object({
   logTitle: z.string().max(30).min(1, '로그 제목은 필수입니다.'),
   thumbnail: imageFileSchema,
   logDescription: z.string(),
-  places: z.array(placeSchema),
+  places: z.array(placeSchema).min(1, '장소 1개 이상은 필수입니다.'),
   tags: tagsSchema,
   address: addressSchema,
 });
@@ -59,6 +59,6 @@ export const LogEditformSchema = z.object({
   logTitle: z.string().max(30).min(1, '로그 제목은 필수입니다.'),
   thumbnail: z.string(),
   logDescription: z.string().nullable(),
-  places: z.array(EditPlaceSchema),
+  places: z.array(EditPlaceSchema).min(1, '장소 1개 이상은 필수입니다.'),
   tags: tagsSchema,
 });
