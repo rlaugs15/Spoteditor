@@ -128,7 +128,10 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 
 export default LogEditPage;
 
-function extractDirtyValues<T>(dirtyFields: any, allValues: T): Partial<T> {
+function extractDirtyValues<T extends Record<string, any>>(
+  dirtyFields: any,
+  allValues: T
+): Partial<T> {
   if (typeof dirtyFields !== 'object' || dirtyFields === true) return allValues;
 
   const result: any = Array.isArray(dirtyFields) ? [] : {};
