@@ -6,7 +6,7 @@ interface TitledSectionProps {
 }
 const TitledSection = ({ title, subTitle, children }: TitledSectionProps) => {
   return (
-    <div className="flex flex-col gap-[45px]">
+    <div className="flex flex-col gap-[45px] relative">
       <SectionTitle title={title} subTitle={subTitle} />
       {children}
     </div>

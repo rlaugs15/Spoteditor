@@ -71,8 +71,8 @@ export const AddImageIcon = ({ className }: IconProps) => {
   return (
     <Image
       src="/icons/add-image.svg"
-      width={4}
-      height={4}
+      width={16}
+      height={16}
       alt="로그 작성 아이콘"
       className={className}
     />
