@@ -51,7 +51,6 @@ export default function MyLogs({ userId }: MyLogsProps) {
               <MotionCard key={log?.log_id} className="relative group">
                 <Link href={`/log/${log?.log_id}`}>
                   <PostCardImage
-                    lable
                     author={String(log?.users?.nickname)}
                     imageUrl={String(log?.thumbnail_url)}
                   />

@@ -10,9 +10,11 @@ import { useRouter } from 'next/navigation';
 
 interface LogBookMarkButtonProps {
   logId: string;
+  userId: string;
+  modal?: boolean;
 }
 
-export default function LogBookMarkButton({ logId }: LogBookMarkButtonProps) {
+export default function LogBookMarkButton({ logId, userId, modal }: LogBookMarkButtonProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: user, isLoading: userIsLoading } = useUser();
@@ -31,7 +33,10 @@ export default function LogBookMarkButton({ logId }: LogBookMarkButtonProps) {
     <button
       onClick={onBookMarkClick}
       disabled={isLoading}
-      className=" hover:cursor-pointer w-[42px] h-[42px] bg-white flex p-[6px] justify-center items-center absolute top-[15px] right-[15px]"
+      className={cn(
+        ' hover:cursor-pointer w-[42px] h-[42px] bg-white flex p-[6px] justify-center items-center absolute top-[15px] right-[15px]',
+        modal && 'top-1.5 right-1.5'
+      )}
     >
       <div className="w-10.5 h-10.5 flex justify-center items-center">
         <Bookmark className={cn(data?.isBookmark && 'fill-black')} />

@@ -50,11 +50,7 @@ export default function SavePlaces({ userId }: SavePlacesProps) {
             {data?.data.map((place) => (
               <MotionCard key={place.place_id} className="relative group">
                 <Link href={`/log/${place.log_id}`}>
-                  <PostCardImage
-                    lable
-                    author={place.user.nickname}
-                    imageUrl={place.image.image_path}
-                  />
+                  <PostCardImage author={place.user.nickname} imageUrl={place.image.image_path} />
                   <PostCardTitle title={place.name} />
                   <PostCardLocation category={place.category} />
                 </Link>

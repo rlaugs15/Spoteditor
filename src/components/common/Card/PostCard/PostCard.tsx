@@ -12,9 +12,10 @@ const LogBookMarkButton = dynamic(
 interface PostCardProps {
   log: LogWithUserAndAddress;
   vertical?: boolean;
+  modal?: boolean;
 }
 
-const PostCard = ({ log, vertical }: PostCardProps) => {
+const PostCard = ({ log, vertical, modal }: PostCardProps) => {
   return (
     <div className="cursor-pointer relative">
       <PostCardImage
