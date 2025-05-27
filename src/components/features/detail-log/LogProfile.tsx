@@ -1,17 +1,20 @@
-import { Button } from '@/components/ui/button';
+import { getUser } from '@/app/actions/user';
+import FollowingButton from '@/components/common/Button/FollowingButton';
+import UserImage from '@/components/common/UserImage';
 
 interface LogProfileProps {
   userId: string;
+  userImage: string;
+  userNickname: string;
 }
 
-const LogProfile = ({ userId }: LogProfileProps) => {
+const LogProfile = async ({ userId, userImage, userNickname }: LogProfileProps) => {
+  const me = await getUser();
   return (
     <div className="flex items-center gap-2">
-      <div className="bg-red-300 w-6 h-6 rounded-full" />
-      <span className="text-text-sm web:text-text-md font-semibold">userId</span>
-      <Button size={'sm'} variant={'outline'} className="rounded-full">
-        팔로우
-      </Button>
+      <UserImage imgSrc={userImage} className="w-6 h-6" />
+      <span className="text-text-sm web:text-text-md font-semibold">{userNickname}</span>
+      {me?.user_id !== userId && <FollowingButton userId={userId} />}
     </div>
   );
 };
