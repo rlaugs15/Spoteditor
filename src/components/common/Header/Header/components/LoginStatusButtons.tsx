@@ -1,9 +1,13 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import UserProfileButton from './UserProfileButton/UserProfileButton';
 import { IUser } from '@/types/api/user';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
+
+const UserProfileButton = dynamic(() => import('./UserProfileButton/UserProfileButton'), {
+  ssr: false,
+});
 
 interface LoginStatusButtonsProps {
   user: IUser;
