@@ -111,7 +111,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
       <Form {...form}>
         <main className="grow bg-white">
           <TitledInput />
-          <PhotoTextSection thumbnail />
+          <PhotoTextSection thumbnail edit />
           <div className="flex flex-col gap-4">
             {fields.map((field, idx) => (
               <PlaceForm

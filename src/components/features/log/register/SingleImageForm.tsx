@@ -12,9 +12,10 @@ import { useFormContext } from 'react-hook-form';
 interface SingleImageFormProps {
   name: string;
   label?: string;
+  edit?: boolean;
 }
 
-const SingleImageForm = ({ name, label }: SingleImageFormProps) => {
+const SingleImageForm = ({ name, label, edit }: SingleImageFormProps) => {
   const { control, getValues } = useFormContext();
   const [preview, setPreview] = useState<string | null>(getValues(name) || null);
   const displayImage =
@@ -64,7 +65,7 @@ const SingleImageForm = ({ name, label }: SingleImageFormProps) => {
               alt="업로드한 장소 이미지"
               className="object-cover"
             />
-            <button onClick={() => setPreview(null)}>
+            <button onClick={() => setPreview(null)} className={cn(edit && 'hidden')}>
               <XRemoveThumbnailIcon className="absolute top-2 right-2 cursor-pointer hover:brightness-90" />
             </button>
           </div>
