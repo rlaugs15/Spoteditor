@@ -57,7 +57,7 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
         maxLength={3}
         accept=".jpg,.jpeg,.png,.webp,.avif"
       />
-      <div className="flex max-h-[320px] overflow-x-auto gap-1">
+      <div className="grid grid-cols-3 max-h-[320px] overflow-x-auto gap-1">
         {fields.map((field, imageIdx) => {
           const file = field.file;
           const url = typeof file === 'string' ? file : URL.createObjectURL(file);
