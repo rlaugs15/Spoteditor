@@ -19,7 +19,7 @@ export default async function CarouselSection({ currentPage }: CarouselSectionPr
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <TitledSection title="Latest" subTitle="Log">
+      <TitledSection title="Sort by" subTitle="Popularity">
         <CarouselContent />
       </TitledSection>
     </HydrationBoundary>
