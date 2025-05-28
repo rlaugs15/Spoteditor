@@ -1,26 +1,40 @@
 'use client';
-import { CheckedCircleIcon, CircleIcon, ClockIcon, LocationIcon } from '@/components/common/Icons';
+import { ClockIcon, LocationIcon } from '@/components/common/Icons';
 import { FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import PhotoTextSection from './PhotoTextSection';
+import PlaceDrawer from './PlaceDrawer';
 
 interface PlaceFormProps {
-  isChecked?: boolean;
   idx: number;
   onDeletePlace: (idx: number) => void;
+  onMoveUpPlace: (idx: number) => void;
+  onMoveDownPlace: (idx: number) => void;
   edit?: boolean;
 }
 
-const PlaceForm = ({ isChecked, idx, onDeletePlace, edit }: PlaceFormProps) => {
+const PlaceForm = ({
+  idx,
+  onDeletePlace,
+  onMoveUpPlace,
+  onMoveDownPlace,
+  edit,
+}: PlaceFormProps) => {
   const { control } = useFormContext();
+  const [isChecked, setIsChecked] = useState(false);
   return (
     <div>
       <div className="flex justify-between">
         <span className="text-text-lg font-bold">{String(idx + 1).padStart(2, '0')}</span>
-        <button className="cursor-pointer" onClick={() => onDeletePlace(idx)}>
-          {isChecked ? <CheckedCircleIcon /> : <CircleIcon />}
-        </button>
+        <PlaceDrawer
+          isChecked={isChecked}
+          setIsChecked={setIsChecked}
+          onDeletePlace={() => onDeletePlace(idx)}
+          onMoveUpPlace={() => onMoveUpPlace(idx)}
+          onMoveDownPlace={() => onMoveDownPlace(idx)}
+        />
       </div>
       <FormField
         control={control}
