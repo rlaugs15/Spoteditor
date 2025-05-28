@@ -1,5 +1,6 @@
 import { logKeys } from '@/app/actions/keys';
 import { getLogs } from '@/app/actions/log';
+import { TitledSection } from '@/components/common/SectionBlock';
 import { getQueryClient } from '@/lib/utils';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import CarouselContent from './CarouselContent';
@@ -15,9 +16,12 @@ export default async function CarouselSection({ currentPage }: CarouselSectionPr
     queryKey: logKeys.list({ currentPage, pageSize: 12, sort: 'popular' }),
     queryFn: () => getLogs({ currentPage, pageSize: 12, sort: 'popular' }),
   });
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <CarouselContent currentPage={currentPage} />
+      <TitledSection title="Latest" subTitle="Log">
+        <CarouselContent />
+      </TitledSection>
     </HydrationBoundary>
   );
 }

@@ -27,7 +27,7 @@ export type ActionResponse = {
 };
 
 export interface PaginationParams {
-  currentPage: number;
+  currentPage?: number;
   pageSize?: number;
   sort?: Sort;
 }
