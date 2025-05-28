@@ -44,6 +44,21 @@ export async function fetchLog(logId: string): Promise<LogResponse> {
 }
 
 // ===================================================================
+// 로그 삭제
+// ===================================================================
+export async function deleteLog(logId: string) {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.from('log').delete().eq('log_id', logId).select();
+    if (error) throw new Error(error.message);
+    return { success: true, data: data };
+  } catch (e) {
+    console.error(e);
+    return { success: false, msg: '에러' };
+  }
+}
+
+// ===================================================================
 // 로그 리스트
 // ===================================================================
 async function fetchLogs({

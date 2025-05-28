@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   const router = useRouter();
-  const { title, thumbnail_url, description, place: places, log_tag, address } = logData;
+  const { title, thumbnail_url, description, place: places, log_tag, address, log_id } = logData;
   const initializeTags = useLogCreationStore((state) => state.initializeTags);
   const moodTags = log_tag.filter((t) => t.category === 'mood').map((t) => t.tag);
   const activityTags = log_tag.filter((t) => t.category === 'activity').map((t) => t.tag);
@@ -102,7 +102,12 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <LogEditHeader city={address[0].city} sigungu={address[0].sigungu} />
+      <LogEditHeader
+        city={address[0].city}
+        sigungu={address[0].sigungu}
+        logTitle={title}
+        logId={log_id}
+      />
       <Form {...form}>
         <main className="grow bg-white">
           <TitledInput />
