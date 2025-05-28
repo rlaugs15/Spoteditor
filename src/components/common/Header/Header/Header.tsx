@@ -1,5 +1,6 @@
 import { getUser } from '@/app/actions/user';
 import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { GlobeIcon } from '../../Icons';
 import Logo from '../Logo';
 import LoginStatusButtons from './components/LoginStatusButtons';
@@ -13,9 +14,14 @@ const Header = async () => {
       <Logo />
       <section className="flex items-center text-white web:gap-5">
         <SearchBarButton />
-        <Button variant={'ghost'} size={'icon'}>
-          <GlobeIcon />
-        </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant={'ghost'} size={'icon'}>
+              <GlobeIcon />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent>다국어 서비스는 준비중입니다.</PopoverContent>
+        </Popover>
         <LoginStatusButtons user={user} />
       </section>
       <SearchBar />

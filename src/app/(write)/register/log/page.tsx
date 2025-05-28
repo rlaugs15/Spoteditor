@@ -46,13 +46,22 @@ const LogPage = () => {
       },
     },
   });
-  const { fields, append, remove } = useFieldArray<LogFormValues>({
+  const { fields, append, remove, swap } = useFieldArray<LogFormValues>({
     control: form.control,
     name: 'places',
   });
 
   const handleAddNewPlace = () => append(initialPlace);
   const handleDeletePlace = (idx: number) => remove(idx);
+  const handleMovePlaceUp = (idx: number) => {
+    if (idx <= 0) return;
+    swap(idx, idx - 1);
+  };
+  const handleMovePlaceDown = (idx: number) => {
+    if (idx >= fields.length - 1) return;
+    swap(idx, idx + 1);
+  };
+
   const onSubmit = async (values: LogFormValues) => {
     const formData = createFormData(values);
     const uploadResult = await createLog(formData);
@@ -75,7 +84,13 @@ const LogPage = () => {
           <PhotoTextSection thumbnail />
           <div className="flex flex-col gap-4">
             {fields.map((field, idx) => (
-              <PlaceForm key={field.id} idx={idx} onDeletePlace={handleDeletePlace} />
+              <PlaceForm
+                key={field.id}
+                idx={idx}
+                onDeletePlace={handleDeletePlace}
+                onMoveUpPlace={handleMovePlaceUp}
+                onMoveDownPlace={handleMovePlaceDown}
+              />
             ))}
           </div>
         </main>

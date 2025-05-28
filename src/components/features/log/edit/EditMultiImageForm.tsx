@@ -18,7 +18,7 @@ const EditMultiImageForm = ({ idx }: EditMultiImageFormProps) => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex max-h-[320px] overflow-x-auto gap-1">
+      <div className="grid grid-cols-3 max-h-[320px] overflow-x-auto gap-1">
         {fields.map((field, imageIdx) => {
           const url = getStoragePublicImage(field.image_path);
           return (

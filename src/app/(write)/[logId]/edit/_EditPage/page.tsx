@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   const router = useRouter();
-  const { title, thumbnail_url, description, place: places, log_tag, address } = logData;
+  const { title, thumbnail_url, description, place: places, log_tag, address, log_id } = logData;
   const initializeTags = useLogCreationStore((state) => state.initializeTags);
   const moodTags = log_tag.filter((t) => t.category === 'mood').map((t) => t.tag);
   const activityTags = log_tag.filter((t) => t.category === 'activity').map((t) => t.tag);
@@ -50,7 +50,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     },
   });
 
-  const { fields, remove } = useFieldArray<LogEditFormValues>({
+  const { fields, remove, swap } = useFieldArray<LogEditFormValues>({
     control: form.control,
     name: 'places',
   });
@@ -68,6 +68,14 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   }, [activity]);
 
   const handleDeletePlace = (idx: number) => remove(idx);
+  const handleMovePlaceUp = (idx: number) => {
+    if (idx <= 0) return;
+    swap(idx, idx - 1);
+  };
+  const handleMovePlaceDown = (idx: number) => {
+    if (idx >= fields.length - 1) return;
+    swap(idx, idx + 1);
+  };
 
   const onSubmit = async (values: LogEditFormValues) => {
     const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
@@ -94,14 +102,26 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <LogEditHeader city={address[0].city} sigungu={address[0].sigungu} />
+      <LogEditHeader
+        city={address[0].city}
+        sigungu={address[0].sigungu}
+        logTitle={title}
+        logId={log_id}
+      />
       <Form {...form}>
         <main className="grow bg-white">
           <TitledInput />
-          <PhotoTextSection thumbnail />
+          <PhotoTextSection thumbnail edit />
           <div className="flex flex-col gap-4">
             {fields.map((field, idx) => (
-              <PlaceForm key={field.id} idx={idx} onDeletePlace={handleDeletePlace} edit />
+              <PlaceForm
+                key={field.id}
+                idx={idx}
+                onDeletePlace={handleDeletePlace}
+                onMoveUpPlace={handleMovePlaceUp}
+                onMoveDownPlace={handleMovePlaceDown}
+                edit
+              />
             ))}
           </div>
         </main>

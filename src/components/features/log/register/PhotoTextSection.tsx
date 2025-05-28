@@ -13,7 +13,7 @@ const PhotoTextSection = ({ thumbnail, idx = 1, edit }: PhotoTextSectionProps) =
   return (
     <div className="mb-2.5">
       {thumbnail ? (
-        <SingleImageForm name="thumbnail" label="커버 이미지" />
+        <SingleImageForm name="thumbnail" label="커버 이미지" edit={edit} />
       ) : edit ? (
         <EditMultiImageForm idx={idx} />
       ) : (
