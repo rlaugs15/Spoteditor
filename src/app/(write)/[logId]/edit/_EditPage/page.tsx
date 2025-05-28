@@ -50,7 +50,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     },
   });
 
-  const { fields, remove } = useFieldArray<LogEditFormValues>({
+  const { fields, remove, swap } = useFieldArray<LogEditFormValues>({
     control: form.control,
     name: 'places',
   });
@@ -68,6 +68,14 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   }, [activity]);
 
   const handleDeletePlace = (idx: number) => remove(idx);
+  const handleMovePlaceUp = (idx: number) => {
+    if (idx <= 0) return;
+    swap(idx, idx - 1);
+  };
+  const handleMovePlaceDown = (idx: number) => {
+    if (idx >= fields.length - 1) return;
+    swap(idx, idx + 1);
+  };
 
   const onSubmit = async (values: LogEditFormValues) => {
     const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
@@ -101,7 +109,14 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
           <PhotoTextSection thumbnail />
           <div className="flex flex-col gap-4">
             {fields.map((field, idx) => (
-              <PlaceForm key={field.id} idx={idx} onDeletePlace={handleDeletePlace} edit />
+              <PlaceForm
+                key={field.id}
+                idx={idx}
+                onDeletePlace={handleDeletePlace}
+                onMoveUpPlace={handleMovePlaceUp}
+                onMoveDownPlace={handleMovePlaceDown}
+                edit
+              />
             ))}
           </div>
         </main>
