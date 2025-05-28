@@ -45,7 +45,7 @@ const Carousel = ({ logs }: { logs: LogWithUserAndAddress[] }) => {
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 3000 }}
         spaceBetween={15}
-        className="max-w-full"
+        className="w-full"
         breakpoints={breakpoints}
         slidesPerGroup={slidesPerGroup}
         speed={800}
