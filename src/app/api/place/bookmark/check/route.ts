@@ -23,8 +23,8 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(
     {
-      success: !!placeBookmark,
-      msg: placeBookmark ? '북마크되어 있음' : '북마크되어 있지 않음',
+      success: true,
+      isBookmark: !!placeBookmark,
     },
     { status: 200 }
   );
@@ -43,6 +43,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, msg: '장소 ID가 필요합니다.' }, { status: 400 });
   }
 
+  const existing = await prisma.place_bookmark.findFirst({
+    where: {
+      user_id: me.user_id,
+      place_id: String(placeId),
+    },
+  });
+
+  if (existing) {
+    return NextResponse.json({ success: true, isBookmark: true }, { status: 200 });
+  }
+
   try {
     await prisma.place_bookmark.create({
       data: {
@@ -50,7 +61,6 @@ export async function POST(req: NextRequest) {
         place_id: String(placeId),
       },
     });
-
     return NextResponse.json({ success: true, isBookmark: true }, { status: 200 });
   } catch (_error) {
     return NextResponse.json({ success: false, msg: '서버 오류로 북마크 실패' }, { status: 500 });

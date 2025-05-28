@@ -5,8 +5,7 @@ import PostCardLocation from './PostCardLocation';
 import PostCardTitle from './PostCardTitle';
 
 const LogBookMarkButton = dynamic(
-  () => import('@/components/common/Button/Bookmark/LogBookMarkButton'),
-  { ssr: false }
+  () => import('@/components/common/Button/Bookmark/LogBookMarkButton')
 );
 
 interface PostCardProps {
