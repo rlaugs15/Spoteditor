@@ -1,6 +1,6 @@
-import { PublicUser, IUser } from '@/types/api/user';
-import FollowButtons from './components/FollowButtons';
 import UserImage from '@/components/common/UserImage';
+import { IUser, PublicUser } from '@/types/api/user';
+import FollowButtons from './components/FollowButtons';
 import ProfileActionButton from './components/ProfileActionButton';
 
 interface ProfileHeaderProps {

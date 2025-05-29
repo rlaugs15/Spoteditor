@@ -12,11 +12,10 @@ export default async function Page({ params }: ProfilepageProps) {
   const { userId } = await params;
   const me = await getUser();
   const user = await getPublicUser(userId);
-
   return (
-    <div className="pt-7.5 web:pt-15 mx-4 web:mx-12.5 mb-35 web:mb-25">
+    <main className="pt-7.5 web:pt-15 mx-4 web:mx-12.5 mb-35 web:mb-25">
       <ProfileHeader me={me} user={user} />
       <ProfileTabSection me={me} userId={userId} />
-    </div>
+    </main>
   );
 }

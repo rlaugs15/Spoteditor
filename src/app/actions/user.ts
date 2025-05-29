@@ -137,8 +137,9 @@ export async function patchUser({
         description,
       },
     });
-
     revalidateTag(cacheTags.me());
+    revalidateTag(cacheTags.publicUser(userId));
+
     return updated;
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {

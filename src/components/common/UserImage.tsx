@@ -28,6 +28,7 @@ export default function UserImage({ imgSrc, className, ...props }: UserImageProp
         sizes="60px"
         alt="유저 프로필 이미지"
         className="object-cover object-center"
+        quality={100}
         {...props}
       />
     </div>
