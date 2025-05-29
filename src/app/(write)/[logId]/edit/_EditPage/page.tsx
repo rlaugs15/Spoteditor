@@ -76,10 +76,8 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     swap(idx, idx + 1);
   };
 
-  const onSubmit = async (values: LogEditFormValues) => {
-    console.log(form.formState.dirtyFields, values);
+  const onSubmit = (values: LogEditFormValues) => {
     const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
-
     const patchedPlaces = dirtyValues.places?.map((place, idx) => ({
       ...place,
       id: form.getValues('places')[idx]?.id,
@@ -90,7 +88,6 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
       ...dirtyValues,
       ...(dirtyValues.places ? { places: patchedPlaces } : {}),
     };
-    console.log(patchedDirtyValues);
 
     const formData = createFormData(patchedDirtyValues);
     mutate({ formData, logId: logData.log_id });
@@ -134,7 +131,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 
       <ConfirmRegistrationDialog
         edit
-        disabled={!form.formState.isValid || isPending}
+        disabled={!form.formState.isValid || form.formState.isSubmitting || isPending}
         loading={isPending}
         onSubmitLogForm={form.handleSubmit(onSubmit)}
       />
