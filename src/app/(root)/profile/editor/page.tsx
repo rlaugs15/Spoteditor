@@ -8,6 +8,7 @@ import ProfileFormFields from '@/components/features/profile-editor/ProfileFormF
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import useUser from '@/hooks/queries/user/useUser';
+import { createClient } from '@/lib/supabase/client';
 import { profileEditorSchema } from '@/lib/zod/profileSchema';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -50,15 +51,35 @@ export default function ProfileSetting() {
     let image_url: string | undefined = undefined;
 
     if (imageFile) {
+      // 기존 이미지 삭제 (image_url이 있고, 기본 이미지가 아닐 경우)
+      if (
+        me?.image_url &&
+        me.image_url.includes('profiles/') &&
+        !me.image_url.includes('user-default-avatar')
+      ) {
+        // 버킷 경로 제거
+        const relativePath = me.image_url.replace(/^profiles\//, '');
+        const supabase = await createClient();
+        const { error } = await supabase.storage.from('profiles').remove([relativePath]);
+
+        if (error) {
+          console.warn('기존 이미지 삭제 실패:', error.message);
+        } else {
+          console.log('기존 이미지 삭제 성공:', relativePath);
+        }
+      }
+
+      // 새 이미지 업로드
       const resizingFile = await compressImageToWebp(imageFile, { maxWidthOrHeight: 300 });
       if (!resizingFile) {
         console.error('이미지 압축 실패: resizingFile이 undefined');
         return;
       }
+
       const uploadResult = await uploadFile('profiles', resizingFile, {
-        folder: me?.user_id,
+        folder: '',
         subfolder: '',
-        filename: `${me?.user_id}.webp`,
+        filename: `${me?.user_id}${Date.now()}.webp`, // 고유한 파일명
       });
       if (uploadResult?.fullPath) {
         image_url = uploadResult.fullPath;
