@@ -1,5 +1,6 @@
 'use client';
 import { XRemovePlaceImageIcon } from '@/components/common/Icons';
+import { cn } from '@/lib/utils';
 import { LogEditFormValues } from '@/types/schema/log';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
 import Image from 'next/image';
@@ -25,7 +26,12 @@ const EditMultiImageForm = ({ idx }: EditMultiImageFormProps) => {
             <div key={field.id} className="relative w-[220px] h-[300px] my-2.5">
               <Image src={url} fill alt="업로드한 장소 이미지" className="object-cover" />
               <button onClick={() => remove(imageIdx)}>
-                <XRemovePlaceImageIcon className="absolute top-2 right-2 cursor-pointer hover:brightness-90" />
+                <XRemovePlaceImageIcon
+                  className={cn(
+                    'absolute top-2 right-2 cursor-pointer hover:brightness-90',
+                    fields.length === 1 && 'hidden'
+                  )}
+                />
               </button>
             </div>
           );

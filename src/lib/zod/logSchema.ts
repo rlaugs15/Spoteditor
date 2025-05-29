@@ -49,6 +49,7 @@ export const SavedPlaceImageSchema = z.object({
 
 export const EditPlaceSchema = placeSchema.extend({
   id: z.string(),
+  order: z.number(),
   placeImages: z
     .array(SavedPlaceImageSchema)
     .max(3, { message: '최대 3장의 이미지만 업로드 가능합니다.' })
