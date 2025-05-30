@@ -6,7 +6,6 @@ import CustomPagination from '@/components/common/CustomPagination';
 import { TitledSection } from '@/components/common/SectionBlock';
 import useLogs from '@/hooks/queries/log/useLogs';
 import useQueryPagination from '@/hooks/useQueryPagination';
-import Link from 'next/link';
 import { useRef } from 'react';
 
 interface LatestLogConentProps {
@@ -22,11 +21,9 @@ export default function LatestLogConent({ currentPage }: LatestLogConentProps) {
       <TitledSection title="Latest" subTitle="Log">
         <PostCardWrapper className="mb-[50px]">
           {data?.data.map((log) => (
-            <Link href={`log/${log?.log_id}`} key={log?.log_id}>
-              <MotionCard>
-                <PostCard log={log} />
-              </MotionCard>
-            </Link>
+            <MotionCard key={log?.log_id}>
+              <PostCard log={log} />
+            </MotionCard>
           ))}
         </PostCardWrapper>
         <CustomPagination

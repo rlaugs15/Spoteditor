@@ -1,7 +1,6 @@
 'use client';
 import { PostCard } from '@/components/common/Card/PostCard';
 import { LogsReseponse } from '@/types/api/log';
-import Link from 'next/link';
 import { useRef } from 'react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -45,9 +44,7 @@ const Carousel = ({ logs, onReachEnd }: CarouselProps) => {
     >
       {logs?.data.map((log) => (
         <SwiperSlide key={log?.log_id}>
-          <Link href={`/log/${log?.log_id}`}>
-            <PostCard log={log} vertical />
-          </Link>
+          <PostCard log={log} vertical />
         </SwiperSlide>
       ))}
     </Swiper>
