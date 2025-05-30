@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { IUser } from '@/types/api/user';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import MyProfileButton from './components/MyProfileButton';
 
 interface UserProfileButtonProps {
@@ -19,6 +20,12 @@ interface UserProfileButtonProps {
 }
 
 export default function UserProfileButton({ user }: UserProfileButtonProps) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger className="focus:outline-none" asChild>
@@ -28,7 +35,7 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         // autoFocus를 끄면 포커스를 잡지 않음(에러방지)
-        onCloseAutoFocus={(event) => event.preventDefault()}
+        autoFocus={false}
         className="w-[264px]"
       >
         <DropdownMenuItem className="font-bold text-text-lg flex justify-start gap-[5px] px-4 items-center">

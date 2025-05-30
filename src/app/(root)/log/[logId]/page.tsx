@@ -4,6 +4,7 @@ import ExtraActionButton from '@/components/features/detail-log/ExtraActionButto
 import LogAuthorIntro from '@/components/features/detail-log/LogAuthorIntro';
 import LogContent from '@/components/features/detail-log/LogContent';
 import LogThubmnail from '@/components/features/detail-log/LogThubmnail';
+import { PlaceWithImages } from '@/types/api/log';
 import Link from 'next/link';
 
 export interface LogIdParams {
@@ -22,7 +23,7 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
       <LogThubmnail logData={logData} />
       <main className="flex flex-col px-4 web:px-[50px]">
         <LogAuthorIntro userId={logData.user_id} logDescription={logData.description ?? ''} />
-        {logData.place.map((place, idx) => (
+        {logData.place.map((place: PlaceWithImages, idx: number) => (
           <LogContent key={place.place_id} place={place} idx={idx + 1} />
         ))}
       </main>

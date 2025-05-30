@@ -1,7 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { logBookmarkListParmas, LogResponse, LogsParams, LogsReseponse } from '@/types/api/log';
+import { logBookmarkListParmas, LogsParams, LogsReseponse } from '@/types/api/log';
 import { SearchParams, SearchReseponse } from '@/types/api/search';
 import { Prisma } from '@prisma/client';
 import { revalidateTag, unstable_cache } from 'next/cache';
@@ -12,7 +12,7 @@ import { cacheTags } from './tags';
 // ===================================================================
 // 단일 로그
 // ===================================================================
-export async function fetchLog(logId: string): Promise<LogResponse> {
+export async function fetchLog(logId: string) {
   try {
     const supabase = await createClient();
 
