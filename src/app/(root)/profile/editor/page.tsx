@@ -3,6 +3,7 @@
 import { userKeys } from '@/app/actions/keys';
 import { uploadFile } from '@/app/actions/storage';
 import { patchUser } from '@/app/actions/user';
+import AccountDeleteSection from '@/components/features/profile-editor/AccountDeleteSection/AccountDeleteSection';
 import AvatarEditSection from '@/components/features/profile-editor/AvatarEditSection';
 import ProfileFormFields from '@/components/features/profile-editor/ProfileFormFields';
 import { Button } from '@/components/ui/button';
@@ -119,8 +120,16 @@ export default function ProfileSetting() {
             {/* 프로필 편집 섹션 */}
             <ProfileFormFields />
 
+            {/* 계정삭제 섹션 */}
+            <AccountDeleteSection />
+
             <section className="flex justify-between mt-12.5">
-              <Button type="button" variant="outline" className="rounded-[6px] w-30 h-10.5">
+              <Button
+                onClick={() => router.back()}
+                type="button"
+                variant="outline"
+                className="rounded-[6px] w-30 h-10.5"
+              >
                 취소
               </Button>
               <Button type="submit" className="rounded-[6px] w-30 h-10.5">

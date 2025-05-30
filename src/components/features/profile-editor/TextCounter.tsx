@@ -8,7 +8,12 @@ interface TextCounterProps {
 
 export default memo(function TextCounter({ length, maxLength }: TextCounterProps) {
   return (
-    <span className={cn('text-text-2xs', length > 30 ? 'text-red-500' : 'text-light-300')}>
+    <span
+      className={cn(
+        'text-text-2xs font-pretendard',
+        length > 30 ? 'text-red-500' : 'text-light-300'
+      )}
+    >
       {length}/{maxLength}
     </span>
   );
