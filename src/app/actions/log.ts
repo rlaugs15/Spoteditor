@@ -23,7 +23,7 @@ export async function fetchLog(logId: string): Promise<LogResponse> {
         *,
          place(*,
          place_images(*)
-         ),
+         ) ,
          log_tag(
           category, tag
          ),
@@ -32,6 +32,7 @@ export async function fetchLog(logId: string): Promise<LogResponse> {
          )
       `
       )
+      .order('order', { referencedTable: 'place', ascending: true })
       .eq('log_id', logId)
       .single();
 

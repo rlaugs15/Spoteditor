@@ -58,11 +58,12 @@ export async function updateLog(formData: FormData, logId: string) {
     /* 장소 데이터 */
     if (Array.isArray(parseResult.places) && parseResult.places.length > 0) {
       const updatePromises = parseResult.places.map(async (place) => {
-        const placeData: Record<string, string | Date> = {};
+        const placeData: Record<string, string | Date | number> = {};
         if (place.placeName) placeData.name = place.placeName;
         if (place.description) placeData.description = place.description;
         if (place.category) placeData.category = place.category;
         if (place.location) placeData.address = place.location;
+        if (place.order) placeData.order = place.order;
         placeData.updated_at = new Date();
 
         const { error: placeError } = await supabase

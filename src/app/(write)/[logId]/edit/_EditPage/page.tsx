@@ -15,6 +15,7 @@ import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   const { mutate, isPending } = useLogEditMutation();
@@ -46,6 +47,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
         mood: moodTags,
         activity: activityTags,
       },
+      deletedPlace: [],
     },
   });
 
@@ -66,7 +68,11 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     form.setValue('tags.activity', activity, { shouldDirty: true });
   }, [activity]);
 
-  const handleDeletePlace = (idx: number) => remove(idx);
+  const handleDeletePlace = (idx: number) => {
+    if (fields.length === 1) return toast.error('1개의 장소는 필수입니다.');
+    else remove(idx);
+    //   form.setValue(`places.${idx}.deleted`, true, { shouldDirty: true });
+  };
   const handleMovePlaceUp = (idx: number) => {
     if (idx <= 0) return;
     swap(idx, idx - 1);
@@ -77,17 +83,23 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   };
 
   const onSubmit = (values: LogEditFormValues) => {
+    console.log('보내기', form.formState.dirtyFields, 'values', values);
+
     const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
-    const patchedPlaces = dirtyValues.places?.map((place, idx) => ({
-      ...place,
-      id: form.getValues('places')[idx]?.id,
-      order: idx, // 순서변경중,,
-    }));
+    console.log('dirtyValues', dirtyValues);
 
     const patchedDirtyValues = {
       ...dirtyValues,
-      ...(dirtyValues.places ? { places: patchedPlaces } : {}),
+      ...(dirtyValues.places && {
+        places: dirtyValues.places.map((place, idx) => ({
+          ...place,
+          id: form.getValues('places')[idx]?.id,
+          order: idx + 1,
+        })),
+      }),
     };
+
+    console.log('보냅니다', patchedDirtyValues);
 
     const formData = createFormData(patchedDirtyValues);
     mutate({ formData, logId: logData.log_id });
@@ -145,14 +157,19 @@ function extractDirtyValues<T extends Record<string, any>>(
   dirtyFields: any,
   allValues: T
 ): Partial<T> {
+  if (!dirtyFields || !allValues) return {};
   if (typeof dirtyFields !== 'object' || dirtyFields === true) return allValues;
 
   const result: any = Array.isArray(dirtyFields) ? [] : {};
+
   for (const key in dirtyFields) {
-    // 재귀
-    if (dirtyFields[key]) {
-      result[key] = extractDirtyValues(dirtyFields[key], allValues[key]);
+    if (dirtyFields[key] && allValues[key] !== undefined) {
+      result[key] =
+        dirtyFields[key] === true
+          ? allValues[key]
+          : extractDirtyValues(dirtyFields[key], allValues[key]);
     }
   }
+
   return result;
 }
