@@ -13,8 +13,6 @@ export type DetailLog = Tables<'log'> & {
   address: Array<Pick<Tables<'address'>, 'country' | 'city' | 'sigungu'>>;
 };
 
-export type LogResponse = ApiResponse<DetailLog>;
-
 /* 로그리스트 */
 export type LogsReseponse = ApiResponse<LogWithUserAndAddress[]>;
 export interface LogsParams extends PaginationParams {

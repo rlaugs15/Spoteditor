@@ -1,7 +1,8 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { logBookmarkListParmas, LogResponse, LogsParams, LogsReseponse } from '@/types/api/log';
+import { ApiResponse } from '@/types/api/common';
+import { DetailLog, logBookmarkListParmas, LogsParams, LogsReseponse } from '@/types/api/log';
 import { SearchParams, SearchReseponse } from '@/types/api/search';
 import { Prisma } from '@prisma/client';
 import { revalidateTag, unstable_cache } from 'next/cache';
@@ -12,10 +13,9 @@ import { cacheTags } from './tags';
 // ===================================================================
 // 단일 로그
 // ===================================================================
-export async function fetchLog(logId: string): Promise<LogResponse> {
+export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
   try {
     const supabase = await createClient();
-
     const { data, error } = await supabase
       .from('log')
       .select(
@@ -40,22 +40,47 @@ export async function fetchLog(logId: string): Promise<LogResponse> {
     return { success: true, data: data };
   } catch (e) {
     console.error(e);
-    return { success: false, msg: '에러' };
+    return { success: false, msg: '단일 로그 조회 실패' };
   }
 }
 
 // ===================================================================
 // 로그 삭제
 // ===================================================================
-export async function deleteLog(logId: string) {
+export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase.from('log').delete().eq('log_id', logId).select();
-    if (error) throw new Error(error.message);
-    return { success: true, data: data };
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) throw new Error('유저 정보 없음');
+
+    // 로그 삭제
+    const { error: logDeleteError } = await supabase.from('log').delete().eq('log_id', logId);
+    if (logDeleteError) {
+      console.error('로그 삭제 실패', logDeleteError);
+      throw new Error('로그 삭제 실패');
+    }
+
+    // 스토리지 삭제 (places, thumbnails)
+    const [placesRes, thumbnailRes] = await Promise.all([
+      supabase.storage.from('places').remove([`${user.id}/${logId}`]),
+      supabase.storage.from('thumbnails').remove([`${user.id}/${logId}`]),
+    ]);
+
+    if (placesRes.error) {
+      console.error('장소 이미지 삭제 실패', placesRes.error);
+      throw new Error('장소 이미지 삭제 실패');
+    }
+    if (thumbnailRes.error) {
+      console.error('썸네일 삭제 실패', thumbnailRes.error);
+      throw new Error('썸네일 삭제 실패');
+    }
+
+    return { success: true, data: null };
   } catch (e) {
-    console.error(e);
-    return { success: false, msg: '에러' };
+    console.error('로그 삭제 전체 실패:', e);
+    return { success: false, msg: '로그 삭제 실패' };
   }
 }
 

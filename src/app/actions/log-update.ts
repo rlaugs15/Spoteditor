@@ -89,7 +89,7 @@ export async function updateLog(formData: FormData, logId: string) {
 
         const { error: storageDeleteError } = await supabase.storage
           .from('places')
-          .remove([`${user.id}/${placeId}`]);
+          .remove([`${user.id}/${logId}/${placeId}`]);
 
         if (placeDeleteError) {
           console.error('장소 삭제 실패', placeDeleteError);
