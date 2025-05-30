@@ -80,6 +80,31 @@ export async function updateLog(formData: FormData, logId: string) {
       await Promise.all(updatePromises);
     }
 
+    if (parseResult.deletedPlace) {
+      const deletePromises = parseResult.deletedPlace.map(async (placeId) => {
+        const { error: placeDeleteError } = await supabase
+          .from('place')
+          .delete()
+          .eq('place_id', placeId);
+
+        const { error: storageDeleteError } = await supabase.storage
+          .from('places')
+          .remove([`${user.id}/${placeId}`]);
+
+        if (placeDeleteError) {
+          console.error('장소 삭제 실패', placeDeleteError);
+          throw new Error(`${placeId} 장소 삭제 실패`);
+        }
+
+        if (storageDeleteError) {
+          console.error('장소 이미지 삭제 실패', storageDeleteError);
+          throw new Error(`${placeId} 이미지 삭제 실패`);
+        }
+      });
+
+      await Promise.all(deletePromises);
+    }
+
     return { success: true };
   } catch (e) {
     console.error(e);
