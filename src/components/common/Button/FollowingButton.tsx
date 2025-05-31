@@ -18,18 +18,26 @@ export default function FollowingButton({ userId, className = '' }: FollowingBut
 
   const onFollowClick = () => {
     if (isMutating || isPending) return;
-
-    mutate({ userId, isFollowing });
+    mutate(
+      { userId, isFollowing }
+      /* {
+        onSuccess: async () => {
+          await revalidatePublicUser(userId);
+        },
+      } */
+    );
   };
 
   return (
-    <Button
-      onClick={onFollowClick}
-      variant={isFollowing ? 'ghost' : 'outline'}
-      size="s"
-      className={cn('font-medium rounded-[60px]', className)}
-    >
-      {isFollowing ? '팔로잉' : '팔로우'}
-    </Button>
+    <form action="">
+      <Button
+        onClick={onFollowClick}
+        variant={isFollowing ? 'ghost' : 'outline'}
+        size="s"
+        className={cn('font-medium rounded-[60px]', className)}
+      >
+        {isFollowing ? '팔로잉' : '팔로우'}
+      </Button>
+    </form>
   );
 }

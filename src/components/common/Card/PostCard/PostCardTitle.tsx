@@ -15,7 +15,7 @@ function PostCardTitle({ className, title, modal }: PostCardTitleProps) {
         className
       )}
     >
-      {title}
+      {title ?? ''}
     </h3>
   );
 }
