@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 const TitledInput = () => {
-  const { control, setValue } = useFormContext();
+  const { control, setValue, formState } = useFormContext();
   const logTitle = useWatch({ control, name: 'logTitle' });
-
+  const isError = !!formState.errors?.logTitle;
   return (
     <div className="flex items-center border-b border-light-100">
       <FormField
@@ -19,7 +19,7 @@ const TitledInput = () => {
               {...field}
               type="text"
               placeholder="제목을 입력해주세요.(최대 30자) *"
-              className="!text-text-md my-2"
+              className={cn('!text-text-md my-2', isError && 'placeholder:text-error-500 ')}
               maxLength={30}
               required
             />

@@ -182,6 +182,7 @@ export type Database = {
           description: string | null
           log_id: string
           name: string
+          order: number
           place_id: string
           updated_at: string | null
         }
@@ -192,6 +193,7 @@ export type Database = {
           description?: string | null
           log_id: string
           name: string
+          order: number
           place_id?: string
           updated_at?: string | null
         }
@@ -202,6 +204,7 @@ export type Database = {
           description?: string | null
           log_id?: string
           name?: string
+          order?: number
           place_id?: string
           updated_at?: string | null
         }

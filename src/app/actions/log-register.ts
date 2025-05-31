@@ -95,6 +95,7 @@ async function uploadPlaces(places: LogFormValues['places'], logId: string) {
       description: description,
       address: location,
       category: category,
+      order: placeIdx + 1,
     });
 
     const uploads = placeImages.map(

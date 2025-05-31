@@ -1,26 +1,45 @@
 'use client';
-import { CheckedCircleIcon, CircleIcon, ClockIcon, LocationIcon } from '@/components/common/Icons';
+import { ClockIcon, LocationIcon } from '@/components/common/Icons';
 import { FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import PhotoTextSection from './PhotoTextSection';
+import PlaceDrawer from './PlaceDrawer';
 
 interface PlaceFormProps {
-  isChecked?: boolean;
   idx: number;
   onDeletePlace: (idx: number) => void;
+  onMoveUpPlace: (idx: number) => void;
+  onMoveDownPlace: (idx: number) => void;
   edit?: boolean;
 }
 
-const PlaceForm = ({ isChecked, idx, onDeletePlace, edit }: PlaceFormProps) => {
-  const { control } = useFormContext();
+const PlaceForm = ({
+  idx,
+  onDeletePlace,
+  onMoveUpPlace,
+  onMoveDownPlace,
+  edit,
+}: PlaceFormProps) => {
+  const { control, formState } = useFormContext();
+  const [isChecked, setIsChecked] = useState(false);
+  const placeErrors = Array.isArray(formState.errors.places)
+    ? formState.errors.places[idx]
+    : undefined;
+
   return (
     <div>
       <div className="flex justify-between">
         <span className="text-text-lg font-bold">{String(idx + 1).padStart(2, '0')}</span>
-        <button className="cursor-pointer" onClick={() => onDeletePlace(idx)}>
-          {isChecked ? <CheckedCircleIcon /> : <CircleIcon />}
-        </button>
+        <PlaceDrawer
+          isChecked={isChecked}
+          setIsChecked={setIsChecked}
+          onDeletePlace={() => onDeletePlace(idx)}
+          onMoveUpPlace={() => onMoveUpPlace(idx)}
+          onMoveDownPlace={() => onMoveDownPlace(idx)}
+        />
       </div>
       <FormField
         control={control}
@@ -30,7 +49,10 @@ const PlaceForm = ({ isChecked, idx, onDeletePlace, edit }: PlaceFormProps) => {
             {...field}
             type="text"
             placeholder="장소명을 적어주세요 *"
-            className="placeholder:text-light-300 font-bold !text-text-lg"
+            className={cn(
+              'placeholder:text-light-300 font-bold !text-text-lg',
+              placeErrors?.placeName && 'placeholder:text-error-500'
+            )}
           />
         )}
       />
@@ -46,7 +68,10 @@ const PlaceForm = ({ isChecked, idx, onDeletePlace, edit }: PlaceFormProps) => {
                 {...field}
                 type="text"
                 placeholder="장소 카테고리 *"
-                className="!text-text-sm"
+                className={cn(
+                  '!text-text-sm',
+                  placeErrors?.category && 'placeholder:text-error-500'
+                )}
               />
             )}
           />
@@ -61,7 +86,10 @@ const PlaceForm = ({ isChecked, idx, onDeletePlace, edit }: PlaceFormProps) => {
                 {...field}
                 type="text"
                 placeholder="위치를 적어주세요. *"
-                className="!text-text-sm"
+                className={cn(
+                  '!text-text-sm',
+                  placeErrors?.location && 'placeholder:text-error-500'
+                )}
               />
             )}
           />

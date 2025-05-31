@@ -1,12 +1,14 @@
-import { Button } from '@/components/ui/button';
+import ConfirmDeleteDialog from '@/components/features/log/edit/ConfirmDeleteDialog';
 import BackButton from '../Button/BackButton';
 
 interface LogEditHeaderProps {
   city: string;
   sigungu: string;
+  logTitle: string;
+  logId: string;
 }
 
-const LogEditHeader = ({ city, sigungu }: LogEditHeaderProps) => {
+const LogEditHeader = ({ city, sigungu, logTitle, logId }: LogEditHeaderProps) => {
   return (
     <header className="py-[15px] bg-white flex items-center justify-between">
       <div className="flex items-center gap-2.5">
@@ -15,13 +17,7 @@ const LogEditHeader = ({ city, sigungu }: LogEditHeaderProps) => {
           {city} · {sigungu}
         </p>
       </div>
-      <Button
-        variant={'ghost'}
-        className="font-bold text-text-md !text-error-500"
-        onClick={() => console.log('삭제')}
-      >
-        로그 삭제
-      </Button>
+      <ConfirmDeleteDialog logTitle={logTitle} logId={logId} />
     </header>
   );
 };

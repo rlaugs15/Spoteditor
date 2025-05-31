@@ -6,28 +6,29 @@ export type NullableFields<T> = {
   [K in keyof T]: T[K] | null;
 };
 
-export type ApiResponse<T> = {
-  data: T;
-  success: boolean;
-  meta?: {
-    pagination?: {
-      currentPage: number;
-      pageSize: number;
-      totalPages: number;
-      totalItems: number;
-      sort?: Sort;
+export type ApiResponse<T> =
+  | {
+      success: true;
+      data: T;
+      meta?: {
+        pagination?: {
+          currentPage: number;
+          pageSize: number;
+          totalPages: number;
+          totalItems: number;
+          sort?: Sort;
+        };
+        httpStatus?: number;
+      };
+    }
+  | {
+      success: false;
+      msg?: string;
+      errorCode?: string;
     };
-    httpStatus?: number;
-  };
-};
-
-export type ActionResponse = {
-  success: boolean;
-  msg?: string;
-};
 
 export interface PaginationParams {
-  currentPage: number;
+  currentPage?: number;
   pageSize?: number;
   sort?: Sort;
 }
