@@ -1,19 +1,17 @@
 'use client';
-import { createLog } from '@/app/actions/log-register';
 import { Header3 } from '@/components/common/Header';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
 import PlaceForm from '@/components/features/log/register/PlaceForm';
 import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
+import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
 import { LogformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/schema/log';
 import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 
 const initialPlace = {
   placeName: '',
@@ -24,8 +22,7 @@ const initialPlace = {
 };
 
 const LogPage = () => {
-  const clearTag = useLogCreationStore((state) => state.clearTag);
-  const router = useRouter();
+  const { mutate, isPending } = useLogCreateMutation();
   const form = useForm({
     resolver: zodResolver(LogformSchema),
     mode: 'onBlur',
@@ -64,15 +61,7 @@ const LogPage = () => {
 
   const onSubmit = async (values: LogFormValues) => {
     const formData = createFormData(values);
-    const uploadResult = await createLog(formData);
-
-    if (uploadResult.success) {
-      router.replace(`/log/${uploadResult.data}`);
-      toast.success('업로드 성공');
-      clearTag();
-    } else {
-      toast.error('업로드 실패');
-    }
+    mutate({ formData });
   };
 
   return (
@@ -103,8 +92,8 @@ const LogPage = () => {
 
       <ConfirmRegistrationDialog
         logTitle={form.getValues('logTitle')}
-        disabled={!form.formState.isValid || form.formState.isSubmitting}
-        loading={form.formState.isSubmitting}
+        disabled={!form.formState.isValid || form.formState.isSubmitting || isPending}
+        loading={isPending}
         onSubmitLogForm={form.handleSubmit(onSubmit)}
       />
     </div>

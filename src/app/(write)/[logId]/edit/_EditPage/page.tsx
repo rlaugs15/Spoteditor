@@ -1,5 +1,4 @@
 'use client';
-import { updateLog } from '@/app/actions/log-update';
 import { LogEditHeader } from '@/components/common/Header';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
@@ -7,19 +6,19 @@ import PlaceForm from '@/components/features/log/register/PlaceForm';
 import { TagGroup } from '@/components/features/log/register/tags';
 import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
+import useLogEditMutation from '@/hooks/mutations/log/useLogEditMutation';
 import { LogEditformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { DetailLog } from '@/types/api/log';
 import { LogEditFormValues } from '@/types/schema/log';
 import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
-  const router = useRouter();
+  const { mutate, isPending } = useLogEditMutation();
   const { title, thumbnail_url, description, place: places, log_tag, address, log_id } = logData;
   const initializeTags = useLogCreationStore((state) => state.initializeTags);
   const moodTags = log_tag.filter((t) => t.category === 'mood').map((t) => t.tag);
@@ -42,11 +41,13 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
         location: place.address,
         description: place?.description ?? '',
         placeImages: place.place_images,
+        order: place.order,
       })),
       tags: {
         mood: moodTags,
         activity: activityTags,
       },
+      deletedPlace: [],
     },
   });
 
@@ -67,7 +68,10 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     form.setValue('tags.activity', activity, { shouldDirty: true });
   }, [activity]);
 
-  const handleDeletePlace = (idx: number) => remove(idx);
+  const handleDeletePlace = (idx: number) => {
+    if (fields.length === 1) return toast.error('1개의 장소는 필수입니다.');
+    remove(idx);
+  };
   const handleMovePlaceUp = (idx: number) => {
     if (idx <= 0) return;
     swap(idx, idx - 1);
@@ -77,27 +81,27 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     swap(idx, idx + 1);
   };
 
-  const onSubmit = async (values: LogEditFormValues) => {
+  const onSubmit = (values: LogEditFormValues) => {
+    console.log('보내기', form.formState.dirtyFields);
+
     const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
-    const patchedPlaces = dirtyValues.places?.map((place, idx) => ({
-      ...place,
-      id: form.getValues('places')[idx]?.id,
-    }));
+    console.log('dirtyValues', dirtyValues);
 
     const patchedDirtyValues = {
       ...dirtyValues,
-      ...(dirtyValues.places ? { places: patchedPlaces } : {}),
+      ...(dirtyValues.places && {
+        places: dirtyValues.places.map((place, idx) => ({
+          ...place,
+          id: form.getValues('places')[idx]?.id,
+          order: idx + 1,
+        })),
+      }),
     };
 
-    const formData = createFormData(patchedDirtyValues);
-    const uploadResult = await updateLog(formData, logData.log_id);
+    console.log('보냅니다', patchedDirtyValues);
 
-    if (uploadResult.success) {
-      router.replace(`/log/${logData.log_id}`);
-      toast.success('로그 수정 성공');
-    } else {
-      toast.error('로그 수정  실패');
-    }
+    const formData = createFormData(patchedDirtyValues);
+    mutate({ formData, logId: logData.log_id });
   };
 
   return (
@@ -138,8 +142,8 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 
       <ConfirmRegistrationDialog
         edit
-        disabled={!form.formState.isValid || form.formState.isSubmitting}
-        loading={form.formState.isSubmitting}
+        disabled={!form.formState.isValid || form.formState.isSubmitting || isPending}
+        loading={isPending}
         onSubmitLogForm={form.handleSubmit(onSubmit)}
       />
     </div>
@@ -152,14 +156,19 @@ function extractDirtyValues<T extends Record<string, any>>(
   dirtyFields: any,
   allValues: T
 ): Partial<T> {
+  if (!dirtyFields || !allValues) return {};
   if (typeof dirtyFields !== 'object' || dirtyFields === true) return allValues;
 
   const result: any = Array.isArray(dirtyFields) ? [] : {};
+
   for (const key in dirtyFields) {
-    // 재귀
-    if (dirtyFields[key]) {
-      result[key] = extractDirtyValues(dirtyFields[key], allValues[key]);
+    if (dirtyFields[key] && allValues[key] !== undefined) {
+      result[key] =
+        dirtyFields[key] === true
+          ? allValues[key]
+          : extractDirtyValues(dirtyFields[key], allValues[key]);
     }
   }
+
   return result;
 }

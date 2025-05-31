@@ -1,5 +1,4 @@
 'use client';
-import { deleteLog } from '@/app/actions/log';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,10 +11,8 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { HOME } from '@/constants/pathname';
-import { useRouter } from 'next/navigation';
+import useLogDeleteMutation from '@/hooks/mutations/log/useLogDeleteMutation';
 import { useState } from 'react';
-import { toast } from 'sonner';
 interface ConfirmDeleteDialogProps {
   logTitle: string;
   logId: string;
@@ -23,18 +20,9 @@ interface ConfirmDeleteDialogProps {
 
 const ConfirmDeleteDialog = ({ logTitle, logId }: ConfirmDeleteDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
-  const handleSubmit = async () => {
-    try {
-      const { success } = await deleteLog(logId);
-      if (success) {
-        toast.success('로그가 삭제되었습니다.');
-        router.replace(HOME);
-      } else throw new Error('삭제 실패');
-    } catch {
-      toast.error('로그 삭제를 실패했습니다. 다시 시도해주세요.');
-    }
-  };
+  const { mutate } = useLogDeleteMutation();
+  const handleSubmit = () => mutate({ logId });
+
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>

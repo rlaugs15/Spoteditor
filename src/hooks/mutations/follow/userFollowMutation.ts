@@ -1,9 +1,9 @@
 import { followKeys } from '@/app/actions/keys';
-import { ActionResponse } from '@/types/api/common';
+import { ApiResponse } from '@/types/api/common';
 import { FollowParams, FollowResponse } from '@/types/api/follow';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-async function fetchFollow({ userId, isFollowing }: FollowParams): Promise<ActionResponse> {
+async function fetchFollow({ userId, isFollowing }: FollowParams): Promise<ApiResponse<null>> {
   const res = await fetch(`/api/follow?userId=${userId}`, {
     method: isFollowing ? 'DELETE' : 'POST',
   });
