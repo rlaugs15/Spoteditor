@@ -1,4 +1,6 @@
 import { getLogs } from '@/app/actions/log';
+import { ERROR_CODES } from '@/constants/errorCode';
+import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -8,11 +10,26 @@ export async function GET(req: NextRequest) {
   const currentPage = parseInt(searchParams.get('currentPage') || '1');
   const pageSize = parseInt(searchParams.get('pageSize') || '10');
 
-  const logs = await getLogs({ userId, currentPage, pageSize });
+  try {
+    const result = await getLogs({ userId, currentPage, pageSize });
 
-  if (!logs) {
-    return NextResponse.json({ success: false, msg: '서버 오류로 조회 실패' }, { status: 500 });
+    if (!result.success) {
+      return NextResponse.json(result, {
+        status: 404,
+      });
+    }
+
+    return NextResponse.json(result, {
+      status: result.meta?.httpStatus ?? 200,
+    });
+  } catch (_error) {
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.LOG.LIST_EMPTY,
+        errorCode: ERROR_CODES.LOG.LIST_EMPTY,
+      },
+      { status: 500 }
+    );
   }
-
-  return NextResponse.json(logs, { status: 200 });
 }

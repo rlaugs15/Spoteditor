@@ -21,6 +21,7 @@ export default function SearchContent({ keyword, currentPage }: SearchContentPro
 
   const { handlePageChange } = useQueryPagination('page', currentPage, contentRef);
   const { data, isLoading } = useSearchLogs({ currentPage, keyword, pageSize: 16 });
+
   return (
     <section
       ref={contentRef}
