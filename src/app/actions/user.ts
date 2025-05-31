@@ -159,6 +159,21 @@ export async function deleteUser() {
     return { success: false, msg: '로그인 상태가 아닙니다.' };
   }
   try {
+    /* 프로필 이미지 삭제 */
+    if (
+      me.image_url &&
+      me.image_url.includes('profiles/') &&
+      !me.image_url.includes('user-default-avatar')
+    ) {
+      const relativePath = me.image_url.replace(/^profiles\//, '');
+      const supabase = await createClient();
+      const { error } = await supabase.storage.from('profiles').remove([relativePath]);
+      if (error) {
+        console.warn('프로필 이미지 삭제 실패:', error.message);
+      }
+    }
+
+    /* 유저 데이터 삭제 */
     await prisma.public_users.delete({
       where: {
         user_id: me.user_id,
