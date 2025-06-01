@@ -1,4 +1,6 @@
 import { getSearchLogs } from '@/app/actions/log';
+import { ERROR_CODES } from '@/constants/errorCode';
+import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -20,9 +22,14 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json(result, { status: 200 });
-  } catch (error) {
-    console.error('에러', error);
-
-    return NextResponse.json({ success: false, msg: '서버 오류로 검색 실패' }, { status: 500 });
+  } catch (_error) {
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.SEARCH.FAILED,
+        errorCode: ERROR_CODES.SEARCH.FAILED,
+      },
+      { status: 500 }
+    );
   }
 }

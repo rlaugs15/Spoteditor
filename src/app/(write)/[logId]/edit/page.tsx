@@ -7,7 +7,11 @@ interface LogEditServerPageProps {
 
 const LogEditServerPage = async ({ params }: LogEditServerPageProps) => {
   const { logId } = await params;
-  const { data: logData } = await fetchLog(logId);
+  const result = await fetchLog(logId);
+  if (!result.success) {
+    throw new Error(result.msg);
+  }
+  const logData = result.data;
 
   return <LogEditPage logData={logData} />;
 };

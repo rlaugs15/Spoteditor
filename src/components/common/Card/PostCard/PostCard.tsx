@@ -1,14 +1,13 @@
 import { LogWithUserAndAddress } from '@/types/api/common';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import LogBookMarkButton from '../../Button/Bookmark/LogBookMarkButton';
 import PostCardImage from './PostCardImage';
 import PostCardLocation from './PostCardLocation';
 import PostCardTitle from './PostCardTitle';
 
-// const LogBookMarkButton = dynamic(
-//   () => import('@/components/common/Button/Bookmark/LogBookMarkButton'),
-//   { ssr: false }
-// );
+const LogBookMarkButton = dynamic(
+  () => import('@/components/common/Button/Bookmark/LogBookMarkButton')
+);
 
 interface PostCardProps {
   log: LogWithUserAndAddress;
@@ -19,7 +18,7 @@ interface PostCardProps {
 const PostCard = ({ log, vertical, modal }: PostCardProps) => {
   return (
     <div className="cursor-pointer relative">
-      <Link href={`log/${log?.log_id}`}>
+      <Link href={`/log/${log?.log_id}`}>
         <PostCardImage
           author={String(log?.users?.nickname)}
           imageUrl={log?.thumbnail_url}

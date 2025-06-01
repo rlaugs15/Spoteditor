@@ -5,7 +5,7 @@ import { PublicUser } from '@/types/api/user';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
-import { userKeys } from './keys';
+import { followKeys, logKeys, placeKeys, searchKeys, userKeys } from './keys';
 import { cacheTags } from './tags';
 
 interface PatchUserProps {
@@ -137,8 +137,9 @@ export async function patchUser({
         description,
       },
     });
-
     revalidateTag(cacheTags.me());
+    revalidateTag(cacheTags.publicUser(userId));
+
     return updated;
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
@@ -152,15 +153,41 @@ export async function patchUser({
 // ===================================================================
 // 유저 삭제
 // ===================================================================
-export async function deleteUser(userId: string) {
+export async function deleteUser() {
+  const me = await getUser();
+  if (!me) {
+    return { success: false, msg: '로그인 상태가 아닙니다.' };
+  }
   try {
+    /* 프로필 이미지 삭제 */
+    if (
+      me.image_url &&
+      me.image_url.includes('profiles/') &&
+      !me.image_url.includes('user-default-avatar')
+    ) {
+      const relativePath = me.image_url.replace(/^profiles\//, '');
+      const supabase = await createClient();
+      const { error } = await supabase.storage.from('profiles').remove([relativePath]);
+      if (error) {
+        console.warn('프로필 이미지 삭제 실패:', error.message);
+      }
+    }
+
+    /* 유저 데이터 삭제 */
     await prisma.public_users.delete({
       where: {
-        user_id: userId,
+        user_id: me.user_id,
       },
     });
-
-    revalidateTag(cacheTags.me());
+    /* 캐시 무효화 */
+    const userTagsToInvalidate = [
+      ...userKeys.all,
+      ...followKeys.all,
+      ...logKeys.log,
+      ...placeKeys.place,
+      ...searchKeys.all,
+    ];
+    userTagsToInvalidate.forEach((tag) => revalidateTag(tag));
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
       // 이미 삭제되었거나 존재하지 않는 유저는 조용히 처리

@@ -1,3 +1,5 @@
+import { ERROR_CODES } from '@/constants/errorCode';
+import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from 'prisma/prisma';
 
@@ -56,7 +58,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        msg: '팔로잉 목록을 불러오는 중 오류가 발생했습니다.',
+        msg: ERROR_MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
+        errorCode: ERROR_CODES.COMMON.INTERNAL_SERVER_ERROR,
       },
       { status: 500 }
     );

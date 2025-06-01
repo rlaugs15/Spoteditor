@@ -1,4 +1,6 @@
 import { fetchBookmarkedPlaces } from '@/app/actions/place';
+import { ERROR_CODES } from '@/constants/errorCode';
+import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -9,13 +11,34 @@ export async function GET(req: NextRequest) {
   const pageSize = parseInt(searchParams.get('pageSize') ?? '10', 10);
 
   if (!userId) {
-    return NextResponse.json({ success: false, msg: '로그인이 필요합니다.' }, { status: 400 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.COMMON.UNAUTHORIZED,
+        errorCode: ERROR_CODES.COMMON.UNAUTHORIZED,
+      },
+      { status: 400 }
+    );
   }
 
   try {
     const result = await fetchBookmarkedPlaces({ userId, currentPage, pageSize });
+
+    if (!result.success) {
+      return NextResponse.json(result, {
+        status: 404,
+      });
+    }
+
     return NextResponse.json(result, { status: result.meta?.httpStatus ?? 200 });
   } catch (_error) {
-    return NextResponse.json({ success: false, msg: '서버 오류로 조회 실패' }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
+        errorCode: ERROR_CODES.COMMON.INTERNAL_SERVER_ERROR,
+      },
+      { status: 500 }
+    );
   }
 }

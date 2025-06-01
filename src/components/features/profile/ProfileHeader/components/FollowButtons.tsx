@@ -1,9 +1,9 @@
 'use client';
 
 import { Separator } from '@/components/ui/separator';
-import FollowerListButton from './FollowerListButton';
 import usePublicUser from '@/hooks/queries/user/usePublicUser';
 import { IUser } from '@/types/api/user';
+import FollowerListButton from './FollowerListButton';
 import FollowingListButton from './FollowingListButton';
 
 interface FollowButtonsProps {

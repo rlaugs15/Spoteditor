@@ -1,5 +1,7 @@
 'use server';
 
+import { ERROR_CODES } from '@/constants/errorCode';
+import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { createClient } from '@/lib/supabase/server';
 import { ApiResponse } from '@/types/api/common';
 import { DetailLog, logBookmarkListParmas, LogsParams, LogsReseponse } from '@/types/api/log';
@@ -36,11 +38,25 @@ export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
       .eq('log_id', logId)
       .single();
 
-    if (error) throw new Error(error.message);
-    return { success: true, data: data };
+    if (!data || error?.code === 'PGRST116') {
+      return {
+        success: false,
+        msg: ERROR_MESSAGES.LOG.NOT_FOUND,
+        errorCode: ERROR_CODES.LOG.NOT_FOUND,
+      };
+    }
+
+    return {
+      success: true,
+      data,
+    };
   } catch (e) {
     console.error(e);
-    return { success: false, msg: '단일 로그 조회 실패' };
+    return {
+      success: false,
+      msg: ERROR_MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
+      errorCode: ERROR_CODES.COMMON.INTERNAL_SERVER_ERROR,
+    };
   }
 }
 
@@ -93,58 +109,66 @@ async function fetchLogs({
   sort = 'latest',
   userId,
 }: LogsParams): Promise<LogsReseponse> {
-  const safePage = Math.max(1, currentPage);
-  const safeSize = Math.min(Math.max(1, pageSize), 30);
-  const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
+  try {
+    const safePage = Math.max(1, currentPage);
+    const safeSize = Math.min(Math.max(1, pageSize), 30);
+    const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
 
-  /* userId가 있을 경우 마이로그에서 쓸 로그리스트 반환 */
-  const where = userId ? { user_id: userId } : undefined;
+    /* userId가 있을 경우 마이로그에서 쓸 로그리스트 반환 */
+    const where = userId ? { user_id: userId } : undefined;
 
-  const [logs, totalCount] = await Promise.all([
-    prisma.log.findMany({
-      skip, // 앞에서 몇 개 건너뛸지
-      take: safeSize, // 가져올 데이터 수
-      where,
+    const [logs, totalCount] = await Promise.all([
+      prisma.log.findMany({
+        skip, // 앞에서 몇 개 건너뛸지
+        take: safeSize, // 가져올 데이터 수
+        where,
 
-      // 정렬 기준 설정: 인기순이면 북마크 개수 기준(연결된 테이블의 개수를 기준으로 정렬), 기본은 최신순
-      orderBy: sort === 'popular' ? { log_bookmark: { _count: 'desc' } } : { created_at: 'desc' },
-      select: {
-        log_id: true,
-        title: true,
-        description: true,
-        thumbnail_url: true,
-        users: {
-          select: {
-            user_id: true,
-            nickname: true,
+        // 정렬 기준 설정: 인기순이면 북마크 개수 기준(연결된 테이블의 개수를 기준으로 정렬), 기본은 최신순
+        orderBy: sort === 'popular' ? { log_bookmark: { _count: 'desc' } } : { created_at: 'desc' },
+        select: {
+          log_id: true,
+          title: true,
+          description: true,
+          thumbnail_url: true,
+          users: {
+            select: {
+              user_id: true,
+              nickname: true,
+            },
+          },
+          address: {
+            select: {
+              country: true,
+              city: true,
+              sigungu: true,
+            },
           },
         },
-        address: {
-          select: {
-            country: true,
-            city: true,
-            sigungu: true,
-          },
-        },
-      },
-    }),
-    // 전체 로그 수 카운트 (페이지 수 계산에 사용)
-    prisma.log.count({ where }),
-  ]);
+      }),
+      // 전체 로그 수 카운트 (페이지 수 계산에 사용)
+      prisma.log.count({ where }),
+    ]);
 
-  return {
-    success: true,
-    data: logs,
-    meta: {
-      pagination: {
-        currentPage: safePage,
-        pageSize: safeSize,
-        totalPages: Math.ceil(totalCount / safeSize),
-        totalItems: totalCount,
+    return {
+      success: true,
+      data: logs,
+      meta: {
+        pagination: {
+          currentPage: safePage,
+          pageSize: safeSize,
+          totalPages: Math.ceil(totalCount / safeSize),
+          totalItems: totalCount,
+        },
+        httpStatus: 200,
       },
-      httpStatus: 200,
-    },
-  };
+    };
+  } catch (_error) {
+    return {
+      success: false,
+      msg: ERROR_MESSAGES.LOG.LIST_EMPTY,
+      errorCode: ERROR_CODES.LOG.LIST_EMPTY,
+    };
+  }
 }
 
 export async function getLogs(params: LogsParams) {
@@ -174,64 +198,72 @@ export async function fetchBookmarkedLogs({
   currentPage = 1,
   pageSize = 10,
 }: logBookmarkListParmas): Promise<LogsReseponse> {
-  const safePage = Math.max(1, currentPage);
-  const safeSize = Math.min(Math.max(1, pageSize), 30);
-  const skip = (safePage - 1) * safeSize;
+  try {
+    const safePage = Math.max(1, currentPage);
+    const safeSize = Math.min(Math.max(1, pageSize), 30);
+    const skip = (safePage - 1) * safeSize;
 
-  const bookmarkedLogs = await prisma.log_bookmark.findMany({
-    where: { user_id: userId },
-    skip,
-    take: pageSize,
-    orderBy: {
-      log: {
-        created_at: 'desc',
+    const bookmarkedLogs = await prisma.log_bookmark.findMany({
+      where: { user_id: userId },
+      skip,
+      take: pageSize,
+      orderBy: {
+        log: {
+          created_at: 'desc',
+        },
       },
-    },
-    include: {
-      log: {
-        select: {
-          log_id: true,
-          title: true,
-          description: true,
-          thumbnail_url: true,
-          users: {
-            select: {
-              user_id: true,
-              nickname: true,
+      include: {
+        log: {
+          select: {
+            log_id: true,
+            title: true,
+            description: true,
+            thumbnail_url: true,
+            users: {
+              select: {
+                user_id: true,
+                nickname: true,
+              },
             },
-          },
-          address: {
-            select: {
-              country: true,
-              city: true,
-              sigungu: true,
+            address: {
+              select: {
+                country: true,
+                city: true,
+                sigungu: true,
+              },
             },
           },
         },
       },
-    },
-  });
+    });
 
-  // 전체 로그북마크 수 카운트 (페이지 수 계산에 사용)
-  const totalCount = await prisma.log_bookmark.count({
-    where: { user_id: userId },
-  });
+    // 전체 로그북마크 수 카운트 (페이지 수 계산에 사용)
+    const totalCount = await prisma.log_bookmark.count({
+      where: { user_id: userId },
+    });
 
-  //실제로 존재하는 log만 필터링, 예: 로그가 삭제된 북마크가 있을 경우
-  const filterBookmarkedLogs = bookmarkedLogs.map((b) => b.log).filter(Boolean);
-  return {
-    success: true,
-    data: filterBookmarkedLogs,
-    meta: {
-      pagination: {
-        currentPage: safePage,
-        pageSize: safeSize,
-        totalPages: Math.ceil(totalCount / safeSize),
-        totalItems: totalCount,
+    //실제로 존재하는 log만 필터링, 예: 로그가 삭제된 북마크가 있을 경우
+    const filterBookmarkedLogs = bookmarkedLogs.map((b) => b.log).filter(Boolean);
+    return {
+      success: true,
+      data: filterBookmarkedLogs,
+      meta: {
+        pagination: {
+          currentPage: safePage,
+          pageSize: safeSize,
+          totalPages: Math.ceil(totalCount / safeSize),
+          totalItems: totalCount,
+        },
+        httpStatus: 200,
       },
-      httpStatus: 200,
-    },
-  };
+    };
+  } catch (_error) {
+    return {
+      success: false,
+      msg: ERROR_MESSAGES.LOG.LIST_EMPTY,
+      errorCode: ERROR_CODES.LOG.LIST_EMPTY,
+    };
+  }
 }
 
 export async function getBookmarkedLogs(params: logBookmarkListParmas) {
@@ -257,104 +289,120 @@ async function fetchSearchLogs({
   pageSize = 10,
   sort = 'latest',
 }: SearchParams): Promise<SearchReseponse> {
-  const safePage = Math.max(1, currentPage);
-  const safeSize = Math.min(Math.max(1, pageSize), 30);
-  const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
+  try {
+    const safePage = Math.max(1, currentPage);
+    const safeSize = Math.min(Math.max(1, pageSize), 30);
+    const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
 
-  const whereCondition = {
-    AND: [
-      keyword
-        ? {
-            OR: [
-              { title: { contains: keyword, mode: 'insensitive' } },
-              { place: { some: { name: { contains: keyword, mode: 'insensitive' } } } },
-              {
-                address: {
-                  some: {
-                    city: { contains: keyword, mode: 'insensitive' },
+    const whereCondition = {
+      AND: [
+        keyword
+          ? {
+              OR: [
+                { title: { contains: keyword, mode: 'insensitive' } },
+                { place: { some: { name: { contains: keyword, mode: 'insensitive' } } } },
+                {
+                  address: {
+                    some: {
+                      city: { contains: keyword, mode: 'insensitive' },
+                    },
                   },
                 },
-              },
-              {
-                address: {
-                  some: {
-                    sigungu: { contains: keyword, mode: 'insensitive' },
+                {
+                  address: {
+                    some: {
+                      sigungu: { contains: keyword, mode: 'insensitive' },
+                    },
                   },
                 },
+              ],
+            }
+          : undefined,
+        city
+          ? {
+              address: {
+                some: {
+                  city: { equals: city },
+                },
               },
-            ],
-          }
-        : undefined,
-      city
-        ? {
-            address: {
-              some: {
-                city: { equals: city },
+            }
+          : undefined,
+        sigungu
+          ? {
+              address: {
+                some: {
+                  sigungu: { contains: sigungu, mode: 'insensitive' },
+                },
               },
-            },
-          }
-        : undefined,
-      sigungu
-        ? {
-            address: {
-              some: {
-                sigungu: { contains: sigungu, mode: 'insensitive' },
-              },
-            },
-          }
-        : undefined,
-      // undefined 제거 + 타입 오류 방지
-      // filter(Boolean)만으로는 타입이 좁혀지지 않기 때문에
-      // 명시적으로 logWhereInput[]로 단언해줘야 타입스크립트 에러가 발생하지 않음
-    ].filter(Boolean) as Prisma.logWhereInput[],
-  };
+            }
+          : undefined,
+        // undefined 제거 + 타입 오류 방지
+        // filter(Boolean)만으로는 타입이 좁혀지지 않기 때문에
+        // 명시적으로 logWhereInput[]로 단언해줘야 타입스크립트 에러가 발생하지 않음
+      ].filter(Boolean) as Prisma.logWhereInput[],
+    };
 
-  const [searchData, totalCount] = await Promise.all([
-    prisma.log.findMany({
-      skip, // 앞에서 몇 개 건너뛸지
-      take: safeSize, // 가져올 데이터 수
-      where: whereCondition,
+    const [searchData, totalCount] = await Promise.all([
+      prisma.log.findMany({
+        skip, // 앞에서 몇 개 건너뛸지
+        take: safeSize, // 가져올 데이터 수
+        where: whereCondition,
 
-      // 정렬 기준 설정: 인기순이면 북마크 개수 기준(연결된 테이블의 개수를 기준으로 정렬), 기본은 최신순
-      orderBy: sort === 'popular' ? { log_bookmark: { _count: 'desc' } } : { created_at: 'desc' },
-      select: {
-        log_id: true,
-        title: true,
-        description: true,
-        thumbnail_url: true,
-        users: {
-          select: {
-            user_id: true,
-            nickname: true,
+        // 정렬 기준 설정: 인기순이면 북마크 개수 기준(연결된 테이블의 개수를 기준으로 정렬), 기본은 최신순
+        orderBy: sort === 'popular' ? { log_bookmark: { _count: 'desc' } } : { created_at: 'desc' },
+        select: {
+          log_id: true,
+          title: true,
+          description: true,
+          thumbnail_url: true,
+          users: {
+            select: {
+              user_id: true,
+              nickname: true,
+            },
+          },
+          address: {
+            select: {
+              country: true,
+              city: true,
+              sigungu: true,
+            },
           },
         },
-        address: {
-          select: {
-            country: true,
-            city: true,
-            sigungu: true,
-          },
-        },
-      },
-    }),
-    prisma.log.count({
-      where: whereCondition,
-    }),
-  ]);
+      }),
+      prisma.log.count({
+        where: whereCondition,
+      }),
+    ]);
 
-  return {
-    success: true,
-    data: searchData,
-    meta: {
-      pagination: {
-        currentPage: safePage,
-        pageSize: safeSize,
-        totalPages: Math.ceil(totalCount / safeSize),
-        totalItems: totalCount,
+    if (!searchData || searchData.length === 0) {
+      return {
+        success: false,
+        msg: ERROR_MESSAGES.SEARCH.EMPTY,
+        errorCode: ERROR_CODES.SEARCH.EMPTY,
+      };
+    }
+
+    return {
+      success: true,
+      data: searchData,
+      meta: {
+        pagination: {
+          currentPage: safePage,
+          pageSize: safeSize,
+          totalPages: Math.ceil(totalCount / safeSize),
+          totalItems: totalCount,
+        },
+        httpStatus: 200,
       },
-      httpStatus: 200,
-    },
-  };
+    };
+  } catch (_error) {
+    return {
+      success: false,
+      msg: ERROR_MESSAGES.SEARCH.FAILED,
+      errorCode: ERROR_CODES.SEARCH.FAILED,
+    };
+  }
 }
 
 export async function getSearchLogs(params: SearchParams) {

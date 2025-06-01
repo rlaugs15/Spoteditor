@@ -1,6 +1,7 @@
-import { followKeys } from '@/app/actions/keys';
+import { followKeys, userKeys } from '@/app/actions/keys';
 import { ApiResponse } from '@/types/api/common';
 import { FollowParams, FollowResponse } from '@/types/api/follow';
+import { PublicUser } from '@/types/api/user';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 async function fetchFollow({ userId, isFollowing }: FollowParams): Promise<ApiResponse<null>> {
@@ -18,23 +19,37 @@ export default function useFollowMutation() {
     mutationFn: fetchFollow,
     onMutate: async ({ userId, isFollowing }: FollowParams) => {
       await queryClient.cancelQueries({ queryKey: followKeys.status(userId) });
+      await queryClient.cancelQueries({ queryKey: userKeys.publicUser(userId) });
 
-      const previousData = queryClient.getQueryData(followKeys.status(userId));
+      const previousFollowData = queryClient.getQueryData(followKeys.status(userId));
+      const previousUserData = queryClient.getQueryData(userKeys.publicUser(userId));
 
       queryClient.setQueryData(followKeys.status(userId), (old: FollowResponse) => ({
         ...old,
         isFollowing: !isFollowing,
       }));
+      queryClient.setQueryData(userKeys.publicUser(userId), (old: PublicUser) => {
+        if (!old) return old;
+        const followingCount = isFollowing ? old.followingCount - 1 : old.followingCount + 1;
+        return {
+          ...old,
+          followingCount,
+        };
+      });
 
-      return { previousData };
+      return { previousFollowData, previousUserData };
     },
     onError: (_error, variables, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(followKeys.status(variables.userId), context.previousData);
+      if (context?.previousFollowData) {
+        queryClient.setQueryData(followKeys.status(variables.userId), context.previousFollowData);
+      }
+      if (context?.previousUserData) {
+        queryClient.setQueryData(userKeys.publicUser(variables.userId), context.previousUserData);
       }
     },
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({ queryKey: followKeys.status(variables.userId) });
+      queryClient.invalidateQueries({ queryKey: userKeys.publicUser(variables.userId) });
     },
   });
 }

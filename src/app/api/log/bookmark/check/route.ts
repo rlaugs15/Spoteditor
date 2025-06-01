@@ -1,4 +1,6 @@
 import { getUser } from '@/app/actions/user';
+import { ERROR_CODES } from '@/constants/errorCode';
+import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from 'prisma/prisma';
 
@@ -8,26 +10,51 @@ export async function GET(req: NextRequest) {
   const me = await getUser();
 
   if (!me) {
-    return NextResponse.json({ success: false, msg: '로그인이 필요합니다.' }, { status: 401 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.COMMON.UNAUTHORIZED,
+        errorCode: ERROR_CODES.COMMON.UNAUTHORIZED,
+      },
+      { status: 401 }
+    );
   }
+
   if (!logId) {
-    return NextResponse.json({ success: false, msg: '로그 id가 필요합니다.' }, { status: 400 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.COMMON.BAD_REQUEST,
+        errorCode: ERROR_CODES.COMMON.BAD_REQUEST,
+      },
+      { status: 400 }
+    );
   }
+  try {
+    const logBookmark = await prisma.log_bookmark.findFirst({
+      where: {
+        user_id: me?.user_id,
+        log_id: String(logId),
+      },
+    });
 
-  const logBookmark = await prisma.log_bookmark.findFirst({
-    where: {
-      user_id: me?.user_id,
-      log_id: String(logId),
-    },
-  });
-
-  return NextResponse.json(
-    {
-      success: true,
-      isBookmark: !!logBookmark,
-    },
-    { status: 200 }
-  );
+    return NextResponse.json(
+      {
+        success: true,
+        isBookmark: !!logBookmark,
+      },
+      { status: 200 }
+    );
+  } catch (_error) {
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.LOG.NOT_FOUND,
+        errorCode: ERROR_CODES.LOG.NOT_FOUND,
+      },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -36,10 +63,25 @@ export async function POST(req: NextRequest) {
   const me = await getUser();
 
   if (!me) {
-    return NextResponse.json({ success: false, msg: '로그인이 필요합니다.' }, { status: 401 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.COMMON.UNAUTHORIZED,
+        errorCode: ERROR_CODES.COMMON.UNAUTHORIZED,
+      },
+      { status: 401 }
+    );
   }
+
   if (!logId) {
-    return NextResponse.json({ success: false, msg: '로그 id가 필요합니다.' }, { status: 400 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.COMMON.BAD_REQUEST,
+        errorCode: ERROR_CODES.COMMON.BAD_REQUEST,
+      },
+      { status: 400 }
+    );
   }
 
   const existing = await prisma.log_bookmark.findFirst({
@@ -62,7 +104,14 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json({ success: true, isBookmark: true }, { status: 200 });
   } catch (_error) {
-    return NextResponse.json({ success: false, msg: '서버 오류로 북마크 실패' }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.LOG.NOT_FOUND,
+        errorCode: ERROR_CODES.LOG.NOT_FOUND,
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -72,11 +121,25 @@ export async function DELETE(req: NextRequest) {
   const me = await getUser();
 
   if (!me) {
-    return NextResponse.json({ success: false, msg: '로그인이 필요합니다.' }, { status: 401 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.COMMON.UNAUTHORIZED,
+        errorCode: ERROR_CODES.COMMON.UNAUTHORIZED,
+      },
+      { status: 401 }
+    );
   }
 
   if (!logId) {
-    return NextResponse.json({ success: false, msg: '로그 id가 필요합니다.' }, { status: 400 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.COMMON.BAD_REQUEST,
+        errorCode: ERROR_CODES.COMMON.BAD_REQUEST,
+      },
+      { status: 400 }
+    );
   }
 
   try {
@@ -87,6 +150,17 @@ export async function DELETE(req: NextRequest) {
       },
     });
 
+    if (deleted.count === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          msg: ERROR_MESSAGES.LOG.NOT_FOUND,
+          errorCode: ERROR_CODES.LOG.NOT_FOUND,
+        },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json(
       {
         success: deleted.count > 0,
@@ -96,7 +170,11 @@ export async function DELETE(req: NextRequest) {
     );
   } catch (_error) {
     return NextResponse.json(
-      { success: false, msg: '서버 오류로 북마크 취소 실패' },
+      {
+        success: false,
+        msg: ERROR_MESSAGES.LOG.CREATE_FAILED,
+        errorCode: ERROR_CODES.LOG.CREATE_FAILED,
+      },
       { status: 500 }
     );
   }

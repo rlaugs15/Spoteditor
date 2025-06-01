@@ -30,6 +30,11 @@ export default function SaveLogs({ userId }: SavaLogsProps) {
     userId,
     currentPage: Number(currentPage),
   });
+
+  if (data && !data.success) {
+    throw Error(data.msg);
+  }
+
   useEffect(() => {
     if (!me?.user_id) return;
 
@@ -40,42 +45,41 @@ export default function SaveLogs({ userId }: SavaLogsProps) {
 
     revalidateAndRefetch();
   }, [me?.user_id]);
+
+  if (isPending) {
+    return <Loading className="min-h-[350px]" />;
+  }
+  if (data && (!data.success || data.data.length === 0)) {
+    return <ProfileFallbackMessage resourceName="로그" />;
+  }
   return (
     <>
-      {isPending ? (
-        <Loading className="min-h-[350px]" />
-      ) : data?.data.length !== 0 ? (
-        <>
-          <PostCardWrapper className="mb-[50px]">
-            {data?.data.map((log) => (
-              <MotionCard key={log?.log_id} className="relative group">
-                <Link href={`/log/${log?.log_id}`} className="hover:cursor-default">
-                  <PostCardImage
-                    author={String(log?.users?.nickname)}
-                    imageUrl={String(log?.thumbnail_url)}
-                  />
-                  <PostCardTitle title={String(log?.title)} />
-                  <PostCardLocation
-                    city={String(log?.address[0]?.city)}
-                    country={String(log?.address[0]?.country)}
-                    sigungu={String(log?.address[0]?.sigungu)}
-                  />
-                </Link>
-                <LogBookMarkButton logId={String(log?.log_id)} />
-              </MotionCard>
-            ))}
-          </PostCardWrapper>
-          <section className="mt-[50px]">
-            <CustomPagination
-              currentPage={currentPage}
-              totalPages={data?.meta?.pagination?.totalPages ?? 1}
-              onChangePage={handlePageChange}
-            />
-          </section>
-        </>
-      ) : (
-        <ProfileFallbackMessage resourceName="로그" />
-      )}
+      <PostCardWrapper className="mb-[50px]">
+        {data?.data.map((log) => (
+          <MotionCard key={log?.log_id} className="relative group">
+            <Link href={`/log/${log?.log_id}`} className="hover:cursor-default">
+              <PostCardImage
+                author={String(log?.users?.nickname)}
+                imageUrl={String(log?.thumbnail_url)}
+              />
+              <PostCardTitle title={String(log?.title)} />
+              <PostCardLocation
+                city={String(log?.address[0]?.city)}
+                country={String(log?.address[0]?.country)}
+                sigungu={String(log?.address[0]?.sigungu)}
+              />
+            </Link>
+            <LogBookMarkButton logId={String(log?.log_id)} />
+          </MotionCard>
+        ))}
+      </PostCardWrapper>
+      <section className="mt-[50px]">
+        <CustomPagination
+          currentPage={currentPage}
+          totalPages={data?.meta?.pagination?.totalPages ?? 1}
+          onChangePage={handlePageChange}
+        />
+      </section>
     </>
   );
 }

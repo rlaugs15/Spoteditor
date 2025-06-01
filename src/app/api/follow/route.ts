@@ -1,4 +1,6 @@
 import { getUser } from '@/app/actions/user';
+import { ERROR_CODES } from '@/constants/errorCode';
+import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from 'prisma/prisma';
 
@@ -20,7 +22,14 @@ export async function GET(req: NextRequest) {
   const me = await getUser();
 
   if (!me?.user_id || !userId) {
-    return NextResponse.json({ success: false, msg: '잘못된 요청입니다.' }, { status: 400 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.COMMON.BAD_REQUEST,
+        errorCode: ERROR_CODES.COMMON.BAD_REQUEST,
+      },
+      { status: 400 }
+    );
   }
 
   try {
@@ -37,7 +46,11 @@ export async function GET(req: NextRequest) {
     });
   } catch (_error) {
     return NextResponse.json(
-      { success: false, msg: '서버 오류로 팔로우 확인 실패' },
+      {
+        success: false,
+        msg: ERROR_MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
+        errorCode: ERROR_CODES.COMMON.INTERNAL_SERVER_ERROR,
+      },
       { status: 500 }
     );
   }
@@ -49,12 +62,23 @@ export async function POST(req: NextRequest) {
   const me = await getUser();
 
   if (!me?.user_id || !userId) {
-    return NextResponse.json({ success: false, msg: '잘못된 요청입니다.' }, { status: 400 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.COMMON.BAD_REQUEST,
+        errorCode: ERROR_CODES.COMMON.BAD_REQUEST,
+      },
+      { status: 400 }
+    );
   }
 
   if (me.user_id === userId) {
     return NextResponse.json(
-      { success: false, msg: '자기 자신을 팔로우할 수 없습니다.' },
+      {
+        success: false,
+        msg: '자기 자신을 팔로우할 수 없습니다.',
+        errorCode: ERROR_CODES.FOLLOW.CREATE_FAILED,
+      },
       { status: 400 }
     );
   }
@@ -70,7 +94,11 @@ export async function POST(req: NextRequest) {
 
     if (alreadyFollowed) {
       return NextResponse.json(
-        { success: false, msg: '이미 팔로우한 유저입니다.' },
+        {
+          success: false,
+          msg: '이미 팔로우한 유저입니다.',
+          errorCode: ERROR_CODES.FOLLOW.CREATE_FAILED,
+        },
         { status: 409 }
       );
     }
@@ -84,7 +112,14 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json({ success: true, isFollowing: true }, { status: 200 });
   } catch (_error) {
-    return NextResponse.json({ success: false, msg: '서버 오류로 팔로우 실패' }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.FOLLOW.CREATE_FAILED,
+        errorCode: ERROR_CODES.FOLLOW.CREATE_FAILED,
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -94,7 +129,14 @@ export async function DELETE(req: NextRequest) {
   const me = await getUser();
 
   if (!me?.user_id || !targetUserId) {
-    return NextResponse.json({ success: false, msg: '잘못된 요청입니다.' }, { status: 400 });
+    return NextResponse.json(
+      {
+        success: false,
+        msg: ERROR_MESSAGES.COMMON.BAD_REQUEST,
+        errorCode: ERROR_CODES.COMMON.BAD_REQUEST,
+      },
+      { status: 400 }
+    );
   }
 
   if (me.user_id === targetUserId) {

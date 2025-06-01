@@ -1,5 +1,5 @@
-import { BookMarkIcon, ClockIcon, LocationIcon } from '@/components/common/Icons';
-import { Button } from '@/components/ui/button';
+import PlaceBookMarkButton from '@/components/common/Button/Bookmark/PlaceBookMarkButton';
+import { ClockIcon, LocationIcon } from '@/components/common/Icons';
 import { DetailLog } from '@/types/api/log';
 import PlaceImageSlider from './PlaceImageSlider';
 
@@ -26,9 +26,8 @@ const LogContent = ({ place, idx }: LogContentProps) => {
             <span>{place.address}</span>
           </div>
         </div>
-        <Button variant={'ghost'} size={'icon'} className="absolute right-0">
-          <BookMarkIcon />
-        </Button>
+
+        <PlaceBookMarkButton placeId={place.place_id} />
       </section>
 
       <section className="flex flex-col gap-4">

@@ -15,7 +15,7 @@ export default function ProfileActionButton({
 }: ProfileActionButtonProps) {
   if (isMe) {
     return (
-      <Link href="/profile-setting">
+      <Link href="/profile/editor">
         <Button variant="outline" className={className}>
           편집
         </Button>
