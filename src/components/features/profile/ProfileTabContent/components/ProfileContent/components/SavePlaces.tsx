@@ -40,35 +40,34 @@ export default function SavePlaces({ userId }: SavePlacesProps) {
 
     revalidateAndRefetch();
   }, [me?.user_id]);
+
+  if (isPending) {
+    return <Loading className="min-h-[350px]" />;
+  }
+  if (data && (!data.success || data.data.length === 0)) {
+    return <ProfileFallbackMessage resourceName="장소" />;
+  }
   return (
     <>
-      {isPending ? (
-        <Loading className="min-h-[350px]" />
-      ) : data?.data.length !== 0 ? (
-        <>
-          <PostCardWrapper className="mb-[50px]">
-            {data?.data.map((place) => (
-              <MotionCard key={place.place_id} className="relative group">
-                <Link href={`/log/${place.log_id}`} className="hover:cursor-default">
-                  <PostCardImage author={place.user.nickname} imageUrl={place.image.image_path} />
-                  <PostCardTitle title={place.name} />
-                  <PostCardLocation category={place.category} />
-                </Link>
-                <PlaceBookMarkButton placeId={place.place_id} />
-              </MotionCard>
-            ))}
-          </PostCardWrapper>
-          <section className="mt-[50px]">
-            <CustomPagination
-              currentPage={currentPage}
-              totalPages={data?.meta?.pagination?.totalPages ?? 1}
-              onChangePage={handlePageChange}
-            />
-          </section>
-        </>
-      ) : (
-        <ProfileFallbackMessage resourceName="장소" />
-      )}
+      <PostCardWrapper className="mb-[50px]">
+        {data?.data.map((place) => (
+          <MotionCard key={place.place_id} className="relative group">
+            <Link href={`/log/${place.log_id}`} className="hover:cursor-default">
+              <PostCardImage author={place.user.nickname} imageUrl={place.image.image_path} />
+              <PostCardTitle title={place.name} />
+              <PostCardLocation category={place.category} />
+            </Link>
+            <PlaceBookMarkButton placeId={place.place_id} />
+          </MotionCard>
+        ))}
+      </PostCardWrapper>
+      <section className="mt-[50px]">
+        <CustomPagination
+          currentPage={currentPage}
+          totalPages={data?.meta?.pagination?.totalPages ?? 1}
+          onChangePage={handlePageChange}
+        />
+      </section>
     </>
   );
 }

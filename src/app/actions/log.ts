@@ -38,21 +38,25 @@ export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
       .eq('log_id', logId)
       .single();
 
-    if (error) {
-      if (error.code === 'PGRST116') {
-        return {
-          success: false,
-          msg: ERROR_MESSAGES.LOG.NOT_FOUND,
-          errorCode: ERROR_CODES.LOG.NOT_FOUND,
-        };
-      }
-
-      throw new Error(error.message);
+    if (!data || error?.code === 'PGRST116') {
+      return {
+        success: false,
+        msg: ERROR_MESSAGES.LOG.NOT_FOUND,
+        errorCode: ERROR_CODES.LOG.NOT_FOUND,
+      };
     }
-    return { success: true, data: data };
+
+    return {
+      success: true,
+      data,
+    };
   } catch (e) {
     console.error(e);
-    return { success: false, msg: '단일 로그 조회 실패' };
+    return {
+      success: false,
+      msg: ERROR_MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
+      errorCode: ERROR_CODES.COMMON.INTERNAL_SERVER_ERROR,
+    };
   }
 }
 

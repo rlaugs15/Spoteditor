@@ -16,7 +16,11 @@ interface LogDetailPageProps {
 
 const LogDetailPage = async ({ params }: LogDetailPageProps) => {
   const { logId } = await params;
-  const { data: logData } = await fetchLog(logId);
+  const result = await fetchLog(logId);
+  if (!result.success) {
+    throw new Error(result.msg);
+  }
+  const { data: logData } = result;
 
   return (
     <div>

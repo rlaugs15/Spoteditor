@@ -28,7 +28,7 @@ export default function SearchContent({ keyword, currentPage }: SearchContentPro
       className="pt-10 web:pt-12.5 pb-12.5 flex flex-col gap-10 web:gap-12.5"
     >
       <div>
-        {!Array.isArray(data?.data) || data.data.length === 0 ? (
+        {data && (!data?.success || !Array.isArray(data.data) || data.data.length === 0) ? (
           <p className="text-light-300 text-text-lg web:text-text-xl">검색 결과가 없습니다.</p>
         ) : (
           <div>

@@ -9,9 +9,11 @@ interface PlaceCollectProps {
 }
 export default async function PlaceCollect({ params }: PlaceCollectProps) {
   const { logId } = await params;
-  const {
-    data: { place: places },
-  } = await fetchLog(logId);
+  const result = await fetchLog(logId);
+  if(!result.success) {
+    return null
+  }
+   const { place: places } = result.data; 
   return (
     <ModalContent>
       <ModalHeader className="justify-between px-0">
