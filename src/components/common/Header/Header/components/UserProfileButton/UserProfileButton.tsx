@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { REGISTER_PATHS } from '@/constants/pathname';
 import { IUser } from '@/types/api/user';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -48,10 +49,13 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <div className="m-1">
-          <DropdownMenuItem className="flex items-center justify-start gap-2 px-4 py-3 text-text-sm">
-            <AddImageIcon />
-            로그 작성하기
-          </DropdownMenuItem>
+          <Link href={REGISTER_PATHS.MOOD}>
+            <DropdownMenuItem className="flex items-center justify-start gap-2 px-4 py-3 text-text-sm">
+              <AddImageIcon />
+              로그 작성하기
+            </DropdownMenuItem>
+          </Link>
+
           <DropdownMenuItem
             asChild
             className="flex items-center justify-start gap-2 px-4 py-3 text-text-sm"
