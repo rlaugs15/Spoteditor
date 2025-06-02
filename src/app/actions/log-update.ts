@@ -106,13 +106,6 @@ export async function updateLog(formData: FormData, logId: string) {
 
       await Promise.all(deletePromises);
     }
-    //서버 캐시 무효화
-    const tagsToInvalidate = [
-      cacheTags.logDetail(logId),
-      cacheTags.logList(),
-      cacheTags.placeList(),
-    ];
-    tagsToInvalidate.forEach((tag) => revalidateTag(tag));
 
     if (parseResult.deletedPlaceImages?.length) {
       const { error: placeImgDeleteError } = await supabase
@@ -125,6 +118,14 @@ export async function updateLog(formData: FormData, logId: string) {
         throw new Error('place_images 삭제 실패');
       }
     }
+
+    //서버 캐시 무효화
+    const tagsToInvalidate = [
+      cacheTags.logDetail(logId),
+      cacheTags.logList(),
+      cacheTags.placeList(),
+    ];
+    tagsToInvalidate.forEach((tag) => revalidateTag(tag));
 
     return { success: true };
   } catch (e) {
