@@ -1,3 +1,5 @@
+'use client';
+
 import FollowingButton from '@/components/common/Button/FollowingButton';
 import { Button } from '@/components/ui/button';
 import { PROFILE_PATHS } from '@/constants/pathname';
@@ -19,15 +21,17 @@ export default function ProfileActionButton({
 
   const isMe = me.user_id === userId;
 
-  if (isMe) {
-    return (
-      <Link href={PROFILE_PATHS.EDITOR}>
-        <Button variant="outline" className={className}>
-          편집
-        </Button>
-      </Link>
-    );
-  }
-
-  return <FollowingButton userId={userId} className={className} />;
+  return (
+    <>
+      {isMe ? (
+        <Link href={PROFILE_PATHS.EDITOR}>
+          <Button variant="outline" className={className}>
+            편집
+          </Button>
+        </Link>
+      ) : (
+        <FollowingButton userId={userId} className={className} />
+      )}
+    </>
+  );
 }

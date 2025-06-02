@@ -30,7 +30,7 @@ export async function fetchUserSupabase() {
 
 async function fetchUserPrisma(userId: string) {
   try {
-    return await prisma.public_users.findUnique({
+    const user = await prisma.public_users.findUnique({
       where: { user_id: userId },
       select: {
         user_id: true,
@@ -40,6 +40,26 @@ async function fetchUserPrisma(userId: string) {
         description: true,
       },
     });
+
+    if (!user) return null;
+
+    const followerCount = await prisma.follow.count({
+      where: {
+        following_id: userId,
+      },
+    });
+
+    const followingCount = await prisma.follow.count({
+      where: {
+        follower_id: userId,
+      },
+    });
+
+    return {
+      ...user,
+      followerCount,
+      followingCount,
+    };
   } catch (error) {
     console.error(`로그인 유저 조회 실패 (${userId})`, error);
     return null;
@@ -54,7 +74,7 @@ const cacheUser = unstable_cache(
   [...userKeys.me()],
   {
     tags: [cacheTags.me()],
-    revalidate: false,
+    revalidate: 300,
   }
 );
 
