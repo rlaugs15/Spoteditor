@@ -47,6 +47,7 @@ export async function GET(req: NextRequest) {
       { status: 200 }
     );
   } catch (_error) {
+    console.error(_error);
     return NextResponse.json(
       {
         success: false,
@@ -105,6 +106,7 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json({ success: true, isBookmark: true }, { status: 200 });
   } catch (_error) {
+    console.error(_error);
     return NextResponse.json(
       {
         success: false,
@@ -159,6 +161,7 @@ export async function DELETE(req: NextRequest) {
       { status: 200 }
     );
   } catch (_error) {
+    console.error(_error);
     return NextResponse.json(
       {
         success: false,

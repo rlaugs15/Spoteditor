@@ -176,6 +176,7 @@ async function fetchLogs({
       },
     };
   } catch (_error) {
+    console.error(_error);
     return {
       success: false,
       msg: ERROR_MESSAGES.LOG.LIST_EMPTY,
@@ -271,6 +272,7 @@ export async function fetchBookmarkedLogs({
       },
     };
   } catch (_error) {
+    console.error(_error);
     return {
       success: false,
       msg: ERROR_MESSAGES.LOG.LIST_EMPTY,
@@ -410,6 +412,7 @@ async function fetchSearchLogs({
       },
     };
   } catch (_error) {
+    console.error(_error);
     return {
       success: false,
       msg: ERROR_MESSAGES.SEARCH.FAILED,

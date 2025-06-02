@@ -6,6 +6,7 @@ export async function GET() {
     const user = await getUser();
     return NextResponse.json({ user });
   } catch (_error) {
+    console.error(_error);
     return NextResponse.json({ success: false, msg: '유저 조회 실패' }, { status: 500 });
   }
 }

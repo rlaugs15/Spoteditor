@@ -10,8 +10,9 @@ import Link from 'next/link';
 
 interface LogThubmnailProps {
   logData: DetailLog;
+  isAuthor: boolean;
 }
-const LogThubmnail = ({ logData }: LogThubmnailProps) => {
+const LogThubmnail = ({ logData, isAuthor }: LogThubmnailProps) => {
   const { thumbnail_url, title, place, log_tag } = logData;
   const result = log_tag.filter((item) => ['mood', 'activity'].includes(item.category));
   return (
@@ -29,14 +30,13 @@ const LogThubmnail = ({ logData }: LogThubmnailProps) => {
 
         <div className="flex flex-col gap-2">
           <ClipboardButton />
-          {
-            // user &&
+          {isAuthor && (
             <ExtraActionButton>
               <Link href={`/${logData.log_id}/edit`}>
                 <PenIcon />
               </Link>
             </ExtraActionButton>
-          }
+          )}
         </div>
       </div>
       <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient" />
