@@ -10,9 +10,6 @@ interface ProfileHeaderProps {
 }
 
 export default function ProfileHeader({ me, user, isMe }: ProfileHeaderProps) {
-  console.log('me', me);
-  console.log('user', user);
-
   return (
     <section className="flex flex-col items-center justify-start w-full pb-7.5 web:pb-10">
       <section>
