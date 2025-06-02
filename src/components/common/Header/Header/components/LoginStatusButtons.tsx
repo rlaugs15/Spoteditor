@@ -17,11 +17,9 @@ export default function LoginStatusButtons({ user }: LoginStatusButtonsProps) {
   return (
     <>
       {!user ? (
-        <Link href="/login">
-          <Button variant={'ghost'} className="font-bold">
-            회원가입/로그인
-          </Button>
-        </Link>
+        <Button variant={'ghost'} className="font-bold" asChild>
+          <Link href="/login">회원가입/로그인</Link>
+        </Button>
       ) : (
         <>
           <UserProfileButton user={user} />

@@ -1,5 +1,4 @@
 'use client';
-
 import LogoutButton from '@/components/common/Button/LogoutButton';
 import { AddImageIcon, HeadPhoneIcon, UserIcon } from '@/components/common/Icons';
 import { Button } from '@/components/ui/button';
@@ -30,7 +29,7 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger className="focus:outline-none" asChild>
-        <Button variant={'ghost'} size={'icon'} className="h-10.5">
+        <Button variant={'ghost'} size={'icon'}>
           <UserIcon />
         </Button>
       </DropdownMenuTrigger>
