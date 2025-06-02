@@ -2,6 +2,8 @@
 
 import { useCitySearchStore } from '@/stores/searchStore';
 import { AnimatePresence, motion, useMotionTemplate, Variants } from 'motion/react';
+import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 import CitySearchDropbox from './components/CitySearchDropbox';
 
 const dropboxVar: Variants = {
@@ -31,10 +33,17 @@ const dropboxVar: Variants = {
 };
 
 export default function SearchDropBox() {
+  const pathname = usePathname();
   const isDropBox = useCitySearchStore((state) => state.isDropBox);
+  //함수 추출 고정화
+  const closeDropBox = useCitySearchStore.getState().closeDropBox;
 
   /* 드롭박스 마운트, 언마운트 시 transformOrigin 값 변경 */
   const transformOrigin = useMotionTemplate`top ${isDropBox ? 'left' : 'right'} `;
+
+  useEffect(() => {
+    closeDropBox();
+  }, [pathname]);
   return (
     <AnimatePresence>
       {isDropBox ? (

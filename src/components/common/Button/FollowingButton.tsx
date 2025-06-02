@@ -29,15 +29,13 @@ export default function FollowingButton({ userId, className = '' }: FollowingBut
   };
 
   return (
-    <form action="">
-      <Button
-        onClick={onFollowClick}
-        variant={isFollowing ? 'ghost' : 'outline'}
-        size="s"
-        className={cn('font-medium rounded-[60px]', className)}
-      >
-        {isFollowing ? '팔로잉' : '팔로우'}
-      </Button>
-    </form>
+    <Button
+      onClick={onFollowClick}
+      variant={isFollowing ? 'ghost' : 'outline'}
+      size="s"
+      className={cn('font-medium rounded-[60px]', className, isFollowing && 'bg-gray-50')}
+    >
+      {isFollowing ? '팔로잉' : '팔로우'}
+    </Button>
   );
 }
