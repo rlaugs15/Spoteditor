@@ -53,7 +53,7 @@ export default function FollowingListButton({ userId, totalCount, me }: Followin
         >
           <DialogDescription
             className={cn(
-              'text-black text-text-md web:text-text-2xl',
+              'text-black !text-text-md web:!text-text-2xl',
               totalCount <= 0 && 'text-light-300'
             )}
           >
