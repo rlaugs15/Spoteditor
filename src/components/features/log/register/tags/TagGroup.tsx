@@ -21,10 +21,13 @@ const TagGroup = ({ title, type }: TagGroupProps) => {
   const selectedCity = useLogCreationStore((state) => state['city']);
 
   const tags = type === 'sigungu' ? cityDistricts[selectedCity || '서울'] : TAG_SETS[type];
-  const handleTagClick = useCallback((value: string) => {
-    if (isMultiType(type)) toggleMultiTag(type, value);
-    else setSingleTag(type, value);
-  }, []);
+  const handleTagClick = useCallback(
+    (value: string) => {
+      if (isMultiType(type)) toggleMultiTag(type, value);
+      else setSingleTag(type, value);
+    },
+    [setSingleTag, toggleMultiTag, type]
+  );
 
   return (
     <div className="mb-5">

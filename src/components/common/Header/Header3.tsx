@@ -17,7 +17,7 @@ const Header3 = ({ onAddNewPlace }: Header3Props) => {
 
   useEffect(() => {
     if (!country || !city || !sigungu) router.replace(REGISTER_PATHS.COUNTRY);
-  }, []);
+  }, [city, country, sigungu, router]);
 
   return (
     <header className="py-[15px] bg-white flex items-center justify-between">

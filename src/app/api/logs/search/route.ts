@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(result, { status: 200 });
   } catch (_error) {
+    console.error(_error);
     return NextResponse.json(
       {
         success: false,

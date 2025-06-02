@@ -2,7 +2,6 @@
 
 import { PlusIcon } from '@/components/common/Icons';
 import useUser from '@/hooks/queries/user/useUser';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function ProfileMyLogFallback() {
