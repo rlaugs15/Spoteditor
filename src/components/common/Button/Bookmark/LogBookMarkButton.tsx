@@ -1,5 +1,5 @@
 'use client';
-
+import { Button } from '@/components/ui/button';
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLogBookmarkCheck from '@/hooks/queries/log/useLogBookmarkCheck';
 import useUser from '@/hooks/queries/user/useUser';
@@ -10,13 +10,16 @@ import { useRouter } from 'next/navigation';
 interface LogBookMarkButtonProps {
   logId: string;
   modal?: boolean;
+  className?: string;
 }
 
-export default function LogBookMarkButton({ logId, modal }: LogBookMarkButtonProps) {
+export default function LogBookMarkButton({ logId, modal, className }: LogBookMarkButtonProps) {
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
   const { data, isLoading } = useLogBookmarkCheck({ logId, userId: String(user?.user_id) });
   const { mutate } = useLogBookmarkMutation();
+
+  console.log(data?.isBookmark);
 
   const onBookMarkClick = () => {
     if (userIsLoading) return;
@@ -27,17 +30,18 @@ export default function LogBookMarkButton({ logId, modal }: LogBookMarkButtonPro
     mutate({ logId, isBookmark: data.isBookmark });
   };
   return (
-    <button
+    <Button
+      variant={'outline'}
+      size={'icon'}
       onClick={onBookMarkClick}
       disabled={isLoading}
       className={cn(
-        ' hover:cursor-pointer w-[42px] h-[42px] bg-white flex p-[6px] justify-center items-center absolute top-[15px] right-[15px]',
-        modal && 'top-1.5 right-1.5'
+        'w-[42px] h-[42px] flex justify-center items-center absolute top-[15px] right-[15px] hover:brightness-90 rounded-none border-0',
+        modal && 'top-1.5 right-1.5',
+        className
       )}
     >
-      <div className="w-10.5 h-10.5 flex justify-center items-center">
-        <Bookmark className={cn(data?.isBookmark && 'fill-black')} />
-      </div>
-    </button>
+      <Bookmark className={cn('!w-6 !h-6', data?.isBookmark && 'fill-black')} />
+    </Button>
   );
 }

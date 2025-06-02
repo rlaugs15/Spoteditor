@@ -13,10 +13,10 @@ const ExtraActionButton = ({ children, className, onClick, asChild }: ExtraActio
   const Comp = asChild ? Slot : Button;
   return (
     <Comp
-      variant={'ghost'}
+      variant={'outline'}
       size={'icon'}
       className={cn(
-        'flex items-center justify-center bg-white/70 border border-light-100 w-9 h-9 rounded-full',
+        'flex items-center justify-center bg-white/70 border border-light-100 w-9 h-9 rounded-full hover:brightness-90 bg-white',
         className
       )}
       onClick={onClick}
