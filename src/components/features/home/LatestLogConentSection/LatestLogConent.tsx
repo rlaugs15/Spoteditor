@@ -21,7 +21,7 @@ export default function LatestLogConent({ currentPage }: LatestLogConentProps) {
   }
   return (
     <section ref={contentRef}>
-      <TitledSection title="Latest" subTitle="Log" showRefreshNotice>
+      <TitledSection title="Latest" subTitle="Log">
         <PostCardWrapper className="mb-[50px]">
           {data?.data.map((log) => (
             <MotionCard key={log?.log_id}>
