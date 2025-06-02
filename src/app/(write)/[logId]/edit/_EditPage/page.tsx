@@ -59,7 +59,8 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 
   useEffect(() => {
     initializeTags({ mood: moodTags, activity: activityTags });
-  }, [activityTags, moodTags, initializeTags]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     form.setValue('tags.mood', mood, { shouldDirty: true });
@@ -87,7 +88,6 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 
   const onSubmit = (values: LogEditFormValues) => {
     const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
-    console.log('dirtyValues', dirtyValues);
 
     const patchedDirtyValues = {
       ...dirtyValues,
