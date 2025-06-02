@@ -42,6 +42,11 @@ export default function ProfileSetting() {
   };
 
   const onSubmit = async (data: z.infer<typeof profileEditorSchema>) => {
+    if (!me) {
+      console.error('사용자 정보가 없습니다.');
+      return;
+    }
+
     const nickname = data.nickname.trim();
     const description = data.description;
     const insta_id = data.insta_id
@@ -90,7 +95,7 @@ export default function ProfileSetting() {
 
     // 변경 감지 로직(프리즈마는 값이 undefined인 필드는 db에 업로드 안 함)
     const updateData = {
-      userId: me?.user_id!,
+      userId: me.user_id,
       nickname: nickname !== me?.nickname ? nickname : undefined,
       image_url: image_url ?? undefined, // 업로드된 경우만
       insta_id: insta_id !== me?.insta_id ? insta_id : undefined,
@@ -100,8 +105,8 @@ export default function ProfileSetting() {
     //캐시 무효화 추가
     await patchUser(updateData);
     queryClient.invalidateQueries({ queryKey: userKeys.me() });
-    queryClient.invalidateQueries({ queryKey: userKeys.publicUser(String(me?.user_id)) });
-    router.push(`/profile/${me?.user_id}`);
+    queryClient.invalidateQueries({ queryKey: userKeys.publicUser(String(me.user_id)) });
+    router.push(`/profile/${me.user_id}`);
     //router.refresh();
   };
 

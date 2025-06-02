@@ -13,7 +13,7 @@ export interface LogIdParams {
   logId: string;
 }
 interface LogDetailPageProps {
-  params: LogIdParams;
+  params: Promise<LogIdParams>;
 }
 
 const LogDetailPage = async ({ params }: LogDetailPageProps) => {

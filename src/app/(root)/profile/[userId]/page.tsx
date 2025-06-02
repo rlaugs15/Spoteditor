@@ -3,9 +3,7 @@ import ProfileHeader from '@/components/features/profile/ProfileHeader/ProfileHe
 import ProfileTabSection from '@/components/features/profile/ProfileTabContent/ProfileTabSection';
 
 interface ProfilepageProps {
-  params: {
-    userId: string;
-  };
+  params: Promise<{ userId: string }>;
 }
 
 export default async function Page({ params }: ProfilepageProps) {

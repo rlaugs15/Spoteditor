@@ -24,7 +24,7 @@ export default function useQueryPagination(
       router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
       scrollTargetRef?.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [currentPage, isClickedPagination, pathname, router, searchParams, scrollTargetRef]);
+  }, [currentPage, isClickedPagination, pathname, router, searchParams, scrollTargetRef, queryKey]);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);

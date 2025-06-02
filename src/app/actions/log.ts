@@ -103,6 +103,9 @@ export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
       cacheTags.logList(),
       cacheTags.placeList(),
       cacheTags.searchList({}),
+      cacheTags.logBookmark(logId),
+      cacheTags.logBookmarkList(me.user_id),
+      cacheTags.logListByUser(me.user_id),
     ];
     logTagsToInvalidate.forEach((tag) => revalidateTag(tag));
 

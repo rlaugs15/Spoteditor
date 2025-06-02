@@ -5,15 +5,15 @@ import PlaceCard from '@/components/common/Card/PlaceCard.tsx/PlaceCard';
 import { ModalContent, ModalHeader } from '@/components/common/Modal';
 import { PlaceWithImages } from '@/types/api/log';
 interface PlaceCollectProps {
-  params: LogIdParams;
+  params: Promise<LogIdParams>;
 }
 export default async function PlaceCollect({ params }: PlaceCollectProps) {
   const { logId } = await params;
   const result = await fetchLog(logId);
-  if(!result.success) {
-    return null
+  if (!result.success) {
+    return null;
   }
-   const { place: places } = result.data; 
+  const { place: places } = result.data;
   return (
     <ModalContent>
       <ModalHeader className="justify-between px-0">

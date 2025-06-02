@@ -2,7 +2,7 @@ import { LogIdParams } from '@/app/(root)/log/[logId]/page';
 import { fetchLog } from '@/app/actions/log';
 import LogEditPage from './_EditPage/page';
 interface LogEditServerPageProps {
-  params: LogIdParams;
+  params: Promise<LogIdParams>;
 }
 
 const LogEditServerPage = async ({ params }: LogEditServerPageProps) => {
