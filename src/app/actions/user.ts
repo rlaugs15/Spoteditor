@@ -5,7 +5,7 @@ import { PublicUser } from '@/types/api/user';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
-import { followKeys, logKeys, placeKeys, searchKeys, userKeys } from './keys';
+import { userKeys } from './keys';
 import { cacheTags } from './tags';
 
 interface PatchUserProps {
@@ -181,11 +181,16 @@ export async function deleteUser() {
     });
     /* 캐시 무효화 */
     const userTagsToInvalidate = [
-      ...userKeys.all,
-      ...followKeys.all,
-      ...logKeys.log,
-      ...placeKeys.place,
-      ...searchKeys.all,
+      cacheTags.me(),
+      cacheTags.publicUser(me.user_id),
+      cacheTags.follower(me.user_id),
+      cacheTags.followerList(me.user_id),
+      cacheTags.following(me.user_id),
+      cacheTags.followingList(me.user_id),
+      cacheTags.logListByUser(me.user_id),
+      cacheTags.logBookmarkList(me.user_id),
+      cacheTags.logMyList(me.user_id),
+      cacheTags.placeBookmarkList(me.user_id),
     ];
     userTagsToInvalidate.forEach((tag) => revalidateTag(tag));
   } catch (error) {
