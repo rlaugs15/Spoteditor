@@ -2,6 +2,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { LogEditFormValues } from '@/types/schema/log';
 import { parseFormData } from '@/utils/formatLog';
+import { revalidateTag } from 'next/cache';
+import { cacheTags } from './tags';
 
 export async function updateLog(formData: FormData, logId: string) {
   try {
@@ -116,6 +118,14 @@ export async function updateLog(formData: FormData, logId: string) {
         throw new Error('place_images 삭제 실패');
       }
     }
+
+    //서버 캐시 무효화
+    const tagsToInvalidate = [
+      cacheTags.logDetail(logId),
+      cacheTags.logList(),
+      cacheTags.placeList(),
+    ];
+    tagsToInvalidate.forEach((tag) => revalidateTag(tag));
 
     return { success: true };
   } catch (e) {

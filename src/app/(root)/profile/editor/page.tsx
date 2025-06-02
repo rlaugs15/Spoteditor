@@ -22,6 +22,7 @@ import { z } from 'zod';
 export default function ProfileSetting() {
   const router = useRouter();
   const { data: me } = useUser();
+
   const queryClient = useQueryClient();
 
   const [imageFile, setImageFile] = useState<File | null>(null);

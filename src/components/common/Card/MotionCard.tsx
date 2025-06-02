@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
-import { Variants } from 'motion/react';
-import * as motion from 'motion/react-client';
+import { LazyMotion, Variants, domAnimation } from 'motion/react';
+import * as m from 'motion/react-m';
 
 interface MotionCardProps {
   className?: string;
@@ -25,13 +25,15 @@ const cardVar: Variants = {
 
 export default function MotionCard({ className, children }: MotionCardProps) {
   return (
-    <motion.div
-      variants={cardVar}
-      initial="start"
-      animate="end"
-      className={cn('w-full flex flex-col', className)}
-    >
-      {children}
-    </motion.div>
+    <LazyMotion features={domAnimation} strict>
+      <m.div
+        variants={cardVar}
+        initial="start"
+        animate="end"
+        className={cn('w-full flex flex-col', className)}
+      >
+        {children}
+      </m.div>
+    </LazyMotion>
   );
 }
