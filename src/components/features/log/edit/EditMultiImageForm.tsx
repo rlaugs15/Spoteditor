@@ -11,7 +11,7 @@ interface EditMultiImageFormProps {
 }
 
 const EditMultiImageForm = ({ idx }: EditMultiImageFormProps) => {
-  const { control } = useFormContext<LogEditFormValues>();
+  const { control, setValue, getValues } = useFormContext<LogEditFormValues>();
   const { fields, remove } = useFieldArray({
     control: control,
     name: `places.${idx}.placeImages`,
@@ -19,7 +19,13 @@ const EditMultiImageForm = ({ idx }: EditMultiImageFormProps) => {
 
   const handleDeleteClick = (imageIdx: number) => {
     if (fields.length === 1) return toast.error('장소 이미지 1장은 필수입니다.');
+
+    const deletedImagePath = fields[imageIdx].place_image_id; // 선 추출 후 빼기
     remove(imageIdx);
+    const prevDeletedImgs = getValues('deletedPlaceImages') ?? [];
+    setValue('deletedPlaceImages', [...prevDeletedImgs, deletedImagePath], {
+      shouldDirty: true,
+    });
   };
 
   return (

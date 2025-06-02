@@ -48,6 +48,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
         activity: activityTags,
       },
       deletedPlace: [],
+      deletedPlaceImages: [],
     },
   });
 
@@ -70,6 +71,9 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 
   const handleDeletePlace = (idx: number) => {
     if (fields.length === 1) return toast.error('1개의 장소는 필수입니다.');
+    const deletedPlaceId = form.getValues(`places.${idx}.id`);
+    const prevDeleted = form.getValues('deletedPlace') ?? [];
+    form.setValue('deletedPlace', [...prevDeleted, deletedPlaceId], { shouldDirty: true });
     remove(idx);
   };
   const handleMovePlaceUp = (idx: number) => {
@@ -82,8 +86,6 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   };
 
   const onSubmit = (values: LogEditFormValues) => {
-    console.log('보내기', form.formState.dirtyFields);
-
     const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
     console.log('dirtyValues', dirtyValues);
 
@@ -98,7 +100,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
       }),
     };
 
-    console.log('보냅니다', patchedDirtyValues);
+    // console.log('보냅니다', patchedDirtyValues);
 
     const formData = createFormData(patchedDirtyValues);
     mutate({ formData, logId: logData.log_id });

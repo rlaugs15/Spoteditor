@@ -105,6 +105,18 @@ export async function updateLog(formData: FormData, logId: string) {
       await Promise.all(deletePromises);
     }
 
+    if (parseResult.deletedPlaceImages?.length) {
+      const { error: placeImgDeleteError } = await supabase
+        .from('place_images')
+        .delete()
+        .in('place_image_id', parseResult.deletedPlaceImages);
+
+      if (placeImgDeleteError) {
+        console.error('DB place_image 삭제 실패', placeImgDeleteError);
+        throw new Error('place_images 삭제 실패');
+      }
+    }
+
     return { success: true };
   } catch (e) {
     console.error(e);
