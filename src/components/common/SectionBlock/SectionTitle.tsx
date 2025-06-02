@@ -8,7 +8,7 @@ interface SectionTitleProps {
 
 const SectionTitle = ({ title, subTitle, boldTarget }: SectionTitleProps) => {
   return (
-    <header className="w-full text-lg font-medium web:text-2xl !leading-[120%] font-untitled">
+    <header className="text-lg font-medium web:text-2xl !leading-[120%] font-untitled">
       <p className={cn('text-light-300', boldTarget === 'title' && 'font-bold')}>{title}</p>
       <p className={cn('text-primary-950', boldTarget === 'subTitle' && 'font-bold')}>{subTitle}</p>
     </header>
