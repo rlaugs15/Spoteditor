@@ -11,10 +11,14 @@ const InfoBanners = () => {
       <InfoBanner>
         <TypingText />
         <div className="flex items-center">
-          <Button className="rounded-full !text-text-md font-medium text-white" size={'lg'} asChild>
+          <Button
+            className="rounded-full !text-text-sm web:!text-text-md font-medium text-white"
+            size={'lg'}
+            asChild
+          >
             <Link href={REGISTER_PATHS.MOOD}>나의 추천 코스 등록하기</Link>
           </Button>
-          <Button className="rounded-full" size={'icon'} asChild>
+          <Button className="rounded-full opacity-0 sm:opacity-100" size={'icon'} asChild>
             <Link href={REGISTER_PATHS.MOOD}>
               <ArrowUpRightIcon />
             </Link>
