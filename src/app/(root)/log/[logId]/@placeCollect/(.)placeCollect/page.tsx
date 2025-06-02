@@ -5,7 +5,7 @@ import PlaceCard from '@/components/common/Card/PlaceCard.tsx/PlaceCard';
 import { ModalContent, ModalHeader } from '@/components/common/Modal';
 import { PlaceWithImages } from '@/types/api/log';
 interface PlaceCollectProps {
-  params: LogIdParams;
+  params: Promise<LogIdParams>;
 }
 export default async function PlaceCollect({ params }: PlaceCollectProps) {
   const { logId } = await params;

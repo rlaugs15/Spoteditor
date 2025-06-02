@@ -1,9 +1,10 @@
 import { redirect } from 'next/navigation';
 
 interface Props {
-  params: { logId: string };
+  params: Promise<{ logId: string }>;
 }
 
-export default function Page({ params }: Props) {
-  redirect(`/log/${params.logId}`);
+export default async function Page({ params }: Props) {
+  const { logId } = await params;
+  redirect(`/log/${logId}`);
 }

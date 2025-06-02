@@ -40,7 +40,7 @@ export default function MyLogs({ userId }: MyLogsProps) {
     };
 
     revalidateAndRefetch();
-  }, [me?.user_id]);
+  }, [me?.user_id, refetch]);
 
   if (isPending) {
     return <Loading className="min-h-[350px]" />;
