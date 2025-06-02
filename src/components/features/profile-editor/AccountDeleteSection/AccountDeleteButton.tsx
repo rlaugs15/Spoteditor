@@ -31,7 +31,7 @@ export default function AccountDeleteButton({ setIsSuccess }: AccountDeleteButto
     ];
 
     userQueryKeysToRemove.forEach((key) => {
-      queryClient.removeQueries({ queryKey: key, exact: false });
+      queryClient.invalidateQueries({ queryKey: key });
     });
     setIsSuccess(!!state.success);
   }

@@ -36,7 +36,7 @@ export default function ProfileHeader({ me, user }: ProfileHeaderProps) {
         <h3>{user?.insta_id ? user?.insta_id : '@spoteditorofficial'}</h3>
       </section>
       <ProfileActionButton
-        isMe={!!me}
+        me={me}
         userId={String(user?.user_id)}
         className="mt-[10px] min-h-0 web:mt-[15px] p-2 w-[50px] web:w-[60px] h-[24px] web:h-[28px] rounded-[60px] font-medium text-text-xs"
       />

@@ -11,6 +11,7 @@ import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { logKeys, searchKeys } from './keys';
 import { cacheTags } from './tags';
+import { getUser } from './user';
 
 // ===================================================================
 // 단일 로그
@@ -64,6 +65,10 @@ export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
 // 로그 삭제
 // ===================================================================
 export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
+  const me = await getUser();
+  if (!me) {
+    return { success: false, msg: '로그인 상태가 아닙니다.' };
+  }
   try {
     const supabase = await createClient();
     const {
@@ -92,6 +97,14 @@ export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
       console.error('썸네일 삭제 실패', thumbnailRes.error);
       throw new Error('썸네일 삭제 실패');
     }
+    /* 캐시 무효화 */
+    const logTagsToInvalidate = [
+      cacheTags.logDetail(logId),
+      cacheTags.logList(),
+      cacheTags.placeList(),
+      cacheTags.searchList({}),
+    ];
+    logTagsToInvalidate.forEach((tag) => revalidateTag(tag));
 
     return { success: true, data: null };
   } catch (e) {

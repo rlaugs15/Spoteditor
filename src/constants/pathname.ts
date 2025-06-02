@@ -8,3 +8,8 @@ export const REGISTER_PATHS = {
   SIGUNGU: '/register/tags/sigungu',
   LOG: '/register/log',
 } as const;
+
+export const PROFILE_PATHS = {
+  PROFILE: '/profile',
+  EDITOR: '/profile/editor',
+} as const;

@@ -24,8 +24,8 @@ export default function ProfileFormFields() {
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="유저의 현재 닉네임"
-                  className="text-text-sm font-medium placeholder:text-text-sm py-[5px] px-0"
+                  placeholder="닉네임"
+                  className="!text-text-sm text-light-500 font-medium placeholder:text-text-sm py-[5px] px-0"
                 />
               </FormControl>
             </FormItem>
@@ -44,7 +44,7 @@ export default function ProfileFormFields() {
                 <Input
                   {...field}
                   placeholder="프로필 설명을 입력하세요."
-                  className="text-text-sm font-medium placeholder:text-text-sm py-[5px] px-0"
+                  className="!text-text-sm text-light-500 font-medium placeholder:text-text-sm py-[5px] px-0"
                 />
               </FormControl>
             </FormItem>
@@ -62,7 +62,7 @@ export default function ProfileFormFields() {
                 <Input
                   {...field}
                   placeholder="@"
-                  className="text-text-sm font-medium placeholder:text-text-sm py-[5px] px-0"
+                  className="!text-text-sm text-light-500 font-medium placeholder:text-text-sm py-[5px] px-0"
                 />
               </FormControl>
             </FormItem>
