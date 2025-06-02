@@ -45,7 +45,7 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
           <ExtraActionButton className="w-11 h-11" asChild>
             <LogBookMarkButton
               logId={logData.log_id}
-              className="rounded-full relative top-0 right-0 "
+              className="rounded-full relative !top-0 !right-0"
             />
           </ExtraActionButton>
         )}
