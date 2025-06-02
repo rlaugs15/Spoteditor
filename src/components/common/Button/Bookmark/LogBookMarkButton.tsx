@@ -19,8 +19,6 @@ export default function LogBookMarkButton({ logId, modal, className }: LogBookMa
   const { data, isLoading } = useLogBookmarkCheck({ logId, userId: String(user?.user_id) });
   const { mutate } = useLogBookmarkMutation();
 
-  console.log(data?.isBookmark);
-
   const onBookMarkClick = () => {
     if (userIsLoading) return;
     if (!user) {
