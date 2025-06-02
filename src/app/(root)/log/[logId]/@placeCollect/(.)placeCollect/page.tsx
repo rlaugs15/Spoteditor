@@ -13,7 +13,7 @@ export default async function PlaceCollect({ params }: PlaceCollectProps) {
   if (!result.success) {
     return null;
   }
-  const { place: places } = result.data;
+  const { place: places, address } = result.data;
   return (
     <ModalContent>
       <ModalHeader className="justify-between px-0">
@@ -22,7 +22,7 @@ export default async function PlaceCollect({ params }: PlaceCollectProps) {
       </ModalHeader>
       <section className="grid grid-cols-3 w-full gap-x-[5px] gap-y-5 overflow-y-auto max-h-[600px] scrollbar-hide">
         {places.map((place: PlaceWithImages, idx: number) => (
-          <PlaceCard key={idx} place={place} vertical modal />
+          <PlaceCard key={idx} place={place} address={address[0]} vertical modal />
         ))}
       </section>
     </ModalContent>

@@ -26,7 +26,6 @@ export default function SearchBar() {
   const { toggleSearchBar } = useSearchStore();
 
   const onSearchSubmit = ({ keyword }: SearchForm) => {
-    console.log(keyword);
     form.reset();
     router.push(`/search?keyword=${keyword}`);
     toggleSearchBar();

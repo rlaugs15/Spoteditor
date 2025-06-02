@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { LogWithUserAndAddress } from '@/types/api/common';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -13,12 +14,13 @@ interface PostCardProps {
   log: LogWithUserAndAddress;
   vertical?: boolean;
   modal?: boolean;
+  isLarge?: boolean;
 }
 
 const PostCard = ({ log, vertical, modal }: PostCardProps) => {
   return (
-    <div className="cursor-pointer relative">
-      <Link href={`/log/${log?.log_id}`}>
+    <div className={cn('cursor-pointer relative h-full')}>
+      <Link href={`/log/${log?.log_id}`} className="flex flex-col h-full">
         <PostCardImage
           author={String(log?.users?.nickname)}
           imageUrl={log?.thumbnail_url}

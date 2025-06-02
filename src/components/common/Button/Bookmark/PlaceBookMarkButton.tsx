@@ -1,5 +1,5 @@
 'use client';
-
+import { Button } from '@/components/ui/button';
 import usePlaceBookmarkMutation from '@/hooks/mutations/place/usePlaceBookmarkMutation';
 import usePlaceBookmarkCheck from '@/hooks/queries/place/useIsPlaceBookmarkCheck';
 import useUser from '@/hooks/queries/user/useUser';
@@ -9,9 +9,10 @@ import { useRouter } from 'next/navigation';
 
 interface PlaceBookMarkButtonProps {
   placeId: string;
+  modal?: boolean;
 }
 
-export default function PlaceBookMarkButton({ placeId }: PlaceBookMarkButtonProps) {
+export default function PlaceBookMarkButton({ placeId, modal }: PlaceBookMarkButtonProps) {
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
   const { data, isLoading } = usePlaceBookmarkCheck({ placeId, userId: String(user?.user_id) });
@@ -29,14 +30,17 @@ export default function PlaceBookMarkButton({ placeId }: PlaceBookMarkButtonProp
     });
   };
   return (
-    <button
+    <Button
+      variant={modal ? 'outline' : 'ghost'}
+      size={'icon'}
       onClick={onBookMarkClick}
       disabled={isLoading}
-      className=" hover:cursor-pointer w-[42px] h-[42px] bg-white flex p-[6px] justify-center items-center absolute top-[15px] right-[15px]"
+      className={cn(
+        'w-[42px] h-[42px] flex justify-center items-center hover:brightness-90 rounded-none border-0',
+        modal && 'top-1.5 right-1.5 absolute'
+      )}
     >
-      <div className="w-10.5 h-10.5 flex justify-center items-center">
-        <Bookmark className={cn(data?.isBookmark && 'fill-black')} />
-      </div>
-    </button>
+      <Bookmark className={cn('!w-6 !h-6', data?.isBookmark && 'fill-black')} />
+    </Button>
   );
 }
