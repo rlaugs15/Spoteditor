@@ -104,6 +104,7 @@ export async function fetchBookmarkedPlaces({
       },
     };
   } catch (_error) {
+    console.error(_error);
     return {
       success: false,
       msg: ERROR_MESSAGES.PLACE.LIST_EMPTY,

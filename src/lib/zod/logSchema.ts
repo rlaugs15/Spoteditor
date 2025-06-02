@@ -63,4 +63,5 @@ export const LogEditformSchema = z.object({
   places: z.array(EditPlaceSchema).min(1, '장소 1개 이상은 필수입니다.'),
   tags: tagsSchema,
   deletedPlace: z.array(z.string()),
+  deletedPlaceImages: z.array(z.number()),
 });

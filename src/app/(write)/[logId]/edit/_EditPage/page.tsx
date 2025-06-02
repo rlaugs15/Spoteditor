@@ -14,7 +14,7 @@ import { LogEditFormValues } from '@/types/schema/log';
 import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
@@ -48,6 +48,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
         activity: activityTags,
       },
       deletedPlace: [],
+      deletedPlaceImages: [],
     },
   });
 
@@ -58,18 +59,21 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 
   useEffect(() => {
     initializeTags({ mood: moodTags, activity: activityTags });
-  }, []);
+  }, [activityTags, moodTags, initializeTags]);
 
   useEffect(() => {
     form.setValue('tags.mood', mood, { shouldDirty: true });
-  }, [mood]);
+  }, [form, mood]);
 
   useEffect(() => {
     form.setValue('tags.activity', activity, { shouldDirty: true });
-  }, [activity]);
+  }, [form, activity]);
 
   const handleDeletePlace = (idx: number) => {
     if (fields.length === 1) return toast.error('1개의 장소는 필수입니다.');
+    const deletedPlaceId = form.getValues(`places.${idx}.id`);
+    const prevDeleted = form.getValues('deletedPlace') ?? [];
+    form.setValue('deletedPlace', [...prevDeleted, deletedPlaceId], { shouldDirty: true });
     remove(idx);
   };
   const handleMovePlaceUp = (idx: number) => {
@@ -82,8 +86,6 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   };
 
   const onSubmit = (values: LogEditFormValues) => {
-    console.log('보내기', form.formState.dirtyFields);
-
     const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
     console.log('dirtyValues', dirtyValues);
 
@@ -98,7 +100,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
       }),
     };
 
-    console.log('보냅니다', patchedDirtyValues);
+    // console.log('보냅니다', patchedDirtyValues);
 
     const formData = createFormData(patchedDirtyValues);
     mutate({ formData, logId: logData.log_id });
@@ -152,10 +154,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 
 export default LogEditPage;
 
-function extractDirtyValues<T extends Record<string, any>>(
-  dirtyFields: any,
-  allValues: T
-): Partial<T> {
+function extractDirtyValues<T extends FieldValues>(dirtyFields: any, allValues: T): Partial<T> {
   if (!dirtyFields || !allValues) return {};
   if (typeof dirtyFields !== 'object' || dirtyFields === true) return allValues;
 
