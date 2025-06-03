@@ -15,7 +15,7 @@ async function fetchUsePlacesBookmark(params: BookmarkParams): Promise<PlacesRes
 export default function usePlacesBookmark({
   userId,
   currentPage = 1,
-  pageSize = 10,
+  pageSize = 12,
 }: BookmarkParams) {
   const params = {
     userId,

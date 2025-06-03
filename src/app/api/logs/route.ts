@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   const userIdParam = searchParams.get('userId');
   const userId = userIdParam && userIdParam !== 'null' ? userIdParam : undefined;
   const currentPage = parseInt(searchParams.get('currentPage') || '1');
-  const pageSize = parseInt(searchParams.get('pageSize') || '10');
+  const pageSize = parseInt(searchParams.get('pageSize') || '12');
 
   try {
     const result = await getLogs({ userId, currentPage, pageSize });

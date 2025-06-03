@@ -14,7 +14,7 @@ import { cacheTags } from './tags';
 export async function fetchBookmarkedPlaces({
   userId,
   currentPage = 1,
-  pageSize = 10,
+  pageSize = 12,
 }: PlaceBookmarkListParmas): Promise<PlacesReseponse> {
   try {
     const safePage = Math.max(1, currentPage);
