@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { RefObject, useEffect, useState } from 'react';
 
 export default function useQueryPagination(
@@ -8,23 +8,24 @@ export default function useQueryPagination(
   initialPage = 1,
   scrollTargetRef?: RefObject<HTMLElement | null>
 ) {
-  const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
-  const pageParam = Number(searchParams.get(queryKey)) || initialPage;
-  const [currentPage, setCurrentPage] = useState(pageParam);
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const [isClickedPagination, setIsClickedPagination] = useState(false);
 
   useEffect(() => {
-    if (isClickedPagination) {
-      const newParams = new URLSearchParams(searchParams.toString());
-      newParams.set(queryKey, String(currentPage));
+    if (!isClickedPagination) return;
 
-      router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
-      scrollTargetRef?.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [currentPage, isClickedPagination, pathname, router, searchParams, scrollTargetRef, queryKey]);
+    const currentParams = new URLSearchParams(window.location.search);
+    currentParams.set(queryKey, String(currentPage));
+
+    router.push(`${pathname}?${currentParams.toString()}`, { scroll: false });
+
+    scrollTargetRef?.current?.scrollIntoView({ behavior: 'smooth' });
+
+    setIsClickedPagination(false); // 다음 클릭을 위한 초기화
+  }, [isClickedPagination, currentPage, pathname, router, queryKey, scrollTargetRef]);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
