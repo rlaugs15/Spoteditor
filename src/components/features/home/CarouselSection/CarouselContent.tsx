@@ -2,7 +2,7 @@
 
 import useLogs from '@/hooks/queries/log/useLogs';
 import Carousel from './Carousel';
-import CarouselSkeleton from './CarouselSkeeton';
+import CarouselSkeleton from './CarouselSkeleton';
 
 export default function CarouselContent() {
   const { data, isPending } = useLogs({ pageSize: 12, sort: 'popular' });
