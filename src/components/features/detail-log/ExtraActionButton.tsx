@@ -16,7 +16,7 @@ const ExtraActionButton = ({ children, className, onClick, asChild }: ExtraActio
       variant={'outline'}
       size={'icon'}
       className={cn(
-        'flex items-center justify-center bg-white/70 border border-light-100 w-9 h-9 rounded-full hover:brightness-90 bg-white',
+        'flex items-center justify-center bg-white border border-light-100 w-9 h-9 rounded-full hover:brightness-90',
         className
       )}
       onClick={onClick}

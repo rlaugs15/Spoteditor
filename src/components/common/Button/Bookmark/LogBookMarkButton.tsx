@@ -16,7 +16,7 @@ interface LogBookMarkButtonProps {
 export default function LogBookMarkButton({ logId, modal, className }: LogBookMarkButtonProps) {
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
-  const { data, isLoading } = useLogBookmarkCheck({ logId, userId: String(user?.user_id) });
+  const { data, isLoading } = useLogBookmarkCheck({ logId, userId: user?.user_id || null });
   const { mutate } = useLogBookmarkMutation();
 
   const onBookMarkClick = () => {

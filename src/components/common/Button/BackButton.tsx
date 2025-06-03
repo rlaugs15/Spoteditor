@@ -16,7 +16,7 @@ const BackButton = ({ circle }: BackButtonProps) => {
       variant={'ghost'}
       size={'icon'}
       onClick={handleClick}
-      className={cn(circle && 'rounded-full bg-white/70')}
+      className={cn(circle && 'rounded-full bg-white')}
     >
       <ArrowLeftIcon />
     </Button>

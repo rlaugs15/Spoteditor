@@ -57,12 +57,12 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
         maxLength={3}
         accept=".jpg,.jpeg,.png,.webp,.avif"
       />
-      <div className="grid grid-cols-3 max-h-[320px] overflow-x-auto gap-1">
+      <div className="flex web:grid web:grid-cols-3 max-h-[320px] overflow-x-auto gap-1 scrollbar-hide">
         {fields.map((field, imageIdx) => {
           const file = field.file;
           const url = typeof file === 'string' ? file : URL.createObjectURL(file);
           return (
-            <div key={field.id} className="relative w-[220px] h-[300px] mb-2.5">
+            <div key={field.id} className="relative w-[220px] h-[300px] mb-2.5 shrink-0">
               <Image src={url} fill alt="업로드한 장소 이미지" className="object-cover" />
               <button onClick={() => remove(imageIdx)}>
                 <XRemovePlaceImageIcon className="absolute top-2 right-2 cursor-pointer hover:brightness-90" />
