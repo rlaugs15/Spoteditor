@@ -1,11 +1,18 @@
+import { cn } from '@/lib/utils';
 import React from 'react';
 
 interface InfoBannerProps {
   children: React.ReactNode;
+  className?: string;
 }
-const InfoBanner = ({ children }: InfoBannerProps) => {
+const InfoBanner = ({ children, className }: InfoBannerProps) => {
   return (
-    <div className="flex flex-col justify-between text-light-300 text-text-sm web:text-text-lg border-t border-b border-light-100 py-12">
+    <div
+      className={cn(
+        'flex flex-col justify-between !text-light-300 text-text-sm web:text-text-lg border-t border-b border-light-100 py-5 web:py-12',
+        className
+      )}
+    >
       {children}
     </div>
   );
