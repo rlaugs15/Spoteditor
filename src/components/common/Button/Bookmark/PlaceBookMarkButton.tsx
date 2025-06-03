@@ -10,14 +10,9 @@ import { useRouter } from 'next/navigation';
 interface PlaceBookMarkButtonProps {
   placeId: string;
   modal?: boolean;
-  className?: string;
 }
 
-export default function PlaceBookMarkButton({
-  placeId,
-  modal,
-  className = '',
-}: PlaceBookMarkButtonProps) {
+export default function PlaceBookMarkButton({ placeId, modal }: PlaceBookMarkButtonProps) {
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
   const { data, isLoading } = usePlaceBookmarkCheck({ placeId, userId: String(user?.user_id) });

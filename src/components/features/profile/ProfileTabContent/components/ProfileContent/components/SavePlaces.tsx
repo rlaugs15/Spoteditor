@@ -57,10 +57,7 @@ export default function SavePlaces({ userId }: SavePlacesProps) {
               <PostCardTitle title={place.name} />
               <PostCardLocation category={place.category} />
             </Link>
-            <PlaceBookMarkButton
-              placeId={place.place_id}
-              className="absolute top-[10px] web:top-[15px] right-[10px] web:right-[15px] hover:brightness-90 bg-white"
-            />
+            <PlaceBookMarkButton placeId={place.place_id} />
           </MotionCard>
         ))}
       </PostCardWrapper>
