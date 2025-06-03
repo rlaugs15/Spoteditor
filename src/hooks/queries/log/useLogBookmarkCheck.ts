@@ -5,7 +5,7 @@ import useUser from '../user/useUser';
 
 interface UseLogBookmarkCheckProps {
   logId: string;
-  userId: string;
+  userId: string | null;
 }
 
 async function fetchLogBookmarkCheck(logId: string): Promise<BookmarkResponse> {

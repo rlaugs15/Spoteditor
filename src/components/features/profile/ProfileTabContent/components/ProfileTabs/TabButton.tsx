@@ -18,7 +18,7 @@ export default function TabButton({ tabKey, tabName, tab, onTabClick }: TabButto
       <button
         onClick={() => onTabClick(tabKey)}
         className={cn(
-          'py-2 web:py-3 font-bold text-text-sm web:text-text-xl',
+          'py-2 web:py-3 font-bold !text-text-sm web:!text-text-xl ',
           isActive ? 'text-black' : 'text-light-200'
         )}
       >
