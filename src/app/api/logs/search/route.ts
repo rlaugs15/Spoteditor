@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   const city = searchParams.get('city') || undefined;
   const sigungu = searchParams.get('sigungu') || undefined;
   const currentPage = parseInt(searchParams.get('currentPage') || '1', 10);
-  const pageSize = parseInt(searchParams.get('pageSize') || '10', 10);
+  const pageSize = parseInt(searchParams.get('pageSize') || '12', 12);
 
   try {
     const result = await getSearchLogs({

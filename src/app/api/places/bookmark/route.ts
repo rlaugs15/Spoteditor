@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
 
   const userId = searchParams.get('userId');
   const currentPage = parseInt(searchParams.get('page') ?? '1', 10);
-  const pageSize = parseInt(searchParams.get('pageSize') ?? '10', 10);
+  const pageSize = parseInt(searchParams.get('pageSize') ?? '12', 12);
 
   if (!userId) {
     return NextResponse.json(

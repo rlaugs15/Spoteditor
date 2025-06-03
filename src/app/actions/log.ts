@@ -121,7 +121,7 @@ export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
 // ===================================================================
 async function fetchLogs({
   currentPage = 1,
-  pageSize = 10,
+  pageSize = 12,
   sort = 'latest',
   userId,
 }: LogsParams): Promise<LogsReseponse> {
@@ -213,7 +213,7 @@ export async function getLogs(params: LogsParams) {
 export async function fetchBookmarkedLogs({
   userId,
   currentPage = 1,
-  pageSize = 10,
+  pageSize = 12,
 }: logBookmarkListParmas): Promise<LogsReseponse> {
   try {
     const safePage = Math.max(1, currentPage);
@@ -304,7 +304,7 @@ async function fetchSearchLogs({
   city,
   sigungu,
   currentPage = 1,
-  pageSize = 10,
+  pageSize = 12,
   sort = 'latest',
 }: SearchParams): Promise<SearchReseponse> {
   try {
