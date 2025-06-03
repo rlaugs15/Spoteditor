@@ -64,13 +64,15 @@ export default function SavePlaces({ userId }: SavePlacesProps) {
           </MotionCard>
         ))}
       </PostCardWrapper>
-      <section className="mt-[50px]">
-        <CustomPagination
-          currentPage={currentPage}
-          totalPages={data?.meta?.pagination?.totalPages ?? 1}
-          onChangePage={handlePageChange}
-        />
-      </section>
+      {data?.success && data.meta?.pagination && (
+        <section className="mt-[50px]">
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={data.meta.pagination.totalPages}
+            onChangePage={handlePageChange}
+          />
+        </section>
+      )}
     </>
   );
 }

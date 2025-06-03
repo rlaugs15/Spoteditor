@@ -73,13 +73,15 @@ export default function SaveLogs({ userId }: SavaLogsProps) {
           </MotionCard>
         ))}
       </PostCardWrapper>
-      <section className="mt-[50px]">
-        <CustomPagination
-          currentPage={currentPage}
-          totalPages={data?.meta?.pagination?.totalPages ?? 1}
-          onChangePage={handlePageChange}
-        />
-      </section>
+      {data?.success && data.meta?.pagination && (
+        <section className="mt-[50px]">
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={data?.meta.pagination.totalPages}
+            onChangePage={handlePageChange}
+          />
+        </section>
+      )}
     </>
   );
 }
