@@ -14,7 +14,14 @@ import SearchDropBox from './SearchDropBox/SearchDropBox';
 
 export default function CitySearchForm() {
   const router = useRouter();
-  const { city, sigungu, toggleCityDropBox, toggleSigunguDropBox } = useCitySearchStore();
+  const {
+    city,
+    sigungu,
+    isCityDropBox,
+    toggleCityDropBox,
+    openSigunguDropBoxDirectly,
+    toggleSigunguDropBox,
+  } = useCitySearchStore();
 
   const defaultValues = {
     city: '서울',
@@ -42,7 +49,11 @@ export default function CitySearchForm() {
   };
 
   const opencityDropBoxClick = () => {
-    toggleCityDropBox();
+    if (isCityDropBox) {
+      openSigunguDropBoxDirectly(); // 한 번 더 누르면 구 리스트로 바로 이동
+    } else {
+      toggleCityDropBox(); // 기본 도시 선택 드롭다운
+    }
   };
 
   const opensigunguDropBoxClick = () => {
