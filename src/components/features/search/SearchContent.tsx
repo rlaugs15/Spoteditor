@@ -57,11 +57,13 @@ export default function SearchContent({ keyword, currentPage }: SearchContentPro
                 ))
               )}
             </div>
-            <CustomPagination
-              currentPage={currentPage}
-              totalPages={Number(data?.meta?.pagination?.totalPages)}
-              onChangePage={handlePageChange}
-            />
+            {data?.success && data.meta?.pagination && (
+              <CustomPagination
+                currentPage={currentPage}
+                totalPages={Number(data.meta.pagination.totalPages)}
+                onChangePage={handlePageChange}
+              />
+            )}
           </div>
         )}
       </div>

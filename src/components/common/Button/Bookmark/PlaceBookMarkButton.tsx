@@ -31,13 +31,13 @@ export default function PlaceBookMarkButton({ placeId, modal }: PlaceBookMarkBut
   };
   return (
     <Button
-      variant={modal ? 'outline' : 'ghost'}
+      variant={'outline'}
       size={'icon'}
       onClick={onBookMarkClick}
       disabled={isLoading}
       className={cn(
-        'w-[42px] h-[42px] flex justify-center items-center hover:brightness-90 rounded-none border-0',
-        modal && 'top-1.5 right-1.5 absolute'
+        'w-[42px] h-[42px] flex justify-center items-center absolute top-[10px] web:top-[15px] right-[10px] web:right-[15px] hover:brightness-90 rounded-none border-0',
+        modal && 'top-1.5 right-1.5'
       )}
     >
       <Bookmark className={cn('!w-6 !h-6', data?.isBookmark && 'fill-black')} />

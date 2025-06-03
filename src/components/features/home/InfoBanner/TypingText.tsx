@@ -11,7 +11,7 @@ const TypingText = () => {
         1200,
       ]}
       speed={40}
-      className="font-bold text-xl text-black"
+      className="font-bold text-md web:text-xl text-black"
       repeat={Infinity}
     />
   );

@@ -11,7 +11,7 @@ async function fetchUseLogs(params: LogsParams): Promise<LogsReseponse> {
 }
 
 export default function useLogs(
-  { userId, currentPage = 1, pageSize = 10 }: Partial<LogsParams> = {},
+  { userId, currentPage = 1, pageSize = 12 }: Partial<LogsParams> = {},
   options?: Partial<UseQueryOptions<LogsReseponse, Error>>
 ) {
   const params = {

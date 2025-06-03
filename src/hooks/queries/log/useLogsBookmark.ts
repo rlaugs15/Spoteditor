@@ -15,7 +15,7 @@ async function fetchUseLogsBookmark(params: BookmarkParams): Promise<LogsResepon
 export default function useLogsBookmark({
   userId,
   currentPage = 1,
-  pageSize = 10,
+  pageSize = 12,
 }: BookmarkParams) {
   const params = {
     userId,
