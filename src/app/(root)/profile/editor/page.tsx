@@ -1,7 +1,7 @@
 'use client';
 
 import { userKeys } from '@/app/actions/keys';
-import { uploadFile } from '@/app/actions/storage';
+import { getSignedUploadUrl, removeImageIfNeeded, uploadToSignedUrl } from '@/app/actions/storage';
 import { patchUser } from '@/app/actions/user';
 import AccountDeleteSection from '@/components/features/profile-editor/AccountDeleteSection/AccountDeleteSection';
 import AvatarEditSection from '@/components/features/profile-editor/AvatarEditSection';
@@ -9,8 +9,8 @@ import ProfileFormFields from '@/components/features/profile-editor/ProfileFormF
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import useUser from '@/hooks/queries/user/useUser';
-import { createClient } from '@/lib/supabase/client';
 import { profileEditorSchema } from '@/lib/zod/profileSchema';
+import { buildPublicUrl } from '@/utils/buildPublicUrl';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
@@ -69,39 +69,32 @@ export default function ProfileEditorPage() {
     let image_url: string | undefined = undefined;
 
     if (imageFile) {
-      // 기존 이미지 삭제 (image_url이 있고, 기본 이미지가 아닐 경우)
+      /** 1.기존 이미지 삭제 (image_url이 있고, 기본 이미지가 아닐 경우) */
       if (
         me?.image_url &&
         me.image_url.includes('profiles/') &&
         !me.image_url.includes('user-default-avatar')
       ) {
-        // 버킷 경로 제거
-        const relativePath = me.image_url.replace(/^profiles\//, '');
-        const supabase = await createClient();
-        const { error } = await supabase.storage.from('profiles').remove([relativePath]);
-
-        if (error) {
-          console.warn('기존 이미지 삭제 실패:', error.message);
-        } else {
-          console.log('기존 이미지 삭제 성공:', relativePath);
-        }
+        await removeImageIfNeeded(me.image_url, 'profiles');
       }
 
-      // 새 이미지 업로드
+      /** 2.새 이미지 압축 */
       const resizingFile = await compressImageToWebp(imageFile, { maxWidthOrHeight: 300 });
       if (!resizingFile) {
         console.error('이미지 압축 실패: resizingFile이 undefined');
         return;
       }
 
-      const uploadResult = await uploadFile('profiles', resizingFile, {
-        folder: '',
-        subfolder: '',
-        filename: `${me?.user_id}${Date.now()}.webp`, // 고유한 파일명
-      });
-      if (uploadResult?.fullPath) {
-        image_url = uploadResult.fullPath;
+      /** 3.서버에서 PreSigned URL 발급 + fetch 업로드 */
+      const filename = `${me?.user_id}${Date.now()}.webp`;
+      const { signedUrl, path } = await getSignedUploadUrl('profiles', filename);
+      const ok = await uploadToSignedUrl(signedUrl, resizingFile.type, resizingFile);
+      if (!ok) {
+        console.error('업로드 실패');
+        return;
       }
+      /** 4.public URL 생성 후 patch */
+      image_url = buildPublicUrl('profiles', path);
     }
 
     // 변경 감지 로직(프리즈마는 값이 undefined인 필드는 db에 업로드 안 함)
@@ -115,10 +108,10 @@ export default function ProfileEditorPage() {
 
     //캐시 무효화 추가
     await patchUser(updateData);
+
     queryClient.invalidateQueries({ queryKey: userKeys.me() });
     queryClient.invalidateQueries({ queryKey: userKeys.publicUser(String(me.user_id)) });
     router.push(`/profile/${me.user_id}`);
-    //router.refresh();
   };
 
   return (
