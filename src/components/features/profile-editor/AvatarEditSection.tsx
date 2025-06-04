@@ -30,6 +30,13 @@ export default function AvatarEditSection({ imageUrl, onFileChange }: AvatarEdit
     }
   };
 
+  /* imageUrl props가 바뀌면 imagePreview도 업데이트 */
+  useEffect(() => {
+    if (!imageFile && imageUrl) {
+      setImagePreview(imageUrl);
+    }
+  }, [imageUrl]);
+
   //이미지 미리보기
   useEffect(() => {
     if (imageFile) {
