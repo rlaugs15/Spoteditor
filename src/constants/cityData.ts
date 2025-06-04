@@ -262,7 +262,6 @@ export const globalRegions: Record<string, string[]> = {
   아시아: [
     '일본',
     '중국',
-    '한국',
     '대만',
     '베트남',
     '태국',
