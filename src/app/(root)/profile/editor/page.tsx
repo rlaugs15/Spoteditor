@@ -15,11 +15,11 @@ import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-export default function ProfileSetting() {
+export default function ProfileEditorPage() {
   const router = useRouter();
   const { data: me } = useUser();
 
@@ -30,12 +30,23 @@ export default function ProfileSetting() {
   const form = useForm({
     resolver: zodResolver(profileEditorSchema),
     defaultValues: {
-      nickname: me?.nickname ?? '',
-      image_url: me?.image_url ?? '',
-      description: me?.description ?? '',
-      insta_id: me?.insta_id ?? '',
+      nickname: '',
+      image_url: '',
+      description: '',
+      insta_id: '',
     },
   });
+
+  useEffect(() => {
+    if (me) {
+      form.reset({
+        nickname: me.nickname ?? '',
+        image_url: me.image_url ?? '',
+        description: me.description ?? '',
+        insta_id: me.insta_id ?? '',
+      });
+    }
+  }, [me, form]);
 
   const handleImageChange = (file: File | null) => {
     setImageFile(file);
