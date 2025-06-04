@@ -22,7 +22,7 @@ export default function LatestLogConent({ currentPage }: LatestLogConentProps) {
   }
   return (
     <section ref={contentRef}>
-      <TitledSection title="Latest" subTitle="Log" description="Updated every 5 minutes">
+      <TitledSection title="Latest" subTitle="Log" description="* 5분마다 갱신됩니다">
         <PostCardWrapper className="mb-[50px]">
           {data?.data.map((log, idx) => (
             <MotionCard

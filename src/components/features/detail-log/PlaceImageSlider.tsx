@@ -1,6 +1,7 @@
 'use client';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -8,6 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Tables } from '@/types/supabase';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
+import { X } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import 'swiper/css';
@@ -49,17 +51,30 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
       </Swiper>
 
       <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-        <DialogContent className=" bg-transparent p-0 flex justify-center items-center border-0 w-full h-1/2 focus-visible:outline-none">
+        <DialogContent
+          className="bg-transparent p-0 flex justify-center items-center border-0 w-full h-1/2 shadow-none "
+          showCloseButton={false}
+        >
           <DialogHeader>
             <DialogTitle hidden>장소 이미지</DialogTitle>
             <DialogDescription hidden>확대한 장소 이미지</DialogDescription>
           </DialogHeader>
+
           <Image
             src={getStoragePublicImage(selectedImage as string)}
             alt="장소 이미지"
             fill
             className="object-contain"
           />
+
+          <DialogClose asChild>
+            <button
+              className="absolute right-2 top-0 z-10 text-white bg-black/50 hover:bg-black/70 rounded-full p-0.5"
+              aria-label="닫기"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </DialogClose>
         </DialogContent>
       </Dialog>
     </>

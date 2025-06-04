@@ -19,7 +19,7 @@ interface PostCardProps {
 
 const PostCard = ({ log, vertical, modal }: PostCardProps) => {
   return (
-    <div className={cn('cursor-pointer relative h-full')}>
+    <div className={cn('cursor-pointer relative h-full group')}>
       <Link href={`/log/${log?.log_id}`} className="flex flex-col h-full">
         <PostCardImage
           author={String(log?.users?.nickname)}
