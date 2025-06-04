@@ -15,7 +15,7 @@ interface PlaceBookMarkButtonProps {
 export default function PlaceBookMarkButton({ placeId, modal }: PlaceBookMarkButtonProps) {
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
-  const { data, isLoading } = usePlaceBookmarkCheck({ placeId, userId: String(user?.user_id) });
+  const { data, isLoading } = usePlaceBookmarkCheck({ placeId, userId: user?.user_id || null });
   const { mutate } = usePlaceBookmarkMutation();
 
   const onBookMarkClick = () => {
