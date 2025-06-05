@@ -11,10 +11,32 @@ export const SearchIcon = ({ className }: IconProps) => {
     <Image src="/icons/search.svg" width={20} height={20} alt="검색 아이콘" className={className} />
   );
 };
+export const SearchBlackIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/search-black.svg"
+      width={20}
+      height={20}
+      alt="검색 아이콘"
+      className={className}
+    />
+  );
+};
 export const GlobeIcon = ({ className }: IconProps) => {
   return (
     <Image
       src="/icons/globe.svg"
+      width={20}
+      height={20}
+      alt="다국어 아이콘"
+      className={className}
+    />
+  );
+};
+export const GlobeBlackIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/globe-black.svg"
       width={20}
       height={20}
       alt="다국어 아이콘"
@@ -30,6 +52,17 @@ export const AlertIcon = ({ className }: IconProps) => {
 export const UserIcon = ({ className }: IconProps) => {
   return (
     <Image src="/icons/user.svg" width={20} height={20} alt="유저 아이콘" className={className} />
+  );
+};
+export const UserBlackIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/user-black.svg"
+      width={20}
+      height={20}
+      alt="유저 아이콘"
+      className={className}
+    />
   );
 };
 

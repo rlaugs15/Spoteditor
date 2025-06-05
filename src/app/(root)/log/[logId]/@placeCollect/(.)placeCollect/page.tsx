@@ -16,7 +16,7 @@ export default async function PlaceCollect({ params }: PlaceCollectProps) {
   const { place: places, address } = result.data;
   return (
     <ModalContent>
-      <ModalHeader className="justify-between px-0">
+      <ModalHeader className="justify-between p-0 pb-4">
         <h3 className="font-bold text-text-2xl">소개된 장소</h3>
         <XButton />
       </ModalHeader>

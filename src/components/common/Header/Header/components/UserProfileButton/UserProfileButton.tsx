@@ -1,6 +1,6 @@
 'use client';
 import LogoutButton from '@/components/common/Button/LogoutButton';
-import { AddImageIcon, HeadPhoneIcon, UserIcon } from '@/components/common/Icons';
+import { AddImageIcon, HeadPhoneIcon, UserBlackIcon, UserIcon } from '@/components/common/Icons';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -29,8 +29,9 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger className="focus:outline-none" asChild>
-        <Button variant={'ghost'} size={'icon'}>
-          <UserIcon />
+        <Button variant={'ghost'} size={'icon'} className="relative group">
+          <UserIcon className="absolute group-hover:opacity-0" />
+          <UserBlackIcon className="opacity-0 group-hover:opacity-100" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

@@ -67,7 +67,7 @@ const PlaceForm = ({
               <Input
                 {...field}
                 type="text"
-                placeholder="장소 카테고리 *"
+                placeholder="카페, 미술관, 레스토랑 카테고리를 적어주세요. *"
                 className={cn(
                   '!text-text-sm',
                   placeErrors?.category && 'placeholder:text-error-500'
