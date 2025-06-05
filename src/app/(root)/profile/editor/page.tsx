@@ -1,7 +1,7 @@
 'use client';
 
 import { userKeys } from '@/app/actions/keys';
-import { getSignedUploadUrl, removeImageIfNeeded, uploadToSignedUrl } from '@/app/actions/storage';
+import { getSignedUploadUrl } from '@/app/actions/storage';
 import { patchUser } from '@/app/actions/user';
 import AccountDeleteSection from '@/components/features/profile-editor/AccountDeleteSection/AccountDeleteSection';
 import AvatarEditSection from '@/components/features/profile-editor/AvatarEditSection';
@@ -9,6 +9,7 @@ import ProfileFormFields from '@/components/features/profile-editor/ProfileFormF
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import useUser from '@/hooks/queries/user/useUser';
+import { removeImageIfNeeded, uploadToSignedUrl } from '@/lib/utils';
 import { profileEditorSchema } from '@/lib/zod/profileSchema';
 import { buildPublicUrl } from '@/utils/buildPublicUrl';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
@@ -53,6 +54,8 @@ export default function ProfileEditorPage() {
   };
 
   const onSubmit = async (data: z.infer<typeof profileEditorSchema>) => {
+    console.time('업로드 총 시간');
+
     if (!me) {
       console.error('사용자 정보가 없습니다.');
       return;
@@ -72,9 +75,12 @@ export default function ProfileEditorPage() {
       /** 1.기존 이미지 삭제 (image_url이 있고, 기본 이미지가 아닐 경우) */
       if (
         me?.image_url &&
-        me.image_url.includes('profiles/') &&
-        !me.image_url.includes('user-default-avatar')
+        (me.image_url.includes('/storage/v1/object/public/profiles/') || // 절대 경로
+          me.image_url.startsWith('profiles/')) && // 상대 경로
+        !me.image_url.includes('user-default-avatar') // 기본 이미지가 아님
       ) {
+        console.log('기존 이미지 삭제 됐나');
+
         await removeImageIfNeeded(me.image_url, 'profiles');
       }
 
@@ -112,6 +118,7 @@ export default function ProfileEditorPage() {
     queryClient.invalidateQueries({ queryKey: userKeys.me() });
     queryClient.invalidateQueries({ queryKey: userKeys.publicUser(String(me.user_id)) });
     router.push(`/profile/${me.user_id}`);
+    console.timeEnd('업로드 총 시간');
   };
 
   return (
