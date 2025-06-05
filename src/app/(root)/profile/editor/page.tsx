@@ -15,12 +15,18 @@ import { buildPublicUrl } from '@/utils/buildPublicUrl';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+const Loading = dynamic(() => import('@/components/common/Loading/Loading'), {
+  ssr: false,
+});
+
 export default function ProfileEditorPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { data: me } = useUser();
 
@@ -54,71 +60,74 @@ export default function ProfileEditorPage() {
   };
 
   const onSubmit = async (data: z.infer<typeof profileEditorSchema>) => {
-    console.time('업로드 총 시간');
+    setIsSubmitting(true);
 
-    if (!me) {
-      console.error('사용자 정보가 없습니다.');
-      return;
-    }
-
-    const nickname = data.nickname.trim();
-    const description = data.description;
-    const insta_id = data.insta_id
-      ? data.insta_id.trim().startsWith('@')
-        ? data.insta_id.trim()
-        : `@${data.insta_id.trim()}`
-      : undefined;
-
-    let image_url: string | undefined = undefined;
-
-    if (imageFile) {
-      /** 1.기존 이미지 삭제 (image_url이 있고, 기본 이미지가 아닐 경우) */
-      if (
-        me?.image_url &&
-        (me.image_url.includes('/storage/v1/object/public/profiles/') || // 절대 경로
-          me.image_url.startsWith('profiles/')) && // 상대 경로
-        !me.image_url.includes('user-default-avatar') // 기본 이미지가 아님
-      ) {
-        console.log('기존 이미지 삭제 됐나');
-
-        await removeImageIfNeeded(me.image_url, 'profiles');
-      }
-
-      /** 2.새 이미지 압축 */
-      const resizingFile = await compressImageToWebp(imageFile, { maxWidthOrHeight: 300 });
-      if (!resizingFile) {
-        console.error('이미지 압축 실패: resizingFile이 undefined');
+    try {
+      if (!me) {
+        console.error('사용자 정보가 없습니다.');
         return;
       }
 
-      /** 3.서버에서 PreSigned URL 발급 + fetch 업로드 */
-      const filename = `${me?.user_id}${Date.now()}.webp`;
-      const { signedUrl, path } = await getSignedUploadUrl('profiles', filename);
-      const ok = await uploadToSignedUrl(signedUrl, resizingFile.type, resizingFile);
-      if (!ok) {
-        console.error('업로드 실패');
-        return;
+      const nickname = data.nickname.trim();
+      const description = data.description;
+      const insta_id = data.insta_id
+        ? data.insta_id.trim().startsWith('@')
+          ? data.insta_id.trim()
+          : `@${data.insta_id.trim()}`
+        : undefined;
+
+      let image_url: string | undefined = undefined;
+
+      if (imageFile) {
+        /** 1.기존 이미지 삭제 (image_url이 있고, 기본 이미지가 아닐 경우) */
+        if (
+          me?.image_url &&
+          (me.image_url.includes('/storage/v1/object/public/profiles/') || // 절대 경로
+            me.image_url.startsWith('profiles/')) && // 상대 경로
+          !me.image_url.includes('user-default-avatar') // 기본 이미지가 아님
+        ) {
+          console.log('기존 이미지 삭제 됐나');
+
+          await removeImageIfNeeded(me.image_url, 'profiles');
+        }
+
+        /** 2.새 이미지 압축 */
+        const resizingFile = await compressImageToWebp(imageFile, { maxWidthOrHeight: 300 });
+        if (!resizingFile) {
+          console.error('이미지 압축 실패: resizingFile이 undefined');
+          return;
+        }
+
+        /** 3.서버에서 PreSigned URL 발급 + fetch 업로드 */
+        const filename = `${me?.user_id}${Date.now()}.webp`;
+        const { signedUrl, path } = await getSignedUploadUrl('profiles', filename);
+        const ok = await uploadToSignedUrl(signedUrl, resizingFile.type, resizingFile);
+        if (!ok) {
+          console.error('업로드 실패');
+          return;
+        }
+        /** 4.public URL 생성 후 patch */
+        image_url = buildPublicUrl('profiles', path);
       }
-      /** 4.public URL 생성 후 patch */
-      image_url = buildPublicUrl('profiles', path);
+
+      // 변경 감지 로직(프리즈마는 값이 undefined인 필드는 db에 업로드 안 함)
+      const updateData = {
+        userId: me.user_id,
+        nickname: nickname !== me?.nickname ? nickname : undefined,
+        image_url: image_url ?? undefined, // 업로드된 경우만
+        insta_id: insta_id !== me?.insta_id ? insta_id : undefined,
+        description: description !== me?.description ? description : undefined,
+      };
+
+      //캐시 무효화 추가
+      await patchUser(updateData);
+
+      queryClient.invalidateQueries({ queryKey: userKeys.me() });
+      queryClient.invalidateQueries({ queryKey: userKeys.publicUser(String(me.user_id)) });
+      router.push(`/profile/${me.user_id}`);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    // 변경 감지 로직(프리즈마는 값이 undefined인 필드는 db에 업로드 안 함)
-    const updateData = {
-      userId: me.user_id,
-      nickname: nickname !== me?.nickname ? nickname : undefined,
-      image_url: image_url ?? undefined, // 업로드된 경우만
-      insta_id: insta_id !== me?.insta_id ? insta_id : undefined,
-      description: description !== me?.description ? description : undefined,
-    };
-
-    //캐시 무효화 추가
-    await patchUser(updateData);
-
-    queryClient.invalidateQueries({ queryKey: userKeys.me() });
-    queryClient.invalidateQueries({ queryKey: userKeys.publicUser(String(me.user_id)) });
-    router.push(`/profile/${me.user_id}`);
-    console.timeEnd('업로드 총 시간');
   };
 
   return (
@@ -150,7 +159,7 @@ export default function ProfileEditorPage() {
                 취소
               </Button>
               <Button type="submit" className="rounded-[6px] w-30 h-10.5">
-                저장
+                {isSubmitting ? <Loading /> : '저장'}
               </Button>
             </section>
           </form>
