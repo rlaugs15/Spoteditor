@@ -13,3 +13,7 @@ export const PROFILE_PATHS = {
   PROFILE: '/profile',
   EDITOR: '/profile/editor',
 } as const;
+
+export const NOTICE_PATHS = {
+  NOTICE: '/notice',
+};
