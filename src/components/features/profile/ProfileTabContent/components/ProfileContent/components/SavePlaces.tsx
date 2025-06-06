@@ -34,7 +34,7 @@ export default function SavePlaces({ userId }: SavePlacesProps) {
     if (!me?.user_id) return;
 
     const revalidateAndRefetch = async () => {
-      await revalidateBookmarkPlaces(String(me.user_id));
+      await revalidateBookmarkPlaces();
       refetch();
     };
 

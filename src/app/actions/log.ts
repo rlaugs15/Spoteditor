@@ -10,7 +10,7 @@ import { Prisma } from '@prisma/client';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { logKeys, searchKeys } from './keys';
-import { cacheTags } from './tags';
+import { cacheTags, globalTags } from './tags';
 import { getUser } from './user';
 
 // ===================================================================
@@ -99,13 +99,11 @@ export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
     }
     /* 캐시 무효화 */
     const logTagsToInvalidate = [
-      cacheTags.logDetail(logId),
-      cacheTags.logList(),
-      cacheTags.placeList(),
-      cacheTags.searchList({}),
-      cacheTags.logBookmark(logId),
-      cacheTags.logBookmarkList(me.user_id),
-      cacheTags.logListByUser(me.user_id),
+      globalTags.logAll,
+      globalTags.logListAll,
+      globalTags.logBookmarkAll,
+      globalTags.placeListAll,
+      globalTags.searchAll,
     ];
     logTagsToInvalidate.forEach((tag) => revalidateTag(tag));
 
@@ -189,19 +187,15 @@ async function fetchLogs({
 }
 
 export async function getLogs(params: LogsParams) {
-  const { userId, currentPage = 1, pageSize = 10, sort = 'latest' } = params;
+  const queryKey = params.userId ? logKeys.listByUser(params) : logKeys.list(params);
 
-  const queryKey = userId
-    ? logKeys.listByUser({ userId, currentPage, pageSize })
-    : logKeys.list({ currentPage, pageSize, sort });
-
-  const tagKey = userId ? cacheTags.logListByUser(userId) : cacheTags.logList();
+  const tagKey = params.userId ? cacheTags.logListByUser(params) : cacheTags.logList(params);
 
   return unstable_cache(
     () => fetchLogs(params),
     [...queryKey].map((v) => v ?? ''),
     {
-      tags: [tagKey],
+      tags: [tagKey, 'log:all'], // 상위 그룹 태그 추가
       revalidate: 300,
     }
   )();
@@ -286,14 +280,17 @@ export async function fetchBookmarkedLogs({
 
 export async function getBookmarkedLogs(params: logBookmarkListParmas) {
   return unstable_cache(() => fetchBookmarkedLogs(params), [...logKeys.bookmarkList(params)], {
-    tags: [cacheTags.logBookmarkList(params.userId)],
+    tags: [
+      cacheTags.logBookmarkList(params), // 특정 페이지 북마크 리스트
+      'log:bookmark:all', // 전체 북마크 리스트 무효화용 상위 태그
+    ],
     revalidate: 300,
   })();
 }
 
 /* 북마크 시 서버캐시 무효화 */
-export async function revalidateBookmarkLogs(userId: string) {
-  revalidateTag(cacheTags.logBookmarkList(userId));
+export async function revalidateBookmarkLogs() {
+  revalidateTag('log:bookmark:all'); // 특정 유저·페이지 무관하게 전체 무효화
 }
 
 // ===================================================================
@@ -426,7 +423,10 @@ async function fetchSearchLogs({
 
 export async function getSearchLogs(params: SearchParams) {
   return unstable_cache(() => fetchSearchLogs(params), [...searchKeys.list(params)], {
-    tags: [cacheTags.searchList(params)],
+    tags: [
+      cacheTags.searchList(params), // 조건별로 구분되는 태그
+      'search:all', // 전체 무효화용 상위 태그
+    ],
     revalidate: 300,
   })();
 }

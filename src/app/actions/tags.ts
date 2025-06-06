@@ -1,5 +1,31 @@
+import { PaginationParams } from '@/types/api/common';
+import { logBookmarkListParmas, LogsParams } from '@/types/api/log';
 import { SearchParams } from '@/types/api/search';
 import { followKeys, logKeys, placeKeys, searchKeys, userKeys } from './keys';
+
+/* 해당 태그 관련 전체 무효화용 */
+export const globalTags = {
+  /* 유저 관련 */
+  userAll: 'user:all',
+
+  /* 팔로우 관련 */
+  followAll: 'follow:all',
+  followerAll: 'follow:follower:all',
+  followingAll: 'follow:following:all',
+
+  /* 로그 관련 */
+  logAll: 'log:all',
+  logListAll: 'log:list:all',
+  logBookmarkAll: 'log:bookmark:all',
+
+  /* 장소 관련 */
+  placeAll: 'place:all',
+  placeListAll: 'place:list:all',
+  placeBookmarkAll: 'place:bookmark:all',
+
+  /* 검색 관련 */
+  searchAll: 'search:list:all',
+};
 
 export const cacheTags = {
   // 캐시키 배열을 문자열로 변환
@@ -17,17 +43,17 @@ export const cacheTags = {
 
   /* 로그 */
   logDetail: (logId: string) => cacheTags.fromKey([...logKeys.detail(logId), 'single']),
-  logList: () => cacheTags.fromKey([...logKeys.log, 'list']),
-  logListByUser: (userId: string) => cacheTags.fromKey([...logKeys.log, 'byUser', userId, 'list']),
-  logBookmarkList: (userId: string) =>
-    cacheTags.fromKey([...logKeys.log, 'bookmark', userId, 'list']),
+  logList: (params: LogsParams) => cacheTags.fromKey(logKeys.list(params)),
+  logListByUser: (params: LogsParams) => cacheTags.fromKey(logKeys.listByUser(params)),
+  logBookmarkList: (params: logBookmarkListParmas) =>
+    cacheTags.fromKey(logKeys.bookmarkList(params)),
   logMyList: (userId: string) => cacheTags.fromKey([...logKeys.log, 'myList', userId, 'list']),
 
   /* 장소 */
   placeDetail: (placeId: string) => cacheTags.fromKey([...placeKeys.detail(placeId), 'single']),
-  placeList: () => cacheTags.fromKey([...placeKeys.place, 'list']),
-  placeBookmarkList: (userId: string) =>
-    cacheTags.fromKey([...placeKeys.place, 'bookmark', userId, 'list']),
+  placeList: (params: PaginationParams) => cacheTags.fromKey(placeKeys.list(params)),
+  placeBookmarkList: (params: logBookmarkListParmas) =>
+    cacheTags.fromKey(placeKeys.bookmarkList(params)),
 
   /* 북마크 */
   placeBookmark: (placeId: string) =>
