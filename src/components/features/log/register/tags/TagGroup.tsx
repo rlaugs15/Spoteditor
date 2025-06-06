@@ -31,11 +31,14 @@ const TagGroup = ({ title, type }: TagGroupProps) => {
   const tags = useMemo(() => {
     switch (type) {
       case 'sigungu':
-        return isDomestic ? cityDistricts[selectedCity] : globalRegions[selectedCity];
+        if (!selectedCity) return [];
+        return isDomestic ? cityDistricts[selectedCity] ?? [] : globalRegions[selectedCity] ?? [];
+
       case 'city':
         return isDomestic ? cityCategories : globalCategories;
+
       default:
-        return TAG_SETS[type];
+        return TAG_SETS[type] ?? [];
     }
   }, [type, selectedCity, isDomestic]);
 
