@@ -87,7 +87,12 @@ export default function ProfileEditorPage() {
             me.image_url.startsWith('profiles/')) && // 상대 경로
           !me.image_url.includes('user-default-avatar') // 기본 이미지가 아님
         ) {
-          await removeImageIfNeeded(me.image_url, 'profiles');
+          try {
+            await removeImageIfNeeded(me.image_url, 'profiles');
+          } catch (error) {
+            console.warn('기존 이미지 삭제 실패:', error);
+            return;
+          }
         }
 
         /** 2.새 이미지 압축 */
@@ -126,6 +131,8 @@ export default function ProfileEditorPage() {
 
       router.push(`/profile/${me.user_id}`);
       toast.success('회원 정보 수정 성공');
+    } catch (_error) {
+      toast.error('회원 정보 수정 실패');
     } finally {
       setIsSubmitting(false);
     }

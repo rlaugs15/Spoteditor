@@ -1,6 +1,9 @@
+'use client';
+
 import { cn } from '@/lib/utils';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
 import Image, { ImageProps } from 'next/image';
+import { useState } from 'react';
 
 interface UserImageProps extends Omit<ImageProps, 'src' | 'alt' | 'fill'> {
   imgSrc: string | null;
@@ -15,17 +18,15 @@ function isAbsoluteUrl(url: string) {
 }
 
 export default function UserImage({ imgSrc, className, ...props }: UserImageProps) {
-  /* const finalSrc =
-    imgSrc && imgSrc !== 'null'
-      ? isBlobUrl(imgSrc) // blob URL이거나 data URL인 경우 그대로 사용
-        ? imgSrc
-        : getStoragePublicImage(imgSrc) // 일반 Supabase 경로는 변환
-      : '/profile/user-default-avatar.webp'; */
+  const [errored, setErrored] = useState(false);
+
+  const isValidImgSrc = imgSrc && imgSrc !== 'null' && imgSrc !== '';
+
   const finalSrc =
-    imgSrc && imgSrc !== 'null'
+    !errored && isValidImgSrc
       ? isBlobUrl(imgSrc) || isAbsoluteUrl(imgSrc) // 이미 절대 URL이면 그대로 사용
         ? imgSrc
-        : getStoragePublicImage(imgSrc) // Supabase 상대경로면 변환
+        : getStoragePublicImage(imgSrc) // 수파베이스 상대경로면 변환
       : '/profile/user-default-avatar.webp';
   return (
     <div
@@ -38,6 +39,7 @@ export default function UserImage({ imgSrc, className, ...props }: UserImageProp
         alt="유저 프로필 이미지"
         className="object-cover object-center"
         quality={100}
+        onError={() => setErrored(true)}
         {...props}
       />
     </div>
