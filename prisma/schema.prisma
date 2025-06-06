@@ -341,8 +341,8 @@ model follow {
   follow_id                        BigInt       @id @default(autoincrement())
   follower_id                      String       @db.Uuid
   following_id                     String       @db.Uuid
-  users_follow_follower_idTousers  public_users @relation("follow_follower_idTousers", fields: [follower_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-  users_follow_following_idTousers public_users @relation("follow_following_idTousers", fields: [following_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  users_follow_follower_idTousers  public_users @relation("follow_follower_idTousers", fields: [follower_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
+  users_follow_following_idTousers public_users @relation("follow_following_idTousers", fields: [following_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
 }
@@ -356,7 +356,7 @@ model log {
   thumbnail_url String
   log_id        String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   address       address[]
-  users         public_users   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  users         public_users   @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
   log_bookmark  log_bookmark[]
   log_tag       log_tag[]
   place         place[]

@@ -1,45 +1,38 @@
 'use client';
 
-import { followKeys, logKeys, placeKeys, searchKeys, userKeys } from '@/app/actions/keys';
-import { deleteUser } from '@/app/actions/user';
+import Loading from '@/components/common/Loading/Loading';
 import { Button } from '@/components/ui/button';
-import useUser from '@/hooks/queries/user/useUser';
-import { useQueryClient } from '@tanstack/react-query';
-import { Dispatch, SetStateAction, useActionState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { Dispatch, SetStateAction, useTransition } from 'react';
+import { toast } from 'sonner';
 
 interface AccountDeleteButtonProps {
   setIsSuccess: Dispatch<SetStateAction<boolean>>;
+  setMsg: Dispatch<SetStateAction<string>>;
 }
 
-async function DeleteWithState() {
-  await deleteUser();
-  return { success: true };
-}
+export default function AccountDeleteButton({ setIsSuccess, setMsg }: AccountDeleteButtonProps) {
+  const [isPending, startTransition] = useTransition();
 
-export default function AccountDeleteButton({ setIsSuccess }: AccountDeleteButtonProps) {
-  const { data: me } = useUser();
-  const queryClient = useQueryClient();
-  const [state, formAction] = useActionState(DeleteWithState, null);
+  const handleDelete = () => {
+    if (isPending) return;
 
-  if (me && state?.success) {
-    const userQueryKeysToRemove = [
-      userKeys.all,
-      followKeys.all,
-      logKeys.log,
-      placeKeys.place,
-      searchKeys.all,
-    ];
+    startTransition(async () => {
+      const res = await fetch('/api/user', { method: 'POST' });
+      const result = await res.json();
 
-    userQueryKeysToRemove.forEach((key) => {
-      queryClient.invalidateQueries({ queryKey: key });
+      if (result.success) {
+        const supabase = createClient();
+        await supabase.auth.signOut(); // 쿠키 삭제
+        setIsSuccess(true);
+      }
+      setMsg(result.msg);
+      toast.success('계정 삭제 성공');
     });
-    setIsSuccess(!!state.success);
-  }
+  };
   return (
-    <form action={formAction}>
-      <Button size="sm" className="w-[100px] text-[13px]">
-        확인
-      </Button>
-    </form>
+    <Button onClick={handleDelete} size="sm" className="w-[100px] text-[13px]">
+      {isPending ? <Loading /> : '확인'}
+    </Button>
   );
 }
