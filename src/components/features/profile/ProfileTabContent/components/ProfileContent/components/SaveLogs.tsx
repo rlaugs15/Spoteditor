@@ -56,8 +56,8 @@ export default function SaveLogs({ userId }: SavaLogsProps) {
     <>
       <PostCardWrapper className="mb-[50px]">
         {data?.data.map((log) => (
-          <MotionCard key={log?.log_id} className="relative group">
-            <Link href={`/log/${log?.log_id}`} className="hover:cursor-default">
+          <MotionCard key={log?.log_id} className="relative group hover:cursor-default">
+            <Link href={`/log/${log?.log_id}`}>
               <PostCardImage
                 author={String(log?.users?.nickname)}
                 imageUrl={String(log?.thumbnail_url)}
