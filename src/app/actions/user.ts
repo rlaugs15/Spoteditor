@@ -8,7 +8,7 @@ import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { userKeys } from './keys';
 import { deleteProfileStorageFolder } from './storage';
-import { cacheTags } from './tags';
+import { cacheTags, globalTags } from './tags';
 
 interface PatchUserProps {
   userId: string;
@@ -193,20 +193,18 @@ export async function deleteUser() {
       },
     });
     /* 캐시 무효화 */
-    const userTagsToInvalidate = [
-      cacheTags.me(),
-      cacheTags.publicUser(me.user_id),
-      cacheTags.follower(me.user_id),
-      cacheTags.followerList(me.user_id),
-      cacheTags.following(me.user_id),
-      cacheTags.followingList(me.user_id),
-      cacheTags.logListByUser(me.user_id),
-      cacheTags.logBookmarkList(me.user_id),
-      cacheTags.logMyList(me.user_id),
-      cacheTags.placeBookmarkList(me.user_id),
-      'search',
+    const tagsToInvalidate = [
+      globalTags.userAll,
+      globalTags.followAll,
+      globalTags.logAll,
+      globalTags.logListAll,
+      globalTags.logBookmarkAll,
+      globalTags.placeAll,
+      globalTags.placeListAll,
+      globalTags.placeBookmarkAll,
+      globalTags.searchAll,
     ];
-    userTagsToInvalidate.forEach((tag) => revalidateTag(tag));
+    tagsToInvalidate.forEach(revalidateTag);
     return { success: true, msg: ERROR_MESSAGES.USER.DELETE_SUCCESS };
   } catch (error) {
     console.error('유저 삭제 오류', error);
