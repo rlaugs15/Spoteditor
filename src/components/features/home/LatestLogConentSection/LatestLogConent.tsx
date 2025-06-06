@@ -16,7 +16,7 @@ interface LatestLogConentProps {
 export default function LatestLogConent({ currentPage }: LatestLogConentProps) {
   const contentRef = useRef<HTMLElement | null>(null);
   const { handlePageChange } = useQueryPagination('logPage', currentPage, contentRef);
-  const { data } = useLogs({ currentPage, pageSize: 13 });
+  const { data } = useLogs({ currentPage, pageSize: 13, sort: 'latest' });
   if (data && !data.success) {
     throw new Error(data.msg);
   }

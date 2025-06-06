@@ -12,8 +12,8 @@ export default async function LatestLogConentSection({ currentPage }: LatestLogC
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: logKeys.list({ currentPage: currentPage, pageSize: 13 }),
-    queryFn: () => getLogs({ currentPage: currentPage, pageSize: 13 }),
+    queryKey: logKeys.list({ currentPage: currentPage, pageSize: 13, sort: 'latest' }),
+    queryFn: () => getLogs({ currentPage: currentPage, pageSize: 13, sort: 'latest' }),
   });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
