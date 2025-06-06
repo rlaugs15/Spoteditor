@@ -4,6 +4,7 @@ import Loading from '@/components/common/Loading/Loading';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
 import { Dispatch, SetStateAction, useTransition } from 'react';
+import { toast } from 'sonner';
 
 interface AccountDeleteButtonProps {
   setIsSuccess: Dispatch<SetStateAction<boolean>>;
@@ -26,6 +27,7 @@ export default function AccountDeleteButton({ setIsSuccess, setMsg }: AccountDel
         setIsSuccess(true);
       }
       setMsg(result.msg);
+      toast.success('계정 삭제 성공');
     });
   };
   return (
