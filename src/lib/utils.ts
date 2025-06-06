@@ -39,7 +39,6 @@ export function getQueryClient() {
 /* 기존 이미지 삭제 */
 export async function removeImageIfNeeded(url: string, bucket: StorageBucket) {
   const publicPrefix = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/`;
-  console.log('url 들어갔나', url);
 
   let relativePath: string;
 
@@ -53,8 +52,6 @@ export async function removeImageIfNeeded(url: string, bucket: StorageBucket) {
     // 상대 경로일 경우 그대로 사용
     relativePath = url;
   }
-
-  console.log('[🧹삭제 시도] relativePath:', relativePath);
   const supabase = await createClient();
   const { error } = await supabase.storage.from(bucket).remove([relativePath]);
 

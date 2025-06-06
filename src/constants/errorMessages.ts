@@ -27,6 +27,8 @@ export const ERROR_MESSAGES = {
   USER: {
     NOT_FOUND: '사용자 정보를 찾을 수 없습니다.',
     DELETE_FAILED: '회원 탈퇴에 실패했습니다.',
+    DELETE_SUCCESS: '계정 삭제가 완료되었습니다.',
+    ALREADY_DELETED: '삭제할 유저가 존재하지 않거나 이미 삭제되었습니다.',
   },
   SEARCH: {
     FAILED: '검색 결과 조회에 실패했습니다.',

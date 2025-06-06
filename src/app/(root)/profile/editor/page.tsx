@@ -81,13 +81,11 @@ export default function ProfileEditorPage() {
       if (imageFile) {
         /** 1.기존 이미지 삭제 (image_url이 있고, 기본 이미지가 아닐 경우) */
         if (
-          me?.image_url &&
+          me.image_url &&
           (me.image_url.includes('/storage/v1/object/public/profiles/') || // 절대 경로
             me.image_url.startsWith('profiles/')) && // 상대 경로
           !me.image_url.includes('user-default-avatar') // 기본 이미지가 아님
         ) {
-          console.log('기존 이미지 삭제 됐나');
-
           await removeImageIfNeeded(me.image_url, 'profiles');
         }
 

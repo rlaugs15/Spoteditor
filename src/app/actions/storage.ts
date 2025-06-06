@@ -61,3 +61,61 @@ export async function getSignedUploadUrl(
 
   return { ...data, path }; // signedUrl, path
 }
+
+/* 유저 삭제 시 이미지 폴더 삭제 */
+export async function deleteProfileStorageFolder(
+  imageUrl: string,
+  bucket: StorageBucket = 'profiles'
+) {
+  const publicPrefix = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/`;
+
+  let relativePath: string;
+
+  if (imageUrl.startsWith(publicPrefix)) {
+    // 절대 URL인 경우 prefix 제거
+    relativePath = imageUrl.replace(publicPrefix, '');
+    if (relativePath.startsWith(`${bucket}/`)) {
+      relativePath = relativePath.replace(`${bucket}/`, '');
+    }
+  } else {
+    // 상대 경로인 경우 그대로
+    relativePath = imageUrl;
+  }
+
+  // relativePath 예: 3ff6777e-2516-4207-af10/avatar.webp → 폴더 추출
+  const match = relativePath.match(/^([^/]+)\//); // 첫 번째 경로 조각 추출
+  const userFolder = match?.[1];
+
+  if (!userFolder) {
+    console.warn('사용자 폴더 경로 추출 실패');
+    return;
+  }
+
+  const supabase = await createClient();
+
+  // 1. userId/ 경로 안의 파일들 모두 조회
+  const { data: files, error: listError } = await supabase.storage
+    .from(bucket)
+    .list(userFolder + '/');
+
+  if (listError) {
+    console.warn('폴더 내 파일 목록 조회 실패');
+    return;
+  }
+
+  if (!files || files.length === 0) {
+    console.log('삭제할 파일 없음 (빈 폴더)');
+    return;
+  }
+
+  // 2. 전체 경로 문자열 배열 생성
+  const paths = files.map((file) => `${userFolder}/${file.name}`);
+  // 3. 실제 삭제
+  const { error: deleteError } = await supabase.storage.from(bucket).remove(paths);
+
+  if (deleteError) {
+    console.warn('프로필 이미지 삭제 실패');
+  } else {
+    console.log('프로필 폴더 삭제 완료');
+  }
+}

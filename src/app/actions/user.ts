@@ -1,11 +1,13 @@
 'use server';
 
+import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { createClient } from '@/lib/supabase/server';
 import { PublicUser } from '@/types/api/user';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { userKeys } from './keys';
+import { deleteProfileStorageFolder } from './storage';
 import { cacheTags } from './tags';
 
 interface PatchUserProps {
@@ -176,27 +178,18 @@ export async function patchUser({
 export async function deleteUser() {
   const me = await getUser();
   if (!me) {
-    return { success: false, msg: '로그인 상태가 아닙니다.' };
+    return { success: false, msg: ERROR_MESSAGES.COMMON.UNAUTHORIZED };
   }
   try {
     /* 프로필 이미지 삭제 */
-    if (
-      me.image_url &&
-      me.image_url.includes('profiles/') &&
-      !me.image_url.includes('user-default-avatar')
-    ) {
-      const relativePath = me.image_url.replace(/^profiles\//, '');
-      const supabase = await createClient();
-      const { error } = await supabase.storage.from('profiles').remove([relativePath]);
-      if (error) {
-        console.warn('프로필 이미지 삭제 실패:', error.message);
-      }
+    if (me.image_url && me.image_url.includes('profiles')) {
+      await deleteProfileStorageFolder(me.image_url);
     }
 
     /* 유저 데이터 삭제 */
-    await prisma.public_users.delete({
+    await prisma.auth_users.delete({
       where: {
-        user_id: me.user_id,
+        id: me.user_id,
       },
     });
     /* 캐시 무효화 */
@@ -211,15 +204,20 @@ export async function deleteUser() {
       cacheTags.logBookmarkList(me.user_id),
       cacheTags.logMyList(me.user_id),
       cacheTags.placeBookmarkList(me.user_id),
+      'search',
     ];
     userTagsToInvalidate.forEach((tag) => revalidateTag(tag));
+    return { success: true, msg: ERROR_MESSAGES.USER.DELETE_SUCCESS };
   } catch (error) {
+    console.error('유저 삭제 오류', error);
     if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
       // 이미 삭제되었거나 존재하지 않는 유저는 조용히 처리
       return;
     }
-    // 그 외 예외는 다시 던짐
-    throw error;
+    return {
+      success: false,
+      msg: ERROR_MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
+    };
   }
 }
 

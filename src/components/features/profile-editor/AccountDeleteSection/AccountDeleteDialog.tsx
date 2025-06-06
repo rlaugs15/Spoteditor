@@ -9,13 +9,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import AccountDeleteButton from './AccountDeleteButton';
 
 export default function AccountDeleteDialog() {
-  const router = useRouter();
   const [isSuccess, setIsSuccess] = useState(false);
+  const [msg, setMsg] = useState('');
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -23,7 +22,7 @@ export default function AccountDeleteDialog() {
       </DialogTrigger>
       <DialogContent className="w-[300px] web:w-[390px] p-6">
         <DialogTitle className="w-full font-bold text-text-2xl">계정삭제</DialogTitle>
-        <DialogDescription className="w-full mt-2 mb-4 text-primary-500 text-start text-text-sm">
+        <DialogDescription className="w-full mt-2 mb-4 !text-primary-500 text-start !text-text-sm">
           {!isSuccess ? (
             <span>
               계정을 삭제시 등록된 로그는 영구삭제됩니다.
@@ -31,7 +30,7 @@ export default function AccountDeleteDialog() {
               계정을 삭제하시겠어요?
             </span>
           ) : (
-            <span>계정 삭제가 완료되었습니다.</span>
+            <span>{msg || '계정 삭제가 완료되었습니다.'}</span>
           )}
         </DialogDescription>
         <section className="flex justify-end w-full h-10.5 gap-x-2 font-pretendard">
@@ -42,10 +41,14 @@ export default function AccountDeleteDialog() {
                   취소
                 </Button>
               </DialogClose>
-              <AccountDeleteButton setIsSuccess={setIsSuccess} />
+              <AccountDeleteButton setIsSuccess={setIsSuccess} setMsg={setMsg} />
             </>
           ) : (
-            <Button onClick={() => router.push('/')} size="sm" className="w-[100px] text-[13px]">
+            <Button
+              onClick={() => window.location.replace('/')}
+              size="sm"
+              className="w-[100px] text-[13px]"
+            >
               확인
             </Button>
           )}
