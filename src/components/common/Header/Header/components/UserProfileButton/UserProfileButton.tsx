@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { REGISTER_PATHS } from '@/constants/pathname';
+import { NOTICE_PATHS, REGISTER_PATHS, TERMS_PATHS } from '@/constants/pathname';
 import { IUser } from '@/types/api/user';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -74,12 +74,16 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
         </div>
         <DropdownMenuSeparator />
         <div className="flex items-center justify-start px-4 py-[10px] gap-[15px] text-[#81858F]">
-          <Link href="/notice" className="flex">
+          <Link href={NOTICE_PATHS.NOTICE} className="flex">
             <DropdownMenuItem className="p-0">
               <button className="text-text-xs">공지사항</button>
             </DropdownMenuItem>
           </Link>
-          <button className="text-text-xs">이용약관</button>
+          <Link href={TERMS_PATHS.TERMS} className="flex">
+            <DropdownMenuItem className="p-0">
+              <button className="text-text-xs">이용약관</button>
+            </DropdownMenuItem>
+          </Link>
           <button className="text-text-xs">개인정보처리방침</button>
         </div>
       </DropdownMenuContent>
