@@ -22,7 +22,6 @@ interface CitySearchState {
   toggleSigunguDropBox: () => void;
   setcity: (city: string) => void;
   setsigungu: (sigungu: string) => void;
-  openSigunguDropBoxDirectly: () => void;
 }
 
 export const useCitySearchStore = create<CitySearchState>((set, get) => ({
@@ -53,14 +52,16 @@ export const useCitySearchStore = create<CitySearchState>((set, get) => ({
       }));
     }
   },
-  toggleSigunguDropBox: () =>
-    set((state) => ({ isSigunguDropBox: !state.isSigunguDropBox, isDropBox: !state.isDropBox })),
-  openSigunguDropBoxDirectly: () =>
+  toggleSigunguDropBox: () => {
+    const state = get();
+    const willOpen = !state.isSigunguDropBox;
+
     set(() => ({
-      isDropBox: true,
-      isSigunguDropBox: true,
+      isSigunguDropBox: willOpen,
       isCityDropBox: false,
-    })),
+      isDropBox: willOpen,
+    }));
+  },
   setcity: (city) => set(() => ({ city })),
   setsigungu: (sigungu) => set(() => ({ sigungu })),
 }));
