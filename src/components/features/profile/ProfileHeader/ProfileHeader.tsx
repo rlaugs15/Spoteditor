@@ -1,3 +1,4 @@
+import ClipboardButton from '@/components/common/Button/ClipboardButton';
 import UserImage from '@/components/common/UserImage';
 import { IUser, PublicUser } from '@/types/api/user';
 import FollowButtons from './components/FollowButtons';
@@ -11,7 +12,10 @@ interface ProfileHeaderProps {
 
 export default function ProfileHeader({ me, user, isMe }: ProfileHeaderProps) {
   return (
-    <section className="flex flex-col items-center justify-start w-full pb-7.5 web:pb-10">
+    <section className="relative flex flex-col items-center justify-start w-full pb-7.5 web:pb-10">
+      <div className="absolute top-0 right-[15px] web:right-0">
+        <ClipboardButton />
+      </div>
       <section>
         <UserImage imgSrc={String(user?.image_url)} />
       </section>
