@@ -17,3 +17,7 @@ export const PROFILE_PATHS = {
 export const NOTICE_PATHS = {
   NOTICE: '/notice',
 };
+
+export const TERMS_PATHS = {
+  TERMS: '/terms',
+};

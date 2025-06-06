@@ -78,7 +78,11 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
               <button className="text-text-xs">공지사항</button>
             </DropdownMenuItem>
           </Link>
-          <button className="text-text-xs">이용약관</button>
+          <Link href={TERMS_PATHS.TERMS} className="flex">
+            <DropdownMenuItem className="p-0">
+              <button className="text-text-xs">이용약관</button>
+            </DropdownMenuItem>
+          </Link>
           <button className="text-text-xs">개인정보처리방침</button>
         </div>
       </DropdownMenuContent>
