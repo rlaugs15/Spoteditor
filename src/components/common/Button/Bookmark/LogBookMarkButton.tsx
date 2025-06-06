@@ -31,8 +31,8 @@ export default function LogBookMarkButton({ logId, modal, className }: LogBookMa
       onClick={onBookMarkClick}
       disabled={isLoading}
       className={cn(
-        'w-[42px] h-[42px] bg-white flex justify-center items-center absolute top-[10px] web:top-[15px] right-[10px] web:right-[15px] rounded-none border-0',
-        modal && 'top-1.5 right-1.5',
+        'w-[42px] h-[42px] bg-white flex justify-center items-center absolute top-[10px] web:top-[15px] right-[10px] web:right-[15px] rounded-none border-0 hover:brightness-85',
+        modal && '!top-1.5 !right-1.5',
         className
       )}
     >
