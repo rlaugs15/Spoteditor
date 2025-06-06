@@ -4,11 +4,9 @@ import { LogEditFormValues } from '@/types/schema/log';
 import { parseFormData } from '@/utils/formatLog';
 import { revalidateTag } from 'next/cache';
 import { globalTags } from './tags';
-import { getUser } from './user';
 
 export async function updateLog(formData: FormData, logId: string) {
   try {
-    const me = await getUser();
     const supabase = await createClient();
     const {
       data: { user },

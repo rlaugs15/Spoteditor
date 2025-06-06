@@ -131,7 +131,7 @@ export default function ProfileEditorPage() {
 
       router.push(`/profile/${me.user_id}`);
       toast.success('회원 정보 수정 성공');
-    } catch (_error) {
+    } catch {
       toast.error('회원 정보 수정 실패');
     } finally {
       setIsSubmitting(false);
