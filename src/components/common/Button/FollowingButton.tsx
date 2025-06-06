@@ -34,9 +34,9 @@ export default function FollowingButton({ userId, className = '' }: FollowingBut
       variant={'ghost'}
       size="s"
       className={cn(
-        'font-medium rounded-full bg-gray-50',
+        'font-medium rounded-full bg-gray-50 border',
         className,
-        isFollowing ? 'bg-black text-white' : 'bg-white border-light-100 border-[1px]'
+        isFollowing ? 'bg-black text-white' : 'bg-white border-light-100'
       )}
     >
       {isFollowing ? '팔로잉' : '팔로우'}
