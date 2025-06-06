@@ -19,6 +19,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 const Loading = dynamic(() => import('@/components/common/Loading/Loading'), {
@@ -122,7 +123,9 @@ export default function ProfileEditorPage() {
 
       queryClient.invalidateQueries({ queryKey: userKeys.me() });
       queryClient.invalidateQueries({ queryKey: userKeys.publicUser(String(me.user_id)) });
+
       router.push(`/profile/${me.user_id}`);
+      toast.success('회원 정보 수정 성공');
     } finally {
       setIsSubmitting(false);
     }
