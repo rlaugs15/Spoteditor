@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { IUser } from '@/types/api/user';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const UserProfileButton = dynamic(() => import('./UserProfileButton/UserProfileButton'), {
   ssr: false,
@@ -20,11 +20,17 @@ interface LoginStatusButtonsProps {
 }
 
 export default function LoginStatusButtons({ user }: LoginStatusButtonsProps) {
+  const router = useRouter();
+
+  const handleLoginClick = () => {
+    router.push('/login');
+  };
+
   return (
     <>
       {!user ? (
-        <Button variant={'ghost'} className="font-bold" asChild>
-          <Link href="/login">회원가입/로그인</Link>
+        <Button onClick={handleLoginClick} variant={'ghost'} className="font-bold">
+          회원가입/로그인
         </Button>
       ) : (
         <UserProfileButton user={user} />

@@ -1,25 +1,16 @@
 'use client';
 
-import { logout } from '@/app/actions/user';
-import { userKeys } from '@/app/actions/keys';
 import { LogoutIcon } from '@/components/common/Icons';
-import { useQueryClient } from '@tanstack/react-query';
-import { useActionState } from 'react';
-
-async function logoutWithState() {
-  await logout();
-  return { success: true };
-}
+import useLogoutMutation from '@/hooks/mutations/useLogoutMuation';
 
 export default function LogoutButton() {
-  const queryClient = useQueryClient();
-  const [state, formAction] = useActionState(logoutWithState, null);
-
-  if (state?.success) {
-    queryClient.removeQueries({ queryKey: userKeys.me() });
-  }
+  const { mutate } = useLogoutMutation();
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    mutate();
+  };
   return (
-    <form action={formAction}>
+    <form onSubmit={handleSubmit}>
       <button className="flex items-center justify-start w-full gap-2 px-4 py-3 rounded-sm cursor-default text-text-sm hover:bg-neutral-100 focus:bg-neutral-100 focus:text-neutral-900">
         <LogoutIcon />
         <p>로그아웃</p>

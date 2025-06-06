@@ -11,7 +11,7 @@ export default function SocialLoginButtons() {
         imgSrc="/login/google-login-button.png"
         alt="구글 로그인 버튼"
       />
-      <SocialLoginButton imgSrc="/login/kakao-login-button.png" alt="카카오 로그인 버튼" />
+      {/* <SocialLoginButton imgSrc="/login/kakao-login-button.png" alt="카카오 로그인 버튼" /> */}
     </form>
   );
 }

@@ -1,5 +1,4 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLogBookmarkCheck from '@/hooks/queries/log/useLogBookmarkCheck';
 import useUser from '@/hooks/queries/user/useUser';
@@ -28,18 +27,16 @@ export default function LogBookMarkButton({ logId, modal, className }: LogBookMa
     mutate({ logId, isBookmark: data.isBookmark });
   };
   return (
-    <Button
-      variant={'outline'}
-      size={'icon'}
+    <button
       onClick={onBookMarkClick}
       disabled={isLoading}
       className={cn(
-        'w-[42px] h-[42px] flex justify-center items-center absolute top-[10px] web:top-[15px] right-[10px] web:right-[15px] hover:brightness-90 rounded-none border-0',
-        modal && 'top-1.5 right-1.5',
+        'w-[42px] h-[42px] bg-white flex justify-center items-center absolute top-[10px] web:top-[15px] right-[10px] web:right-[15px] rounded-none border-0 hover:brightness-85',
+        modal && '!top-1.5 !right-1.5',
         className
       )}
     >
       <Bookmark className={cn('!w-6 !h-6', data?.isBookmark && 'fill-black')} />
-    </Button>
+    </button>
   );
 }

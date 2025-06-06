@@ -10,13 +10,22 @@ interface UserImageProps extends Omit<ImageProps, 'src' | 'alt' | 'fill'> {
 function isBlobUrl(url: string) {
   return url.startsWith('blob:') || url.startsWith('data:');
 }
+function isAbsoluteUrl(url: string) {
+  return url.startsWith('http://') || url.startsWith('https://');
+}
 
 export default function UserImage({ imgSrc, className, ...props }: UserImageProps) {
-  const finalSrc =
+  /* const finalSrc =
     imgSrc && imgSrc !== 'null'
       ? isBlobUrl(imgSrc) // blob URL이거나 data URL인 경우 그대로 사용
         ? imgSrc
         : getStoragePublicImage(imgSrc) // 일반 Supabase 경로는 변환
+      : '/profile/user-default-avatar.webp'; */
+  const finalSrc =
+    imgSrc && imgSrc !== 'null'
+      ? isBlobUrl(imgSrc) || isAbsoluteUrl(imgSrc) // 이미 절대 URL이면 그대로 사용
+        ? imgSrc
+        : getStoragePublicImage(imgSrc) // Supabase 상대경로면 변환
       : '/profile/user-default-avatar.webp';
   return (
     <div

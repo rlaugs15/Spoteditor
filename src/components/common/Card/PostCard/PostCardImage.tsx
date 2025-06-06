@@ -12,7 +12,7 @@ function PostCardImage({ imageUrl, author, className, vertical }: PostCardImageP
   return (
     <div
       className={cn(
-        'relative flex-1 w-full group',
+        'relative flex-1 w-full',
         'aspect-[324/218] overflow-hidden mb-1.5 web:mb-2.5',
         vertical && 'aspect-[324/425]',
         className

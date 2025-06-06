@@ -14,7 +14,7 @@ import SearchDropBox from './SearchDropBox/SearchDropBox';
 
 export default function CitySearchForm() {
   const router = useRouter();
-  const { city, sigungu, toggleCityDropBox, toggleSigunguDropBox } = useCitySearchStore();
+  const { isDropBox, city, sigungu, isCityDropBox, toggleSigunguDropBox } = useCitySearchStore();
 
   const defaultValues = {
     city: '서울',
@@ -42,7 +42,13 @@ export default function CitySearchForm() {
   };
 
   const opencityDropBoxClick = () => {
-    toggleCityDropBox();
+    if (isDropBox && isCityDropBox) {
+      // 이미 시 드롭박스가 열려 있으면 닫기
+      useCitySearchStore.getState().closeDropBox();
+    } else {
+      // 그렇지 않으면 기존 동작 유지
+      useCitySearchStore.getState().toggleCityDropBox();
+    }
   };
 
   const opensigunguDropBoxClick = () => {

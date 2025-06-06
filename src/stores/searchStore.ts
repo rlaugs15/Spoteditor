@@ -24,7 +24,7 @@ interface CitySearchState {
   setsigungu: (sigungu: string) => void;
 }
 
-export const useCitySearchStore = create<CitySearchState>((set) => ({
+export const useCitySearchStore = create<CitySearchState>((set, get) => ({
   isDropBox: false,
   isCityDropBox: false,
   isSigunguDropBox: false,
@@ -34,10 +34,34 @@ export const useCitySearchStore = create<CitySearchState>((set) => ({
   openDropBox: () => set(() => ({ isDropBox: true, city: '', sigungu: '' })),
   closeDropBox: () =>
     set(() => ({ isDropBox: false, isSigunguDropBox: false, isCityDropBox: false })),
-  toggleCityDropBox: () =>
-    set((state) => ({ isCityDropBox: !state.isCityDropBox, isDropBox: !state.isDropBox })),
-  toggleSigunguDropBox: () =>
-    set((state) => ({ isSigunguDropBox: !state.isSigunguDropBox, isDropBox: !state.isDropBox })),
+  toggleCityDropBox: () => {
+    const { isCityDropBox } = get();
+    if (isCityDropBox) {
+      // 이미 시 선택창이 열려있는 상태에서 다시 클릭하면 -> 구 리스트로 이동
+      set(() => ({
+        isCityDropBox: false,
+        isSigunguDropBox: true,
+        isDropBox: true,
+      }));
+    } else {
+      // 기본 시 선택창 열기
+      set(() => ({
+        isCityDropBox: true,
+        isSigunguDropBox: false,
+        isDropBox: true,
+      }));
+    }
+  },
+  toggleSigunguDropBox: () => {
+    const state = get();
+    const willOpen = !state.isSigunguDropBox;
+
+    set(() => ({
+      isSigunguDropBox: willOpen,
+      isCityDropBox: false,
+      isDropBox: willOpen,
+    }));
+  },
   setcity: (city) => set(() => ({ city })),
   setsigungu: (sigungu) => set(() => ({ sigungu })),
 }));

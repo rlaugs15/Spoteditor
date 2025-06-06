@@ -1,6 +1,8 @@
+import { StorageBucket } from '@/types/api/storage';
 import { QueryClient } from '@tanstack/react-query';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { createClient } from './supabase/client';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -28,4 +30,49 @@ export function toQueryString(params: Record<string, any>): string {
 
 export function getQueryClient() {
   return new QueryClient();
+}
+
+// ===================================================================
+// storage 관련
+// ===================================================================
+
+/* 기존 이미지 삭제 */
+export async function removeImageIfNeeded(url: string, bucket: StorageBucket) {
+  const publicPrefix = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/`;
+
+  let relativePath: string;
+
+  if (url.startsWith(publicPrefix)) {
+    // 절대 URL인 경우 prefix 제거
+    relativePath = url.replace(publicPrefix, '');
+    if (relativePath.startsWith(`${bucket}/`)) {
+      relativePath = relativePath.replace(`${bucket}/`, '');
+    }
+  } else {
+    // 상대 경로일 경우 그대로 사용
+    relativePath = url;
+  }
+  const supabase = await createClient();
+  const { error } = await supabase.storage.from(bucket).remove([relativePath]);
+
+  if (error) {
+    console.warn('기존 이미지 삭제 실패:', error.message);
+  } else {
+    console.log('기존 이미지 삭제 성공:', relativePath);
+  }
+}
+
+/* getSignedUploadUrl한테 받은 서명 URL로 fetch 업로드 */
+export async function uploadToSignedUrl(
+  signedUrl: string,
+  contentType: string,
+  file: Blob
+): Promise<boolean> {
+  const res = await fetch(signedUrl, {
+    method: 'PUT',
+    headers: { 'Content-Type': contentType },
+    body: file,
+  });
+
+  return res.ok;
 }

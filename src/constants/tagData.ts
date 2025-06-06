@@ -1,4 +1,4 @@
-import { cityCategories } from './cityData';
+import { cityCategories, globalCategories } from './cityData';
 
 export const TAG_SETS = {
   mood: ['혼자', '친구랑', '연인과', '가족과', '동료와', '반려동물과'] as const,
@@ -21,6 +21,6 @@ export const TAG_SETS = {
     '가성비 굿',
   ] as const,
   country: ['국내', '국외'] as const,
-  city: cityCategories,
+  city: cityCategories || globalCategories,
   sigungu: [],
 };

@@ -13,7 +13,10 @@ const HeroCategoryList = () => {
   return (
     <div className="flex flex-wrap gap-1.5">
       {categories.map((category) => (
-        <Badge key={category} className="border border-light-800 py-1.5 px-[14px] rounded-xl">
+        <Badge
+          key={category}
+          className="border border-light-800 py-1.5 px-[14px] rounded-xl bg-transparent"
+        >
           {category}
         </Badge>
       ))}
