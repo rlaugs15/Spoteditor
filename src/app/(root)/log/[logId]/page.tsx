@@ -1,5 +1,5 @@
 import { fetchLog } from '@/app/actions/log';
-import { getUser } from '@/app/actions/user';
+import { getPublicUser, getUser } from '@/app/actions/user';
 import LogBookMarkButton from '@/components/common/Button/Bookmark/LogBookMarkButton';
 import { PenBlackIcon, TableIcon } from '@/components/common/Icons';
 import ExtraActionButton from '@/components/features/detail-log/ExtraActionButton';
@@ -24,12 +24,13 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
   }
   const { data: logData } = result;
   const user = await getUser();
+  const logUser = await getPublicUser(result.data.user_id);
   const isAuthor = user?.user_id === logData.user_id;
   return (
     <div>
       <LogThubmnail logData={logData} isAuthor={isAuthor} />
       <main className="flex flex-col px-4 web:px-[50px]">
-        <LogAuthorIntro userId={logData.user_id} logDescription={logData.description ?? ''} />
+        <LogAuthorIntro user={logUser} logDescription={logData.description ?? ''} />
         {logData.place.map((place: PlaceWithImages, idx: number) => (
           <LogContent key={place.place_id} place={place} idx={idx + 1} />
         ))}

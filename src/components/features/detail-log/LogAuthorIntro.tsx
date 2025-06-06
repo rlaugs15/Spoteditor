@@ -1,13 +1,12 @@
-import { getPublicUser } from '@/app/actions/user';
+import { PublicUser } from '@/types/api/user';
 import LogProfile from './LogProfile';
 
 interface LogAuthorIntroProps {
-  userId: string;
+  user: PublicUser;
   logDescription: string;
 }
 
-const LogAuthorIntro = async ({ userId, logDescription }: LogAuthorIntroProps) => {
-  const user = await getPublicUser(userId);
+const LogAuthorIntro = ({ user, logDescription }: LogAuthorIntroProps) => {
   return (
     <div className="web:grid grid-cols-[1fr_4fr] gap-[15px] py-5 space-y-1">
       <LogProfile

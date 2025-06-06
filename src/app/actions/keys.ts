@@ -46,8 +46,8 @@ export const logKeys = {
       `${params.pageSize}`,
       `${params.sort}`,
     ] as const,
-  listByUser: ({ userId, currentPage, pageSize }: LogsParams) =>
-    [...logKeys.log, 'byUser', userId, `${currentPage}`, `${pageSize}`] as const,
+  listByUser: ({ userId, currentPage = 1, pageSize = 10 }: LogsParams) =>
+    [...logKeys.log, 'byUser', userId ?? '', `${currentPage}`, `${pageSize}`] as const,
   bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParmas) =>
     [...logKeys.log, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
 
@@ -60,7 +60,8 @@ export const logKeys = {
 export const placeKeys = {
   place: ['place'] as const,
   detail: (placeId: string) => [...placeKeys.place, placeId] as const,
-  list: (params: PaginationParams) => [...placeKeys.place, 'list', params] as const,
+  list: ({ currentPage = 1, pageSize = 10 }: PaginationParams) =>
+    [...placeKeys.place, 'list', `${currentPage}`, `${pageSize}`] as const,
   bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParmas) =>
     [...placeKeys.place, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
 

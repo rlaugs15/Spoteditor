@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { LogEditFormValues } from '@/types/schema/log';
 import { parseFormData } from '@/utils/formatLog';
 import { revalidateTag } from 'next/cache';
-import { cacheTags } from './tags';
+import { globalTags } from './tags';
 import { getUser } from './user';
 
 export async function updateLog(formData: FormData, logId: string) {
@@ -122,9 +122,13 @@ export async function updateLog(formData: FormData, logId: string) {
     }
     //서버 캐시 무효화
     const tagsToInvalidate = [
-      cacheTags.logBookmark(logId),
-      cacheTags.logBookmarkList(String(me?.user_id)),
-      cacheTags.logListByUser(String(me?.user_id)),
+      globalTags.logAll,
+      globalTags.logBookmarkAll,
+      globalTags.logListAll,
+      globalTags.placeAll,
+      globalTags.placeBookmarkAll,
+      globalTags.placeListAll,
+      globalTags.searchAll,
     ];
     tagsToInvalidate.forEach((tag) => revalidateTag(tag));
     return { success: true };

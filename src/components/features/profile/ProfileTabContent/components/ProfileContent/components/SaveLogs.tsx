@@ -39,7 +39,7 @@ export default function SaveLogs({ userId }: SavaLogsProps) {
     if (!me?.user_id) return;
 
     const revalidateAndRefetch = async () => {
-      await revalidateBookmarkLogs(String(me.user_id));
+      await revalidateBookmarkLogs();
       refetch();
     };
 
