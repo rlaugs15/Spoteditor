@@ -1,8 +1,10 @@
 'use client';
 
+import { followKeys, logKeys, placeKeys, searchKeys, userKeys } from '@/app/actions/keys';
 import Loading from '@/components/common/Loading/Loading';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
+import { useQueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { toast } from 'sonner';
 
@@ -13,6 +15,7 @@ interface AccountDeleteButtonProps {
 
 export default function AccountDeleteButton({ setIsSuccess, setMsg }: AccountDeleteButtonProps) {
   const [isPending, startTransition] = useTransition();
+  const queryClient = useQueryClient();
 
   const handleDelete = () => {
     if (isPending) return;
@@ -24,10 +27,24 @@ export default function AccountDeleteButton({ setIsSuccess, setMsg }: AccountDel
       if (result.success) {
         const supabase = createClient();
         await supabase.auth.signOut(); // 쿠키 삭제
+
+        const keysToRemove = [
+          userKeys.all,
+          followKeys.all,
+          logKeys.log,
+          placeKeys.place,
+          searchKeys.all,
+        ];
+        keysToRemove.forEach((key) => {
+          queryClient.removeQueries({ queryKey: key, exact: false });
+        });
+
         setIsSuccess(true);
+        toast.success('계정 삭제 성공');
+      } else {
+        toast.error('계정 삭제 실패');
       }
       setMsg(result.msg);
-      toast.success('계정 삭제 성공');
     });
   };
   return (
