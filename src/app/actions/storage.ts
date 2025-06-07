@@ -1,11 +1,12 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { ApiResponse } from '@/types/api/common';
 import { StorageBucket } from '../../types/api/storage';
 import { getUser } from './user';
 
 /*
- * 스토리지에 파일 업로드
+ * 스토리지에 파일 직접 업로드
  * profiles/userId/profile.webp
  * thumbnails/userId/${logId}.webp
  * placess/logId/userId/placeId/...
@@ -40,7 +41,7 @@ export async function uploadFile(
   }
 }
 
-/* PreSigned URL 방식으로 이미지 업로드 */
+/* SignedURL 발급 받기 */
 export async function getSignedUploadUrl(
   bucketName: StorageBucket,
   filename: string,
@@ -60,6 +61,124 @@ export async function getSignedUploadUrl(
   }
 
   return { ...data, path }; // signedUrl, path
+}
+
+/* signedUrl로 이미지 업로드 */
+type UploadImageOptions = {
+  folder?: string;
+  subfolder?: string;
+  filename: string;
+};
+
+/* 단일 이미지 업로드 */
+export async function uploadImageToSupabase(
+  bucketName: StorageBucket,
+  file: Blob,
+  options: UploadImageOptions
+): Promise<ApiResponse<string>> {
+  try {
+    // 1. signed URL 발급
+    const supabase = await createClient();
+    const { path, token } = await getSignedUploadUrl(
+      bucketName,
+      options.filename,
+      options.folder,
+      options.subfolder
+    );
+
+    // 2. signed URL로 업로드
+    const { data, error } = await supabase.storage
+      .from(bucketName)
+      .uploadToSignedUrl(path, token, file);
+
+    if (error) throw new Error('업로드 실패');
+    return { success: true, data: data?.fullPath };
+  } catch (error) {
+    console.error('Image upload failed:', error);
+    return { success: false, msg: ' 이미지 업로드 실패' };
+  }
+}
+
+/* SignedURLs  */
+export async function getMultipleSignedUploadUrls(
+  bucketName: StorageBucket,
+  filePaths: string[]
+): Promise<ApiResponse<{ token: string; path: string }[]>> {
+  try {
+    const supabase = await createClient();
+    const results: { token: string; path: string }[] = [];
+
+    for (const path of filePaths) {
+      const { data, error } = await supabase.storage.from(bucketName).createSignedUploadUrl(path);
+
+      if (error || !data) {
+        console.error(`Signed upload URL 생성 실패:`, error);
+        return { success: false, msg: 'Signed upload URL 생성 실패' };
+      }
+
+      results.push({ token: data.token, path });
+    }
+
+    return { success: true, data: results };
+  } catch (err) {
+    console.error('getMultipleSignedUploadUrls 실패:', err);
+    return { success: false, msg: 'Signed upload 처리 중 오류 발생' };
+  }
+}
+
+/* 다중 이미지 업로드 */
+type UploadMultipleImagesOptions = {
+  files: Blob[];
+  bucketName: StorageBucket;
+  folder?: string;
+  subfolder?: string;
+};
+
+export async function uploadMultipleImages({
+  files,
+  bucketName,
+  folder,
+  subfolder,
+}: UploadMultipleImagesOptions): Promise<ApiResponse<string[]>> {
+  try {
+    const me = await getUser();
+    if (!me) throw new Error('유저 없음');
+    if (files.length === 0) return { success: true, data: [] };
+
+    const supabase = await createClient();
+    // 1. 업로드할 파일 경로 생성
+    const fileNames = files.map((_, i) => {
+      const filename = `${i}.webp`;
+      return [me.user_id, folder, subfolder, filename].filter(Boolean).join('/');
+    });
+
+    // 2. Signed URL 목록 발급
+    const signedUrlsResult = await getMultipleSignedUploadUrls(bucketName, fileNames);
+    if (!signedUrlsResult.success) {
+      throw new Error(signedUrlsResult.msg);
+    }
+    const signedUrlsData = signedUrlsResult.data;
+
+    // 3. Signed URL에 이미지 업로드
+    const uploadPromises = files.map(async (file, i) => {
+      const { path, token } = signedUrlsData[i];
+
+      const { data, error } = await supabase.storage
+        .from(bucketName)
+        .uploadToSignedUrl(path, token, file);
+
+      if (error) throw new Error(`파일 업로드 실패: ${fileNames[i]}`);
+
+      return data?.fullPath;
+    });
+
+    const urls = await Promise.all(uploadPromises);
+
+    return { success: true, data: urls };
+  } catch (error) {
+    console.error('다중 이미지 업로드 실패:', error);
+    return { success: false, msg: '이미지 업로드 중 오류가 발생했습니다.' };
+  }
 }
 
 /* 유저 삭제 시 이미지 폴더 삭제 */

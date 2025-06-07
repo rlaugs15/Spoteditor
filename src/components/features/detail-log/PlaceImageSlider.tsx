@@ -45,6 +45,7 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
                 alt="장소 이미지"
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 80vw, 600px"
               />
             </SwiperSlide>
           ))}
@@ -65,6 +66,7 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
             alt="장소 이미지"
             fill
             className="object-contain"
+            sizes="100vw"
           />
 
           <DialogClose asChild>
