@@ -9,7 +9,9 @@ import {
   NewPlaceImage,
   NewTag,
 } from '@/types/schema/log';
+import { revalidateTag } from 'next/cache';
 import { uploadImageToSupabase, uploadMultipleImages } from './storage';
+import { globalTags } from './tags';
 
 /* 로그 등록 */
 export async function createLog(values: LogFormValues) {
@@ -57,6 +59,10 @@ export async function createLog(values: LogFormValues) {
     console.time('🗃️ DB 삽입');
     await insertLogToDB({ logData, tagsData, placeDataList, placeImageDataList, addressData });
     console.timeEnd('🗃️ DB 삽입');
+
+    //서버 캐시 무효화
+    const tagsToInvalidate = [globalTags.logAll, globalTags.logListAll, globalTags.searchAll];
+    tagsToInvalidate.forEach((tag) => revalidateTag(tag));
 
     return { success: true, data: logId };
   } catch (e) {

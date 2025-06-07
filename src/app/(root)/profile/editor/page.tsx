@@ -126,8 +126,8 @@ export default function ProfileEditorPage() {
       //캐시 무효화 추가
       await patchUser(updateData);
 
-      queryClient.invalidateQueries({ queryKey: userKeys.me() });
-      queryClient.invalidateQueries({ queryKey: userKeys.publicUser(String(me.user_id)) });
+      queryClient.removeQueries({ queryKey: userKeys.me(), exact: true });
+      queryClient.removeQueries({ queryKey: userKeys.publicUser(String(me.user_id)), exact: true });
 
       router.push(`/profile/${me.user_id}`);
       toast.success('회원 정보 수정 성공');
