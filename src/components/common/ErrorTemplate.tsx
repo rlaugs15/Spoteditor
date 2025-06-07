@@ -7,21 +7,16 @@ import ErrorImg from '../../../public/images/404.png';
 interface ErrorTemplateProps {
   title?: string;
   message?: string;
-  onReset?: () => void;
 }
 
 export default function ErrorTemplate({
   title = '찾으시는 페이지를 찾을 수 없습니다.',
   message = 'URL 주소를 확인해주세요.',
-  onReset,
 }: ErrorTemplateProps) {
   const router = useRouter();
+
   const handleClick = () => {
-    if (onReset) {
-      onReset(); // error.tsx에서 reset 전달된 경우
-    } else {
-      router.push('/'); // not-found.tsx 같은 경우엔 직접 이동
-    }
+    router.push('/');
   };
   return (
     <main className="flex flex-col items-center justify-center h-dvh grow">
