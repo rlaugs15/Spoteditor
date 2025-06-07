@@ -9,7 +9,6 @@ import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
 import { LogformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/schema/log';
-import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
 
@@ -60,8 +59,7 @@ const LogPage = () => {
   };
 
   const onSubmit = async (values: LogFormValues) => {
-    const formData = createFormData(values);
-    mutate({ formData });
+    mutate({ values });
   };
 
   return (
