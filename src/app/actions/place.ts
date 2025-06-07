@@ -6,7 +6,7 @@ import { PlaceBookmarkListParmas, PlacesReseponse } from '@/types/api/place';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { logKeys } from './keys';
-import { cacheTags } from './tags';
+import { cacheTags, globalTags } from './tags';
 
 // ===================================================================
 // 북마크 장소 리스트
@@ -125,5 +125,5 @@ export async function getBookmarkedPlaces(params: PlaceBookmarkListParmas) {
 
 /* 북마크 시 서버캐시 무효화 */
 export async function revalidateBookmarkPlaces() {
-  revalidateTag('place:bookmark:all');
+  revalidateTag(globalTags.placeBookmarkAll);
 }
