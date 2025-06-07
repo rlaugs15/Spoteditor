@@ -75,7 +75,7 @@ const cacheUser = unstable_cache(
   },
   [...userKeys.me()],
   {
-    tags: [cacheTags.me()],
+    tags: [cacheTags.me(), globalTags.userAll],
     revalidate: 300,
   }
 );
@@ -131,7 +131,7 @@ async function fetchPublicUser(userId: string): Promise<PublicUser | null> {
 
 export async function getPublicUser(userId: string) {
   return unstable_cache(() => fetchPublicUser(userId), [...userKeys.publicUser(userId)], {
-    tags: [cacheTags.publicUser(userId)],
+    tags: [cacheTags.publicUser(userId), globalTags.userAll],
     revalidate: 300,
   })();
 }

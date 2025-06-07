@@ -9,11 +9,12 @@ import {
   NewPlaceImage,
   NewTag,
 } from '@/types/schema/log';
-import { parseFormData } from '@/utils/formatLog';
-import { uploadFile } from './storage';
+import { revalidateTag } from 'next/cache';
+import { uploadImageToSupabase, uploadMultipleImages } from './storage';
+import { globalTags } from './tags';
 
 /* 로그 등록 */
-export async function createLog(formData: FormData) {
+export async function createLog(values: LogFormValues) {
   try {
     const supabase = await createClient();
     const {
@@ -22,31 +23,28 @@ export async function createLog(formData: FormData) {
     if (!user) throw new Error('유저 없음');
 
     const logId = crypto.randomUUID();
-    console.time('📦 FormData 파싱');
-    const parseResult = parseFormData<LogFormValues>(formData);
-    console.timeEnd('📦 FormData 파싱');
 
     /* 썸네일 업로드 */
     console.time('🖼️ 썸네일 업로드');
-    const thumbnailUploadResult = await uploadThumbnail(parseResult.thumbnail, logId);
+    const thumbnailUploadResult = await uploadThumbnail(values.thumbnail, logId);
     console.timeEnd('🖼️ 썸네일 업로드');
     if (!thumbnailUploadResult?.success) throw new Error(thumbnailUploadResult?.msg);
 
     /* 장소 이미지 업로드 */
     console.time('📍 장소 이미지 업로드');
-    const { placeDataList, placeImageDataList } = await uploadPlaces(parseResult.places, logId);
+    const { placeDataList, placeImageDataList } = await uploadPlaces(values.places, logId);
     console.timeEnd('📍 장소 이미지 업로드');
 
     const logData = {
       log_id: logId,
-      title: parseResult.logTitle,
-      description: parseResult.logDescription,
-      thumbnail_url: thumbnailUploadResult.fullPath,
+      title: values.logTitle,
+      description: values.logDescription,
+      thumbnail_url: thumbnailUploadResult.data,
     };
 
     const tagsData =
-      parseResult.tags &&
-      (Object.entries(parseResult.tags).flatMap(([category, tag]) =>
+      values.tags &&
+      (Object.entries(values.tags).flatMap(([category, tag]) =>
         Array.isArray(tag)
           ? tag.map((t) => ({ category, tag: t, log_id: logId }))
           : [{ category, tag, log_id: logId }]
@@ -55,12 +53,16 @@ export async function createLog(formData: FormData) {
 
     const addressData = {
       log_id: logId,
-      ...parseResult.address,
+      ...values.address,
     };
 
     console.time('🗃️ DB 삽입');
     await insertLogToDB({ logData, tagsData, placeDataList, placeImageDataList, addressData });
     console.timeEnd('🗃️ DB 삽입');
+
+    //서버 캐시 무효화
+    const tagsToInvalidate = [globalTags.logAll, globalTags.logListAll, globalTags.searchAll];
+    tagsToInvalidate.forEach((tag) => revalidateTag(tag));
 
     return { success: true, data: logId };
   } catch (e) {
@@ -71,9 +73,8 @@ export async function createLog(formData: FormData) {
 
 /* 썸네일 업로드 */
 async function uploadThumbnail(thumbnail: Blob, logId: string) {
-  return await uploadFile('thumbnails', thumbnail, {
+  return await uploadImageToSupabase('thumbnails', thumbnail, {
     folder: logId,
-    subfolder: '',
     filename: `${logId}.webp`,
   });
 }
@@ -83,42 +84,45 @@ async function uploadPlaces(places: LogFormValues['places'], logId: string) {
   const placeDataList: NewPlace[] = [];
   const placeImageDataList: NewPlaceImage[] = [];
 
-  // 장소 개수만큼 이미지 생성
-  for (let placeIdx = 0; placeIdx < places.length; placeIdx++) {
-    const { placeName, description, location, category, placeImages } = places[placeIdx];
-    const placeId = crypto.randomUUID();
+  const uploadTasks = places.map(
+    async ({ placeName, description, location, category, placeImages }, idx) => {
+      const placeId = crypto.randomUUID();
 
-    placeDataList.push({
-      place_id: placeId,
-      log_id: logId,
-      name: placeName,
-      description: description,
-      address: location,
-      category: category,
-      order: placeIdx + 1,
-    });
+      // 장소 데이터 생성
+      placeDataList.push({
+        place_id: placeId,
+        log_id: logId,
+        name: placeName,
+        description,
+        address: location,
+        category,
+        order: idx + 1,
+      });
 
-    const uploads = placeImages.map(
-      async ({ file, order }: { file: Blob; order: number }, imgIdx: number) => {
-        const uploadResult = await uploadFile('places', file, {
-          folder: logId,
-          subfolder: placeId,
-          filename: `${imgIdx}.webp`,
-        });
-        if (!uploadResult?.success) throw new Error(uploadResult?.msg);
+      // 이미지 업로드
+      const files = placeImages.map((img) => img.file);
+      const uploadResult = await uploadMultipleImages({
+        files,
+        bucketName: 'places',
+        folder: logId,
+        subfolder: placeId,
+      });
 
-        return {
-          image_path: uploadResult.fullPath as string,
-          order,
-          place_id: placeId,
-        };
+      if (!uploadResult.success) {
+        throw new Error(uploadResult.msg || '장소 이미지 업로드 실패');
       }
-    );
 
-    const uploadedImages = await Promise.all(uploads);
-    placeImageDataList.push(...uploadedImages);
-  }
+      const uploaded = uploadResult.data.map((url, i) => ({
+        image_path: url,
+        order: placeImages[i].order,
+        place_id: placeId,
+      }));
 
+      placeImageDataList.push(...uploaded);
+    }
+  );
+
+  await Promise.all(uploadTasks);
   return { placeDataList, placeImageDataList };
 }
 

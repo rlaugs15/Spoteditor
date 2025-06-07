@@ -20,7 +20,7 @@ const useLogDeleteMutation = () => {
         const keysToInvalidate = [logKeys.log, placeKeys.place, searchKeys.all];
 
         keysToInvalidate.forEach((key) => {
-          queryClient.invalidateQueries({ queryKey: key });
+          queryClient.removeQueries({ queryKey: key, exact: false });
         });
         router.replace(HOME);
       }

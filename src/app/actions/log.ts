@@ -180,8 +180,8 @@ async function fetchLogs({
     console.error(_error);
     return {
       success: false,
-      msg: ERROR_MESSAGES.LOG.LIST_EMPTY,
-      errorCode: ERROR_CODES.LOG.LIST_EMPTY,
+      msg: ERROR_MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
+      errorCode: ERROR_CODES.COMMON.INTERNAL_SERVER_ERROR,
     };
   }
 }
