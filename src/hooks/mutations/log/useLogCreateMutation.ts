@@ -1,18 +1,19 @@
 import { createLog } from '@/app/actions/log-register';
 import { useLogCreationStore } from '@/stores/logCreationStore';
+import { LogFormValues } from '@/types/schema/log';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 interface LogCreateMutationProps {
-  formData: FormData;
+  values: LogFormValues;
 }
 
 const useLogCreateMutation = () => {
   const router = useRouter();
   const clearTag = useLogCreationStore((state) => state.clearTag);
   return useMutation({
-    mutationFn: ({ formData }: LogCreateMutationProps) => createLog(formData),
+    mutationFn: ({ values }: LogCreateMutationProps) => createLog(values),
     onSuccess: ({ success, data }) => {
       if (success) {
         clearTag();

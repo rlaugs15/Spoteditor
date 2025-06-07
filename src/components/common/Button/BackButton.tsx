@@ -6,20 +6,29 @@ import { ArrowLeftIcon } from '../Icons';
 
 interface BackButtonProps {
   circle?: boolean;
+  plain?: boolean;
 }
 
-const BackButton = ({ circle }: BackButtonProps) => {
+const BackButton = ({ circle, plain }: BackButtonProps) => {
   const router = useRouter();
   const handleClick = () => router.back();
   return (
-    <Button
-      variant={'ghost'}
-      size={'icon'}
-      onClick={handleClick}
-      className={cn(circle && 'rounded-full bg-white')}
-    >
-      <ArrowLeftIcon />
-    </Button>
+    <>
+      {plain ? (
+        <button onClick={handleClick} className={cn(circle && 'rounded-full bg-white')}>
+          <ArrowLeftIcon />
+        </button>
+      ) : (
+        <Button
+          variant={'ghost'}
+          size={'icon'}
+          onClick={handleClick}
+          className={cn(circle && 'rounded-full bg-white')}
+        >
+          <ArrowLeftIcon />
+        </Button>
+      )}
+    </>
   );
 };
 

@@ -1,5 +1,7 @@
 import { LogIdParams } from '@/app/(root)/log/[logId]/page';
 import { fetchLog } from '@/app/actions/log';
+import { HOME } from '@/constants/pathname';
+import { redirect } from 'next/navigation';
 import LogEditPage from './_EditPage/page';
 interface LogEditServerPageProps {
   params: Promise<LogIdParams>;
@@ -8,9 +10,7 @@ interface LogEditServerPageProps {
 const LogEditServerPage = async ({ params }: LogEditServerPageProps) => {
   const { logId } = await params;
   const result = await fetchLog(logId);
-  if (!result.success) {
-    throw new Error(result.msg);
-  }
+  if (!result.success) redirect(HOME);
   const logData = result.data;
 
   return <LogEditPage logData={logData} />;
