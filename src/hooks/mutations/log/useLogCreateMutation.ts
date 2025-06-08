@@ -54,15 +54,13 @@ const useLogCreateMutation = () => {
     onSuccess: ({ success, data }) => {
       if (success) {
         clearTag();
+        router.replace(`/log/${data}`);
+        toast.success('업로드 성공');
 
         const keysToInvalidate = [logKeys.log, searchKeys.all];
-
         keysToInvalidate.forEach((key) =>
           queryClient.removeQueries({ queryKey: key, exact: false })
         );
-
-        router.replace(`/log/${data}`);
-        toast.success('업로드 성공');
       }
     },
     onError: () => {
