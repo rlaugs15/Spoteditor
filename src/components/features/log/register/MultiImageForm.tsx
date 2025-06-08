@@ -2,6 +2,7 @@
 import { AddCameraIcon, XRemovePlaceImageIcon } from '@/components/common/Icons';
 import { FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import useMultipleImagePreview from '@/hooks/useMultipleImagePreview';
 import { LogFormValues } from '@/types/schema/log';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import Image from 'next/image';
@@ -20,6 +21,9 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
     control: control,
     name: `places.${idx}.placeImages`,
   });
+
+  const { previews, addFile, removeByFile } = useMultipleImagePreview();
+
   const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files; // 유사 배열 객체
     if (!fileList) return;
@@ -32,10 +36,16 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
     const compressedFiles = await Promise.all(files.map((file) => compressImageToWebp(file)));
 
     compressedFiles
-      .filter((compressedImg) => compressedImg !== undefined)
-      .forEach((compressedImg, idx) =>
-        append({ file: compressedImg, order: fields.length + idx + 1 })
-      );
+      .filter((compressedImg): compressedImg is File => compressedImg !== undefined)
+      .forEach((compressedImg, i) => {
+        addFile(compressedImg);
+        append({ file: compressedImg, order: fields.length + i + 1 });
+      });
+  };
+
+  const handleRemove = (index: number, file: Blob) => {
+    if (file instanceof Blob) removeByFile(file);
+    remove(index);
   };
 
   return (
@@ -60,11 +70,15 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
       <div className="flex web:grid web:grid-cols-3 max-h-[320px] overflow-x-auto gap-1 scrollbar-hide">
         {fields.map((field, imageIdx) => {
           const file = field.file;
-          const url = typeof file === 'string' ? file : URL.createObjectURL(file);
+          const previewUrl =
+            typeof file === 'string' ? file : previews.find((p) => p.file === file)?.url || '';
+
           return (
             <div key={field.id} className="relative w-[220px] h-[300px] mb-2.5 shrink-0">
-              <Image src={url} fill alt="업로드한 장소 이미지" className="object-cover" />
-              <button onClick={() => remove(imageIdx)}>
+              {previewUrl && (
+                <Image src={previewUrl} fill alt="업로드한 장소 이미지" className="object-cover" />
+              )}
+              <button onClick={() => handleRemove(imageIdx, file)}>
                 <XRemovePlaceImageIcon className="absolute top-2 right-2 cursor-pointer hover:brightness-90" />
               </button>
             </div>
