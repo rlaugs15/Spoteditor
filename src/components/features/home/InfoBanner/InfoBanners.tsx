@@ -28,8 +28,10 @@ const InfoBanners = () => {
       <InfoBanner className="border-t-0 web:border-t">
         <p className="web:px-5">
           내가 좋아하는 숨은 명소와 맛집을 공유하고, 다른 유저들이 여러분의 루트를 참고하며
-          &quot;내가 만든 코스로 누군가 즐거운 하루를 보냈구나!&quot; 하는 느낌, 상상만 해도
-          행복하지 않나요? 🥰
+          <br />
+          &quot;내가 만든 코스로 누군가 즐거운 하루를 보냈구나!&quot; 하는 느낌!
+          <br />
+          상상만 해도 행복하지 않나요? 🥰
           <br />
           다른 유저들이 참고할 수 있도록 여러분만의 코스를 나눠보세요.
           <br />

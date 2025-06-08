@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 const ContactLink = () => {
   return (
     <div className="flex gap-4 border-b border-light-950 text-light-200 pb-4 web:pb-8">
@@ -8,7 +6,7 @@ const ContactLink = () => {
           Contact Us
         </a>
       </div>
-      <Link href={'#'}>Instragram</Link>
+      {/* <Link href={'#'}>Instragram</Link> */}
     </div>
   );
 };
