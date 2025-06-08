@@ -195,7 +195,7 @@ export default function PrivacyPage() {
           <ul className="pl-5 space-y-1">
             <li>
               ① 킷폼은 이용자에게 개별적인 맞춤서비스를 제공하기 위해 이용정보를 저장하고 수시로
-              불러오는 '쿠키(cookie)'를 사용합니다.
+              불러오는 &lsquo;쿠키(cookie)&lsquo;를 사용합니다.
             </li>
             <li>
               ② 쿠키의 사용목적
