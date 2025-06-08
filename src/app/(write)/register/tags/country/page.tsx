@@ -5,7 +5,7 @@ import { REGISTER_PATHS } from '@/constants/pathname';
 const CountrySelectionPage = () => {
   return (
     <>
-      <PageIntro title="국가를 선택해주세요." des="메인 국가를 선택해주세요." />
+      <PageIntro type="country" />
       <div className="grow">
         <TagGroup title="국가" type="country" />
       </div>
