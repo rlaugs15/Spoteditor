@@ -41,7 +41,7 @@ export async function uploadFile(
   }
 }
 
-/* SignedURL 발급 받기 */
+/* Signed upload URL 발급 받기 */
 export async function getSignedUploadUrl(
   bucketName: StorageBucket,
   filename: string,

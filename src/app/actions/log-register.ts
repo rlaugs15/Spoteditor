@@ -1,5 +1,6 @@
 'use server';
 
+import { PreparedValues } from '@/hooks/mutations/log/useLogCreateMutation';
 import { createClient } from '@/lib/supabase/server';
 import {
   LogFormValues,
@@ -14,7 +15,7 @@ import { uploadImageToSupabase, uploadMultipleImages } from './storage';
 import { globalTags } from './tags';
 
 /* 로그 등록 */
-export async function createLog(values: LogFormValues) {
+export async function createLog(values: PreparedValues) {
   try {
     const supabase = await createClient();
     const {
@@ -22,49 +23,42 @@ export async function createLog(values: LogFormValues) {
     } = await supabase.auth.getUser();
     if (!user) throw new Error('유저 없음');
 
-    const logId = crypto.randomUUID();
-
-    /* 썸네일 업로드 */
-    console.time('🖼️ 썸네일 업로드');
-    const thumbnailUploadResult = await uploadThumbnail(values.thumbnail, logId);
-    console.timeEnd('🖼️ 썸네일 업로드');
-    if (!thumbnailUploadResult?.success) throw new Error(thumbnailUploadResult?.msg);
-
-    /* 장소 이미지 업로드 */
-    console.time('📍 장소 이미지 업로드');
-    const { placeDataList, placeImageDataList } = await uploadPlaces(values.places, logId);
-    console.timeEnd('📍 장소 이미지 업로드');
-
     const logData = {
-      log_id: logId,
+      log_id: values.logId,
       title: values.logTitle,
       description: values.logDescription,
-      thumbnail_url: thumbnailUploadResult.data,
+      thumbnail_url: values.thumbnailUrl,
     };
 
     const tagsData =
       values.tags &&
       (Object.entries(values.tags).flatMap(([category, tag]) =>
         Array.isArray(tag)
-          ? tag.map((t) => ({ category, tag: t, log_id: logId }))
-          : [{ category, tag, log_id: logId }]
+          ? tag.map((t) => ({ category, tag: t, log_id: values.logId }))
+          : [{ category, tag, log_id: values.logId }]
       ) ??
         []);
 
     const addressData = {
-      log_id: logId,
+      log_id: values.logId,
       ...values.address,
     };
 
     console.time('🗃️ DB 삽입');
-    await insertLogToDB({ logData, tagsData, placeDataList, placeImageDataList, addressData });
+    await insertLogToDB({
+      logData,
+      tagsData,
+      placeDataList: values.placeDataList,
+      placeImageDataList: values.placeImageDataList,
+      addressData,
+    });
     console.timeEnd('🗃️ DB 삽입');
 
     //서버 캐시 무효화
     const tagsToInvalidate = [globalTags.logAll, globalTags.logListAll, globalTags.searchAll];
     tagsToInvalidate.forEach((tag) => revalidateTag(tag));
 
-    return { success: true, data: logId };
+    return { success: true, data: values.logId };
   } catch (e) {
     console.error(e);
     return { success: false, msg: '로그 등록 실패' };
@@ -72,7 +66,7 @@ export async function createLog(values: LogFormValues) {
 }
 
 /* 썸네일 업로드 */
-async function uploadThumbnail(thumbnail: Blob, logId: string) {
+export async function uploadThumbnail(thumbnail: Blob, logId: string) {
   return await uploadImageToSupabase('thumbnails', thumbnail, {
     folder: logId,
     filename: `${logId}.webp`,
@@ -80,7 +74,7 @@ async function uploadThumbnail(thumbnail: Blob, logId: string) {
 }
 
 /* 장소 이미지 업로드 */
-async function uploadPlaces(places: LogFormValues['places'], logId: string) {
+export async function uploadPlaces(places: LogFormValues['places'], logId: string) {
   const placeDataList: NewPlace[] = [];
   const placeImageDataList: NewPlaceImage[] = [];
 
