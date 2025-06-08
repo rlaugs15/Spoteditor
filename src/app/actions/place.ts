@@ -73,7 +73,7 @@ export async function fetchBookmarkedPlaces({
       const image = place?.place_images?.[0];
       return {
         place_id: place?.place_id?.toString() ?? '',
-        log_id: place?.log?.log_id?.toString() ?? null,
+        log_id: place?.log?.log_id?.toString() as string,
         user: {
           user_id: place?.log?.users?.user_id ?? '',
           nickname: place?.log?.users?.nickname ?? null,
