@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { ApiResponse } from '@/types/api/common';
+import pLimit from 'p-limit';
 import { StorageBucket } from '../../types/api/storage';
 import { getUser } from './user';
 
@@ -159,18 +160,31 @@ export async function uploadMultipleImages({
     }
     const signedUrlsData = signedUrlsResult.data;
 
+    const limit = pLimit(3);
+
     // 3. Signed URL에 이미지 업로드
-    const uploadPromises = files.map(async (file, i) => {
-      const { path, token } = signedUrlsData[i];
+    // const uploadPromises = files.map(async (file, i) => {
+    //   const { path, token } = signedUrlsData[i];
 
-      const { data, error } = await supabase.storage
-        .from(bucketName)
-        .uploadToSignedUrl(path, token, file);
+    //   const { data, error } = await supabase.storage
+    //     .from(bucketName)
+    //     .uploadToSignedUrl(path, token, file);
 
-      if (error) throw new Error(`파일 업로드 실패: ${fileNames[i]}`);
+    //   if (error) throw new Error(`파일 업로드 실패: ${fileNames[i]}`);
 
-      return data?.fullPath;
-    });
+    //   return data?.fullPath;
+    // });
+    const uploadPromises = files.map((file, i) =>
+      limit(async () => {
+        const { path, token } = signedUrlsData[i];
+        const { data, error } = await supabase.storage
+          .from(bucketName)
+          .uploadToSignedUrl(path, token, file);
+
+        if (error) throw new Error(`파일 업로드 실패: ${fileNames[i]}`);
+        return data?.fullPath;
+      })
+    );
 
     const urls = await Promise.all(uploadPromises);
 
