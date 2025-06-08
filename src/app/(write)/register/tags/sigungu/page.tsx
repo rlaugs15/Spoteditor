@@ -5,7 +5,7 @@ import { REGISTER_PATHS } from '@/constants/pathname';
 const SigunguSelectionPage = () => {
   return (
     <>
-      <PageIntro title="시/군/구를 선택해주세요." des="메인 시/군/구 도시를 선택해주세요." />
+      <PageIntro type="sigungu" />
       <div className="grow">
         <TagGroup title="시/군/구" type="sigungu" />
       </div>
