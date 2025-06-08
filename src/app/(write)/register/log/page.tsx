@@ -59,6 +59,7 @@ const LogPage = () => {
   };
 
   const onSubmit = async (values: LogFormValues) => {
+    // console.log(values);
     mutate({ values });
   };
 
