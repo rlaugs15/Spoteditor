@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { NOTICE_PATHS, REGISTER_PATHS, TERMS_PATHS } from '@/constants/pathname';
+import { NOTICE_PATHS, PRIVACY_PATHS, REGISTER_PATHS, TERMS_PATHS } from '@/constants/pathname';
 import { IUser } from '@/types/api/user';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -84,7 +84,11 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
               <button className="text-text-xs">이용약관</button>
             </DropdownMenuItem>
           </Link>
-          <button className="text-text-xs">개인정보처리방침</button>
+          <Link href={PRIVACY_PATHS.PRIVACY} className="flex">
+            <DropdownMenuItem className="p-0">
+              <button className="text-text-xs">개인정보처리방침</button>
+            </DropdownMenuItem>
+          </Link>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
