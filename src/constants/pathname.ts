@@ -21,3 +21,7 @@ export const NOTICE_PATHS = {
 export const TERMS_PATHS = {
   TERMS: '/terms',
 };
+
+export const PRIVACY_PATHS = {
+  PRIVACY: '/privacy',
+};
