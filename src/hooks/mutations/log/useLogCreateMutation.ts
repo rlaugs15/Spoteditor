@@ -1,7 +1,8 @@
 import { logKeys, searchKeys } from '@/app/actions/keys';
-import { createLog, uploadPlaces, uploadThumbnail } from '@/app/actions/log-register';
+import { createLog } from '@/app/actions/log-register';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues, NewPlace, NewPlaceImage } from '@/types/schema/log';
+import { uploadPlaces, uploadThumbnail } from '@/utils/upload';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
