@@ -7,7 +7,7 @@ const CitySelectionPage = () => {
     <>
       <PageIntro type="city" />
       <div className="grow">
-        <TagGroup title="도시" type="city" />
+        <TagGroup type="city" />
       </div>
       <RegisterFooter tagTargets={['city']} nextPath={REGISTER_PATHS.SIGUNGU} />
     </>

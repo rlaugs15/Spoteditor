@@ -7,7 +7,7 @@ const SigunguSelectionPage = () => {
     <>
       <PageIntro type="sigungu" />
       <div className="grow">
-        <TagGroup title="시/군/구" type="sigungu" />
+        <TagGroup type="sigungu" />
       </div>
       <RegisterFooter tagTargets={['sigungu']} nextPath={REGISTER_PATHS.LOG} />
     </>

@@ -53,7 +53,7 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
 
       <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
         <DialogContent
-          className="bg-transparent p-0 flex justify-center items-center border-0 w-full h-1/2 shadow-none "
+          className="bg-transparent p-0 flex justify-center items-center border-0 w-[80vw] h-[80vh] shadow-none "
           showCloseButton={false}
         >
           <DialogHeader>

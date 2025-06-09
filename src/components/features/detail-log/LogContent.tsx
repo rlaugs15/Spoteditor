@@ -17,7 +17,7 @@ const LogContent = ({ place, idx }: LogContentProps) => {
             <span>{String(idx).padStart(2, '0')}</span>
             <span>{place.name}</span>
           </div>
-          <PlaceBookMarkButton placeId={place.place_id} />
+          <PlaceBookMarkButton placeId={place.place_id} className="!top-0 !right-0" />
         </div>
         <div>
           <div className="flex gap-1.5 text-light-400 text-text-sm web:text-text-lg">

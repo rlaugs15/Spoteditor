@@ -66,7 +66,7 @@ const LogPage = () => {
     <div className="flex flex-col h-full">
       <Header3 onAddNewPlace={handleAddNewPlace} />
       <Form {...form}>
-        <main className="grow bg-white">
+        <main className="grow bg-white pt-[54px]">
           <TitledInput />
           <PhotoTextSection thumbnail />
           <div className="flex flex-col gap-4">

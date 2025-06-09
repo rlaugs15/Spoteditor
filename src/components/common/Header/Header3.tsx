@@ -21,20 +21,22 @@ const Header3 = ({ onAddNewPlace }: Header3Props) => {
   }, []);
 
   return (
-    <header className="py-[15px] bg-white flex items-center justify-between">
-      <div className="flex items-center gap-2.5">
-        <BackButton />
-        <p className="text-text-2xl font-bold">
-          {city} · {sigungu}
-        </p>
+    <header className="fixed top-0 left-0 right-0 z-50 h-[54px] backdrop-blur-sm">
+      <div className="py-[15px] flex items-center justify-between w-full min-w-[343px] max-w-[724px] mx-auto px-4">
+        <div className="flex items-center gap-2.5">
+          <BackButton plain />
+          <p className="text-text-2xl font-bold">
+            {city} · {sigungu}
+          </p>
+        </div>
+        <Button
+          variant="ghost"
+          className="font-bold text-text-md !text-light-300 px-0"
+          onClick={onAddNewPlace}
+        >
+          장소 추가
+        </Button>
       </div>
-      <Button
-        variant={'ghost'}
-        className="font-bold text-text-md !text-light-300"
-        onClick={onAddNewPlace}
-      >
-        장소 추가
-      </Button>
     </header>
   );
 };
