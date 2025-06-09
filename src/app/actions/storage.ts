@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { ApiResponse } from '@/types/api/common';
-import pLimit from 'p-limit';
+import type { FileObject } from '@supabase/storage-js';
 import { StorageBucket } from '../../types/api/storage';
 import { getUser } from './user';
 
@@ -64,42 +64,6 @@ export async function getSignedUploadUrl(
   return { ...data, path }; // signedUrl, path
 }
 
-/* signedUrl로 이미지 업로드 */
-type UploadImageOptions = {
-  folder?: string;
-  subfolder?: string;
-  filename: string;
-};
-
-/* 단일 이미지 업로드 */
-export async function uploadImageToSupabase(
-  bucketName: StorageBucket,
-  file: Blob,
-  options: UploadImageOptions
-): Promise<ApiResponse<string>> {
-  try {
-    // 1. signed URL 발급
-    const supabase = await createClient();
-    const { path, token } = await getSignedUploadUrl(
-      bucketName,
-      options.filename,
-      options.folder,
-      options.subfolder
-    );
-
-    // 2. signed URL로 업로드
-    const { data, error } = await supabase.storage
-      .from(bucketName)
-      .uploadToSignedUrl(path, token, file);
-
-    if (error) throw new Error('업로드 실패');
-    return { success: true, data: data?.fullPath };
-  } catch (error) {
-    console.error('Image upload failed:', error);
-    return { success: false, msg: ' 이미지 업로드 실패' };
-  }
-}
-
 /* SignedURLs  */
 export async function getMultipleSignedUploadUrls(
   bucketName: StorageBucket,
@@ -124,74 +88,6 @@ export async function getMultipleSignedUploadUrls(
   } catch (err) {
     console.error('getMultipleSignedUploadUrls 실패:', err);
     return { success: false, msg: 'Signed upload 처리 중 오류 발생' };
-  }
-}
-
-/* 다중 이미지 업로드 */
-type UploadMultipleImagesOptions = {
-  files: Blob[];
-  bucketName: StorageBucket;
-  folder?: string;
-  subfolder?: string;
-};
-
-export async function uploadMultipleImages({
-  files,
-  bucketName,
-  folder,
-  subfolder,
-}: UploadMultipleImagesOptions): Promise<ApiResponse<string[]>> {
-  try {
-    const me = await getUser();
-    if (!me) throw new Error('유저 없음');
-    if (files.length === 0) return { success: true, data: [] };
-
-    const supabase = await createClient();
-    // 1. 업로드할 파일 경로 생성
-    const fileNames = files.map((_, i) => {
-      const filename = `${i}.webp`;
-      return [me.user_id, folder, subfolder, filename].filter(Boolean).join('/');
-    });
-
-    // 2. Signed URL 목록 발급
-    const signedUrlsResult = await getMultipleSignedUploadUrls(bucketName, fileNames);
-    if (!signedUrlsResult.success) {
-      throw new Error(signedUrlsResult.msg);
-    }
-    const signedUrlsData = signedUrlsResult.data;
-
-    const limit = pLimit(3);
-
-    // 3. Signed URL에 이미지 업로드
-    // const uploadPromises = files.map(async (file, i) => {
-    //   const { path, token } = signedUrlsData[i];
-
-    //   const { data, error } = await supabase.storage
-    //     .from(bucketName)
-    //     .uploadToSignedUrl(path, token, file);
-
-    //   if (error) throw new Error(`파일 업로드 실패: ${fileNames[i]}`);
-
-    //   return data?.fullPath;
-    // });
-    const uploadPromises = files.map((file, i) =>
-      limit(async () => {
-        const { path, token } = signedUrlsData[i];
-        const { data, error } = await supabase.storage
-          .from(bucketName)
-          .uploadToSignedUrl(path, token, file);
-
-        if (error) throw new Error(`파일 업로드 실패: ${fileNames[i]}`);
-        return data?.fullPath;
-      })
-    );
-
-    const urls = await Promise.all(uploadPromises);
-
-    return { success: true, data: urls };
-  } catch (error) {
-    console.error('다중 이미지 업로드 실패:', error);
-    return { success: false, msg: '이미지 업로드 중 오류가 발생했습니다.' };
   }
 }
 
@@ -227,15 +123,7 @@ export async function deleteProfileStorageFolder(
   const supabase = await createClient();
 
   // 1. userId/ 경로 안의 파일들 모두 조회
-  const { data: files, error: listError } = await supabase.storage
-    .from(bucket)
-    .list(userFolder + '/');
-
-  if (listError) {
-    console.warn('폴더 내 파일 목록 조회 실패');
-    return;
-  }
-
+  const files = await getListAllFilesInFolder(`${userFolder}/`, 'profiles');
   if (!files || files.length === 0) {
     console.log('삭제할 파일 없음 (빈 폴더)');
     return;
@@ -250,5 +138,73 @@ export async function deleteProfileStorageFolder(
     console.warn('프로필 이미지 삭제 실패');
   } else {
     console.log('프로필 폴더 삭제 완료');
+  }
+}
+
+export async function getListAllFilesInFolder(folderPath: string, bucket: string) {
+  const supabase = await createClient();
+
+  const { data: files, error } = await supabase.storage.from(bucket).list(folderPath);
+
+  if (error) {
+    console.warn(`"${folderPath}" 폴더의 파일 목록 조회 실패:`, error.message);
+    return null;
+  }
+
+  return files;
+}
+
+/* 단일 폴더 내 파일 제거 */
+export async function deleteFilesInFolder(folderPath: string, files: FileObject[], bucket: string) {
+  if (!files || files.length === 0) {
+    console.log('삭제할 파일 없음');
+    return;
+  }
+
+  const supabase = await createClient();
+
+  const paths = files.map((file) => `${folderPath}/${file.name}`);
+  const { error } = await supabase.storage.from(bucket).remove(paths);
+
+  if (error) {
+    console.warn('Storage 파일 삭제 실패:', error.message);
+  } else {
+    console.log(`📁 ${folderPath} 내 파일 삭제 완료`);
+  }
+}
+
+/* 2단계 중첩 폴더 내 파일 삭제 */
+export async function deleteNestedFolderFiles(parentFolder: string, bucket: string) {
+  const supabase = await createClient();
+
+  // 1단계: logId 하위 placeId 폴더 목록
+  const subfolders = await getListAllFilesInFolder(parentFolder, bucket);
+  if (!subfolders || subfolders.length === 0) {
+    console.log(`"${parentFolder}" 하위 폴더 없음`);
+    return;
+  }
+
+  const allFilePaths: string[] = [];
+
+  for (const folder of subfolders) {
+    if (!folder.name) continue;
+
+    const placeFolderPath = `${parentFolder}/${folder.name}`;
+    const files = await getListAllFilesInFolder(placeFolderPath, bucket);
+    if (files && files.length > 0) {
+      const fullPaths = files.map((file) => `${placeFolderPath}/${file.name}`);
+      allFilePaths.push(...fullPaths);
+    }
+  }
+
+  if (allFilePaths.length > 0) {
+    const { error } = await supabase.storage.from(bucket).remove(allFilePaths);
+    if (error) {
+      console.warn('중첩 폴더 파일 삭제 실패:', error.message);
+    } else {
+      console.log(`${parentFolder} 이하의 모든 파일 삭제 완료`);
+    }
+  } else {
+    console.log('삭제할 파일 없음');
   }
 }

@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { LogEditFormValues } from '@/types/schema/log';
 import { parseFormData } from '@/utils/formatLog';
 import { revalidateTag } from 'next/cache';
+import { deleteFilesInFolder, getListAllFilesInFolder } from './storage';
 import { globalTags } from './tags';
 
 export async function updateLog(formData: FormData, logId: string) {
@@ -28,33 +29,29 @@ export async function updateLog(formData: FormData, logId: string) {
       }
     }
 
-    const hasMoodTags = parseResult.tags?.mood?.length;
-    const hasActivityTags = parseResult.tags?.activity?.length;
-
     /* 태그 (기존 태그 다 지우고, 새로 추가하기) */
-    if (hasMoodTags || hasActivityTags) {
-      await supabase.from('log_tag').delete().eq('log_id', logId);
+    if (parseResult.tags) {
+      const upsertTagsByCategory = async (category: 'mood' | 'activity') => {
+        const tags = parseResult.tags?.[category];
+        if (!tags?.length) return;
 
-      const newTags = [
-        ...(parseResult.tags?.mood || []).map((tag) => ({
+        await supabase.from('log_tag').delete().eq('log_id', logId).eq('category', category);
+
+        // 새 태그
+        const newTags = tags.map((tag) => ({
           log_id: logId,
           tag,
-          category: 'mood',
-        })),
-        ...(parseResult.tags?.activity || []).map((tag) => ({
-          log_id: logId,
-          tag,
-          category: 'activity',
-        })),
-      ];
-
-      if (newTags.length > 0) {
+          category,
+        }));
         const { error: insertTagError } = await supabase.from('log_tag').insert(newTags);
+
         if (insertTagError) {
-          console.error('태그 삽입 실패', insertTagError);
-          throw new Error('태그 삽입 실패');
+          console.error(`태그 삽입 실패 - ${category}`, insertTagError);
+          throw new Error(`${category} 태그 삽입 실패`);
         }
-      }
+      };
+
+      await Promise.all([upsertTagsByCategory('mood'), upsertTagsByCategory('activity')]);
     }
 
     /* 장소 데이터 */
@@ -82,6 +79,7 @@ export async function updateLog(formData: FormData, logId: string) {
       await Promise.all(updatePromises);
     }
 
+    /* 장소 삭제 */
     if (parseResult.deletedPlace) {
       const deletePromises = parseResult.deletedPlace.map(async (placeId) => {
         const { error: placeDeleteError } = await supabase
@@ -89,24 +87,20 @@ export async function updateLog(formData: FormData, logId: string) {
           .delete()
           .eq('place_id', placeId);
 
-        const { error: storageDeleteError } = await supabase.storage
-          .from('places')
-          .remove([`${user.id}/${logId}/${placeId}`]);
-
         if (placeDeleteError) {
           console.error('장소 삭제 실패', placeDeleteError);
           throw new Error(`${placeId} 장소 삭제 실패`);
         }
 
-        if (storageDeleteError) {
-          console.error('장소 이미지 삭제 실패', storageDeleteError);
-          throw new Error(`${placeId} 이미지 삭제 실패`);
-        }
+        const folderPath = `${user.id}/${logId}/${placeId}`;
+        const files = await getListAllFilesInFolder(folderPath, 'places');
+        if (files && files.length > 0) await deleteFilesInFolder(folderPath, files, 'places');
       });
 
       await Promise.all(deletePromises);
     }
 
+    /* 장소 이미지 삭제 */
     if (parseResult.deletedPlaceImages?.length) {
       const { error: placeImgDeleteError } = await supabase
         .from('place_images')

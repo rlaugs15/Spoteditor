@@ -2,16 +2,8 @@
 
 import { PreparedValues } from '@/hooks/mutations/log/useLogCreateMutation';
 import { createClient } from '@/lib/supabase/server';
-import {
-  LogFormValues,
-  NewAddress,
-  NewLog,
-  NewPlace,
-  NewPlaceImage,
-  NewTag,
-} from '@/types/schema/log';
+import { NewAddress, NewLog, NewPlace, NewPlaceImage, NewTag } from '@/types/schema/log';
 import { revalidateTag } from 'next/cache';
-import { uploadImageToSupabase, uploadMultipleImages } from './storage';
 import { globalTags } from './tags';
 
 /* 로그 등록 */
@@ -63,61 +55,6 @@ export async function createLog(values: PreparedValues) {
     console.error(e);
     return { success: false, msg: '로그 등록 실패' };
   }
-}
-
-/* 썸네일 업로드 */
-export async function uploadThumbnail(thumbnail: Blob, logId: string) {
-  return await uploadImageToSupabase('thumbnails', thumbnail, {
-    folder: logId,
-    filename: `${logId}.webp`,
-  });
-}
-
-/* 장소 이미지 업로드 */
-export async function uploadPlaces(places: LogFormValues['places'], logId: string) {
-  const placeDataList: NewPlace[] = [];
-  const placeImageDataList: NewPlaceImage[] = [];
-
-  const uploadTasks = places.map(
-    async ({ placeName, description, location, category, placeImages }, idx) => {
-      const placeId = crypto.randomUUID();
-
-      // 장소 데이터 생성
-      placeDataList.push({
-        place_id: placeId,
-        log_id: logId,
-        name: placeName,
-        description,
-        address: location,
-        category,
-        order: idx + 1,
-      });
-
-      // 이미지 업로드
-      const files = placeImages.map((img) => img.file);
-      const uploadResult = await uploadMultipleImages({
-        files,
-        bucketName: 'places',
-        folder: logId,
-        subfolder: placeId,
-      });
-
-      if (!uploadResult.success) {
-        throw new Error(uploadResult.msg || '장소 이미지 업로드 실패');
-      }
-
-      const uploaded = uploadResult.data.map((url, i) => ({
-        image_path: url,
-        order: placeImages[i].order,
-        place_id: placeId,
-      }));
-
-      placeImageDataList.push(...uploaded);
-    }
-  );
-
-  await Promise.all(uploadTasks);
-  return { placeDataList, placeImageDataList };
 }
 
 /* 테이블에 데이터 삽입 */
