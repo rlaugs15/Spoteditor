@@ -159,8 +159,16 @@ export async function patchUser({
         description,
       },
     });
-    revalidateTag(cacheTags.me());
-    revalidateTag(cacheTags.publicUser(userId));
+
+    /* 캐시 무효화 */
+    const tagsToInvalidate = [
+      globalTags.userAll,
+      globalTags.logAll,
+      globalTags.logListAll,
+      globalTags.logBookmarkAll,
+      globalTags.searchAll,
+    ];
+    tagsToInvalidate.forEach(revalidateTag);
 
     return updated;
   } catch (error) {

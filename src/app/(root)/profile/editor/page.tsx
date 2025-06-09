@@ -1,6 +1,6 @@
 'use client';
 
-import { userKeys } from '@/app/actions/keys';
+import { logKeys, searchKeys, userKeys } from '@/app/actions/keys';
 import { getSignedUploadUrl } from '@/app/actions/storage';
 import { patchUser } from '@/app/actions/user';
 import AccountDeleteSection from '@/components/features/profile-editor/AccountDeleteSection/AccountDeleteSection';
@@ -128,6 +128,8 @@ export default function ProfileEditorPage() {
 
       queryClient.removeQueries({ queryKey: userKeys.me(), exact: true });
       queryClient.removeQueries({ queryKey: userKeys.publicUser(String(me.user_id)), exact: true });
+      queryClient.removeQueries({ queryKey: logKeys.log, exact: true });
+      queryClient.removeQueries({ queryKey: searchKeys.all, exact: true });
 
       router.push(`/profile/${me.user_id}`);
       toast.success('회원 정보 수정 성공');
