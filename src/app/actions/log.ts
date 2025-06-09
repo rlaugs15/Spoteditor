@@ -19,12 +19,13 @@ import { getUser } from './user';
 // ===================================================================
 export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
   try {
-    const supabase = await createClient();
+    /* const supabase = await createClient();
     const { data, error } = await supabase
       .from('log')
       .select(
         `
         *,
+        users:user_id(user_id, nickname, image_url),
          place(*,
          place_images(*)
          ) ,
@@ -38,9 +39,50 @@ export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
       )
       .order('order', { referencedTable: 'place', ascending: true })
       .eq('log_id', logId)
-      .single();
+      .single(); */
 
-    if (!data || error?.code === 'PGRST116') {
+    /* if (!data || error?.code === 'PGRST116') {
+      return {
+        success: false,
+        msg: ERROR_MESSAGES.LOG.NOT_FOUND,
+        errorCode: ERROR_CODES.LOG.NOT_FOUND,
+      };
+    } */
+
+    const log = await prisma.log.findUnique({
+      where: { log_id: logId },
+      include: {
+        users: {
+          select: {
+            nickname: true,
+            image_url: true,
+          },
+        },
+        place: {
+          include: {
+            place_images: true,
+          },
+          orderBy: {
+            order: 'asc',
+          },
+        },
+        log_tag: {
+          select: {
+            category: true,
+            tag: true,
+          },
+        },
+        address: {
+          select: {
+            country: true,
+            city: true,
+            sigungu: true,
+          },
+        },
+      },
+    });
+
+    if (!log) {
       return {
         success: false,
         msg: ERROR_MESSAGES.LOG.NOT_FOUND,
@@ -50,7 +92,7 @@ export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
 
     return {
       success: true,
-      data,
+      data: log as unknown as DetailLog,
     };
   } catch (e) {
     console.error(e);
