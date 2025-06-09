@@ -114,6 +114,7 @@ export async function uploadPlaces(places: LogFormValues['places'], logId: strin
   const uploadTasks = places.map(
     async ({ placeName, description, location, category, placeImages }, idx) => {
       const placeId = crypto.randomUUID();
+      const files = placeImages.map((img) => img.file); // 이미지 파일 목록
 
       // 장소 데이터 생성
       placeDataList.push({
@@ -126,29 +127,54 @@ export async function uploadPlaces(places: LogFormValues['places'], logId: strin
         order: idx + 1,
       });
 
-      // 이미지 업로드
-      const files = placeImages.map((img) => img.file);
-      const uploadResult = await uploadMultipleImages({
-        files,
-        bucketName: 'places',
-        folder: logId,
-        subfolder: placeId,
-      });
+      try {
+        const uploadResult = await retryUpload(() =>
+          uploadMultipleImages({
+            files,
+            bucketName: 'places',
+            folder: logId,
+            subfolder: placeId,
+          })
+        );
 
-      if (!uploadResult.success) {
-        throw new Error(uploadResult.msg || '장소 이미지 업로드 실패');
+        if (!uploadResult.success) {
+          console.error(`❌ 장소 이미지 업로드 실패 (${placeName}):`, uploadResult.msg);
+          throw new Error(uploadResult.msg || '장소 이미지 업로드 실패');
+        }
+
+        const uploadedImages = uploadResult.data.map((url, i) => ({
+          image_path: url,
+          order: placeImages[i].order,
+          place_id: placeId,
+        }));
+        placeImageDataList.push(...uploadedImages);
+      } catch (err) {
+        console.error(`❌ 장소 "${placeName}" 업로드 재시도 후 실패:`, err);
+        throw err;
       }
-
-      const uploaded = uploadResult.data.map((url, i) => ({
-        image_path: url,
-        order: placeImages[i].order,
-        place_id: placeId,
-      }));
-
-      placeImageDataList.push(...uploaded);
     }
   );
 
   await Promise.all(uploadTasks);
+
   return { placeDataList, placeImageDataList };
+}
+
+/* 비동기 작업 재시도 */
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 1000;
+
+async function retryUpload<T>(taskFn: () => Promise<T>): Promise<T> {
+  let attempt = 0; // 재시도 횟수
+  while (attempt <= MAX_RETRIES) {
+    try {
+      return await taskFn();
+    } catch (error) {
+      attempt++;
+      if (attempt > MAX_RETRIES) throw error;
+      console.warn(`재시도 (${attempt}/${MAX_RETRIES})`);
+      await new Promise((res) => setTimeout(res, RETRY_DELAY));
+    }
+  }
+  throw new Error('업로드 실패');
 }
