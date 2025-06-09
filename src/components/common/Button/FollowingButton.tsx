@@ -36,7 +36,9 @@ export default function FollowingButton({ userId, className = '' }: FollowingBut
       className={cn(
         'font-medium rounded-full bg-gray-50 border',
         className,
-        isFollowing ? 'bg-black text-white' : 'bg-white border-light-100'
+        isFollowing
+          ? 'bg-black hover:bg-black hover:text-white text-white'
+          : 'bg-white border-light-100'
       )}
     >
       {isFollowing ? '팔로잉' : '팔로우'}
