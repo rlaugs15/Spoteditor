@@ -20,7 +20,7 @@ const useImagePreview = (initial: File | string | null) => {
     };
   }, [objectUrl]);
 
-  const handleFileChange = async (file: File): Promise<File | null> => {
+  const handleFileChange = async (file: File): Promise<Blob | null> => {
     const compressed = await compressImageToWebp(file);
     if (!compressed) return null;
 

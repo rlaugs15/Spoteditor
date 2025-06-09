@@ -36,7 +36,7 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
     const compressedFiles = await Promise.all(files.map((file) => compressImageToWebp(file)));
 
     compressedFiles
-      .filter((compressedImg): compressedImg is File => compressedImg !== undefined)
+      .filter((compressedImg) => compressedImg !== undefined)
       .forEach((compressedImg, i) => {
         addFile(compressedImg);
         append({ file: compressedImg, order: fields.length + i + 1 });

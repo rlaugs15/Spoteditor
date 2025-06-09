@@ -74,7 +74,7 @@ export async function uploadMultipleImages({
     }
     const signedUrlsData = signedUrlsResult.data;
 
-    const limit = pLimit(3);
+    const limit = pLimit(5); // 동시 병렬 작업 5개로 변경
 
     // 3. Signed URL에 이미지 업로드
     const uploadPromises = files.map((file, i) =>
