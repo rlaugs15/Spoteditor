@@ -3,9 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { GlobeBlackIcon, GlobeIcon } from '../../Icons';
 import Logo from '../Logo';
-import LoginStatusButtons from './components/LoginStatusButtons';
 import SearchBar from './components/SearchBar';
 import SearchBarButton from './components/SearchBarButton';
+import ClientOnlyLoginStatusButtons from './components/UserProfileButton/ClientOnlyLoginStatusButtons';
 
 const Header = async () => {
   const user = await getUser();
@@ -23,7 +23,7 @@ const Header = async () => {
           </PopoverTrigger>
           <PopoverContent>준비중입니다.</PopoverContent>
         </Popover>
-        <LoginStatusButtons user={user} />
+        <ClientOnlyLoginStatusButtons user={user} />
       </section>
       <SearchBar />
     </header>
