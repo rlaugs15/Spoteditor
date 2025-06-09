@@ -29,7 +29,12 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
     <div>
       <LogThubmnail logData={logData} isAuthor={isAuthor} />
       <main className="flex flex-col px-4 web:px-[50px]">
-        <LogAuthorIntro userId={logData.user_id} logDescription={logData.description ?? ''} />
+        <LogAuthorIntro
+          userId={logData.user_id}
+          userNickname={String(logData.users.nickname)}
+          userImgUrl={String(logData.users.image_url)}
+          logDescription={logData.description ?? ''}
+        />
         {logData.place.map((place: PlaceWithImages, idx: number) => (
           <LogContent key={place.place_id} place={place} idx={idx + 1} />
         ))}

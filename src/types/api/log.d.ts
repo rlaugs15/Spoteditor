@@ -11,6 +11,7 @@ export type DetailLog = Tables<'log'> & {
 } & {
   log_tag: Array<Pick<Tables<'log_tag'>, 'category' | 'tag'>>;
   address: Array<Pick<Tables<'address'>, 'country' | 'city' | 'sigungu'>>;
+  users: Pick<Tables<'users'>, 'image_url' | 'nickname'>;
 };
 
 /* 로그리스트 */
