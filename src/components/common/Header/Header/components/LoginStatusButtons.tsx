@@ -1,7 +1,9 @@
 'use client';
 
+import { UserBlackIcon, UserIcon } from '@/components/common/Icons';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import useResponsive from '@/hooks/useResponsive';
 import { IUser } from '@/types/api/user';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -21,10 +23,31 @@ interface LoginStatusButtonsProps {
 
 export default function LoginStatusButtons({ user }: LoginStatusButtonsProps) {
   const router = useRouter();
+  const { isMobile } = useResponsive();
 
   const handleLoginClick = () => {
     router.push('/login');
   };
+
+  if (isMobile) {
+    return (
+      <>
+        {!user ? (
+          <Button
+            onClick={handleLoginClick}
+            variant={'ghost'}
+            size={'icon'}
+            className="relative group"
+          >
+            <UserIcon className="absolute group-hover:opacity-0" />
+            <UserBlackIcon className="opacity-0 group-hover:opacity-100" />
+          </Button>
+        ) : (
+          <UserProfileButton user={user} />
+        )}
+      </>
+    );
+  }
 
   return (
     <>

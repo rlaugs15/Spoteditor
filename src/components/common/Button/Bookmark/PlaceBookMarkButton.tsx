@@ -9,9 +9,14 @@ import { useRouter } from 'next/navigation';
 interface PlaceBookMarkButtonProps {
   placeId: string;
   modal?: boolean;
+  className?: string;
 }
 
-export default function PlaceBookMarkButton({ placeId, modal }: PlaceBookMarkButtonProps) {
+export default function PlaceBookMarkButton({
+  placeId,
+  modal,
+  className,
+}: PlaceBookMarkButtonProps) {
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
   const { data, isLoading } = usePlaceBookmarkCheck({ placeId, userId: user?.user_id || null });
@@ -34,7 +39,8 @@ export default function PlaceBookMarkButton({ placeId, modal }: PlaceBookMarkBut
       disabled={isLoading}
       className={cn(
         'w-[42px] h-[42px] bg-white flex justify-center items-center absolute top-[10px] web:top-[15px] right-[10px] web:right-[15px] rounded-none border-0 hover:brightness-85',
-        modal && '!top-1.5 !right-1.5'
+        modal && '!top-1.5 !right-1.5',
+        className
       )}
     >
       <Bookmark className={cn('!w-6 !h-6', data?.isBookmark && 'fill-black')} />

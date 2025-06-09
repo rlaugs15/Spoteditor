@@ -9,15 +9,14 @@ import { TAG_SETS } from '@/constants/tagData';
 import { MultiKeys, TagKeys, useLogCreationStore } from '@/stores/logCreationStore';
 import { useCallback, useMemo } from 'react';
 import TagButton from './TagButton';
+import { PAGE_TAG_INTROS } from './constant';
 
 interface TagGroupProps {
-  title: string;
+  title?: string;
   type: TagKeys;
 }
 
 const MULTI_TAG_TYPES = new Set<TagKeys>(['mood', 'activity']);
-const DOMESTIC_COUNTRY = '국내';
-
 const isMultiType = (key: TagKeys): key is MultiKeys => MULTI_TAG_TYPES.has(key);
 
 const TagGroup = ({ title, type }: TagGroupProps) => {
@@ -26,14 +25,17 @@ const TagGroup = ({ title, type }: TagGroupProps) => {
   const setSingleTag = useLogCreationStore((state) => state.setSingleTag);
   const selectedCity = useLogCreationStore((state) => state['city']);
   const selectedCountry = useLogCreationStore((state) => state['country']);
-  const isDomestic = selectedCountry === DOMESTIC_COUNTRY;
+
+  const isDomestic = selectedCountry === '국내';
+  const tagGroupTitle =
+    (type === 'city' || type === 'sigungu') &&
+    PAGE_TAG_INTROS[type][isDomestic ? 'domestic' : 'aboard'].tagGroupTitle;
 
   const tags = useMemo(() => {
     switch (type) {
       case 'sigungu':
         if (!selectedCity) return [];
         return isDomestic ? cityDistricts[selectedCity] ?? [] : globalRegions[selectedCity] ?? [];
-
       case 'city':
         return isDomestic ? cityCategories : globalCategories;
 
@@ -61,7 +63,7 @@ const TagGroup = ({ title, type }: TagGroupProps) => {
 
   return (
     <div className="mb-5">
-      <h5 className="text-text-xs font-bold py-2.5">{title}</h5>
+      <h5 className="text-text-xs font-bold py-2.5">{title || tagGroupTitle}</h5>
       <div className="flex flex-wrap gap-2">
         {tags.map((value: string) => (
           <TagButton

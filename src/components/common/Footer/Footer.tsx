@@ -1,3 +1,5 @@
+import { PRIVACY_PATHS, TERMS_PATHS } from '@/constants/pathname';
+import Link from 'next/link';
 import ContactLink from './ContactLink';
 
 const Footer = () => {
@@ -8,8 +10,8 @@ const Footer = () => {
       <div className="flex flex-col web:flex-row gap-3 justify-between text-light-600">
         <p>©2025 Spoteditor. All Rights are reserved️</p>
         <div className="flex gap-6">
-          <p>Privacy Policy</p>
-          <p>Terms & Conditions</p>
+          <Link href={PRIVACY_PATHS.PRIVACY}>Privacy Policy</Link>
+          <Link href={TERMS_PATHS.TERMS}>Terms & Conditions</Link>
         </div>
       </div>
     </footer>

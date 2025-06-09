@@ -14,22 +14,13 @@ const LogProfile = async ({ userId, userImage, userNickname }: LogProfileProps) 
   const me = await getUser();
   return (
     <div className="flex items-start py-1.5">
-      {userId ? (
-        <div className="flex items-center gap-4">
-          <Link href={`${PROFILE_PATHS.PROFILE}/${userId}`} className="flex items-center gap-2">
-            <UserImage imgSrc={userImage} className="w-6 h-6" />
-            <span className="text-text-sm web:text-text-md font-semibold">{userNickname}</span>
-          </Link>
-          {me && me?.user_id !== userId && <FollowingButton userId={userId} />}
-        </div>
-      ) : (
-        <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
+        <Link href={`${PROFILE_PATHS.PROFILE}/${userId}`} className="flex items-center gap-2">
           <UserImage imgSrc={userImage} className="w-6 h-6" />
-          <span className="text-text-sm web:text-text-md font-semibold">
-            {userNickname ?? '알 수 없음'}
-          </span>
-        </div>
-      )}
+          <span className="text-text-sm web:text-text-md font-semibold">{userNickname}</span>
+        </Link>
+        {me && me?.user_id !== userId && <FollowingButton userId={userId} />}
+      </div>
     </div>
   );
 };
