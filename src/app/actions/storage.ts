@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { ApiResponse } from '@/types/api/common';
+import type { FileObject } from '@supabase/storage-js';
 import { StorageBucket } from '../../types/api/storage';
 import { getUser } from './user';
 
@@ -122,15 +123,7 @@ export async function deleteProfileStorageFolder(
   const supabase = await createClient();
 
   // 1. userId/ 경로 안의 파일들 모두 조회
-  const { data: files, error: listError } = await supabase.storage
-    .from(bucket)
-    .list(userFolder + '/');
-
-  if (listError) {
-    console.warn('폴더 내 파일 목록 조회 실패');
-    return;
-  }
-
+  const files = await getListAllFilesInFolder(`${userFolder}/`, 'profiles');
   if (!files || files.length === 0) {
     console.log('삭제할 파일 없음 (빈 폴더)');
     return;
@@ -145,5 +138,73 @@ export async function deleteProfileStorageFolder(
     console.warn('프로필 이미지 삭제 실패');
   } else {
     console.log('프로필 폴더 삭제 완료');
+  }
+}
+
+export async function getListAllFilesInFolder(folderPath: string, bucket: string) {
+  const supabase = await createClient();
+
+  const { data: files, error } = await supabase.storage.from(bucket).list(folderPath);
+
+  if (error) {
+    console.warn(`"${folderPath}" 폴더의 파일 목록 조회 실패:`, error.message);
+    return null;
+  }
+
+  return files;
+}
+
+/* 단일 폴더 내 파일 제거 */
+export async function deleteFilesInFolder(folderPath: string, files: FileObject[], bucket: string) {
+  if (!files || files.length === 0) {
+    console.log('삭제할 파일 없음');
+    return;
+  }
+
+  const supabase = await createClient();
+
+  const paths = files.map((file) => `${folderPath}/${file.name}`);
+  const { error } = await supabase.storage.from(bucket).remove(paths);
+
+  if (error) {
+    console.warn('Storage 파일 삭제 실패:', error.message);
+  } else {
+    console.log(`📁 ${folderPath} 내 파일 삭제 완료`);
+  }
+}
+
+/* 2단계 중첩 폴더 내 파일 삭제 */
+export async function deleteNestedFolderFiles(parentFolder: string, bucket: string) {
+  const supabase = await createClient();
+
+  // 1단계: logId 하위 placeId 폴더 목록
+  const subfolders = await getListAllFilesInFolder(parentFolder, bucket);
+  if (!subfolders || subfolders.length === 0) {
+    console.log(`"${parentFolder}" 하위 폴더 없음`);
+    return;
+  }
+
+  const allFilePaths: string[] = [];
+
+  for (const folder of subfolders) {
+    if (!folder.name) continue;
+
+    const placeFolderPath = `${parentFolder}/${folder.name}`;
+    const files = await getListAllFilesInFolder(placeFolderPath, bucket);
+    if (files && files.length > 0) {
+      const fullPaths = files.map((file) => `${placeFolderPath}/${file.name}`);
+      allFilePaths.push(...fullPaths);
+    }
+  }
+
+  if (allFilePaths.length > 0) {
+    const { error } = await supabase.storage.from(bucket).remove(allFilePaths);
+    if (error) {
+      console.warn('중첩 폴더 파일 삭제 실패:', error.message);
+    } else {
+      console.log(`${parentFolder} 이하의 모든 파일 삭제 완료`);
+    }
+  } else {
+    console.log('삭제할 파일 없음');
   }
 }

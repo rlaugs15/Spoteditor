@@ -10,6 +10,7 @@ import { Prisma } from '@prisma/client';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { logKeys, searchKeys } from './keys';
+import { deleteNestedFolderFiles } from './storage';
 import { cacheTags, globalTags } from './tags';
 import { getUser } from './user';
 
@@ -84,19 +85,17 @@ export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
     }
 
     // 스토리지 삭제 (places, thumbnails)
-    const [placesRes, thumbnailRes] = await Promise.all([
-      supabase.storage.from('places').remove([`${user.id}/${logId}`]),
-      supabase.storage.from('thumbnails').remove([`${user.id}/${logId}`]),
-    ]);
+    const folderPath = `${user.id}/${logId}`;
+    await deleteNestedFolderFiles(`${user.id}/${logId}`, 'places');
 
-    if (placesRes.error) {
-      console.error('장소 이미지 삭제 실패', placesRes.error);
-      throw new Error('장소 이미지 삭제 실패');
+    const { error: thumbnailDeleteError } = await supabase.storage
+      .from('thumbnails')
+      .remove([`${folderPath}/${logId}.webp`]);
+
+    if (thumbnailDeleteError) {
+      console.warn('썸네일 삭제 실패:', thumbnailDeleteError.message);
     }
-    if (thumbnailRes.error) {
-      console.error('썸네일 삭제 실패', thumbnailRes.error);
-      throw new Error('썸네일 삭제 실패');
-    }
+
     /* 캐시 무효화 */
     const logTagsToInvalidate = [
       globalTags.logAll,
