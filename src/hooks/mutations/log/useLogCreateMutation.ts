@@ -26,17 +26,17 @@ const useLogCreateMutation = () => {
     mutationFn: async ({ values }: LogCreateMutationProps) => {
       const logId = crypto.randomUUID();
 
-      // 클라이언트에서 이미지 업로드
       /* 썸네일 업로드 */
-      // console.time('🖼️ 썸네일 업로드');
+      console.time('🖼️ 썸네일 업로드');
+      console.log(values.thumbnail);
       const thumbnailUploadResult = await uploadThumbnail(values.thumbnail, logId);
-      // console.timeEnd('🖼️ 썸네일 업로드');
+      console.timeEnd('🖼️ 썸네일 업로드');
       if (!thumbnailUploadResult?.success) throw new Error(thumbnailUploadResult?.msg);
 
       /* 장소 이미지 업로드 */
-      // console.time('📍 장소 이미지 업로드');
+      console.time('📍 장소 이미지 업로드');
       const { placeDataList, placeImageDataList } = await uploadPlaces(values.places, logId);
-      // console.timeEnd('📍 장소 이미지 업로드');
+      console.timeEnd('📍 장소 이미지 업로드');
 
       // 서버로 보낼 데이터 모아서 보내기
       const preparedValues: PreparedValues = {

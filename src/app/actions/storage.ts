@@ -1,67 +1,26 @@
 'use server';
-
 import { createClient } from '@/lib/supabase/server';
 import { ApiResponse } from '@/types/api/common';
 import type { FileObject } from '@supabase/storage-js';
+import pLimit from 'p-limit';
 import { StorageBucket } from '../../types/api/storage';
 import { getUser } from './user';
 
-/*
- * 스토리지에 파일 직접 업로드
- * profiles/userId/profile.webp
- * thumbnails/userId/${logId}.webp
- * placess/logId/userId/placeId/...
- */
-export async function uploadFile(
-  bucketName: StorageBucket,
-  file: Blob,
-  options?: {
-    folder?: string;
-    subfolder?: string;
-    filename: string;
-  }
-) {
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) throw new Error('유저 없음');
-
-    const { data, error } = await supabase.storage
-      .from(bucketName)
-      .upload(`${user.id}/${options?.folder}/${options?.subfolder}/${options?.filename}`, file, {
-        upsert: bucketName === 'profiles',
-      });
-
-    if (data) return { success: true, fullPath: data.fullPath };
-    if (error) throw error;
-  } catch (e) {
-    console.error(e);
-    return { success: false, msg: `${options?.filename} 파일 업로드에 실패했습니다.` };
-  }
-}
-
-/* Signed upload URL 발급 받기 */
-export async function getSignedUploadUrl(
-  bucketName: StorageBucket,
-  filename: string,
-  folder?: string,
-  subfolder?: string
-) {
+/* 단일 Signed upload URL 발급 */
+export async function getSignedUploadUrl(bucketName: StorageBucket, filePath: string) {
   const me = await getUser();
   if (!me) throw new Error('유저 없음');
 
-  const path = [me.user_id, folder, subfolder, filename].filter(Boolean).join('/');
-
   const supabase = await createClient();
-  const { data, error } = await supabase.storage.from(bucketName).createSignedUploadUrl(path); //만료시간 고정 2시간 (수정 불가)
+  const { data, error } = await supabase.storage
+    .from(bucketName)
+    .createSignedUploadUrl(filePath, { upsert: true }); //만료시간 고정 2시간 (수정 불가)
 
   if (error || !data) {
     throw new Error('PreSigned URL 생성 실패');
   }
 
-  return { ...data, path }; // signedUrl, path
+  return data;
 }
 
 /* SignedURLs  */
@@ -70,20 +29,18 @@ export async function getMultipleSignedUploadUrls(
   filePaths: string[]
 ): Promise<ApiResponse<{ token: string; path: string }[]>> {
   try {
-    const supabase = await createClient();
-    const results: { token: string; path: string }[] = [];
+    const limit = pLimit(5);
 
-    for (const path of filePaths) {
-      const { data, error } = await supabase.storage.from(bucketName).createSignedUploadUrl(path);
-
-      if (error || !data) {
-        console.error(`Signed upload URL 생성 실패:`, error);
-        return { success: false, msg: 'Signed upload URL 생성 실패' };
-      }
-
-      results.push({ token: data.token, path });
-    }
-
+    console.time('✏️ 다중 이미지 SignedURL 발급');
+    const results = await Promise.all(
+      filePaths.map((path) =>
+        limit(async () => {
+          const data = await getSignedUploadUrl(bucketName, path);
+          return { token: data.token, path };
+        })
+      )
+    );
+    console.timeEnd('✏️ 다중 이미지 SignedURL 발급');
     return { success: true, data: results };
   } catch (err) {
     console.error('getMultipleSignedUploadUrls 실패:', err);
@@ -207,4 +164,24 @@ export async function deleteNestedFolderFiles(parentFolder: string, bucket: stri
   } else {
     console.log('삭제할 파일 없음');
   }
+}
+
+export async function generateFilePaths(
+  folder: string | undefined,
+  subfolder: string | undefined,
+  fileCount: number,
+  filename?: string
+): Promise<string[]> {
+  const me = await getUser();
+  if (!me) throw new Error('유저 없음');
+
+  return Array.from({ length: fileCount }).map((_, i) => {
+    const resolvedFilename = filename
+      ? fileCount === 1
+        ? filename
+        : `${i}_${filename}`
+      : `${i}.webp`;
+
+    return [me.user_id, folder, subfolder, resolvedFilename].filter(Boolean).join('/');
+  });
 }
