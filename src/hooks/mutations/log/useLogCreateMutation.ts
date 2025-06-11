@@ -26,7 +26,6 @@ const useLogCreateMutation = () => {
     mutationFn: async ({ values }: LogCreateMutationProps) => {
       const logId = crypto.randomUUID();
 
-      // 클라이언트에서 이미지 업로드
       /* 썸네일 업로드 */
       // console.time('🖼️ 썸네일 업로드');
       const thumbnailUploadResult = await uploadThumbnail(values.thumbnail, logId);

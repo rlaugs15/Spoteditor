@@ -1,92 +1,102 @@
 'use server';
-
 import { createClient } from '@/lib/supabase/server';
 import { ApiResponse } from '@/types/api/common';
 import type { FileObject } from '@supabase/storage-js';
 import { StorageBucket } from '../../types/api/storage';
 import { getUser } from './user';
 
-/*
- * 스토리지에 파일 직접 업로드
- * profiles/userId/profile.webp
- * thumbnails/userId/${logId}.webp
- * placess/logId/userId/placeId/...
- */
-export async function uploadFile(
-  bucketName: StorageBucket,
-  file: Blob,
-  options?: {
-    folder?: string;
-    subfolder?: string;
-    filename: string;
-  }
-) {
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) throw new Error('유저 없음');
-
-    const { data, error } = await supabase.storage
-      .from(bucketName)
-      .upload(`${user.id}/${options?.folder}/${options?.subfolder}/${options?.filename}`, file, {
-        upsert: bucketName === 'profiles',
-      });
-
-    if (data) return { success: true, fullPath: data.fullPath };
-    if (error) throw error;
-  } catch (e) {
-    console.error(e);
-    return { success: false, msg: `${options?.filename} 파일 업로드에 실패했습니다.` };
-  }
-}
-
-/* Signed upload URL 발급 받기 */
-export async function getSignedUploadUrl(
-  bucketName: StorageBucket,
-  filename: string,
-  folder?: string,
-  subfolder?: string
-) {
+/* 단일 Signed upload URL 발급 */
+export async function getSignedUploadUrl(bucketName: StorageBucket, filePath: string) {
   const me = await getUser();
   if (!me) throw new Error('유저 없음');
 
-  const path = [me.user_id, folder, subfolder, filename].filter(Boolean).join('/');
-
   const supabase = await createClient();
-  const { data, error } = await supabase.storage.from(bucketName).createSignedUploadUrl(path); //만료시간 고정 2시간 (수정 불가)
+  const { data, error } = await supabase.storage.from(bucketName).createSignedUploadUrl(filePath); //만료시간 고정 2시간 (수정 불가)
 
-  if (error || !data) {
-    throw new Error('PreSigned URL 생성 실패');
-  }
+  if (error) throw new Error('PreSigned URL 생성 실패');
+  if (!data) throw new Error('Signed URL 응답 없음 (data가 null)');
 
-  return { ...data, path }; // signedUrl, path
+  return data;
 }
 
 /* SignedURLs  */
 export async function getMultipleSignedUploadUrls(
   bucketName: StorageBucket,
-  filePaths: string[]
+  filePaths: string[],
+  batchSize = 3
 ): Promise<ApiResponse<{ token: string; path: string }[]>> {
   try {
-    const supabase = await createClient();
-    const results: { token: string; path: string }[] = [];
+    console.time('✏️ 다중 이미지 SignedURL 발급');
+    const allResults: { token: string; path: string }[] = [];
+    const allFailed: any[] = [];
 
-    for (const path of filePaths) {
-      const { data, error } = await supabase.storage.from(bucketName).createSignedUploadUrl(path);
+    // filePaths를 배치 단위로 나누어 처리
+    for (let i = 0; i < filePaths.length; i += batchSize) {
+      const batch = filePaths.slice(i, i + batchSize);
+      const batchNumber = Math.floor(i / batchSize) + 1;
+      const totalBatches = Math.ceil(filePaths.length / batchSize);
 
-      if (error || !data) {
-        console.error(`Signed upload URL 생성 실패:`, error);
-        return { success: false, msg: 'Signed upload URL 생성 실패' };
+      console.log(`배치 ${batchNumber}/${totalBatches} 처리 중... (${batch.length}개 파일)`);
+
+      try {
+        // 배치 내에서 동시 처리
+        const batchResults = await Promise.allSettled(
+          batch.map(async (path) => {
+            const data = await withRetry(() => getSignedUploadUrl(bucketName, path));
+            return { token: data.token, path };
+          })
+        );
+
+        // 배치 결과 분리
+        const batchSuccessful = batchResults
+          .filter(
+            (r): r is PromiseFulfilledResult<{ token: string; path: string }> =>
+              r.status === 'fulfilled'
+          )
+          .map((r) => r.value);
+
+        const batchFailed = batchResults
+          .filter((r) => r.status === 'rejected')
+          .map((r, idx) => ({
+            path: batch[idx],
+            error: r.reason,
+            batchNumber,
+          }));
+
+        allResults.push(...batchSuccessful);
+        allFailed.push(...batchFailed);
+
+        console.log(
+          `배치 ${batchNumber} 완료: 성공 ${batchSuccessful.length}개, 실패 ${batchFailed.length}개`
+        );
+
+        // 다음 배치 처리 전 잠시 대기 (서버 부하 방지)
+        if (i + batchSize < filePaths.length) {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+        }
+      } catch (batchError) {
+        console.error(`배치 ${batchNumber} 전체 실패:`, batchError);
+        // 배치 전체가 실패한 경우 해당 배치의 모든 파일을 실패로 처리
+        const batchFailedAll = batch.map((path) => ({
+          path,
+          error: batchError,
+          batchNumber,
+        }));
+        allFailed.push(...batchFailedAll);
       }
-
-      results.push({ token: data.token, path });
     }
 
-    return { success: true, data: results };
+    if (allFailed.length) {
+      console.log('실패한 파일들:', allFailed);
+    }
+
+    console.timeEnd('✏️ 다중 이미지 SignedURL 발급');
+    console.log(`전체 결과: 성공 ${allResults.length}개, 실패 ${allFailed.length}개`);
+
+    return { success: true, data: allResults };
   } catch (err) {
     console.error('getMultipleSignedUploadUrls 실패:', err);
+    console.timeEnd('✏️ 다중 이미지 SignedURL 발급');
     return { success: false, msg: 'Signed upload 처리 중 오류 발생' };
   }
 }
@@ -207,4 +217,47 @@ export async function deleteNestedFolderFiles(parentFolder: string, bucket: stri
   } else {
     console.log('삭제할 파일 없음');
   }
+}
+
+export async function generateFilePaths(
+  folder: string | undefined,
+  subfolder: string | undefined,
+  fileCount: number,
+  filename?: string
+): Promise<string[]> {
+  const me = await getUser();
+  if (!me) throw new Error('유저 없음');
+
+  return Array.from({ length: fileCount }).map((_, i) => {
+    const resolvedFilename = filename
+      ? fileCount === 1
+        ? filename
+        : `${i}_${filename}`
+      : `${i}.webp`;
+
+    return [me.user_id, folder, subfolder, resolvedFilename].filter(Boolean).join('/');
+  });
+}
+
+export async function withRetry<T>(
+  fn: () => Promise<T>,
+  maxRetries = 2,
+  delayMs = 300
+): Promise<T> {
+  let lastError: any;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      console.log(`${attempt} 시도`);
+      return await fn();
+    } catch (err) {
+      lastError = err;
+      console.warn(`재시도 ${attempt + 1}/${maxRetries} 실패:`, err);
+      if (attempt < maxRetries - 1) {
+        await new Promise((res) => setTimeout(res, delayMs));
+      }
+    }
+  }
+
+  throw lastError;
 }
