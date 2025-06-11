@@ -2,7 +2,6 @@
 이미지 압축 + webp 변환
 */
 import imageCompression, { Options } from 'browser-image-compression';
-import { returnFileSize } from './returnFileSize';
 
 export async function compressImageToWebp(
   file: File,
@@ -18,12 +17,12 @@ export async function compressImageToWebp(
 
   try {
     const compressedBlob = await imageCompression(file, defaultOptions);
-    console.log('원본', returnFileSize(file.size), file.type);
+    // console.log('원본', returnFileSize(file.size), file.type);
     if (!compressedBlob) {
       console.error('압축된 Blob이 없습니다');
       return undefined;
     }
-    console.log('압축 변환 완', returnFileSize(compressedBlob.size), compressedBlob.type);
+    // console.log('압축 변환 완', returnFileSize(compressedBlob.size), compressedBlob.type);
     return compressedBlob;
   } catch (error) {
     console.error('이미지 압축 실패:', error);
