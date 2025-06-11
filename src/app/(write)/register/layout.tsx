@@ -11,7 +11,7 @@ const LogWriteLayout = ({ children }: PropsWithChildren) => {
   const sigungu = useLogCreationStore((state) => state.sigungu);
 
   useEffect(() => {
-    if (!country || !city || !sigungu) router.replace(REGISTER_PATHS.COUNTRY);
+    if (!country || !city || !sigungu) router.replace(REGISTER_PATHS.MOOD);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
