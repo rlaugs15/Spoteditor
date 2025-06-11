@@ -26,7 +26,6 @@ const useLogCreateMutation = () => {
     mutationFn: async ({ values }: LogCreateMutationProps) => {
       const logId = crypto.randomUUID();
 
-      // 클라이언트에서 이미지 업로드
       /* 썸네일 업로드 */
       // console.time('🖼️ 썸네일 업로드');
       const thumbnailUploadResult = await uploadThumbnail(values.thumbnail, logId);
@@ -52,11 +51,25 @@ const useLogCreateMutation = () => {
 
       return await createLog(preparedValues);
     },
+    onMutate: () => {
+      const timeoutId = setTimeout(() => {
+        toast.info('이미지 업로드가 조금 오래 걸리고 있어요.', {
+          description: '잠시만 기다려주세요...',
+          id: 'delayed-upload-toast',
+          duration: 8000,
+        });
+      }, 10_000); // 10초
+
+      return { timeoutId };
+    },
     onSuccess: ({ success, data }) => {
       if (success) {
+        toast.success('업로드가 성공적으로 완료되었습니다.', {
+          description: '페이지가 이동합니다. 잠시만 기다려 주세요.',
+        });
+
         clearTag();
         router.replace(`/log/${data}`);
-        toast.success('업로드 성공');
 
         const keysToInvalidate = [logKeys.log, searchKeys.all];
         keysToInvalidate.forEach((key) =>
@@ -65,7 +78,11 @@ const useLogCreateMutation = () => {
       }
     },
     onError: () => {
-      toast.error('업로드 실패');
+      toast.error('업로드가 실패했습니다. 다시 시도해주세요');
+    },
+    onSettled: (_data, _error, _variables, context) => {
+      if (context?.timeoutId) clearTimeout(context.timeoutId);
+      toast.dismiss('delayed-upload-toast');
     },
   });
 };

@@ -15,7 +15,7 @@ export type Database = {
           city: string
           country: string
           created_at: string
-          log_id: string
+          log_id: string | null
           sigungu: string
         }
         Insert: {
@@ -23,7 +23,7 @@ export type Database = {
           city: string
           country: string
           created_at?: string
-          log_id: string
+          log_id?: string | null
           sigungu: string
         }
         Update: {
@@ -31,7 +31,7 @@ export type Database = {
           city?: string
           country?: string
           created_at?: string
-          log_id?: string
+          log_id?: string | null
           sigungu?: string
         }
         Relationships: [
@@ -115,17 +115,17 @@ export type Database = {
       log_bookmark: {
         Row: {
           log_bookmark_id: number
-          log_id: string
+          log_id: string | null
           user_id: string
         }
         Insert: {
           log_bookmark_id?: number
-          log_id: string
+          log_id?: string | null
           user_id: string
         }
         Update: {
           log_bookmark_id?: number
-          log_id?: string
+          log_id?: string | null
           user_id?: string
         }
         Relationships: [
@@ -180,7 +180,7 @@ export type Database = {
           category: string
           created_at: string
           description: string | null
-          log_id: string
+          log_id: string | null
           name: string
           order: number
           place_id: string
@@ -191,7 +191,7 @@ export type Database = {
           category: string
           created_at?: string
           description?: string | null
-          log_id: string
+          log_id?: string | null
           name: string
           order: number
           place_id?: string
@@ -202,7 +202,7 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string | null
-          log_id?: string
+          log_id?: string | null
           name?: string
           order?: number
           place_id?: string

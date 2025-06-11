@@ -1,5 +1,8 @@
-import { getMultipleSignedUploadUrls, getSignedUploadUrl } from '@/app/actions/storage';
-import { getUser } from '@/app/actions/user';
+import {
+  generateFilePaths,
+  getMultipleSignedUploadUrls,
+  getSignedUploadUrl,
+} from '@/app/actions/storage';
 import { createClient } from '@/lib/supabase/client';
 import { ApiResponse } from '@/types/api/common';
 import { StorageBucket } from '@/types/api/storage';
@@ -13,7 +16,7 @@ type UploadImageOptions = {
   filename: string;
 };
 
-export async function uploadImageToSupabase(
+export async function uploadSingleImage(
   bucketName: StorageBucket,
   file: Blob,
   options: UploadImageOptions
@@ -21,12 +24,13 @@ export async function uploadImageToSupabase(
   try {
     // 1. signed URL 발급
     const supabase = await createClient();
-    const { path, token } = await getSignedUploadUrl(
-      bucketName,
-      options.filename,
+    const [filePath] = await generateFilePaths(
       options.folder,
-      options.subfolder
+      options.subfolder,
+      1,
+      options.filename
     );
+    const { path, token } = await getSignedUploadUrl(bucketName, filePath);
 
     // 2. signed URL로 업로드
     const { data, error } = await supabase.storage
@@ -45,9 +49,7 @@ export async function uploadImageToSupabase(
 type UploadMultipleImagesOptions = {
   files: Blob[];
   bucketName: StorageBucket;
-  folder?: string;
-  subfolder?: string;
-};
+} & Pick<UploadImageOptions, 'folder' | 'subfolder'>;
 
 export async function uploadMultipleImages({
   files,
@@ -56,40 +58,32 @@ export async function uploadMultipleImages({
   subfolder,
 }: UploadMultipleImagesOptions): Promise<ApiResponse<string[]>> {
   try {
-    const me = await getUser();
-    if (!me) throw new Error('유저 없음');
-    if (files.length === 0) return { success: true, data: [] };
-
     const supabase = await createClient();
+
     // 1. 업로드할 파일 경로 생성
-    const fileNames = files.map((_, i) => {
-      const filename = `${i}.webp`;
-      return [me.user_id, folder, subfolder, filename].filter(Boolean).join('/');
-    });
+    const filePaths = await generateFilePaths(folder, subfolder, files.length);
 
     // 2. Signed URL 목록 발급
-    const signedUrlsResult = await getMultipleSignedUploadUrls(bucketName, fileNames);
-    if (!signedUrlsResult.success) {
-      throw new Error(signedUrlsResult.msg);
-    }
-    const signedUrlsData = signedUrlsResult.data;
+    const signedUrlsResult = await getMultipleSignedUploadUrls(bucketName, filePaths);
+    if (!signedUrlsResult.success) throw new Error(signedUrlsResult.msg);
 
+    const signedUrlsData = signedUrlsResult.data;
     const limit = pLimit(5); // 동시 병렬 작업 5개로 변경
 
     // 3. Signed URL에 이미지 업로드
-    const uploadPromises = files.map((file, i) =>
+    console.time('🐠 Signed URL에 이미지 업로드');
+    const uploadPromises = files.map((file, idx) =>
       limit(async () => {
-        const { path, token } = signedUrlsData[i];
+        const { path, token } = signedUrlsData[idx];
         const { data, error } = await supabase.storage
           .from(bucketName)
           .uploadToSignedUrl(path, token, file);
-
-        if (error) throw new Error(`파일 업로드 실패: ${fileNames[i]}`);
+        if (error) throw new Error(`파일 업로드 실패: ${path}`);
         return data?.fullPath;
       })
     );
-
     const urls = await Promise.all(uploadPromises);
+    console.timeEnd('🐠 Signed URL에 이미지 업로드');
 
     return { success: true, data: urls };
   } catch (error) {
@@ -100,7 +94,7 @@ export async function uploadMultipleImages({
 
 /* 썸네일 업로드 */
 export async function uploadThumbnail(thumbnail: Blob, logId: string) {
-  return await uploadImageToSupabase('thumbnails', thumbnail, {
+  return await uploadSingleImage('thumbnails', thumbnail, {
     folder: logId,
     filename: `${logId}.webp`,
   });
@@ -108,73 +102,48 @@ export async function uploadThumbnail(thumbnail: Blob, logId: string) {
 
 /* 장소 이미지 업로드 */
 export async function uploadPlaces(places: LogFormValues['places'], logId: string) {
-  const placeDataList: NewPlace[] = [];
+  const placeDataList: NewPlace[] = places.map(
+    ({ placeName, description, location, category }, idx) => ({
+      place_id: crypto.randomUUID(),
+      log_id: logId,
+      name: placeName,
+      description,
+      address: location,
+      category,
+      order: idx + 1,
+    })
+  );
   const placeImageDataList: NewPlaceImage[] = [];
 
-  const uploadTasks = places.map(
-    async ({ placeName, description, location, category, placeImages }, idx) => {
-      const placeId = crypto.randomUUID();
-      const files = placeImages.map((img) => img.file); // 이미지 파일 목록
+  const uploadTasks = places.map(async (place, idx) => {
+    const placeId = placeDataList[idx].place_id;
+    const files = place.placeImages.map((img) => img.file);
 
-      // 장소 데이터 생성
-      placeDataList.push({
-        place_id: placeId,
-        log_id: logId,
-        name: placeName,
-        description,
-        address: location,
-        category,
-        order: idx + 1,
+    try {
+      const uploadResult = await uploadMultipleImages({
+        files,
+        bucketName: 'places',
+        folder: logId,
+        subfolder: placeId,
       });
 
-      try {
-        const uploadResult = await retryUpload(() =>
-          uploadMultipleImages({
-            files,
-            bucketName: 'places',
-            folder: logId,
-            subfolder: placeId,
-          })
-        );
-
-        if (!uploadResult.success) {
-          console.error(`❌ 장소 이미지 업로드 실패 (${placeName}):`, uploadResult.msg);
-          throw new Error(uploadResult.msg || '장소 이미지 업로드 실패');
-        }
-
-        const uploadedImages = uploadResult.data.map((url, i) => ({
-          image_path: url,
-          order: placeImages[i].order,
-          place_id: placeId,
-        }));
-        placeImageDataList.push(...uploadedImages);
-      } catch (err) {
-        console.error(`❌ 장소 "${placeName}" 업로드 재시도 후 실패:`, err);
-        throw err;
+      if (!uploadResult.success) {
+        console.error(`❌ 장소 이미지 업로드 실패 (${place.placeName}):`, uploadResult.msg);
+        throw new Error(uploadResult.msg || '장소 이미지 업로드 실패');
       }
+
+      const uploadedImages = uploadResult.data.map((url, idx) => ({
+        image_path: url,
+        order: place.placeImages[idx].order,
+        place_id: placeId,
+      }));
+      placeImageDataList.push(...uploadedImages);
+    } catch (err) {
+      console.error(`❌ 장소 "${place.placeName}" 업로드 재시도 후 실패:`, err);
+      throw err;
     }
-  );
+  });
 
   await Promise.all(uploadTasks);
-
   return { placeDataList, placeImageDataList };
-}
-
-/* 비동기 작업 재시도 */
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 1000;
-
-async function retryUpload<T>(taskFn: () => Promise<T>): Promise<T> {
-  let attempt = 0; // 재시도 횟수
-  while (attempt <= MAX_RETRIES) {
-    try {
-      return await taskFn();
-    } catch (error) {
-      attempt++;
-      if (attempt > MAX_RETRIES) throw error;
-      console.warn(`재시도 (${attempt}/${MAX_RETRIES})`);
-      await new Promise((res) => setTimeout(res, RETRY_DELAY));
-    }
-  }
-  throw new Error('업로드 실패');
 }

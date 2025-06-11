@@ -413,7 +413,7 @@ model place_bookmark {
 }
 
 model place_images {
-  place_image_id BigInt @id @default(autoincrement())
+  place_image_id Int    @id @default(autoincrement())
   image_path     String
   order          Int
   place_id       String @default(dbgenerated("gen_random_uuid()")) @db.Uuid
