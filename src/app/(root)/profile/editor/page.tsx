@@ -1,7 +1,6 @@
 'use client';
 
 import { logKeys, searchKeys, userKeys } from '@/app/actions/keys';
-import { getSignedUploadUrl } from '@/app/actions/storage';
 import { patchUser } from '@/app/actions/user';
 import AccountDeleteSection from '@/components/features/profile-editor/AccountDeleteSection/AccountDeleteSection';
 import AvatarEditSection from '@/components/features/profile-editor/AvatarEditSection';
@@ -9,10 +8,11 @@ import ProfileFormFields from '@/components/features/profile-editor/ProfileFormF
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import useUser from '@/hooks/queries/user/useUser';
-import { removeImageIfNeeded, uploadToSignedUrl } from '@/lib/utils';
+import { removeImageIfNeeded } from '@/lib/utils';
 import { profileEditorSchema } from '@/lib/zod/profileSchema';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
-import { buildPublicUrl } from '@/utils/getStorageImage';
+import { getStoragePublicImage } from '@/utils/getStorageImage';
+import { uploadSingleImage } from '@/utils/upload';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
@@ -103,15 +103,18 @@ export default function ProfileEditorPage() {
         }
 
         /** 3.서버에서 PreSigned URL 발급 + fetch 업로드 */
-        const filename = `${me?.user_id}${Date.now()}.webp`;
-        const { signedUrl, path } = await getSignedUploadUrl('profiles', filename);
-        const ok = await uploadToSignedUrl(signedUrl, resizingFile.type, resizingFile);
-        if (!ok) {
+        const result = await uploadSingleImage('profiles', resizingFile, {
+          folder: undefined,
+          filename: `profile${Date.now()}.webp`,
+        });
+
+        if (!result.success) {
           console.error('업로드 실패');
           return;
         }
+
         /** 4.public URL 생성 후 patch */
-        image_url = buildPublicUrl('profiles', path);
+        image_url = getStoragePublicImage(result.data);
       }
 
       // 변경 감지 로직(프리즈마는 값이 undefined인 필드는 db에 업로드 안 함)
@@ -124,7 +127,8 @@ export default function ProfileEditorPage() {
       };
 
       //캐시 무효화 추가
-      await patchUser(updateData);
+      const res = await patchUser(updateData);
+      console.log(res);
 
       queryClient.removeQueries({ queryKey: userKeys.me(), exact: true });
       queryClient.removeQueries({ queryKey: userKeys.publicUser(String(me.user_id)), exact: true });
