@@ -101,6 +101,45 @@ export async function getMultipleSignedUploadUrls(
   }
 }
 
+// 모든 하위 폴더 포함 전체 삭제
+export async function deleteAllFilesRecursively(folderPath: string, bucket: StorageBucket) {
+  const supabase = await createClient();
+  const filesToDelete: string[] = [];
+
+  async function collectFiles(currentPath: string) {
+    const { data, error } = await supabase.storage.from(bucket).list(currentPath);
+    if (error) {
+      console.warn(`"${currentPath}" 파일 목록 조회 실패:`, error.message);
+      return;
+    }
+
+    for (const item of data) {
+      const fullPath = `${currentPath}${item.name}`;
+      if (item.name && item.metadata?.mimetype) {
+        // 파일
+        filesToDelete.push(fullPath);
+      } else {
+        // 폴더 → 재귀
+        await collectFiles(`${fullPath}/`);
+      }
+    }
+  }
+
+  await collectFiles(`${folderPath}/`);
+
+  if (filesToDelete.length === 0) {
+    console.log('삭제할 파일 없음');
+    return;
+  }
+
+  const { error: deleteError } = await supabase.storage.from(bucket).remove(filesToDelete);
+  if (deleteError) {
+    console.warn('파일 삭제 실패:', deleteError.message);
+  } else {
+    console.log(`${folderPath} 이하 모든 파일 삭제 완료`);
+  }
+}
+
 /* 유저 삭제 시 이미지 폴더 삭제 */
 export async function deleteProfileStorageFolder(
   imageUrl: string,
@@ -122,7 +161,7 @@ export async function deleteProfileStorageFolder(
   }
 
   // relativePath 예: 3ff6777e-2516-4207-af10/avatar.webp → 폴더 추출
-  const match = relativePath.match(/^([^/]+)\//); // 첫 번째 경로 조각 추출
+  const match = relativePath.match(/^([^/]+)\//); // userId 추출
   const userFolder = match?.[1];
 
   if (!userFolder) {
@@ -130,7 +169,9 @@ export async function deleteProfileStorageFolder(
     return;
   }
 
-  const supabase = await createClient();
+  await deleteAllFilesRecursively(userFolder, bucket);
+
+  /* const supabase = await createClient();
 
   // 1. userId/ 경로 안의 파일들 모두 조회
   const files = await getListAllFilesInFolder(`${userFolder}/`, 'profiles');
@@ -148,7 +189,7 @@ export async function deleteProfileStorageFolder(
     console.warn('프로필 이미지 삭제 실패');
   } else {
     console.log('프로필 폴더 삭제 완료');
-  }
+  } */
 }
 
 export async function getListAllFilesInFolder(folderPath: string, bucket: string) {
