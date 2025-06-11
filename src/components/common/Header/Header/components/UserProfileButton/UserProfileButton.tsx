@@ -21,13 +21,15 @@ interface UserProfileButtonProps {
 
 export default function UserProfileButton({ user }: UserProfileButtonProps) {
   const [mounted, setMounted] = useState(false);
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) return null;
   return (
-    <DropdownMenu modal={false}>
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
       <DropdownMenuTrigger className="focus:outline-none" asChild>
         <Button variant={'ghost'} size={'icon'} className="relative group">
           <UserIcon className="absolute group-hover:opacity-0" />
@@ -45,7 +47,7 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
           {/* {!isTruncated && <VerifiedLabelIcon />} */}
         </DropdownMenuItem>
         <DropdownMenuItem className="px-4 py-5 focus:bg-white">
-          <MyProfileButton user={user} />
+          <MyProfileButton user={user} onClick={() => setOpen(false)} />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <div className="m-1">

@@ -8,6 +8,7 @@ import LogContent from '@/components/features/detail-log/LogContent';
 import LogThubmnail from '@/components/features/detail-log/LogThubmnail';
 import { PlaceWithImages } from '@/types/api/log';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 export interface LogIdParams {
   logId: string;
@@ -20,7 +21,7 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
   const { logId } = await params;
   const result = await fetchLog(logId);
   if (!result.success) {
-    throw new Error(result.msg);
+    notFound();
   }
   const { data: logData } = result;
   const user = await getUser();
