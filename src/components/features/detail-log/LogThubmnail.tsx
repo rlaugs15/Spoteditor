@@ -42,7 +42,7 @@ const LogThubmnail = ({ logData, isAuthor }: LogThubmnailProps) => {
       <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient" />
       <div className="flex flex-col gap-2 z-10">
         <h3 className="text-lg web:text-2xl font-bold text-white">{title}</h3>
-        <div className="flex gap-1">
+        <div className="flex gap-1 overflow-x-scroll scrollbar-hide">
           {result.map((item) => (
             <div key={item.tag} className="flex gap-2 flex-wrap">
               <Badge className="bg-white/30 px-4 py-1.5 rounded-full">{item.tag}</Badge>
