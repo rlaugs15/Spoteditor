@@ -7,7 +7,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { userKeys } from './keys';
-import { deleteProfileStorageFolder } from './storage';
+import { deleteAllFilesRecursively, deleteProfileStorageFolder } from './storage';
 import { cacheTags, globalTags } from './tags';
 
 interface PatchUserProps {
@@ -189,6 +189,12 @@ export async function deleteUser() {
     return { success: false, msg: ERROR_MESSAGES.COMMON.UNAUTHORIZED };
   }
   try {
+    // 유저 삭제 전, 이미지 폴더 삭제
+    await Promise.allSettled([
+      deleteAllFilesRecursively(me.user_id, 'places'),
+      deleteAllFilesRecursively(me.user_id, 'thumbnails'),
+    ]);
+
     /* 프로필 이미지 삭제 */
     if (me.image_url && me.image_url.includes('profiles')) {
       await deleteProfileStorageFolder(me.image_url);
