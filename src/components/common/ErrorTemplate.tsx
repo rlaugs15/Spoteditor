@@ -21,7 +21,7 @@ export default function ErrorTemplate({
   return (
     <main className="flex flex-col items-center justify-center h-dvh grow">
       <Image src={ErrorImg} alt="notFound 이미지" priority />
-      <div className="flex flex-col mt-[50px] mb-5">
+      <div className="flex flex-col items-center mt-[50px] mb-5">
         <h4 className="text-text-xl font-bold">{title}</h4>
         <h5 className="text-center">{message}</h5>
       </div>
