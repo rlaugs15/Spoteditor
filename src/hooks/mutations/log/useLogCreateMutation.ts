@@ -56,7 +56,7 @@ const useLogCreateMutation = () => {
         toast.info('이미지 업로드가 조금 오래 걸리고 있어요.', {
           description: '잠시만 기다려주세요...',
           id: 'delayed-upload-toast',
-          duration: 5000,
+          duration: 8000,
         });
       }, 10_000); // 10초
 
