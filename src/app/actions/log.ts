@@ -39,9 +39,11 @@ export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
       )
       .order('order', { referencedTable: 'place', ascending: true })
       .eq('log_id', logId)
-      .single(); */
+      .single();
 
-    /* if (!data || error?.code === 'PGRST116') {
+    console.log('data', data);
+
+    if (!data || error?.code === 'PGRST116') {
       return {
         success: false,
         msg: ERROR_MESSAGES.LOG.NOT_FOUND,

@@ -6,12 +6,16 @@ import Link from 'next/link';
 
 interface MyProfileButtonProps {
   user: IUser;
+  onClick?: () => void;
 }
 
-export default function MyProfileButton({ user }: MyProfileButtonProps) {
+export default function MyProfileButton({ user, onClick }: MyProfileButtonProps) {
   return (
-    <Link href={`/profile/${user?.user_id}`} className="w-full">
-      <Button disabled={!user} className="w-full h-full rounded-[60px] bg-[#F7F7F7] hover:bg-[#F7F7F7]">
+    <Link href={`/profile/${user?.user_id}`} onClick={onClick} className="w-full">
+      <Button
+        disabled={!user}
+        className="w-full h-full rounded-[60px] bg-[#F7F7F7] hover:bg-[#F7F7F7]"
+      >
         <span className="font-medium text-black text-text-sm">프로필 보기</span>
       </Button>
     </Link>
