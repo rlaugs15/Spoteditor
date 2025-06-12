@@ -13,7 +13,7 @@ interface MultiImageFormProps {
   idx: number;
 }
 
-const MAX_IMAGES_LENGTH = 3;
+const MAX_IMAGES_LENGTH = 15;
 
 const MultiImageForm = ({ idx }: MultiImageFormProps) => {
   const { control } = useFormContext<LogFormValues>();
@@ -29,7 +29,7 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
     if (!fileList) return;
 
     if (fields.length >= MAX_IMAGES_LENGTH) {
-      toast.error('사진은 최대 3장만 가능합니다.');
+      toast.error('사진은 최대 15장만 가능합니다.');
       return;
     }
     const files = Array.from(fileList).slice(0, MAX_IMAGES_LENGTH - fields.length);
@@ -54,7 +54,7 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
         <div className="cursor-pointer text-text-sm w-full h-12 rounded-md flex items-center justify-center border border-dashed my-2.5 font-bold space-x-1.5 hover:bg-accent hover:text-accent-foreground">
           <AddCameraIcon />
           <span>
-            사진 첨부<span className="text-error-500">*</span> (최대 3장)
+            사진 첨부<span className="text-error-500">*</span> (최대 15장)
           </span>
         </div>
       </FormLabel>
@@ -64,17 +64,17 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
         onChange={handleChangeFile}
         className="hidden"
         multiple
-        maxLength={3}
+        maxLength={15}
         accept=".jpg,.jpeg,.png,.webp,.avif"
       />
-      <div className="flex web:grid web:grid-cols-3 max-h-[320px] overflow-x-auto gap-1 scrollbar-hide">
+      <div className="flex max-h-[320px] overflow-x-auto gap-1 scrollbar-hide web:scrollbar-default scrollbar-thin mb-2.5">
         {fields.map((field, imageIdx) => {
           const file = field.file;
           const previewUrl =
             typeof file === 'string' ? file : previews.find((p) => p.file === file)?.url || '';
 
           return (
-            <div key={field.id} className="relative w-[220px] h-[300px] mb-2.5 shrink-0">
+            <div key={field.id} className="relative w-[220px] h-[300px] shrink-0">
               {previewUrl && (
                 <Image src={previewUrl} fill alt="업로드한 장소 이미지" className="object-cover" />
               )}
