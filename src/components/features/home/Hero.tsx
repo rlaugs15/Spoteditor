@@ -1,5 +1,4 @@
 import CitySearchForm from './CitySearchForm/CitySearchForm';
-import HeroCategoryList from './HeroCategoryList';
 
 const Hero = () => {
   return (
@@ -11,9 +10,9 @@ const Hero = () => {
         <br />
         리얼 코스를 만나보세요!
       </div>
-      <div className="flex flex-col gap-[25px] web:px-5">
+      <div className="flex flex-col justify-center gap-[25px] web:px-5">
         <CitySearchForm />
-        <HeroCategoryList />
+        {/* <HeroCategoryList /> */}
       </div>
     </div>
   );
