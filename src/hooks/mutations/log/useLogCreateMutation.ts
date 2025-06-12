@@ -52,7 +52,7 @@ const useLogCreateMutation = () => {
       return await createLog(preparedValues);
     },
     onMutate: () => {
-      const timeoutId = setTimeout(() => {
+      const firstTimeoutId = setTimeout(() => {
         toast.info('이미지 업로드가 조금 오래 걸리고 있어요.', {
           description: '잠시만 기다려주세요...',
           id: 'delayed-upload-toast',
@@ -60,8 +60,16 @@ const useLogCreateMutation = () => {
         });
       }, 10_000); // 10초
 
-      return { timeoutId };
+      const secondTimeoutId = setTimeout(() => {
+        toast.info('업로드 중입니다. 조금만 기다려 주세요.', {
+          id: 'long-upload-toast',
+          duration: 20_000,
+        });
+      }, 25_000); // 20초
+
+      return { firstTimeoutId, secondTimeoutId };
     },
+
     onSuccess: ({ success, data }) => {
       if (success) {
         toast.success('업로드가 성공적으로 완료되었습니다.', {
@@ -81,8 +89,10 @@ const useLogCreateMutation = () => {
       toast.error('업로드가 실패했습니다. 다시 시도해주세요');
     },
     onSettled: (_data, _error, _variables, context) => {
-      if (context?.timeoutId) clearTimeout(context.timeoutId);
+      if (context?.firstTimeoutId) clearTimeout(context.firstTimeoutId);
+      if (context?.secondTimeoutId) clearTimeout(context.secondTimeoutId);
       toast.dismiss('delayed-upload-toast');
+      toast.dismiss('long-upload-toast');
     },
   });
 };
