@@ -10,12 +10,12 @@ import {
 import { Tables } from '@/types/supabase';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
 import { X } from 'lucide-react';
-import Image from 'next/image';
 import { useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { FreeMode } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import ImageWithLoader from './ImageWithLoader';
 interface PlaceImageSliderProps {
   placeImages: Tables<'place_images'>[];
 }
@@ -40,7 +40,7 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
               className="w-[40vw] max-w-[300px] aspect-[3/4] relative"
               onClick={() => setSelectedImage(img.image_path)}
             >
-              <Image
+              <ImageWithLoader
                 src={getStoragePublicImage(img.image_path as string)}
                 alt="장소 이미지"
                 fill
@@ -61,7 +61,7 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
             <DialogDescription hidden>확대한 장소 이미지</DialogDescription>
           </DialogHeader>
 
-          <Image
+          <ImageWithLoader
             src={getStoragePublicImage(selectedImage as string)}
             alt="장소 이미지"
             fill
