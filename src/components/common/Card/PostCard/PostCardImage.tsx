@@ -1,6 +1,6 @@
+import ImageWithLoader from '@/components/features/detail-log/ImageWithLoader';
 import { cn } from '@/lib/utils';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
-import Image from 'next/image';
 interface PostCardImageProps {
   imageUrl?: string | null;
   author?: string | null;
@@ -20,13 +20,12 @@ function PostCardImage({ imageUrl, author, className, vertical }: PostCardImageP
     >
       {imageUrl && (
         <>
-          <Image
-            src={getStoragePublicImage(imageUrl as string)}
+          <ImageWithLoader
+            src={getStoragePublicImage(imageUrl)}
             alt="Post Thumbnail"
             fill
-            sizes="100%"
+            sizes="100vw"
             className="object-cover object-center"
-            loading="lazy"
           />
           <div className="absolute inset-0 card-id-gradient" />
           <div className="absolute inset-0 transition-colors group-hover:bg-black/25" />
