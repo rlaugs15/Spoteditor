@@ -132,7 +132,7 @@ export default function ProfileEditorPage() {
 
       queryClient.removeQueries({ queryKey: userKeys.me(), exact: true });
       queryClient.removeQueries({ queryKey: userKeys.publicUser(String(me.user_id)), exact: true });
-      queryClient.removeQueries({ queryKey: logKeys.log, exact: true });
+      queryClient.removeQueries({ queryKey: logKeys.all, exact: true });
       queryClient.removeQueries({ queryKey: searchKeys.all, exact: true });
 
       router.push(`/profile/${me.user_id}`);

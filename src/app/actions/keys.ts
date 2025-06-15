@@ -36,38 +36,38 @@ export const followKeys = {
 
 /* 로그 */
 export const logKeys = {
-  log: ['log'] as const,
-  detail: (logId: string) => [...logKeys.log, logId] as const,
+  all: ['log'] as const,
+  detail: (logId: string) => [...logKeys.all, logId] as const,
   list: (params: LogsParams) =>
     [
-      ...logKeys.log,
+      ...logKeys.all,
       'list',
       `${params.currentPage}`,
       `${params.pageSize}`,
       `${params.sort}`,
     ] as const,
   listByUser: ({ userId, currentPage = 1, pageSize = 10 }: LogsParams) =>
-    [...logKeys.log, 'byUser', userId ?? '', `${currentPage}`, `${pageSize}`] as const,
+    [...logKeys.all, 'byUser', userId ?? '', `${currentPage}`, `${pageSize}`] as const,
   bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParmas) =>
-    [...logKeys.log, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
+    [...logKeys.all, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
 
   // 단일 로그 북마크
   bookmarkStatus: (logId: string, userId: string) =>
-    [...logKeys.log, 'bookmark', 'status', logId, userId] as const,
+    [...logKeys.all, 'bookmark', 'status', logId, userId] as const,
 };
 
 /* 장소 */
 export const placeKeys = {
-  place: ['place'] as const,
-  detail: (placeId: string) => [...placeKeys.place, placeId] as const,
+  all: ['place'] as const,
+  detail: (placeId: string) => [...placeKeys.all, placeId] as const,
   list: ({ currentPage = 1, pageSize = 10 }: PaginationParams) =>
-    [...placeKeys.place, 'list', `${currentPage}`, `${pageSize}`] as const,
+    [...placeKeys.all, 'list', `${currentPage}`, `${pageSize}`] as const,
   bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParmas) =>
-    [...placeKeys.place, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
+    [...placeKeys.all, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
 
   // 단일 장소 북마크
   bookmarkStatus: (placeId: string, userId: string) =>
-    [...placeKeys.place, 'bookmark', 'status', placeId, userId] as const,
+    [...placeKeys.all, 'bookmark', 'status', placeId, userId] as const,
 };
 
 export const searchKeys = {

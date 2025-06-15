@@ -17,7 +17,7 @@ const useLogDeleteMutation = () => {
     onSuccess: ({ success }) => {
       if (success) {
         toast.success('로그가 삭제되었습니다.');
-        const keysToInvalidate = [logKeys.log, placeKeys.place, searchKeys.all];
+        const keysToInvalidate = [logKeys.all, placeKeys.all, searchKeys.all];
 
         keysToInvalidate.forEach((key) => {
           queryClient.removeQueries({ queryKey: key, exact: false });

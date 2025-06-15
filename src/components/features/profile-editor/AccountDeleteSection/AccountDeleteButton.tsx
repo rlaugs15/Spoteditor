@@ -31,8 +31,8 @@ export default function AccountDeleteButton({ setIsSuccess, setMsg }: AccountDel
         const keysToRemove = [
           userKeys.all,
           followKeys.all,
-          logKeys.log,
-          placeKeys.place,
+          logKeys.all,
+          placeKeys.all,
           searchKeys.all,
         ];
         keysToRemove.forEach((key) => {
