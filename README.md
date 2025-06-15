@@ -108,6 +108,23 @@ npm run dev
 |                   | 3.2 사용자 팔로우 및 마이페이지 연동 | 팔로우한 사용자의 활동이 마이페이지에서 확인됩니다.                |
 | **4. 반응형 디자인**    | 4.1 모바일/PC 최적화         | 다양한 디바이스에 대응하는 UI/UX 제공                     |
 
+## 트러블슈팅 & 개발 전략 요약
+
+- [**서버-클라이언트 데이터 공유 전략 (Next.js 15 + TanStack Query)**](https://github.com/project2025-a/project2025-next/wiki/%EC%84%9C%EB%B2%84%E2%80%90%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B3%B5%EC%9C%A0-%EC%A0%84%EB%9E%B5-(Next.js-15---TanStack-Query))
+  - SSR과 CSR 간 데이터 공유 및 캐시 무효화 전략
+ - [**드롭박스 오픈 시 테두리 깜빡이는 현상**](https://github.com/project2025-a/project2025-next/wiki/%EB%93%9C%EB%A1%AD%EB%B0%95%EC%8A%A4-%EC%98%A4%ED%94%88-%EC%8B%9C-%ED%85%8C%EB%91%90%EB%A6%AC-%EA%B9%9C%EB%B9%A1%EC%9D%B4%EB%8A%94-%ED%98%84%EC%83%81)
+   - Framer Motion의 GPU 레이어 분리 이슈 분석 및 해결
+ - [**프로필페이지 이미지 업로드 속도개선 (11,009 ms 단축)**](https://github.com/project2025-a/project2025-next/wiki/%ED%94%84%EB%A1%9C%ED%95%84%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C-%EC%86%8D%EB%8F%84%EA%B0%9C%EC%84%A0)
+   - 업로드 방식 변경으로 3배 속도 향상
+ - [이미지 업로드 최적화 트러블슈팅(react-image-file-resizer -> browser-image-compression)](https://nayah.tistory.com/190)
+   - 라이브러리 변경으로 화질 유지하며 파일 크기 80% 이상 압축
+ - [react-hook-form 개선기 (Next.js 마이그레이션)](https://nayah.tistory.com/195)
+ - [supabase storage 이미지 업로드 : 서버 액션에서 Signed URL로 전환하며 겪은 문제와 해결
+](https://nayah.tistory.com/196)
+ - [Supabase Storage 단일/중첩 폴더 이미지 삭제 로직 및 구현 방법
+](https://nayah.tistory.com/197)
+ - [중첩 객체 ↔ FormData 유틸 함수 제작기
+](https://nayah.tistory.com/198)
 
 
 
