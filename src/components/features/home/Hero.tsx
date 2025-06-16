@@ -8,7 +8,7 @@ const Hero = () => {
         <br />
         감각있는 스팟 큐레이터들이 직접 만든
         <br />
-        리얼 코스를 만나보세요!
+        코스를 만나보세요!
       </div>
       <div className="flex flex-col justify-center gap-[25px] web:px-5">
         <CitySearchForm />

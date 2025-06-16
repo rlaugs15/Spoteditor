@@ -11,6 +11,7 @@ import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/schema/log';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 const initialPlace = {
   placeName: '',
@@ -47,7 +48,13 @@ const LogPage = () => {
     name: 'places',
   });
 
-  const handleAddNewPlace = () => append(initialPlace);
+  const handleAddNewPlace = () => {
+    if (fields.length >= 10) {
+      toast.info('장소는 최대 10개까지 등록 가능합니다.');
+      return;
+    }
+    append(initialPlace);
+  };
   const handleDeletePlace = (idx: number) => remove(idx);
   const handleMovePlaceUp = (idx: number) => {
     if (idx <= 0) return;

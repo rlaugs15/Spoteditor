@@ -15,7 +15,7 @@ export const placeSchema = z.object({
   description: z.string().nullable(),
   placeImages: z
     .array(PlaceimageSchema)
-    .max(15, { message: '최대 15장의 이미지만 업로드 가능합니다.' })
+    .max(8, { message: '최대 8장의 이미지만 업로드 가능합니다.' })
     .min(1, '장소 최소 1장은 필수입니다.'),
 });
 
@@ -34,7 +34,10 @@ export const LogformSchema = z.object({
   logTitle: z.string().max(30).min(1, '로그 제목은 필수입니다.'),
   thumbnail: imageFileSchema,
   logDescription: z.string(),
-  places: z.array(placeSchema).min(1, '장소 1개 이상은 필수입니다.'),
+  places: z
+    .array(placeSchema)
+    .min(1, '장소 1개 이상은 필수입니다.')
+    .max(10, '장소는 최대 10개 입니다.'),
   tags: tagsSchema,
   address: addressSchema,
 });
