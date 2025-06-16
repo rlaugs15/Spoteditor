@@ -67,8 +67,10 @@ export default function CitySearchForm() {
               control={form.control}
               name="city"
               render={({ field }) => (
-                <FormItem className="flex flex-col bg-white web:px-4 px-3 web:py-3 py-2.5 gap-2">
-                  <FormLabel className="!text-light-400 text-xs">어디로 놀러갈까요?</FormLabel>
+                <FormItem className="flex flex-col bg-white web:px-4 px-3 web:py-5 py-2.5 gap-2">
+                  <FormLabel className="!text-light-400 text-xs web:text-[16px]">
+                    어디로 놀러갈까요?
+                  </FormLabel>
                   <FormControl>
                     <Input
                       onClick={opencityDropBoxClick}
@@ -86,8 +88,10 @@ export default function CitySearchForm() {
               control={form.control}
               name="sigungu"
               render={({ field }) => (
-                <FormItem className="flex flex-col bg-white web:px-4 px-3 web:py-3 py-2.5 gap-2">
-                  <FormLabel className="!text-light-400 text-xs">더 상세히 검색!</FormLabel>
+                <FormItem className="flex flex-col bg-white web:px-4 px-3 web:py-5 py-2.5 gap-2">
+                  <FormLabel className="!text-light-400 text-xs web:text-[16px]">
+                    더 상세히 검색!
+                  </FormLabel>
                   <FormControl>
                     <Input
                       onClick={opensigunguDropBoxClick}
