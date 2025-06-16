@@ -115,7 +115,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
         logId={log_id}
       />
       <Form {...form}>
-        <main className="grow bg-white">
+        <main className="grow bg-white pt-[54px]">
           <TitledInput />
           <PhotoTextSection thumbnail edit />
           <div className="flex flex-col gap-4">
