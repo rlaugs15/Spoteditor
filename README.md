@@ -93,11 +93,10 @@
 <br/>
 
 ## Demo
-
 | 기능         | 웹 버전 이미지                                                                                                  | 모바일 버전 이미지                                                                                                |
 | ---------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | **로그 조회**  | <img src="https://github.com/user-attachments/assets/3596e592-cb53-4818-a0d3-b10deca20cee" width="450" /> | <img src="https://github.com/user-attachments/assets/3587104e-a4a8-40d6-b8cc-294b9caff2f7" width="280" /> |
-| **로그 등록**  | <img src="https://github.com/user-attachments/assets/c321853e-0929-4862-97b5-dcb8d9c01a82" width="450" /> | <img src="https://github.com/user-attachments/assets/d42b69c7-857b-46d6-88bc-a41d3bcfc9d0" width="280" /> |
+| **로그 등록**  | <img src="https://github.com/user-attachments/assets/c321853e-0929-4862-97b5-dcb8d9c01a82" width="450" /> | <img src="https://github.com/user-attachments/assets/a78b2961-ed7d-4135-b134-70cabf74d8a2" width="280" /> |
 | **로그 수정**  | <img src="https://github.com/user-attachments/assets/fec77376-ef98-4da6-b21b-115b79b0e6ca" width="450" /> | <img src="https://github.com/user-attachments/assets/43397ce4-9709-40b7-abaf-86c0a71b00bb" width="280" /> |
 | **상세 페이지** | <img src="https://github.com/user-attachments/assets/70821a19-a5b4-494e-a74b-afbaf4693090" width="450" /> | <img src="https://github.com/user-attachments/assets/bf2e3a8b-dbad-4810-8516-bca877d120ff" width="280" /> |
 | **검색**     | <img src="https://github.com/user-attachments/assets/557d999f-39b9-4f17-ab08-4d96ebd2e2a6" width="450" /> | <img src="https://github.com/user-attachments/assets/08c26426-6894-4e0b-bf6d-0c489a6369c6" width="280" /> |
