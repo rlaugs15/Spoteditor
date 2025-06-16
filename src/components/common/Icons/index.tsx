@@ -5,6 +5,17 @@ interface IconProps {
   className?: string;
 }
 
+/* common */
+export const MapIcon = ({ className }: IconProps) => {
+  return (
+    <div
+      className={cn('relative w-[206.25px] web:w-[275px] h-[187.5px] web:h-[250px] ', className)}
+    >
+      <Image src="/icons/map.svg" alt="맵 아이콘" fill className="object-cover" />
+    </div>
+  );
+};
+
 /* Header */
 export const SearchIcon = ({ className }: IconProps) => {
   return (
