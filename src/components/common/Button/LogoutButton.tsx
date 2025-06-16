@@ -1,7 +1,7 @@
 'use client';
 
 import { LogoutIcon } from '@/components/common/Icons';
-import useLogoutMutation from '@/hooks/mutations/useLogoutMuation';
+import useLogoutMutation from '@/hooks/mutations/user/useLogoutMuation';
 
 export default function LogoutButton() {
   const { mutate } = useLogoutMutation();
