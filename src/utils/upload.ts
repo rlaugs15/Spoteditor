@@ -6,7 +6,7 @@ import {
 import { createClient } from '@/lib/supabase/client';
 import { ApiResponse } from '@/types/api/common';
 import { StorageBucket } from '@/types/api/storage';
-import { LogFormValues, NewPlace, NewPlaceImage } from '@/types/schema/log';
+import { LogFormValues, NewPlace, NewPlaceImage } from '@/types/log';
 import pLimit from 'p-limit';
 
 /* 단일 이미지 업로드 */

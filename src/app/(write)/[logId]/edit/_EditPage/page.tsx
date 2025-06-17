@@ -10,7 +10,7 @@ import useLogEditMutation from '@/hooks/mutations/log/useLogEditMutation';
 import { LogEditformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { DetailLog } from '@/types/api/log';
-import { LogEditFormValues } from '@/types/schema/log';
+import { LogEditFormValues } from '@/types/log';
 import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';

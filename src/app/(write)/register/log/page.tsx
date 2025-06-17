@@ -8,7 +8,7 @@ import { Form } from '@/components/ui/form';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
 import { LogformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
-import { LogFormValues } from '@/types/schema/log';
+import { LogFormValues } from '@/types/log';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';

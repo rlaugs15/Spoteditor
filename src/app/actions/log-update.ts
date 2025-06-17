@@ -1,6 +1,6 @@
 'use server';
 import { createClient } from '@/lib/supabase/server';
-import { LogEditFormValues } from '@/types/schema/log';
+import { LogEditFormValues } from '@/types/log';
 import { parseFormData } from '@/utils/formatLog';
 import { revalidateTag } from 'next/cache';
 import { deleteFilesInFolder, getListAllFilesInFolder } from './storage';
