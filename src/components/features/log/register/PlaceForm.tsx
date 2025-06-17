@@ -2,9 +2,12 @@
 import { LocationIcon, MapIcon } from '@/components/common/Icons';
 import { FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { CATEGORIES } from '@/constants/categoryData';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import ScrollContainer from 'react-indiana-drag-scroll';
 import PhotoTextSection from './PhotoTextSection';
 import PlaceDrawer from './PlaceDrawer';
 
@@ -59,23 +62,34 @@ const PlaceForm = ({
 
       <div>
         <div className="flex items-center gap-1.5">
-          <MapIcon />
+          <MapIcon className="shrink-0" />
           <FormField
             control={control}
             name={`places.${idx}.category`}
             render={({ field }) => (
-              <Input
-                {...field}
-                type="text"
-                placeholder="카페, 미술관, 레스토랑 카테고리를 적어주세요. *"
-                className={cn(
-                  '!text-text-sm',
-                  placeErrors?.category && 'placeholder:text-error-500'
-                )}
-              />
+              <ScrollContainer className="overflow-x-auto cursor-grab active:cursor-grabbing">
+                <ToggleGroup
+                  type="single"
+                  value={field.value ?? ''}
+                  onValueChange={(value) => field.onChange(value)}
+                  className="flex gap-1"
+                >
+                  {CATEGORIES.map((category) => (
+                    <ToggleGroupItem
+                      key={category}
+                      value={category}
+                      className="text-text-sm rounded-full px-2.5 py-[1.5px] max-w-fit"
+                      variant={'outline'}
+                    >
+                      {category}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </ScrollContainer>
             )}
           />
         </div>
+
         <div className="flex items-center gap-1.5">
           <LocationIcon />
           <FormField
