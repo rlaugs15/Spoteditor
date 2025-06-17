@@ -14,7 +14,8 @@ async function fetchLogBookmark({
   const data = await res.json();
   return data;
 }
-export default function useLogBookmarkMutation() {
+
+export default function useLogBookmarkMutation(onToggle?: (newStatus: boolean) => void) {
   const { data: user } = useUser();
   const queryClient = useQueryClient();
 
@@ -37,6 +38,9 @@ export default function useLogBookmarkMutation() {
         })
       );
 
+      // 상세페이지 카운트 반영
+      onToggle?.(!isBookmark);
+
       return { previousbookmarkStatus };
     },
     onError: (_error, variables, context) => {
@@ -46,6 +50,8 @@ export default function useLogBookmarkMutation() {
           context.previousbookmarkStatus
         );
       }
+      // 상세페이지 롤백 시 카운트도 복구
+      onToggle?.(variables.isBookmark);
     },
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({

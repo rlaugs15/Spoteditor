@@ -10,18 +10,25 @@ interface LogBookMarkButtonProps {
   logId: string;
   modal?: boolean;
   className?: string;
+  onToggle?: (isBookmarked: boolean) => void;
 }
 
-export default function LogBookMarkButton({ logId, modal, className }: LogBookMarkButtonProps) {
+export default function LogBookMarkButton({
+  logId,
+  modal,
+  className,
+  onToggle,
+}: LogBookMarkButtonProps) {
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
   const { data, isLoading } = useLogBookmarkCheck({ logId, userId: user?.user_id || null });
-  const { mutate } = useLogBookmarkMutation();
+  const { mutate } = useLogBookmarkMutation(onToggle);
 
   const onBookMarkClick = () => {
     if (userIsLoading) return;
     if (!user) {
       router.push('/login');
+      return;
     }
     if (!data) return;
     mutate({ logId, isBookmark: data.isBookmark });
