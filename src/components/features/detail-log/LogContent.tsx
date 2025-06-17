@@ -2,6 +2,7 @@
 
 import PlaceBookMarkButton from '@/components/common/Button/Bookmark/PlaceBookMarkButton';
 import { ClockIcon, LocationIcon } from '@/components/common/Icons';
+import { formatCount } from '@/lib/utils';
 import { DetailLog } from '@/types/api/log';
 import { useState } from 'react';
 import PlaceImageSlider from './PlaceImageSlider';
@@ -30,7 +31,9 @@ const LogContent = ({ place, idx }: LogContentProps) => {
               onToggle={handleToggleBookmark}
               className="!top-0 !right-0 !relative"
             />
-            <span className="font-medium text-text-sm text-light-300">{bookmarkCount}</span>
+            <span className="font-medium text-text-sm text-light-300">
+              {formatCount(bookmarkCount)}
+            </span>
           </section>
         </div>
         <div>

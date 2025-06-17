@@ -76,3 +76,14 @@ export async function uploadToSignedUrl(
 
   return res.ok;
 }
+
+/* 숫자를 K(천), M(백만) 단위로 축약하여 표시하는 함수 */
+export function formatCount(count: number): string {
+  if (count >= 1_000_000) {
+    return (count / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+  }
+  if (count >= 1_000) {
+    return (count / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+  }
+  return count.toString();
+}
