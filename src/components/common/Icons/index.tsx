@@ -131,6 +131,7 @@ export const HomeIcon = ({ className }: IconProps) => {
 };
 
 /* log */
+
 export const AddCameraIcon = ({ className }: IconProps) => {
   return (
     <Image
@@ -142,9 +143,9 @@ export const AddCameraIcon = ({ className }: IconProps) => {
     />
   );
 };
-export const ClockIcon = ({ className }: IconProps) => {
+export const MapIcon = ({ className }: IconProps) => {
   return (
-    <Image src="/icons/clock.svg" width={20} height={20} alt="시계 아이콘" className={className} />
+    <Image src="/icons/map.svg" width={20} height={20} alt="지도 아이콘" className={className} />
   );
 };
 export const LocationIcon = ({ className }: IconProps) => {

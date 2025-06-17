@@ -1,5 +1,5 @@
 'use client';
-import { ClockIcon, LocationIcon } from '@/components/common/Icons';
+import { LocationIcon, MapIcon } from '@/components/common/Icons';
 import { FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -59,7 +59,7 @@ const PlaceForm = ({
 
       <div>
         <div className="flex items-center gap-1.5">
-          <ClockIcon />
+          <MapIcon />
           <FormField
             control={control}
             name={`places.${idx}.category`}

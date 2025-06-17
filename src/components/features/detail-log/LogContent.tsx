@@ -1,5 +1,5 @@
 import PlaceBookMarkButton from '@/components/common/Button/Bookmark/PlaceBookMarkButton';
-import { ClockIcon, LocationIcon } from '@/components/common/Icons';
+import { LocationIcon, MapIcon } from '@/components/common/Icons';
 import { DetailLog } from '@/types/api/log';
 import PlaceImageSlider from './PlaceImageSlider';
 
@@ -21,7 +21,7 @@ const LogContent = ({ place, idx }: LogContentProps) => {
         </div>
         <div>
           <div className="flex gap-1.5 text-light-400 text-text-sm web:text-text-lg">
-            <ClockIcon />
+            <MapIcon />
             <span>{place.category}</span>
           </div>
           <div className="flex gap-1.5 text-light-400 text-text-sm web:text-text-lg">
