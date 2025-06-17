@@ -1,8 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { MapIcon } from './Icons';
 interface ErrorTemplateProps {
   title?: string;
   message?: string;
@@ -13,13 +13,10 @@ export default function ErrorTemplate({
   message = 'URL 주소를 확인해주세요.',
 }: ErrorTemplateProps) {
   const router = useRouter();
-
-  const handleClick = () => {
-    router.push('/');
-  };
+  const handleClick = () => router.replace('/');
   return (
     <main className="flex flex-col items-center justify-center h-dvh grow">
-      <MapIcon />
+      <Image src="/images/404.png" alt="404" width={300} height={200} />
       <div className="flex flex-col items-center mt-[50px] mb-5">
         <h4 className="text-text-xl font-bold">{title}</h4>
         <h5 className="text-center">{message}</h5>

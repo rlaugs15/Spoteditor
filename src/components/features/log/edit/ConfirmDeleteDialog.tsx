@@ -26,7 +26,10 @@ const ConfirmDeleteDialog = ({ logTitle, logId }: ConfirmDeleteDialogProps) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant={'ghost'} className="font-bold text-text-md !text-error-500 px-0">
+        <Button
+          variant={'ghost'}
+          className="font-bold text-text-md !text-error-500 px-0 hover:!text-error-400 hover:!bg-transparent"
+        >
           로그 삭제
         </Button>
       </AlertDialogTrigger>

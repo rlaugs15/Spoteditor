@@ -1,6 +1,6 @@
 'use client';
 import { XRemovePlaceImageIcon } from '@/components/common/Icons';
-import { LogEditFormValues } from '@/types/schema/log';
+import { LogEditFormValues } from '@/types/log';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
 import Image from 'next/image';
 import { useFieldArray, useFormContext } from 'react-hook-form';

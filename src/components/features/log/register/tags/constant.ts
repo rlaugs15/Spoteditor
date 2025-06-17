@@ -1,7 +1,7 @@
 export const PAGE_TAG_INTROS = {
   mood: {
     title: '어떤 하루인가요?',
-    des: '여러개를 선택할 수 있어요 (최대 6개)',
+    des: '여러개를 선택할 수 있어요 (최대 10개)',
   },
   country: { title: '국가를 선택해주세요.', des: '메인 국가를 선택해주세요.' },
   city: {

@@ -11,7 +11,7 @@ const MainLayout = ({ modal, children }: MainLayoutProps) => {
     <div className="w-full h-dvh flex flex-col font-pretendard web:min-w-[1440px]">
       {modal}
       <Header />
-      <div className="grow">{children}</div>
+      <div className="grow pt-10 web:pt-[60px]">{children}</div>
       <Footer />
     </div>
   );

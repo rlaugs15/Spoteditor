@@ -3,14 +3,14 @@ import { LogEditHeader } from '@/components/common/Header';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
 import PlaceForm from '@/components/features/log/register/PlaceForm';
-import { TagGroup } from '@/components/features/log/register/tags';
+import MultiTagGroup from '@/components/features/log/register/tags/MultiTagGroup';
 import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
 import useLogEditMutation from '@/hooks/mutations/log/useLogEditMutation';
 import { LogEditformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { DetailLog } from '@/types/api/log';
-import { LogEditFormValues } from '@/types/schema/log';
+import { LogEditFormValues } from '@/types/log';
 import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
@@ -132,13 +132,13 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
           </div>
         </main>
         <>
-          <TagGroup title="누구와" type="mood" />
-          <TagGroup title="어떤 느낌으로" type="activity" />
+          <MultiTagGroup title="누구와" type="mood" />
+          <MultiTagGroup title="어떤 느낌으로" type="activity" />
         </>
       </Form>
 
       {/* footer */}
-      <div className="text-text-sm w-full h-12 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
+      <div className="text-text-sm w-full h-9 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
         부적절한 이미지 적발시 로그가 삭제될 수 있습니다.
       </div>
 

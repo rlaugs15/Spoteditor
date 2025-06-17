@@ -5,17 +5,6 @@ interface IconProps {
   className?: string;
 }
 
-/* common */
-export const MapIcon = ({ className }: IconProps) => {
-  return (
-    <div
-      className={cn('relative w-[206.25px] web:w-[275px] h-[187.5px] web:h-[250px] ', className)}
-    >
-      <Image src="/icons/map.svg" alt="맵 아이콘" fill className="object-cover" />
-    </div>
-  );
-};
-
 /* Header */
 export const SearchIcon = ({ className }: IconProps) => {
   return (
@@ -142,6 +131,7 @@ export const HomeIcon = ({ className }: IconProps) => {
 };
 
 /* log */
+
 export const AddCameraIcon = ({ className }: IconProps) => {
   return (
     <Image
@@ -153,9 +143,9 @@ export const AddCameraIcon = ({ className }: IconProps) => {
     />
   );
 };
-export const ClockIcon = ({ className }: IconProps) => {
+export const MapIcon = ({ className }: IconProps) => {
   return (
-    <Image src="/icons/clock.svg" width={20} height={20} alt="시계 아이콘" className={className} />
+    <Image src="/icons/map.svg" width={20} height={20} alt="지도 아이콘" className={className} />
   );
 };
 export const LocationIcon = ({ className }: IconProps) => {
@@ -173,8 +163,8 @@ export const WhiteLocationIcon = ({ className }: IconProps) => {
   return (
     <Image
       src="/icons/location-white.svg"
-      width={20}
-      height={20}
+      width={16}
+      height={16}
       alt="장소 아이콘"
       className={className}
     />

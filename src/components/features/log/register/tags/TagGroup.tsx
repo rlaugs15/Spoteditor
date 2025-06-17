@@ -1,76 +1,24 @@
 'use client';
-import {
-  cityCategories,
-  cityDistricts,
-  globalCategories,
-  globalRegions,
-} from '@/constants/cityData';
-import { TAG_SETS } from '@/constants/tagData';
-import { MultiKeys, TagKeys, useLogCreationStore } from '@/stores/logCreationStore';
-import { useCallback, useMemo } from 'react';
 import TagButton from './TagButton';
-import { PAGE_TAG_INTROS } from './constant';
 
 interface TagGroupProps {
   title?: string;
-  type: TagKeys;
+  tags: readonly string[];
+  isSelected: (value: string) => boolean;
+  onTagClick: (value: string) => void;
 }
 
-const MULTI_TAG_TYPES = new Set<TagKeys>(['mood', 'activity']);
-const isMultiType = (key: TagKeys): key is MultiKeys => MULTI_TAG_TYPES.has(key);
-
-const TagGroup = ({ title, type }: TagGroupProps) => {
-  const selectedTags = useLogCreationStore((state) => state[type]);
-  const toggleMultiTag = useLogCreationStore((state) => state.toggleMultiTag);
-  const setSingleTag = useLogCreationStore((state) => state.setSingleTag);
-  const selectedCity = useLogCreationStore((state) => state['city']);
-  const selectedCountry = useLogCreationStore((state) => state['country']);
-
-  const isDomestic = selectedCountry === '국내';
-  const tagGroupTitle =
-    (type === 'city' || type === 'sigungu') &&
-    PAGE_TAG_INTROS[type][isDomestic ? 'domestic' : 'aboard'].tagGroupTitle;
-
-  const tags = useMemo(() => {
-    switch (type) {
-      case 'sigungu':
-        if (!selectedCity) return [];
-        return isDomestic ? cityDistricts[selectedCity] ?? [] : globalRegions[selectedCity] ?? [];
-      case 'city':
-        return isDomestic ? cityCategories : globalCategories;
-
-      default:
-        return TAG_SETS[type] ?? [];
-    }
-  }, [type, selectedCity, isDomestic]);
-
-  const handleTagClick = useCallback(
-    (value: string) => {
-      if (isMultiType(type)) toggleMultiTag(type, value);
-      else setSingleTag(type, value);
-    },
-    [setSingleTag, toggleMultiTag, type]
-  );
-
-  const isTagSelected = useCallback(
-    (value: string) => {
-      return isMultiType(type)
-        ? Array.isArray(selectedTags) && selectedTags.includes(value)
-        : selectedTags === value;
-    },
-    [type, selectedTags]
-  );
-
+const TagGroup = ({ title, tags, isSelected, onTagClick }: TagGroupProps) => {
   return (
     <div className="mb-5">
-      <h5 className="text-text-xs font-bold py-2.5">{title || tagGroupTitle}</h5>
+      {title && <h5 className="text-text-xs font-bold py-2.5">{title}</h5>}
       <div className="flex flex-wrap gap-2">
-        {tags.map((value: string) => (
+        {tags.map((value) => (
           <TagButton
             key={value}
             value={value}
-            isSelected={isTagSelected(value)}
-            onClick={handleTagClick}
+            isSelected={isSelected(value)}
+            onClick={() => onTagClick(value)}
           />
         ))}
       </div>

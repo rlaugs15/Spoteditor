@@ -10,22 +10,25 @@ interface PlaceBookMarkButtonProps {
   placeId: string;
   modal?: boolean;
   className?: string;
+  onToggle?: (isBookmarked: boolean) => void;
 }
 
 export default function PlaceBookMarkButton({
   placeId,
   modal,
   className,
+  onToggle,
 }: PlaceBookMarkButtonProps) {
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
   const { data, isLoading } = usePlaceBookmarkCheck({ placeId, userId: user?.user_id || null });
-  const { mutate } = usePlaceBookmarkMutation();
+  const { mutate } = usePlaceBookmarkMutation(onToggle);
 
   const onBookMarkClick = () => {
     if (userIsLoading) return;
     if (!user) {
       router.push('/login');
+      return;
     }
     if (!data) return;
     mutate({
