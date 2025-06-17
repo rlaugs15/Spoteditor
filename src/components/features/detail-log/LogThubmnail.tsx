@@ -7,6 +7,7 @@ import { DetailLog } from '@/types/api/log';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
 import Image from 'next/image';
 import Link from 'next/link';
+import TagRow from './TagRow';
 
 interface LogThubmnailProps {
   logData: DetailLog;
@@ -14,7 +15,8 @@ interface LogThubmnailProps {
 }
 const LogThubmnail = ({ logData, isAuthor }: LogThubmnailProps) => {
   const { thumbnail_url, title, place, log_tag } = logData;
-  const result = log_tag.filter((item) => ['mood', 'activity'].includes(item.category));
+  const moods = log_tag.filter((item) => item.category === 'mood');
+  const activities = log_tag.filter((item) => item.category === 'activity');
   return (
     <section className="relative h-[488px] flex flex-col justify-between px-4 web:px-[50px] pt-4 pb-8">
       <Image
@@ -23,7 +25,10 @@ const LogThubmnail = ({ logData, isAuthor }: LogThubmnailProps) => {
         fill
         className="object-cover"
       />
-      <div className="flex justify-between z-10">
+      <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient" />
+
+      {/* 버튼 */}
+      <section className="flex justify-between z-10">
         <ExtraActionButton asChild>
           <BackButton circle />
         </ExtraActionButton>
@@ -38,22 +43,22 @@ const LogThubmnail = ({ logData, isAuthor }: LogThubmnailProps) => {
             </ExtraActionButton>
           )}
         </div>
-      </div>
-      <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient" />
-      <div className="flex flex-col gap-2 z-10">
+      </section>
+
+      {/* 태그 */}
+      <section className="flex flex-col z-10">
         <h3 className="text-lg web:text-2xl font-bold text-white">{title}</h3>
-        <div className="flex gap-1 flex-wrap">
-          {result.map((item) => (
-            <div key={item.tag} className="flex gap-2 flex-wrap">
-              <Badge className="bg-white/30 px-4 py-1.5 rounded-full">{item.tag}</Badge>
-            </div>
-          ))}
+        <div className="flex flex-col gap-1">
+          {/* mood */}
+          <TagRow items={moods} />
+          {/* activity */}
+          <TagRow items={activities} />
           <Badge className="bg-white/30 px-4 py-1.5 rounded-full">
             <WhiteLocationIcon />
             {place.length}
           </Badge>
         </div>
-      </div>
+      </section>
     </section>
   );
 };
