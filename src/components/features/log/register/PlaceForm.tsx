@@ -79,7 +79,7 @@ const PlaceForm = ({
                       key={category}
                       value={category}
                       size={'sm'}
-                      className="text-text-sm rounded-full max-w-fit px-2"
+                      className="text-text-sm !text-light-400 rounded-full max-w-fit px-2"
                       variant={'outline'}
                     >
                       {category}
