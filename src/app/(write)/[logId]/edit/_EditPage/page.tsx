@@ -3,7 +3,7 @@ import { LogEditHeader } from '@/components/common/Header';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
 import PlaceForm from '@/components/features/log/register/PlaceForm';
-import { TagGroup } from '@/components/features/log/register/tags';
+import MultiTagGroup from '@/components/features/log/register/tags/MultiTagGroup';
 import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
 import useLogEditMutation from '@/hooks/mutations/log/useLogEditMutation';
@@ -132,8 +132,8 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
           </div>
         </main>
         <>
-          <TagGroup title="누구와" type="mood" />
-          <TagGroup title="어떤 느낌으로" type="activity" />
+          <MultiTagGroup title="누구와" type="mood" />
+          <MultiTagGroup title="어떤 느낌으로" type="activity" />
         </>
       </Form>
 

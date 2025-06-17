@@ -1,5 +1,6 @@
 import { RegisterFooter } from '@/components/common/Footer';
-import { PageIntro, TagGroup } from '@/components/features/log/register/tags';
+import { PageIntro } from '@/components/features/log/register/tags';
+import MultiTagGroup from '@/components/features/log/register/tags/MultiTagGroup';
 import { REGISTER_PATHS } from '@/constants/pathname';
 
 const MoodSelectionPage = () => {
@@ -7,8 +8,8 @@ const MoodSelectionPage = () => {
     <>
       <PageIntro type="mood" />
       <div className="grow">
-        <TagGroup title="누구와" type="mood" />
-        <TagGroup title="어떤 느낌으로" type="activity" />
+        <MultiTagGroup title="누구와" type="mood" />
+        <MultiTagGroup title="어떤 느낌으로" type="activity" />
       </div>
       <RegisterFooter
         tagTargets={['mood', 'activity']}
