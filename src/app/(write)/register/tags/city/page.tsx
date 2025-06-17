@@ -1,5 +1,5 @@
 import { RegisterFooter } from '@/components/common/Footer';
-import { PageIntro, TagGroup } from '@/components/features/log/register/tags';
+import { PageIntro, SingleTagGroup } from '@/components/features/log/register/tags';
 import { REGISTER_PATHS } from '@/constants/pathname';
 
 const CitySelectionPage = () => {
@@ -7,7 +7,7 @@ const CitySelectionPage = () => {
     <>
       <PageIntro type="city" />
       <div className="grow">
-        <TagGroup type="city" />
+        <SingleTagGroup type="city" nextPath={REGISTER_PATHS.SIGUNGU} />
       </div>
       <RegisterFooter tagTargets={['city']} nextPath={REGISTER_PATHS.SIGUNGU} />
     </>

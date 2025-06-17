@@ -2,7 +2,7 @@
 
 import { PreparedValues } from '@/hooks/mutations/log/useLogCreateMutation';
 import { createClient } from '@/lib/supabase/server';
-import { NewAddress, NewLog, NewPlace, NewPlaceImage, NewTag } from '@/types/schema/log';
+import { NewAddress, NewLog, NewPlace, NewPlaceImage, NewTag } from '@/types/log';
 import { revalidateTag } from 'next/cache';
 import { globalTags } from './tags';
 

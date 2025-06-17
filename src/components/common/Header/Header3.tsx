@@ -21,7 +21,7 @@ const Header3 = ({ onAddNewPlace }: Header3Props) => {
         </div>
         <Button
           variant="ghost"
-          className="font-bold text-text-md !text-light-300 px-0"
+          className="font-bold text-text-md !text-light-300 px-0 hover:!text-light-400 hover:!bg-transparent"
           onClick={onAddNewPlace}
         >
           장소 추가

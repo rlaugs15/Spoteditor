@@ -3,7 +3,7 @@ import { AddCameraIcon, XRemovePlaceImageIcon } from '@/components/common/Icons'
 import { FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useMultipleImagePreview from '@/hooks/useMultipleImagePreview';
-import { LogFormValues } from '@/types/schema/log';
+import { LogFormValues } from '@/types/log';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import Image from 'next/image';
 import { useFieldArray, useFormContext } from 'react-hook-form';

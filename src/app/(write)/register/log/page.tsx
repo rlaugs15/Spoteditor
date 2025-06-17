@@ -8,7 +8,7 @@ import { Form } from '@/components/ui/form';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
 import { LogformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
-import { LogFormValues } from '@/types/schema/log';
+import { LogFormValues } from '@/types/log';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -91,7 +91,7 @@ const LogPage = () => {
       </Form>
 
       {/* footer */}
-      <div className="text-text-sm w-full h-12 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
+      <div className="text-text-sm w-full h-9 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
         부적절한 이미지 적발시 로그가 삭제될 수 있습니다.
       </div>
 

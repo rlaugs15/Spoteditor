@@ -42,7 +42,7 @@ export const useLogCreationStore = create<LogCreationStoreType>()(
         const totalSelected = state.mood.length + state.activity.length;
         const isSelected = tags.includes(tag);
 
-        if (!isSelected && totalSelected >= 6) return; // 최대 6개만
+        if (!isSelected && totalSelected >= 10) return; // 최대 10개만
         set((state) => {
           state[key] = isSelected ? tags.filter((t) => t != tag) : [...tags, tag];
         });
