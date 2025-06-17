@@ -78,7 +78,8 @@ const PlaceForm = ({
                     <ToggleGroupItem
                       key={category}
                       value={category}
-                      className="text-text-sm rounded-full px-2.5 py-[1.5px] max-w-fit"
+                      size={'sm'}
+                      className="text-text-sm rounded-full max-w-fit px-2"
                       variant={'outline'}
                     >
                       {category}
