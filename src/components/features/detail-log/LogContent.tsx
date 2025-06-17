@@ -1,6 +1,10 @@
+'use client';
+
 import PlaceBookMarkButton from '@/components/common/Button/Bookmark/PlaceBookMarkButton';
 import { ClockIcon, LocationIcon } from '@/components/common/Icons';
+import { formatCount } from '@/lib/utils';
 import { DetailLog } from '@/types/api/log';
+import { useState } from 'react';
 import PlaceImageSlider from './PlaceImageSlider';
 
 interface LogContentProps {
@@ -9,6 +13,10 @@ interface LogContentProps {
 }
 
 const LogContent = ({ place, idx }: LogContentProps) => {
+  const [bookmarkCount, setBookmarkCount] = useState(place._count?.place_bookmark ?? 0);
+  const handleToggleBookmark = (newStatus: boolean) => {
+    setBookmarkCount((prev) => prev + (newStatus ? 1 : -1));
+  };
   return (
     <div className="web:grid grid-cols-[1fr_4fr] gap-[15px] border-t pt-[15px] web:pt-3 py-10 space-y-[15px]">
       <section className="flex flex-col gap-2 relative">
@@ -17,16 +25,25 @@ const LogContent = ({ place, idx }: LogContentProps) => {
             <span>{String(idx).padStart(2, '0')}</span>
             <span>{place.name}</span>
           </div>
-          <PlaceBookMarkButton placeId={place.place_id} className="!top-0 !right-0" />
+          <section className="absolute top-0 right-0 flex flex-col items-center">
+            <PlaceBookMarkButton
+              placeId={place.place_id}
+              onToggle={handleToggleBookmark}
+              className="!top-0 !right-0 !relative"
+            />
+            <span className="font-medium text-text-sm text-light-300">
+              {formatCount(bookmarkCount)}
+            </span>
+          </section>
         </div>
-        <div>
-          <div className="flex gap-1.5 text-light-400 text-text-sm web:text-text-lg">
-            <ClockIcon />
-            <span>{place.category}</span>
+        <div className="web:max-w-[324px] flex flex-col gap-2">
+          <div className="flex items-start gap-1.5 text-light-400 text-text-sm web:text-text-lg">
+            <ClockIcon className="mt-0.5 flex-shrink-0" />
+            <span className="break-words block min-w-0">{place.category}</span>
           </div>
-          <div className="flex gap-1.5 text-light-400 text-text-sm web:text-text-lg">
-            <LocationIcon />
-            <span>{place.address}</span>
+          <div className="flex items-start gap-1.5 text-light-400 text-text-sm web:text-text-lg">
+            <LocationIcon className="mt-0.5 flex-shrink-0" />
+            <span className="break-words block min-w-0">{place.address}</span>
           </div>
         </div>
       </section>

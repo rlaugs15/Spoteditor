@@ -41,6 +41,8 @@ const Carousel = ({ logs }: { logs: LogWithUserAndAddress[] }) => {
         />
       </span>
       <Swiper
+        simulateTouch={true} // 기본값이긴 하지만 명시적으로 넣어주는 것도 좋음
+        touchStartPreventDefault={false} // 트랙패드 스크롤을 막지 않도록 설정
         watchSlidesProgress
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 3000 }}

@@ -1,9 +1,9 @@
 import { fetchLog } from '@/app/actions/log';
 import { getUser } from '@/app/actions/user';
-import LogBookMarkButton from '@/components/common/Button/Bookmark/LogBookMarkButton';
 import { PenBlackIcon, TableIcon } from '@/components/common/Icons';
 import ExtraActionButton from '@/components/features/detail-log/ExtraActionButton';
 import LogAuthorIntro from '@/components/features/detail-log/LogAuthorIntro';
+import LogBookmarkWithCount from '@/components/features/detail-log/LogBookmarkWithCount';
 import LogContent from '@/components/features/detail-log/LogContent';
 import LogThubmnail from '@/components/features/detail-log/LogThubmnail';
 import { PlaceWithImages } from '@/types/api/log';
@@ -40,7 +40,7 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
           <LogContent key={place.place_id} place={place} idx={idx + 1} />
         ))}
       </main>
-      <div className="flex flex-col gap-2 fixed z-10 bottom-10 web:right-[50px] right-4">
+      <div className="flex flex-col items-center gap-2 fixed z-10 bottom-10 web:right-[50px] right-4">
         {isAuthor ? (
           <ExtraActionButton className="w-11 h-11">
             <Link href={`/${logData.log_id}/edit`}>
@@ -48,12 +48,10 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
             </Link>
           </ExtraActionButton>
         ) : (
-          <ExtraActionButton className="w-11 h-11" asChild>
-            <LogBookMarkButton
-              logId={logData.log_id}
-              className="rounded-full relative !top-0 !right-0"
-            />
-          </ExtraActionButton>
+          <LogBookmarkWithCount
+            logId={logData.log_id}
+            initialCount={logData._count?.log_bookmark ?? 0}
+          />
         )}
         <ExtraActionButton className="w-11 h-11" asChild>
           <Link href={`/log/${logData.log_id}/placeCollect`}>

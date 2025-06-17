@@ -63,6 +63,7 @@ export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
         place: {
           include: {
             place_images: true,
+            _count: { select: { place_bookmark: true } },
           },
           orderBy: {
             order: 'asc',
@@ -81,6 +82,7 @@ export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
             sigungu: true,
           },
         },
+        _count: { select: { log_bookmark: true } },
       },
     });
 
