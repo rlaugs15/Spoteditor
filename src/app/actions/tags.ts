@@ -47,7 +47,7 @@ export const cacheTags = {
   logListByUser: (params: LogsParams) => cacheTags.fromKey(logKeys.listByUser(params)),
   logBookmarkList: (params: logBookmarkListParmas) =>
     cacheTags.fromKey(logKeys.bookmarkList(params)),
-  logMyList: (userId: string) => cacheTags.fromKey([...logKeys.log, 'myList', userId, 'list']),
+  logMyList: (userId: string) => cacheTags.fromKey([...logKeys.all, 'myList', userId, 'list']),
 
   /* 장소 */
   placeDetail: (placeId: string) => cacheTags.fromKey([...placeKeys.detail(placeId), 'single']),

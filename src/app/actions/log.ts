@@ -325,7 +325,7 @@ export async function getBookmarkedLogs(params: logBookmarkListParmas) {
   return unstable_cache(() => fetchBookmarkedLogs(params), [...logKeys.bookmarkList(params)], {
     tags: [
       cacheTags.logBookmarkList(params), // 특정 페이지 북마크 리스트
-      'log:bookmark:all', // 전체 북마크 리스트 무효화용 상위 태그
+      globalTags.logBookmarkAll, // 전체 북마크 리스트 무효화용 상위 태그
     ],
     revalidate: 300,
   })();
@@ -333,7 +333,7 @@ export async function getBookmarkedLogs(params: logBookmarkListParmas) {
 
 /* 북마크 시 서버캐시 무효화 */
 export async function revalidateBookmarkLogs() {
-  revalidateTag('log:bookmark:all'); // 특정 유저·페이지 무관하게 전체 무효화
+  revalidateTag(globalTags.logBookmarkAll); // 특정 유저·페이지 무관하게 전체 무효화
 }
 
 // ===================================================================

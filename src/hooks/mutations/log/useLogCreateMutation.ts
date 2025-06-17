@@ -79,7 +79,7 @@ const useLogCreateMutation = () => {
         clearTag();
         router.replace(`/log/${data}`);
 
-        const keysToInvalidate = [logKeys.log, searchKeys.all];
+        const keysToInvalidate = [logKeys.all, searchKeys.all];
         keysToInvalidate.forEach((key) =>
           queryClient.removeQueries({ queryKey: key, exact: false })
         );

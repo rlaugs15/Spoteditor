@@ -20,7 +20,7 @@ const useLogEditMutation = () => {
       if (success) {
         clearTag();
 
-        const keysToInvalidate = [logKeys.log, placeKeys.place, searchKeys.all];
+        const keysToInvalidate = [logKeys.all, placeKeys.all, searchKeys.all];
 
         keysToInvalidate.forEach((key) => {
           queryClient.removeQueries({ queryKey: key, exact: false });
