@@ -29,7 +29,7 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
   return (
     <div>
       <LogThubmnail logData={logData} isAuthor={isAuthor} />
-      <main className="flex flex-col px-4 web:px-[50px]">
+      <main className="flex flex-col px-4 web:px-[50px] pb-[200px]">
         <LogAuthorIntro
           userId={logData.user_id}
           userNickname={String(logData.users.nickname)}
