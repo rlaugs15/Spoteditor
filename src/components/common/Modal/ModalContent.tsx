@@ -13,7 +13,7 @@ export default function ModalContent({ children, className }: ModalContentProps)
       <ModalOverlay>
         <div
           className={cn(
-            'w-full h-full web:max-w-[520px] web:h-[470px] p-4 web:p-5 bg-white web:rounded-[12px] flex flex-col items-center',
+            'w-full h-full web:max-w-[520px] web:h-[431px] p-4 web:p-5 bg-white web:rounded-[12px] flex flex-col items-center',
             className
           )}
         >
