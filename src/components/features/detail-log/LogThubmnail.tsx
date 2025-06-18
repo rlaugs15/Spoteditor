@@ -50,13 +50,17 @@ const LogThubmnail = ({ logData, isAuthor }: LogThubmnailProps) => {
         <h3 className="text-lg web:text-2xl font-bold text-white">{title}</h3>
         <div className="flex flex-col gap-1">
           {/* mood */}
-          <TagRow items={moods} />
+          <TagRow
+            items={moods}
+            front={
+              <Badge className="bg-white/30 px-4 py-1.5 rounded-full">
+                <WhiteLocationIcon />
+                {place.length}
+              </Badge>
+            }
+          />
           {/* activity */}
           <TagRow items={activities} />
-          <Badge className="bg-white/30 px-4 py-1.5 rounded-full">
-            <WhiteLocationIcon />
-            {place.length}
-          </Badge>
         </div>
       </section>
     </section>

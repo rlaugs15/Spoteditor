@@ -7,10 +7,8 @@ import { CATEGORIES } from '@/constants/categoryData';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import ScrollContainer from 'react-indiana-drag-scroll';
 import PhotoTextSection from './PhotoTextSection';
 import PlaceDrawer from './PlaceDrawer';
-
 interface PlaceFormProps {
   idx: number;
   onDeletePlace: (idx: number) => void;
@@ -67,26 +65,25 @@ const PlaceForm = ({
             control={control}
             name={`places.${idx}.category`}
             render={({ field }) => (
-              <ScrollContainer className="overflow-x-auto cursor-grab active:cursor-grabbing">
+              <div className="overflow-x-auto cursor-grab active:cursor-grabbing scrollbar-hide">
                 <ToggleGroup
                   type="single"
                   value={field.value ?? ''}
                   onValueChange={(value) => field.onChange(value)}
-                  className="flex gap-1"
+                  className="flex gap-1 web:flex-wrap"
                 >
                   {CATEGORIES.map((category) => (
                     <ToggleGroupItem
                       key={category}
                       value={category}
                       size={'sm'}
-                      className="text-text-sm !text-light-400 rounded-full max-w-fit px-2"
-                      variant={'outline'}
+                      className="text-text-sm !text-light-400 rounded-full min-w-[62px] w-fit px-3 border"
                     >
                       {category}
                     </ToggleGroupItem>
                   ))}
                 </ToggleGroup>
-              </ScrollContainer>
+              </div>
             )}
           />
         </div>
