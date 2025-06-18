@@ -30,7 +30,7 @@ const ConfirmDeleteDialog = ({ logTitle, logId }: ConfirmDeleteDialogProps) => {
           variant={'ghost'}
           className="font-bold text-text-md !text-error-500 px-0 hover:!text-error-400 hover:!bg-transparent"
         >
-          로그 삭제
+          삭제
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className="w-[400px]">
