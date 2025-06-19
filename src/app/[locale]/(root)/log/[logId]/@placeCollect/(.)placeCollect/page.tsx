@@ -1,4 +1,4 @@
-import { LogIdParams } from '@/app/(root)/log/[logId]/page';
+import { LogIdParams } from '@/app/[locale]/(root)/log/[logId]/page';
 import { fetchLog } from '@/app/actions/log';
 import XButton from '@/components/common/Button/XButton';
 import PlaceCard from '@/components/common/Card/PlaceCard.tsx/PlaceCard';

@@ -1,6 +1,6 @@
 'use client';
 
-import { signInWithGoogle } from '@/app/(root)/@modal/(.)login/actions';
+import { signInWithGoogle } from '@/app/[locale]/(root)/@modal/(.)login/actions';
 import SocialLoginButton from './SocialLoginButton';
 
 export default function SocialLoginButtons() {
