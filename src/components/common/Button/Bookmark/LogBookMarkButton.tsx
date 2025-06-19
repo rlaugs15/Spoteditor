@@ -1,9 +1,9 @@
 'use client';
+import { BookMarkIcon } from '@/components/common/Icons';
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLogBookmarkCheck from '@/hooks/queries/log/useLogBookmarkCheck';
 import useUser from '@/hooks/queries/user/useUser';
 import { cn } from '@/lib/utils';
-import { Bookmark } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface LogBookMarkButtonProps {
@@ -43,7 +43,7 @@ export default function LogBookMarkButton({
         className
       )}
     >
-      <Bookmark className={cn('!w-6 !h-6', data?.isBookmark && 'fill-black')} />
+      <BookMarkIcon className={cn('w-6 h-6', data?.isBookmark && 'fill-black')} />
     </button>
   );
 }
