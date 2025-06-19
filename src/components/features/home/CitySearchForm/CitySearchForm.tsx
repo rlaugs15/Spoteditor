@@ -62,7 +62,7 @@ export default function CitySearchForm() {
           onSubmit={form.handleSubmit(onSearchSubmit)}
           className="flex flex-col gap-2.5 web:grid web:grid-cols-[3fr_70px] relative bottom-0 web:z-30"
         >
-          <div className="grid grid-cols-2 gap-1.5">
+          <div className="grid grid-cols-2 gap-2.5">
             <FormField
               control={form.control}
               name="city"
