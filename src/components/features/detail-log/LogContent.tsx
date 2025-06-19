@@ -42,7 +42,7 @@ const LogContent = ({ place, idx }: LogContentProps) => {
             <span>{place.category}</span>
           </div>
           <div className="flex items-start gap-1.5 text-light-400 text-text-sm web:text-text-lg">
-            <LocationIcon className="mt-0.5 flex-shrink-0" />
+            <LocationIcon className="mt-0.5 shrink-0" />
             <span className="break-words block min-w-0">{place.address}</span>
           </div>
         </div>
@@ -50,9 +50,11 @@ const LogContent = ({ place, idx }: LogContentProps) => {
 
       <section className="flex flex-col gap-4">
         <PlaceImageSlider placeImages={place.place_images} />
-        <pre className="text-text-sm web:text-text-lg text-light-400 pre">
-          {place.description || ''}
-        </pre>
+        {place.description && (
+          <pre className="text-text-sm web:text-text-lg text-light-400 pre">
+            {place.description}
+          </pre>
+        )}
       </section>
     </div>
   );
