@@ -216,13 +216,20 @@ export const TableIcon = ({ className }: IconProps) => {
 };
 export const BookMarkIcon = ({ className }: IconProps) => {
   return (
-    <Image
-      src="/icons/bookmark.svg"
-      width={20}
-      height={20}
-      alt="북마크 아이콘"
-      className={className}
-    />
+    <svg
+      width="18"
+      height="22"
+      viewBox="0 0 18 22"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn('w-4.5 h-5.5', className)}
+    >
+      <path
+        d="M16.1665 1.02344V20.25L9.58057 15.5586L9.00049 15.1455L8.42041 15.5586L1.8335 20.25V1.02344H16.1665Z"
+        stroke="black"
+        strokeWidth="2"
+      />
+    </svg>
   );
 };
 export const ShareIcon = ({ className }: IconProps) => {

@@ -49,7 +49,7 @@ export default function SearchDropBox() {
     <AnimatePresence>
       {isDropBox ? (
         <motion.section
-          className="z-[1111] web:z-10 fixed overflow-hidden web:absolute top-0 web:top-[93px] left-0 web:left-auto bg-white w-screen h-screen web:h-auto web:max-w-[calc(100%)] px-4 web:py-5 web:pl-[30px] web:pr-5 flex flex-col gap-[18px] web:gap-2.5"
+          className="z-[1111] web:z-10 fixed overflow-hidden web:absolute top-0 web:top-[107px] left-0 web:left-auto bg-white w-screen h-screen web:h-auto web:max-w-[calc(100%)] px-4 web:py-5 web:pl-[30px] web:pr-5 flex flex-col gap-[18px] web:gap-2.5"
           key="dropbox"
           variants={dropboxVar}
           initial="start"
