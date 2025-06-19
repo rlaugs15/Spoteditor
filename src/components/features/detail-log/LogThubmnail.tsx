@@ -46,9 +46,9 @@ const LogThubmnail = ({ logData, isAuthor }: LogThubmnailProps) => {
       </section>
 
       {/* 태그 */}
-      <section className="flex flex-col z-10">
+      <section className="flex flex-col gap-3 z-10">
         <h3 className="text-lg web:text-2xl font-bold text-white">{title}</h3>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-2">
           {/* mood */}
           <TagRow
             items={moods}

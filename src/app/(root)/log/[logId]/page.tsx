@@ -40,6 +40,7 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
           <LogContent key={place.place_id} place={place} idx={idx + 1} />
         ))}
       </main>
+
       <div className="flex flex-col items-center gap-2 fixed z-10 bottom-10 web:right-[50px] right-4">
         {isAuthor ? (
           <ExtraActionButton className="w-11 h-11">
