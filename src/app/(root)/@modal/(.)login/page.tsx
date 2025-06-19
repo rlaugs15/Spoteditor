@@ -10,9 +10,9 @@ export default function LoginModal() {
       <ModalHeader>
         <XButton />
       </ModalHeader>
-      <section className="flex flex-col text-center items-center gap-6 self-stretch">
-        <h1 className="font-prompt text-3xl font-bold">Spoteditor</h1>
-        <h2 className="font-bold text-2xl">로그인</h2>
+      <section className="flex flex-col text-center items-center self-stretch">
+        <h1 className="font-prompt text-3xl font-bold mb-10">Spoteditor</h1>
+        <h2 className="font-bold text-lg web:text-xl mb-3">로그인</h2>
         <p className="text-center text-text-sm text-light-700">
           지금 로그인 하시고 매일 새로운 Spoteditor의
           <br /> 업데이트 소식을 확인해보세요.
