@@ -50,9 +50,11 @@ const LogContent = ({ place, idx }: LogContentProps) => {
 
       <section className="flex flex-col gap-4">
         <PlaceImageSlider placeImages={place.place_images} />
-        <pre className="text-text-sm web:text-text-lg text-light-400 pre">
-          {place.description || ''}
-        </pre>
+        {place.description && (
+          <pre className="text-text-sm web:text-text-lg text-light-400 pre">
+            {place.description}
+          </pre>
+        )}
       </section>
     </div>
   );

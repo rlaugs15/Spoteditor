@@ -14,7 +14,12 @@ const TextForm = ({ formFieldName }: TextFormProps) => {
       control={control}
       name={formFieldName}
       render={({ field }) => (
-        <Textarea {...field} placeholder="내용을 입력해주세요. (최대 500자)" maxLength={500} />
+        <Textarea
+          {...field}
+          placeholder="내용을 입력해주세요. (최대 500자)"
+          className="border-0"
+          maxLength={500}
+        />
       )}
     />
   );
