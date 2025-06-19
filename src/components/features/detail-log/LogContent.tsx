@@ -36,7 +36,7 @@ const LogContent = ({ place, idx }: LogContentProps) => {
             </span>
           </section>
         </div>
-        <div>
+        <div className="flex flex-col gap-[3px]">
           <div className="flex gap-1.5 text-light-400 text-text-sm web:text-text-lg">
             <MapIcon />
             <span>{place.category}</span>
