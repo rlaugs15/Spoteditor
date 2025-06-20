@@ -4,11 +4,11 @@ import { routing } from './routing';
 
 // Server Component 내에서 locale + messages 불러오기
 export default getRequestConfig(async ({ requestLocale }) => {
-  const locale = hasLocale(routing.locales, requestLocale) ? requestLocale : routing.defaultLocale;
-
+  const requested = await requestLocale; // 반드시 await
+  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
   return {
     locale,
-    messages: (await import(`messages/${locale}.json`)).default,
+    messages: (await import(`../../messages/${locale}.json`)).default,
   };
 });
 
