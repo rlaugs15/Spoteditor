@@ -2,6 +2,26 @@
   "HomePage": {
     "title1": "Not sure where to go?",
     "title2": "Meet curated courses made by trend-savvy spot editors",
-    "title3": "Just for you!"
+    "title3": "Just for you!",
+    "citySearchForm": {
+      "cityLabel": "Where do you want to go?",
+      "sigunguLabel": "Search more specifically!",
+      "cityPlaceholder": "Seoul",
+      "sigunguPlaceholder": "Songpa-gu",
+      "searchButton": "Search",
+      "dropbox": {
+        "cityTitle": "Select city",
+        "sigunguTitle": "Select neighborhood",
+        "subtitle": "New areas will appear when editors add new places!"
+      }
+    },
+    "registerCourse": "Register my recommended course",
+    "registerCourseDescription": {
+      "line1": "Share your favorite hidden spots and food places, and let others discover your route.",
+      "line2": "\"Someone spent a great day with the course I created!\", how awesome is that?",
+      "line3": "Isn't it just delightful to imagine? 🥰",
+      "line4": "Share your own course so others can use it as a reference.",
+      "line5": "The course you make will inspire many others!"
+    }
   }
 }

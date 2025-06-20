@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { citySearchSchema } from '@/lib/zod/searchSchema';
 import { useCitySearchStore } from '@/stores/searchStore';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -13,6 +14,7 @@ import { z } from 'zod';
 import SearchDropBox from './SearchDropBox/SearchDropBox';
 
 export default function CitySearchForm() {
+  const t = useTranslations('HomePage.citySearchForm');
   const router = useRouter();
   const { isDropBox, city, sigungu, isCityDropBox, toggleSigunguDropBox } = useCitySearchStore();
 
@@ -69,12 +71,12 @@ export default function CitySearchForm() {
               render={({ field }) => (
                 <FormItem className="flex flex-col bg-white web:px-5 px-3 web:py-5 web:pb-3 py-2.5 gap-2">
                   <FormLabel className="!text-light-400 text-xs web:text-[16px]">
-                    어디로 놀러갈까요?
+                    {t('cityLabel')}
                   </FormLabel>
                   <FormControl>
                     <Input
                       onClick={opencityDropBoxClick}
-                      placeholder="서울"
+                      placeholder={t('cityPlaceholder')}
                       readOnly
                       {...field}
                       className="p-0 font-bold text-black grow !text-[22px] placeholder:text-black web:text-sm"
@@ -90,12 +92,12 @@ export default function CitySearchForm() {
               render={({ field }) => (
                 <FormItem className="flex flex-col bg-white web:px-5 px-3 web:py-5 web:pb-3 py-2.5 gap-2">
                   <FormLabel className="!text-light-400 text-xs web:text-[16px]">
-                    더 상세히 검색!
+                    {t('sigunguLabel')}
                   </FormLabel>
                   <FormControl>
                     <Input
                       onClick={opensigunguDropBoxClick}
-                      placeholder="송파구"
+                      placeholder={t('sigunguPlaceholder')}
                       readOnly
                       {...field}
                       className="p-0 font-bold text-black grow !text-[22px] placeholder:text-black web:text-sm"
@@ -109,7 +111,7 @@ export default function CitySearchForm() {
             type="submit"
             className="h-full font-medium text-white rounded-none bg-light-950 !text-text-md hover:bg-primary-900"
           >
-            검색
+            {t('searchButton')}
           </Button>
           <SearchDropBox />
         </form>

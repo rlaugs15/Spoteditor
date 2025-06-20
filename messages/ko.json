@@ -2,6 +2,26 @@
   "HomePage": {
     "title1": "어디 갈지 고민될 땐?",
     "title2": "감각있는 스팟 큐레이터들이 직접 만든",
-    "title3": "코스를 만나보세요!"
+    "title3": "코스를 만나보세요!",
+    "citySearchForm": {
+      "cityLabel": "어디로 놀러갈까요?",
+      "sigunguLabel": "더 상세히 검색!",
+      "cityPlaceholder": "서울",
+      "sigunguPlaceholder": "송파구",
+      "searchButton": "검색",
+      "dropbox": {
+        "cityTitle": "도시선택",
+        "sigunguTitle": "동네선택",
+        "subtitle": "에디터가 새로운 지역을 추가하면 새로운 지역이 생겨요!"
+      }
+    },
+    "registerCourse": "나의 추천 코스 등록하기",
+    "registerCourseDescription": {
+      "line1": "내가 좋아하는 숨은 명소와 맛집을 공유하고, 다른 유저들이 여러분의 루트를 참고하며",
+      "line2": "\"내가 만든 코스로 누군가 즐거운 하루를 보냈구나!\" 하는 느낌!",
+      "line3": "상상만 해도 행복하지 않나요? 🥰",
+      "line4": "다른 유저들이 참고할 수 있도록 여러분만의 코스를 나눠보세요.",
+      "line5": "여러분이 만들어준 코스는 많은 사람들에게 새로운 영감을 줄 거예요!"
+    }
   }
 }
