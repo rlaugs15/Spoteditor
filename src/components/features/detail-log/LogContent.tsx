@@ -29,20 +29,20 @@ const LogContent = ({ place, idx }: LogContentProps) => {
             <PlaceBookMarkButton
               placeId={place.place_id}
               onToggle={handleToggleBookmark}
-              className="!top-0 !right-0 !relative"
+              className="!top-0 !right-0 !relative w-9 h-9"
             />
             <span className="font-medium text-text-sm text-light-300">
               {formatCount(bookmarkCount)}
             </span>
           </section>
         </div>
-        <div>
+        <div className="flex flex-col web:w-[324px] gap-[2px]">
           <div className="flex gap-1.5 text-light-400 text-text-sm web:text-text-lg">
-            <MapIcon />
-            <span>{place.category}</span>
+            <MapIcon className="w-4.5 h-4.5 mt-1" />
+            <span className="break-words block min-w-0">{place.category}</span>
           </div>
           <div className="flex items-start gap-1.5 text-light-400 text-text-sm web:text-text-lg">
-            <LocationIcon className="mt-0.5 flex-shrink-0" />
+            <LocationIcon className="w-4.5 h-4.5 mt-1 flex-shrink-0" />
             <span className="break-words block min-w-0">{place.address}</span>
           </div>
         </div>
@@ -50,9 +50,11 @@ const LogContent = ({ place, idx }: LogContentProps) => {
 
       <section className="flex flex-col gap-4">
         <PlaceImageSlider placeImages={place.place_images} />
-        <pre className="text-text-sm web:text-text-lg text-light-400 pre">
-          {place.description || ''}
-        </pre>
+        {place.description && (
+          <pre className="text-text-sm web:text-text-lg text-light-400 pre">
+            {place.description}
+          </pre>
+        )}
       </section>
     </div>
   );

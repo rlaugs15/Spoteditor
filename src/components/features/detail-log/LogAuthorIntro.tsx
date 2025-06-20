@@ -16,9 +16,11 @@ const LogAuthorIntro = async ({
   return (
     <div className="web:grid grid-cols-[1fr_4fr] gap-[15px] py-5 space-y-1">
       <LogProfile userId={userId} userImage={userImgUrl} userNickname={userNickname} />
-      <pre className="text-light-400 text-text-sm web:text-text-lg py-1.5 pre">
-        {logDescription}
-      </pre>
+      {logDescription && (
+        <pre className="text-light-400 text-text-sm web:text-text-lg py-1.5 pre">
+          {logDescription}
+        </pre>
+      )}
     </div>
   );
 };

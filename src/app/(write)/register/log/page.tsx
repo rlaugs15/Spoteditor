@@ -76,7 +76,7 @@ const LogPage = () => {
         <main className="grow bg-white pt-[54px]">
           <TitledInput />
           <PhotoTextSection thumbnail />
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
             {fields.map((field, idx) => (
               <PlaceForm
                 key={field.id}

@@ -31,63 +31,36 @@ const PlaceForm = ({
     : undefined;
 
   return (
-    <div>
-      <div className="flex justify-between">
-        <span className="text-text-lg font-bold">{String(idx + 1).padStart(2, '0')}</span>
-        <PlaceDrawer
-          isChecked={isChecked}
-          setIsChecked={setIsChecked}
-          onDeletePlace={() => onDeletePlace(idx)}
-          onMoveUpPlace={() => onMoveUpPlace(idx)}
-          onMoveDownPlace={() => onMoveDownPlace(idx)}
-        />
-      </div>
-      <FormField
-        control={control}
-        name={`places.${idx}.placeName`}
-        render={({ field }) => (
-          <Input
-            {...field}
-            type="text"
-            placeholder="장소명을 적어주세요 *"
-            className={cn(
-              'placeholder:text-light-300 font-bold !text-text-lg',
-              placeErrors?.placeName && 'placeholder:text-error-500'
-            )}
-          />
-        )}
-      />
-
-      <div>
-        <div className="flex items-center gap-1.5">
-          <MapIcon className="shrink-0" />
-          <FormField
-            control={control}
-            name={`places.${idx}.category`}
-            render={({ field }) => (
-              <div className="overflow-x-auto cursor-grab active:cursor-grabbing scrollbar-hide">
-                <ToggleGroup
-                  type="single"
-                  value={field.value ?? ''}
-                  onValueChange={(value) => field.onChange(value)}
-                  className="flex gap-1 web:flex-wrap"
-                >
-                  {CATEGORIES.map((category) => (
-                    <ToggleGroupItem
-                      key={category}
-                      value={category}
-                      size={'sm'}
-                      className="text-text-sm !text-light-400 rounded-full min-w-[62px] w-fit px-3 border"
-                    >
-                      {category}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
-              </div>
-            )}
+    <div className="py-[5px]">
+      <>
+        <div className="flex justify-between">
+          <span className="text-text-lg font-bold">{String(idx + 1).padStart(2, '0')}</span>
+          <PlaceDrawer
+            isChecked={isChecked}
+            setIsChecked={setIsChecked}
+            onDeletePlace={() => onDeletePlace(idx)}
+            onMoveUpPlace={() => onMoveUpPlace(idx)}
+            onMoveDownPlace={() => onMoveDownPlace(idx)}
           />
         </div>
 
+        <FormField
+          control={control}
+          name={`places.${idx}.placeName`}
+          render={({ field }) => (
+            <Input
+              {...field}
+              type="text"
+              placeholder="장소명을 적어주세요 *"
+              className={cn(
+                'placeholder:text-light-300 font-bold !text-text-lg',
+                placeErrors?.placeName && 'placeholder:text-error-500'
+              )}
+            />
+          )}
+        />
+      </>
+      <div className="pt-2.5 pb-[15px] space-y-2">
         <div className="flex items-center gap-1.5">
           <LocationIcon />
           <FormField
@@ -105,6 +78,36 @@ const PlaceForm = ({
               />
             )}
           />
+        </div>
+
+        <div>
+          <div className="flex items-center web:items-baseline gap-1.5">
+            <MapIcon className="shrink-0" />
+            <FormField
+              control={control}
+              name={`places.${idx}.category`}
+              render={({ field }) => (
+                <div className="overflow-x-auto cursor-grab active:cursor-grabbing scrollbar-hide">
+                  <ToggleGroup
+                    type="single"
+                    value={field.value ?? ''}
+                    onValueChange={(value) => field.onChange(value)}
+                    className="flex gap-1.5 web:flex-wrap"
+                  >
+                    {CATEGORIES.map((category) => (
+                      <ToggleGroupItem
+                        key={category}
+                        value={category}
+                        className="text-text-sm !text-light-400 rounded-full min-w-[58px] h-[24px] w-fit px-3 border"
+                      >
+                        {category}
+                      </ToggleGroupItem>
+                    ))}
+                  </ToggleGroup>
+                </div>
+              )}
+            />
+          </div>
         </div>
       </div>
 
