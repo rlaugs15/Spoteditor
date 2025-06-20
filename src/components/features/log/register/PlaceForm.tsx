@@ -60,9 +60,9 @@ const PlaceForm = ({
           )}
         />
       </>
-      <div className="pt-2.5 pb-[15px] space-y-2">
+      <div className="pt-2.5 pb-[5px] space-y-2">
         <div className="flex items-center gap-1.5">
-          <LocationIcon />
+          <LocationIcon className="shrink-0" />
           <FormField
             control={control}
             name={`places.${idx}.location`}
