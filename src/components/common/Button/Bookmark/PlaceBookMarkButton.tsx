@@ -1,9 +1,9 @@
 'use client';
+import { BookMarkIcon } from '@/components/common/Icons';
 import usePlaceBookmarkMutation from '@/hooks/mutations/place/usePlaceBookmarkMutation';
 import usePlaceBookmarkCheck from '@/hooks/queries/place/useIsPlaceBookmarkCheck';
 import useUser from '@/hooks/queries/user/useUser';
 import { cn } from '@/lib/utils';
-import { Bookmark } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface PlaceBookMarkButtonProps {
@@ -46,7 +46,7 @@ export default function PlaceBookMarkButton({
         className
       )}
     >
-      <Bookmark className={cn('!w-6 !h-6', data?.isBookmark && 'fill-black')} />
+      <BookMarkIcon className={cn('w-6 h-6', data?.isBookmark && 'fill-black')} />
     </button>
   );
 }

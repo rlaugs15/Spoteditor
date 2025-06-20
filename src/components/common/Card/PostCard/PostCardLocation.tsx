@@ -14,7 +14,7 @@ function PostCardLocation({ city, country = '', sigungu, category, modal }: Post
   return (
     <h4
       className={cn(
-        'flex items-center text-text-sm web:text-text-md text-light-300 gap-2',
+        'flex items-center text-text-sm web:text-text-xl text-light-300 gap-2',
         modal && '!text-text-xs'
       )}
     >
