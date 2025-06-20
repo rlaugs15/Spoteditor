@@ -1,10 +1,9 @@
 import { getUser } from '@/app/actions/user';
-import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { GlobeBlackIcon, GlobeIcon } from '../../Icons';
 import Logo from '../Logo';
 import SearchBar from './components/SearchBar';
 import SearchBarButton from './components/SearchBarButton';
+import ToggleLocaleButton from './components/ToggleLocaleButton';
 import ClientOnlyLoginStatusButtons from './components/UserProfileButton/ClientOnlyLoginStatusButtons';
 
 const Header = async () => {
@@ -16,10 +15,7 @@ const Header = async () => {
         <SearchBarButton />
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant={'ghost'} size={'icon'} className="relative group">
-              <GlobeIcon className="absolute group-hover:opacity-0" />
-              <GlobeBlackIcon className="opacity-0 group-hover:opacity-100" />
-            </Button>
+            <ToggleLocaleButton />
           </PopoverTrigger>
           <PopoverContent>준비중입니다.</PopoverContent>
         </Popover>

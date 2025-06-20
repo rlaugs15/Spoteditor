@@ -18,9 +18,9 @@ export default async function RootLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
 
   // 유효하지 않은 locale이면 404
   if (!hasLocale(routing.locales, locale)) {
