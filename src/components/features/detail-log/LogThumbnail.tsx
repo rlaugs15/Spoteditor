@@ -9,11 +9,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import TagRow from './TagRow';
 
-interface LogThubmnailProps {
+interface LogThumbnailProps {
   logData: DetailLog;
   isAuthor: boolean;
 }
-const LogThubmnail = ({ logData, isAuthor }: LogThubmnailProps) => {
+const LogThumbnail = ({ logData, isAuthor }: LogThumbnailProps) => {
   const { thumbnail_url, title, place, log_tag } = logData;
   const moods = log_tag.filter((item) => item.category === 'mood');
   const activities = log_tag.filter((item) => item.category === 'activity');
@@ -67,4 +67,4 @@ const LogThubmnail = ({ logData, isAuthor }: LogThubmnailProps) => {
   );
 };
 
-export default LogThubmnail;
+export default LogThumbnail;

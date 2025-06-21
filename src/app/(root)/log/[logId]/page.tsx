@@ -5,7 +5,7 @@ import ExtraActionButton from '@/components/features/detail-log/ExtraActionButto
 import LogAuthorIntro from '@/components/features/detail-log/LogAuthorIntro';
 import LogBookmarkWithCount from '@/components/features/detail-log/LogBookmarkWithCount';
 import LogContent from '@/components/features/detail-log/LogContent';
-import LogThubmnail from '@/components/features/detail-log/LogThubmnail';
+import LogThumbnail from '@/components/features/detail-log/LogThumbnail';
 import { PlaceWithImages } from '@/types/api/log';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -28,7 +28,7 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
   const isAuthor = user?.user_id === logData.user_id;
   return (
     <div>
-      <LogThubmnail logData={logData} isAuthor={isAuthor} />
+      <LogThumbnail logData={logData} isAuthor={isAuthor} />
       <main className="flex flex-col px-4 web:px-[50px] pb-[200px]">
         <LogAuthorIntro
           userId={logData.user_id}
