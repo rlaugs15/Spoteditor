@@ -13,7 +13,7 @@ import { X } from 'lucide-react';
 import { useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { FreeMode } from 'swiper/modules';
+import { FreeMode, Mousewheel } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import ImageWithLoader from './ImageWithLoader';
 interface PlaceImageSliderProps {
@@ -26,11 +26,12 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
   return (
     <>
       <Swiper
-        modules={[FreeMode]}
+        modules={[FreeMode, Mousewheel]}
         slidesPerView="auto"
         freeMode
-        className="w-full"
+        mousewheel={{ forceToAxis: true }}
         spaceBetween={15}
+        className="w-full cursor-pointer"
       >
         {placeImages
           .sort((a, b) => a.order - b.order)
