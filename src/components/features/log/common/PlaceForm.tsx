@@ -7,8 +7,8 @@ import { CATEGORIES } from '@/constants/categoryData';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import PhotoTextSection from './PhotoTextSection';
-import PlaceDrawer from './PlaceDrawer';
+import PhotoTextSection from '../register/PhotoTextSection';
+import PlaceDrawer from '../register/PlaceDrawer';
 interface PlaceFormProps {
   idx: number;
   onDeletePlace: (idx: number) => void;
@@ -72,7 +72,7 @@ const PlaceForm = ({
                 type="text"
                 placeholder="위치를 적어주세요. *"
                 className={cn(
-                  '!text-text-sm',
+                  '!text-text-sm h-6',
                   placeErrors?.location && 'placeholder:text-error-500'
                 )}
               />
