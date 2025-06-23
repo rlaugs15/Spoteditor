@@ -53,14 +53,14 @@ const PlaceForm = ({
               type="text"
               placeholder="장소명을 적어주세요 *"
               className={cn(
-                'placeholder:text-light-300 font-bold !text-text-lg',
+                'font-bold !text-text-lg',
                 placeErrors?.placeName && 'placeholder:text-error-500'
               )}
             />
           )}
         />
       </>
-      <div className="pt-2.5 pb-[5px] space-y-2">
+      <div className="pt-2 pb-[5px] space-y-2">
         <div className="flex items-center gap-1.5">
           <LocationIcon className="shrink-0" />
           <FormField
