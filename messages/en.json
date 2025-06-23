@@ -24,6 +24,20 @@
     "privacy": "Privacy Policy",
     "viewProfile": "View Profile"
   },
+  "Follow": {
+    "label": {
+      "follower": "Followers",
+      "following": "Following"
+    },
+    "button": {
+      "follow": "Follow",
+      "following": "Following"
+    },
+    "modalTitle": {
+      "follower": "Followers",
+      "following": "Following"
+    }
+  },
   "HomePage": {
     "title1": "Not sure where to go?",
     "title2": "Meet curated courses made by trend-savvy",
@@ -47,6 +61,23 @@
       "line3": "Isn't it just delightful to imagine? 🥰",
       "line4": "Share your own course so others can use it as a reference.",
       "line5": "The course you make will inspire many others!"
+    }
+  },
+  "ProfilePage": {
+    "defaultDescription": "A place to capture little joys and special moments ☕️\nFrom daily happiness to travel memories 🏞️",
+    "edit": "Edit",
+    "tab": {
+      "myLog": "My Logs",
+      "savedSpaces": "Saved Places",
+      "savedLog": "Saved Logs"
+    },
+    "fallback": {
+      "myLog": "Your personal log\nStart by uploading your first post!",
+      "empty": "No saved {resourceName} found.\nExplore logs and save your favorite places!"
+    },
+    "resource": {
+      "log": "log",
+      "place": "place"
     }
   },
   "Region": {

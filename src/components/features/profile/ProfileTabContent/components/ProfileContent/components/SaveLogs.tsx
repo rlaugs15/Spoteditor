@@ -15,6 +15,7 @@ import ProfileFallbackMessage from '@/components/features/profile/fallback/Profi
 import useLogsBookmark from '@/hooks/queries/log/useLogsBookmark';
 import useUser from '@/hooks/queries/user/useUser';
 import usePagination from '@/hooks/usePagination';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
@@ -25,6 +26,7 @@ interface SavaLogsProps {
 export default function SaveLogs({ userId }: SavaLogsProps) {
   const { data: me } = useUser();
   const { currentPage, handlePageChange } = usePagination();
+  const t = useTranslations('ProfilePage');
 
   const { data, isPending, refetch } = useLogsBookmark({
     userId,
@@ -50,7 +52,7 @@ export default function SaveLogs({ userId }: SavaLogsProps) {
     return <Loading className="min-h-[350px]" />;
   }
   if (data && (!data.success || data.data.length === 0)) {
-    return <ProfileFallbackMessage resourceName="로그" />;
+    return <ProfileFallbackMessage resourceName={t('resource.log')} />;
   }
   return (
     <>
