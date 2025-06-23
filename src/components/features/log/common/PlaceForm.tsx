@@ -81,7 +81,7 @@ const PlaceForm = ({
         </div>
 
         <div>
-          <div className="flex items-center web:items-baseline gap-1.5">
+          <div className="flex items-center web:items-start gap-1.5">
             <MapIcon className="shrink-0" />
             <FormField
               control={control}
