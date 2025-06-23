@@ -1,5 +1,5 @@
 import { getUser } from '@/app/actions/user';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Popover, PopoverTrigger } from '@/components/ui/popover';
 import Logo from '../Logo';
 import SearchBar from './components/SearchBar';
 import SearchBarButton from './components/SearchBarButton';
@@ -17,7 +17,6 @@ const Header = async () => {
           <PopoverTrigger asChild>
             <ToggleLocaleButton />
           </PopoverTrigger>
-          <PopoverContent>준비중입니다.</PopoverContent>
         </Popover>
         <ClientOnlyLoginStatusButtons user={user} />
       </section>

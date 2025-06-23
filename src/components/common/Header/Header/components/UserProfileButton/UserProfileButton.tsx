@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { NOTICE_PATHS, PRIVACY_PATHS, REGISTER_PATHS, TERMS_PATHS } from '@/constants/pathname';
 import { IUser } from '@/types/api/user';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import MyProfileButton from './components/MyProfileButton';
@@ -22,6 +23,7 @@ interface UserProfileButtonProps {
 export default function UserProfileButton({ user }: UserProfileButtonProps) {
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  const t = useTranslations('UserDropdown');
 
   useEffect(() => {
     setMounted(true);
@@ -43,18 +45,24 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
       >
         <DropdownMenuItem className="font-bold text-text-lg flex justify-start gap-[5px] px-4 items-center">
           {/* 체크 아이콘 추가 시 span에 ref={textRef} 추가 */}
+          {/* 닉네임 */}
           <span className="truncate">{user?.nickname}</span>
           {/* {!isTruncated && <VerifiedLabelIcon />} */}
         </DropdownMenuItem>
+
+        {/* 프로필 보기 */}
         <DropdownMenuItem className="px-4 py-5 focus:bg-white">
-          <MyProfileButton user={user} onClick={() => setOpen(false)} />
+          <MyProfileButton user={user} label={t('viewProfile')} onClick={() => setOpen(false)} />
         </DropdownMenuItem>
+
         <DropdownMenuSeparator />
+
+        {/* 로그 작성 / 문의하기 */}
         <div className="m-1">
           <Link href={REGISTER_PATHS.MOOD}>
             <DropdownMenuItem className="flex items-center justify-start gap-2 px-4 py-3 text-text-sm">
               <AddImageIcon />
-              로그 작성하기
+              {t('writeLog')}
             </DropdownMenuItem>
           </Link>
 
@@ -64,31 +72,36 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
           >
             <a href="https://tally.so/r/nrYJEo" target="_blank" rel="noopener noreferrer">
               <HeadPhoneIcon />
-              문의하기
+              {t('contact')}
             </a>
           </DropdownMenuItem>
         </div>
         <DropdownMenuSeparator />
+
+        {/* 로그아웃 */}
         <div className="m-1">
           <DropdownMenuItem asChild className="flex items-center justify-start text-text-sm">
-            <LogoutButton />
+            <LogoutButton label={t('logout')} />
           </DropdownMenuItem>
         </div>
+
         <DropdownMenuSeparator />
+
+        {/* 하단 정책 링크 */}
         <div className="flex items-center justify-start px-4 py-[10px] gap-[15px] text-[#81858F]">
           <Link href={NOTICE_PATHS.NOTICE} className="flex">
             <DropdownMenuItem className="p-0">
-              <button className="text-text-xs">공지사항</button>
+              <button className="text-text-xs">{t('notice')}</button>
             </DropdownMenuItem>
           </Link>
           <Link href={TERMS_PATHS.TERMS} className="flex">
             <DropdownMenuItem className="p-0">
-              <button className="text-text-xs">이용약관</button>
+              <button className="text-text-xs">{t('terms')}</button>
             </DropdownMenuItem>
           </Link>
           <Link href={PRIVACY_PATHS.PRIVACY} className="flex">
             <DropdownMenuItem className="p-0">
-              <button className="text-text-xs">개인정보처리방침</button>
+              <button className="text-text-xs">{t('privacy')}</button>
             </DropdownMenuItem>
           </Link>
         </div>

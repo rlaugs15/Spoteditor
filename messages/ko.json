@@ -1,4 +1,13 @@
 {
+  "UserDropdown": {
+    "writeLog": "로그 작성하기",
+    "contact": "문의하기",
+    "logout": "로그아웃",
+    "notice": "공지사항",
+    "terms": "이용약관",
+    "privacy": "개인정보처리방침",
+    "viewProfile": "프로필 보기"
+  },
   "HomePage": {
     "title1": "어디 갈지 고민될 땐?",
     "title2": "감각있는 스팟 큐레이터들이 직접 만든",

@@ -1,4 +1,13 @@
 {
+  "UserDropdown": {
+    "writeLog": "Write Log",
+    "contact": "Contact Us",
+    "logout": "Logout",
+    "notice": "Notice",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "viewProfile": "View Profile"
+  },
   "HomePage": {
     "title1": "Not sure where to go?",
     "title2": "Meet curated courses made by trend-savvy",
