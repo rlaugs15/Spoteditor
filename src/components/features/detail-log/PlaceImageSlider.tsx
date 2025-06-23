@@ -1,5 +1,4 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent } from '@/components/ui/dialog';
 import { Tables } from '@/types/supabase';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
@@ -58,8 +57,9 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
 
       <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
         <DialogContent
-          className="bg-transparent p-0 flex justify-center items-center border-0 min-w-[80vw] max-w-[90vw] h-[80vh] shadow-none"
+          className="bg-transparent p-0 flex justify-center items-center border-0 min-w-[80vw] max-w-[90vw] h-full shadow-none"
           showCloseButton={false}
+          overlayClassName="bg-black"
         >
           <Swiper
             modules={[Navigation]}
@@ -99,14 +99,12 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
           </button>
 
           <DialogClose asChild>
-            <Button
-              variant={'ghost'}
-              size={'icon'}
-              className="absolute right-4 top-4 z-10 text-white rounded-full p-2"
+            <button
+              className="absolute flex items-center justify-center bottom-10 web:bottom-0 web:w-20 web:h-20 w-[54px] h-[54px] z-10 text-[#3C3C3C] rounded-full p-2 bg-[#191919] hover:brightness-90"
               aria-label="닫기"
             >
-              <X className="w-6 h-6" />
-            </Button>
+              <X className="web:w-8 web:h-8 w-6 h-6 stroke-1" />
+            </button>
           </DialogClose>
         </DialogContent>
       </Dialog>
