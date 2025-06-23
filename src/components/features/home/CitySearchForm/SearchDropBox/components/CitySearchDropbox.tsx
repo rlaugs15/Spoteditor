@@ -20,6 +20,7 @@ export default function CitySearchDropbox() {
   } = useCitySearchStore();
 
   const t = useTranslations('HomePage.citySearchForm.dropbox');
+  const r = useTranslations('Region');
 
   const oncityClick = (city: string) => {
     setcity(city);
@@ -54,10 +55,16 @@ export default function CitySearchDropbox() {
         <section className="grid grid-cols-2 web:flex web:justify-start web:items-center gap-[5px] flex-wrap w-[343px] web:w-auto">
           {isCityDropBox &&
             cityCategories.map((city) => (
-              <CitySearchButton key={city} city={city} onClick={oncityClick} />
+              <CitySearchButton
+                key={city}
+                city={city}
+                label={r(city)} // 번역된 이름 보여주기
+                onClick={oncityClick}
+              />
             ))}
-
-          {isSigunguDropBox && <SigunguButtonList city={city} onSigunguClick={onSigunguClick} />}
+          {isSigunguDropBox && (
+            <SigunguButtonList city={city} onSigunguClick={onSigunguClick} tRegion={r} />
+          )}
         </section>
         <div
           onClick={() => closeDropBox()}
