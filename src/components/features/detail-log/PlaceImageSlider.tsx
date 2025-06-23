@@ -1,5 +1,5 @@
 'use client';
-import { Dialog, DialogClose, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Tables } from '@/types/supabase';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
@@ -61,6 +61,7 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
           showCloseButton={false}
           overlayClassName="bg-black"
         >
+          <DialogTitle className="hidden">이미지 상세보기</DialogTitle>
           <Swiper
             modules={[Navigation]}
             initialSlide={selectedImageIndex}
