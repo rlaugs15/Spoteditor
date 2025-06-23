@@ -80,6 +80,44 @@
       "place": "장소"
     }
   },
+  "ProfileEditor": {
+    "title": "프로필 편집",
+    "nickname": {
+      "label": "닉네임"
+    },
+    "description": {
+      "label": "프로필 설명",
+      "placeholder": "프로필 설명을 입력하세요."
+    },
+    "instagram": {
+      "label": "인스타그램"
+    },
+    "cancel": "취소",
+    "save": "저장",
+    "toast": {
+      "success": "회원 정보 수정 성공",
+      "error": "회원 정보 수정 실패"
+    },
+    "account": {
+      "title": "계정 설정",
+      "label": "계정 삭제",
+      "description": "계정 삭제 시 모든 데이터는 영구적으로 삭제되며, 복구가 불가능합니다.\n신중히 결정해주시기 바랍니다.",
+      "trigger": "삭제하기",
+      "dialog": {
+        "title": "계정삭제",
+        "confirm": "계정을 삭제시 등록된 로그는 영구삭제됩니다.\n계정을 삭제하시겠어요?",
+        "success": "계정 삭제가 완료되었습니다."
+      },
+      "toast": {
+        "success": "계정 삭제 성공",
+        "error": "계정 삭제 실패"
+      }
+    },
+    "common": {
+      "cancel": "취소",
+      "ok": "확인"
+    }
+  },
   "Region": {
     "가나": "가나",
     "가평군": "가평군",

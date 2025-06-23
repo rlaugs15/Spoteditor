@@ -80,6 +80,44 @@
       "place": "place"
     }
   },
+  "ProfileEditor": {
+    "title": "Edit Profile",
+    "nickname": {
+      "label": "Nickname"
+    },
+    "description": {
+      "label": "Profile Description",
+      "placeholder": "Enter your profile description."
+    },
+    "instagram": {
+      "label": "Instagram"
+    },
+    "cancel": "Cancel",
+    "save": "Save",
+    "toast": {
+      "success": "Profile updated successfully.",
+      "error": "Failed to update profile."
+    },
+    "account": {
+      "title": "Account Settings",
+      "label": "Delete Account",
+      "description": "When deleting your account, all data will be permanently deleted and cannot be recovered.\nPlease make your decision carefully.",
+      "trigger": "Delete",
+      "dialog": {
+        "title": "Delete Account",
+        "confirm": "Your logs will be permanently deleted.\nAre you sure you want to delete your account?",
+        "success": "Your account has been successfully deleted."
+      },
+      "toast": {
+        "success": "Account deletion successful",
+        "error": "Account deletion failed"
+      }
+    },
+    "common": {
+      "cancel": "Cancel",
+      "ok": "OK"
+    }
+  },
   "Region": {
     "가나": "Ghana",
     "가평군": "Gapyeong-gun",
