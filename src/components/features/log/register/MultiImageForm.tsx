@@ -33,6 +33,8 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
       toast.error('사진은 최대 8장만 가능합니다.');
       return;
     }
+    if (fileList.length >= MAX_IMAGES_LENGTH) toast.info('사진은 최대 8장만 가능합니다.');
+
     const files = Array.from(fileList).slice(0, MAX_IMAGES_LENGTH - fields.length);
     const compressedFiles = await Promise.all(files.map((file) => compressImageToWebp(file)));
 
