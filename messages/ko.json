@@ -1,4 +1,20 @@
 {
+  "LoginModal": {
+    "title": "Spoteditor",
+    "login": "로그인",
+    "description": "지금 로그인 하시고 매일 새로운 Spoteditor의\n업데이트 소식을 확인해보세요.",
+    "agreementNotice": {
+      "beforeLinks": "로그인은",
+      "middle": "및",
+      "afterLinks": "에 동의하는 것을 의미하며,"
+    },
+    "dataCollection": "서비스 이용을 위해 이메일과 이름, 프로필 이미지를 수집합니다.",
+    "privacyPolicy": "개인정보보호정책",
+    "termsOfService": "서비스약관"
+  },
+  "LoginStatus": {
+    "loginOrSignup": "회원가입/로그인"
+  },
   "UserDropdown": {
     "writeLog": "로그 작성하기",
     "contact": "문의하기",

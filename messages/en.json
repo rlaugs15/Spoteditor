@@ -1,4 +1,20 @@
 {
+  "LoginModal": {
+    "title": "Spoteditor",
+    "login": "Login",
+    "description": "Log in now and stay updated with the latest news\nfrom Spoteditor every day.",
+    "agreementNotice": {
+      "beforeLinks": "By logging in, you agree to the",
+      "middle": "and",
+      "afterLinks": "."
+    },
+    "dataCollection": "We collect your email, name, and profile image to provide the service.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  },
+  "LoginStatus": {
+    "loginOrSignup": "Sign Up / Login"
+  },
   "UserDropdown": {
     "writeLog": "Write Log",
     "contact": "Contact Us",
