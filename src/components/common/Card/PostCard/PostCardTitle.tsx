@@ -10,7 +10,7 @@ function PostCardTitle({ className, title, modal }: PostCardTitleProps) {
   return (
     <h3
       className={cn(
-        'font-bold text-black text-sm web:text-md truncate',
+        'font-bold text-black text-text-2xl web:text-sm truncate',
         modal && '!text-text-xs',
         className
       )}

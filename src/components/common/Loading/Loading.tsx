@@ -9,7 +9,7 @@ interface LoadingProps {
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 const Loading = ({ className }: LoadingProps) => {
   return (
-    <div className={cn('flex items-center justify-center h-full', className)}>
+    <div className={cn('flex items-center justify-center', className)}>
       <Lottie animationData={loadingAnimation} loop={true} />
     </div>
   );

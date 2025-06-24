@@ -39,10 +39,13 @@ export const useLogCreationStore = create<LogCreationStoreType>()(
       toggleMultiTag: (key, tag) => {
         const state = get();
         const tags = state[key];
-        const totalSelected = state.mood.length + state.activity.length;
         const isSelected = tags.includes(tag);
 
-        if (!isSelected && totalSelected >= 10) return; // 최대 10개만
+        // mood와 activity 각각의 최대 개수 제한
+        if (!isSelected) {
+          if (key === 'mood' && state.mood.length >= 6) return;
+          if (key === 'activity' && state.activity.length >= 10) return;
+        }
         set((state) => {
           state[key] = isSelected ? tags.filter((t) => t != tag) : [...tags, tag];
         });

@@ -1,14 +1,14 @@
 'use client';
-import { AddCameraIcon, XRemovePlaceImageIcon } from '@/components/common/Icons';
+import { AddCameraIcon } from '@/components/common/Icons';
 import { FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useMultipleImagePreview from '@/hooks/useMultipleImagePreview';
 import { LogFormValues } from '@/types/log';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import { Reorder } from 'motion/react';
-import Image from 'next/image';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
+import PlaceImage from '../common/PlaceImage';
 
 interface MultiImageFormProps {
   idx: number;
@@ -33,6 +33,8 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
       toast.error('사진은 최대 8장만 가능합니다.');
       return;
     }
+    if (fileList.length >= MAX_IMAGES_LENGTH) toast.info('사진은 최대 8장만 가능합니다.');
+
     const files = Array.from(fileList).slice(0, MAX_IMAGES_LENGTH - fields.length);
     const compressedFiles = await Promise.all(files.map((file) => compressImageToWebp(file)));
 
@@ -81,15 +83,10 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
         maxLength={8}
         accept=".jpg,.jpeg,.png,.webp,.avif"
       />
+
       {fields.length > 0 && (
-        <div className="overflow-x-auto web:scrollbar-thin mb-2.5">
-          <Reorder.Group
-            axis="x"
-            values={fields}
-            onReorder={handleReorder}
-            className="flex gap-2 min-w-max p-2"
-            style={{ touchAction: 'pan-y' }}
-          >
+        <div className="overflow-x-auto mb-2.5 pb-1.5 web:scrollbar-thin">
+          <Reorder.Group axis="x" values={fields} onReorder={handleReorder} className="flex gap-1">
             {fields.map((field, imageIdx) => {
               const file = field.file;
               const previewUrl = getPreviewUrl(file);
@@ -98,10 +95,7 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
                 <Reorder.Item
                   key={field.id}
                   value={field}
-                  className="relative w-[220px] h-[300px] shrink-0 cursor-grab active:cursor-grabbing select-none overflow-hidden bg-gray-100"
-                  dragConstraints={false}
-                  dragElastic={0}
-                  dragMomentum={false}
+                  className="relative w-[220px] h-[300px] shrink-0 cursor-grab active:cursor-grabbing"
                   whileDrag={{
                     scale: 1.05,
                     zIndex: 100,
@@ -114,30 +108,11 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
                     damping: 30,
                   }}
                 >
-                  <div className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing" />
-
-                  {previewUrl && (
-                    <Image
-                      src={previewUrl}
-                      fill
-                      alt="업로드한 장소 이미지"
-                      className="object-cover pointer-events-none"
-                      unoptimized
-                      onDragStart={(e) => e.preventDefault()}
-                    />
-                  )}
-
-                  <button
-                    onClick={() => handleRemove(imageIdx, file)}
-                    className="absolute top-2 right-2 z-20 pointer-events-auto rounded-full hover:brightness-90"
-                    type="button"
-                  >
-                    <XRemovePlaceImageIcon className="cursor-pointer text-white w-5 h-5" />
-                  </button>
-
-                  <div className="absolute bottom-2 left-2 z-20 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                    {imageIdx + 1}
-                  </div>
+                  <PlaceImage
+                    imageUrl={previewUrl}
+                    onDeleteClick={() => handleRemove(imageIdx, file)}
+                    imageIdx={imageIdx}
+                  />
                 </Reorder.Item>
               );
             })}

@@ -1,5 +1,6 @@
 'use client';
 import { AddCameraIcon, XRemoveThumbnailIcon } from '@/components/common/Icons';
+import Loading from '@/components/common/Loading/Loading';
 import { FormField, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useImagePreview from '@/hooks/useImagePreview';
@@ -16,19 +17,31 @@ interface SingleImageFormProps {
 const SingleImageForm = ({ name, label, edit }: SingleImageFormProps) => {
   const { control, getValues } = useFormContext();
   const initialImage = getValues(name);
-  const { previewUrl, handleFileChange, clearPreview } = useImagePreview(initialImage);
-
+  const { previewUrl, isLoading, handleFileChange, clearPreview } = useImagePreview(initialImage);
   return (
     <div className="flex flex-col">
       <FormLabel htmlFor="single-upload" className={cn(previewUrl && 'hidden')}>
-        <div className="cursor-pointer text-text-sm w-full h-12 rounded-md flex items-center justify-center border border-dashed my-2.5 font-bold space-x-1.5 hover:bg-accent hover:text-accent-foreground">
-          <AddCameraIcon />
-          <span>
-            {label || '이미지 업로드'}
-            <span className="text-error-500">*</span>
-          </span>
+        <div
+          className={cn(
+            'cursor-pointer text-text-sm w-full h-12 rounded-md flex items-center justify-center border border-dashed my-2.5 font-bold space-x-1.5 hover:bg-accent hover:text-accent-foreground transition-colors',
+            isLoading && 'cursor-not-allowed hover:bg-transparent'
+          )}
+          aria-disabled={isLoading}
+        >
+          {isLoading ? (
+            <Loading className="w-26 h-inherit" />
+          ) : (
+            <>
+              <AddCameraIcon />
+              <span>
+                {label || '이미지 업로드'}
+                <span className="text-error-500">*</span>
+              </span>
+            </>
+          )}
         </div>
       </FormLabel>
+
       <FormField
         control={control}
         name={name}
@@ -46,14 +59,28 @@ const SingleImageForm = ({ name, label, edit }: SingleImageFormProps) => {
             multiple
             maxLength={3}
             accept=".jpg,.jpeg,.png,.webp,.avif"
+            disabled={isLoading}
           />
         )}
       />
+
+      {/* 이미지 미리보기 */}
       <div className="flex max-h-[320px] overflow-x-auto gap-1">
         {previewUrl && (
           <div key={previewUrl} className="relative w-full h-[300px] mb-2.5">
-            <Image src={previewUrl} fill alt="업로드한 장소 이미지" className="object-cover" />
-            <button onClick={clearPreview} className={cn(edit && 'hidden')}>
+            <Image
+              src={previewUrl}
+              fill
+              alt="업로드한 이미지"
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+            <button
+              onClick={clearPreview}
+              className={cn(edit && 'hidden')}
+              aria-label="이미지 제거"
+              type="button"
+            >
               <XRemoveThumbnailIcon className="absolute top-2 right-2 cursor-pointer hover:brightness-90" />
             </button>
           </div>
