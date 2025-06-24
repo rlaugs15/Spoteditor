@@ -1,8 +1,8 @@
 'use client';
 import { Header3 } from '@/components/common/Header';
+import PlaceForm from '@/components/features/log/common/PlaceForm';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
-import PlaceForm from '@/components/features/log/register/PlaceForm';
 import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';

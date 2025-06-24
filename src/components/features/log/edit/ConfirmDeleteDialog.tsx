@@ -1,7 +1,6 @@
 'use client';
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -20,7 +19,7 @@ interface ConfirmDeleteDialogProps {
 
 const ConfirmDeleteDialog = ({ logTitle, logId }: ConfirmDeleteDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { mutate } = useLogDeleteMutation();
+  const { mutate, isPending } = useLogDeleteMutation();
   const handleSubmit = () => mutate({ logId });
 
   return (
@@ -40,11 +39,17 @@ const ConfirmDeleteDialog = ({ logTitle, logId }: ConfirmDeleteDialogProps) => {
             로그를 삭제하시겠습니까?
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel className="px-8">취소</AlertDialogCancel>
-          <AlertDialogAction className="px-8" onClick={handleSubmit}>
-            확인
-          </AlertDialogAction>
+        <AlertDialogFooter className="flex items-center justify-center">
+          <AlertDialogCancel disabled={isPending} className="w-[100px] h-10.5">
+            취소
+          </AlertDialogCancel>
+          <Button onClick={handleSubmit} disabled={isPending} className="w-[100px] h-10.5">
+            {isPending ? (
+              <div className="w-5 h-5 border border-gray-300 border-t-blue-500 rounded-full animate-spin" />
+            ) : (
+              '확인'
+            )}
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
