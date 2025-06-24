@@ -8,9 +8,9 @@ import Loading from '@/components/common/Loading/Loading';
 import { SectionTitle } from '@/components/common/SectionBlock';
 import useSearchLogs from '@/hooks/queries/search/useSearchLogs';
 import useQueryPagination from '@/hooks/useQueryPagination';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRef } from 'react';
-
 interface SearchContentProps {
   keyword: string;
   currentPage: number;
@@ -18,6 +18,7 @@ interface SearchContentProps {
 
 export default function SearchContent({ keyword, currentPage }: SearchContentProps) {
   const contentRef = useRef<HTMLElement | null>(null);
+  const t = useTranslations('SearchPage');
 
   const { handlePageChange } = useQueryPagination('page', currentPage, contentRef);
   const { data, isLoading } = useSearchLogs({ currentPage, keyword, pageSize: 16 });
@@ -29,7 +30,7 @@ export default function SearchContent({ keyword, currentPage }: SearchContentPro
     >
       <div>
         {data && (!data?.success || !Array.isArray(data.data) || data.data.length === 0) ? (
-          <p className="text-light-300 text-text-lg web:text-text-xl">검색 결과가 없습니다.</p>
+          <p className="text-light-300 text-text-lg web:text-text-xl"> {t('result.empty')}</p>
         ) : (
           <div>
             <SectionTitle title="Sort by" subTitle="Popularity" />

@@ -7,6 +7,7 @@ import { SearchForm, searchSchema } from '@/lib/zod/searchSchema';
 import { useSearchStore } from '@/stores/searchStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AnimatePresence, motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
@@ -15,6 +16,7 @@ export default function SearchBar() {
   const router = useRouter();
   const isOpen = useSearchStore((state) => state.isOpen);
   const inputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations('SearchPage');
 
   const form = useForm<SearchForm>({
     resolver: zodResolver(searchSchema),
@@ -63,7 +65,7 @@ export default function SearchBar() {
                     <FormItem className="flex-1">
                       <FormControl>
                         <Input
-                          placeholder="제가 찾는 건..."
+                          placeholder={t('input.placeholder')}
                           {...field}
                           ref={inputRef}
                           style={{ color: 'white' }}

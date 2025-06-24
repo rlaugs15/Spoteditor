@@ -118,6 +118,14 @@
       "ok": "OK"
     }
   },
+  "SearchPage": {
+    "input": {
+      "placeholder": "What are you looking for..."
+    },
+    "result": {
+      "empty": "No results found."
+    }
+  },
   "Region": {
     "가나": "Ghana",
     "가평군": "Gapyeong-gun",
