@@ -35,14 +35,16 @@ const useMultipleImagePreview = () => {
 
   const reorderPreviews = (newFileOrder: Blob[]) => {
     setPreviews((prev) => {
+      const previewMap = new Map(prev.map((preview) => [preview.file, preview]));
+
       const reorderedPreviews: PreviewItem[] = [];
 
-      newFileOrder.forEach((file) => {
-        const existingPreview = prev.find((p) => p.file === file);
-        if (existingPreview) {
-          reorderedPreviews.push(existingPreview);
+      for (const file of newFileOrder) {
+        const preview = previewMap.get(file);
+        if (preview) {
+          reorderedPreviews.push(preview);
         }
-      });
+      }
 
       return reorderedPreviews;
     });
