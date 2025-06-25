@@ -40,9 +40,9 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
 
     compressedFiles
       .filter((compressedImg) => compressedImg !== undefined)
-      .forEach((compressedImg, i) => {
+      .forEach((compressedImg) => {
         addFile(compressedImg);
-        append({ file: compressedImg, order: fields.length + i + 1 });
+        append({ file: compressedImg });
       });
   };
 
@@ -53,15 +53,7 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
 
   const handleReorder = (newOrder: typeof fields) => {
     reorderPreviews(newOrder.map((item) => item.file));
-    const reorderedFields = newOrder.map((item, index) => {
-      const original = fields.find((f) => f.id === item.id);
-      return {
-        ...original!,
-        order: index + 1,
-      };
-    });
-
-    replace(reorderedFields);
+    replace(newOrder);
   };
 
   return (
@@ -85,8 +77,17 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
       />
 
       {fields.length > 0 && (
-        <div className="overflow-x-auto mb-2.5 pb-1.5 web:scrollbar-thin">
-          <Reorder.Group axis="x" values={fields} onReorder={handleReorder} className="flex gap-1">
+        <div
+          className="overflow-x-auto mb-2.5 pb-1.5 web:scrollbar-thin"
+          style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch' }}
+        >
+          <Reorder.Group
+            axis="x"
+            values={fields}
+            onReorder={handleReorder}
+            className="flex gap-1"
+            style={{ touchAction: 'pan-x' }}
+          >
             {fields.map((field, imageIdx) => {
               const file = field.file;
               const previewUrl = getPreviewUrl(file);

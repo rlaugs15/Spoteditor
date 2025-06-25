@@ -47,7 +47,7 @@ const SingleTagGroup = ({ title, type, nextPath }: SingleTagGroupProps) => {
       setSingleTag(type, value);
       if (nextPath) router.push(nextPath);
     },
-    [setSingleTag, type, nextPath]
+    [setSingleTag, type, nextPath, router]
   );
 
   return (

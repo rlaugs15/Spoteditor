@@ -2,7 +2,7 @@
 import { Dialog, DialogClose, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Tables } from '@/types/supabase';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
@@ -57,7 +57,7 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
 
       <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
         <DialogContent
-          className="bg-transparent p-0 flex justify-center items-center border-0 min-w-[80vw] max-w-[90vw] h-full shadow-none"
+          className="bg-transparent p-0 flex justify-center items-center border-0 min-w-[100vw] max-w-[90vw] h-full shadow-none"
           showCloseButton={false}
           overlayClassName="bg-black"
         >
@@ -82,29 +82,27 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
               </SwiperSlide>
             ))}
           </Swiper>
-
           <button
             onClick={() => swiperRef.current?.slidePrev()}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 text-white hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="fixed left-[20px] top-1/2 -translate-y-1/2 z-[9999] text-white hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"
             disabled={swiperRef.current?.isBeginning}
           >
-            <ChevronLeft className="w-8 h-8" />
+            <ChevronLeft className="w-10 h-10 stroke-white" strokeWidth={1} />
           </button>
 
           <button
             onClick={() => swiperRef.current?.slideNext()}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-white hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="fixed right-[20px] top-1/2 -translate-y-1/2 z-[9999] text-white hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"
             disabled={swiperRef.current?.isEnd}
           >
-            <ChevronRight className="w-8 h-8" />
+            <ChevronRight className="w-10 h-10 stroke-white" strokeWidth={1} />
           </button>
-
           <DialogClose asChild>
             <button
-              className="absolute flex items-center justify-center bottom-10 web:bottom-0 web:w-20 web:h-20 w-[54px] h-[54px] z-10 text-[#3C3C3C] rounded-full p-2 bg-[#191919] hover:brightness-90"
+              className="fixed top-[15px] right-[25px] font-medium font-pretendard !text-text-sm text-light-300 z-100"
               aria-label="닫기"
             >
-              <X className="web:w-8 web:h-8 w-6 h-6 stroke-1" />
+              닫기
             </button>
           </DialogClose>
         </DialogContent>
