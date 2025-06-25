@@ -1,11 +1,9 @@
 import { z } from 'zod';
 
-// export const imageFileSchema = z.union([z.string(), z.instanceof(Blob)]);
 export const imageFileSchema = z.instanceof(Blob);
 
 export const PlaceimageSchema = z.object({
   file: imageFileSchema,
-  order: z.number(),
 });
 
 export const placeSchema = z.object({

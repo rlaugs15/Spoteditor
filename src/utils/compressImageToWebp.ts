@@ -8,11 +8,10 @@ export async function compressImageToWebp(
   options?: Partial<Options>
 ): Promise<File | undefined> {
   const defaultOptions: Partial<Options> = {
-    maxSizeMB: 1,
-    maxWidthOrHeight: 1024,
+    maxSizeMB: 3,
     useWebWorker: true,
     fileType: 'image/webp',
-    initialQuality: 0.85,
+    maxWidthOrHeight: 1600,
     ...options,
   };
 
