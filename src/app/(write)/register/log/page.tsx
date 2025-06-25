@@ -5,15 +5,18 @@ import ConfirmRegistrationDialog from '@/components/features/log/register/Confir
 import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
 import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
+import { REGISTER_PATHS } from '@/constants/pathname';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
 import { LogformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/log';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-const initialPlace = {
+export const initialPlace = {
   placeName: '',
   category: '',
   location: '',
@@ -22,7 +25,18 @@ const initialPlace = {
 };
 
 const LogPage = () => {
+  const router = useRouter();
+  const country = useLogCreationStore((state) => state.country);
+  const city = useLogCreationStore((state) => state.city);
+  const sigungu = useLogCreationStore((state) => state.sigungu);
+  const hydrated = useLogCreationStore((state) => state.hydrated);
   const { mutate, isPending } = useLogCreateMutation();
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (!country || !city || !sigungu) router.replace(REGISTER_PATHS.MOOD);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated]);
   const form = useForm({
     resolver: zodResolver(LogformSchema),
     mode: 'onBlur',

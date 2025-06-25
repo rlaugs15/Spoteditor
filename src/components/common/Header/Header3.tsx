@@ -15,9 +15,13 @@ const Header3 = ({ onAddNewPlace }: Header3Props) => {
       <div className="py-[15px] flex items-center justify-between w-full min-w-[343px] max-w-[724px] mx-auto px-4">
         <div className="flex items-center gap-2.5">
           <BackButton plain />
-          <p className="text-text-2xl font-bold">
-            {city} · {sigungu}
-          </p>
+          {city && sigungu ? (
+            <p className="text-text-2xl font-bold">
+              {city} · {sigungu}
+            </p>
+          ) : (
+            <p className="text-text-2xl font-bold">로딩중...</p>
+          )}
         </div>
         <Button
           variant="ghost"
