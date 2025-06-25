@@ -48,7 +48,7 @@ const SingleTagGroup = ({ title, type, nextPath }: SingleTagGroupProps) => {
       setSingleTag(type, value);
       if (nextPath) router.push(nextPath);
     },
-    [setSingleTag, type, nextPath]
+    [setSingleTag, type, nextPath, router]
   );
 
   // type에 따른 네임스페이스 분기

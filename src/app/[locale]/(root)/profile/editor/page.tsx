@@ -74,11 +74,10 @@ export default function ProfileEditorPage() {
 
       const nickname = data.nickname.trim();
       const description = data.description;
-      const insta_id = data.insta_id
-        ? data.insta_id.trim().startsWith('@')
-          ? data.insta_id.trim()
-          : `@${data.insta_id.trim()}`
-        : undefined;
+
+      const rawInstaId = data.insta_id.trim();
+      const insta_id =
+        rawInstaId === '' ? null : rawInstaId.startsWith('@') ? rawInstaId : `@${rawInstaId}`;
 
       let image_url: string | undefined = undefined;
 

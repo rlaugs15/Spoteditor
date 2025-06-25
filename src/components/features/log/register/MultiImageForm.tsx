@@ -1,13 +1,14 @@
 'use client';
-import { AddCameraIcon, XRemovePlaceImageIcon } from '@/components/common/Icons';
+import { AddCameraIcon } from '@/components/common/Icons';
 import { FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useMultipleImagePreview from '@/hooks/useMultipleImagePreview';
 import { LogFormValues } from '@/types/log';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
-import Image from 'next/image';
+import { Reorder } from 'motion/react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
+import PlaceImage from '../common/PlaceImage';
 
 interface MultiImageFormProps {
   idx: number;
@@ -17,35 +18,42 @@ const MAX_IMAGES_LENGTH = 8;
 
 const MultiImageForm = ({ idx }: MultiImageFormProps) => {
   const { control } = useFormContext<LogFormValues>();
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control: control,
     name: `places.${idx}.placeImages`,
   });
 
-  const { previews, addFile, removeByFile } = useMultipleImagePreview();
+  const { addFile, removeByFile, reorderPreviews, getPreviewUrl } = useMultipleImagePreview();
 
   const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = e.target.files; // 유사 배열 객체
+    const fileList = e.target.files;
     if (!fileList) return;
 
     if (fields.length >= MAX_IMAGES_LENGTH) {
       toast.error('사진은 최대 8장만 가능합니다.');
       return;
     }
+    if (fileList.length >= MAX_IMAGES_LENGTH) toast.info('사진은 최대 8장만 가능합니다.');
+
     const files = Array.from(fileList).slice(0, MAX_IMAGES_LENGTH - fields.length);
     const compressedFiles = await Promise.all(files.map((file) => compressImageToWebp(file)));
 
     compressedFiles
       .filter((compressedImg) => compressedImg !== undefined)
-      .forEach((compressedImg, i) => {
+      .forEach((compressedImg) => {
         addFile(compressedImg);
-        append({ file: compressedImg, order: fields.length + i + 1 });
+        append({ file: compressedImg });
       });
   };
 
   const handleRemove = (index: number, file: Blob) => {
     if (file instanceof Blob) removeByFile(file);
     remove(index);
+  };
+
+  const handleReorder = (newOrder: typeof fields) => {
+    reorderPreviews(newOrder.map((item) => item.file));
+    replace(newOrder);
   };
 
   return (
@@ -67,24 +75,51 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
         maxLength={8}
         accept=".jpg,.jpeg,.png,.webp,.avif"
       />
-      <div className="flex max-h-[320px] overflow-x-auto gap-1 scrollbar-hide web:scrollbar-default scrollbar-thin mb-2.5">
-        {fields.map((field, imageIdx) => {
-          const file = field.file;
-          const previewUrl =
-            typeof file === 'string' ? file : previews.find((p) => p.file === file)?.url || '';
 
-          return (
-            <div key={field.id} className="relative w-[220px] h-[300px] shrink-0">
-              {previewUrl && (
-                <Image src={previewUrl} fill alt="업로드한 장소 이미지" className="object-cover" />
-              )}
-              <button onClick={() => handleRemove(imageIdx, file)}>
-                <XRemovePlaceImageIcon className="absolute top-2 right-2 cursor-pointer hover:brightness-90" />
-              </button>
-            </div>
-          );
-        })}
-      </div>
+      {fields.length > 0 && (
+        <div
+          className="overflow-x-auto mb-2.5 pb-1.5 web:scrollbar-thin"
+          style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch' }}
+        >
+          <Reorder.Group
+            axis="x"
+            values={fields}
+            onReorder={handleReorder}
+            className="flex gap-1"
+            style={{ touchAction: 'pan-x' }}
+          >
+            {fields.map((field, imageIdx) => {
+              const file = field.file;
+              const previewUrl = getPreviewUrl(file);
+
+              return (
+                <Reorder.Item
+                  key={field.id}
+                  value={field}
+                  className="relative w-[220px] h-[300px] shrink-0 cursor-grab active:cursor-grabbing"
+                  whileDrag={{
+                    scale: 1.05,
+                    zIndex: 100,
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+                    rotate: 2,
+                  }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 600,
+                    damping: 30,
+                  }}
+                >
+                  <PlaceImage
+                    imageUrl={previewUrl}
+                    onDeleteClick={() => handleRemove(imageIdx, file)}
+                    imageIdx={imageIdx}
+                  />
+                </Reorder.Item>
+              );
+            })}
+          </Reorder.Group>
+        </div>
+      )}
     </div>
   );
 };

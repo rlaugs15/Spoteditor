@@ -145,7 +145,7 @@ export const AddCameraIcon = ({ className }: IconProps) => {
 };
 export const MapIcon = ({ className }: IconProps) => {
   return (
-    <Image src="/icons/map.svg" width={18} height={18} alt="지도 아이콘" className={className} />
+    <Image src="/icons/map.svg" width={20} height={20} alt="지도 아이콘" className={className} />
   );
 };
 export const LocationIcon = ({ className }: IconProps) => {
@@ -163,8 +163,8 @@ export const WhiteLocationIcon = ({ className }: IconProps) => {
   return (
     <Image
       src="/icons/location-white.svg"
-      width={16}
-      height={16}
+      width={20}
+      height={20}
       alt="장소 아이콘"
       className={className}
     />

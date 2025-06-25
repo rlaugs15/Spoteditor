@@ -134,7 +134,7 @@ export async function uploadPlaces(places: LogFormValues['places'], logId: strin
 
       const uploadedImages = uploadResult.data.map((url, idx) => ({
         image_path: url,
-        order: place.placeImages[idx].order,
+        order: idx + 1,
         place_id: placeId,
       }));
       placeImageDataList.push(...uploadedImages);

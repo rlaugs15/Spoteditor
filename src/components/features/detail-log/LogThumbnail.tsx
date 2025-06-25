@@ -9,21 +9,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 import TagRow from './TagRow';
 
-interface LogThubmnailProps {
+interface LogThumbnailProps {
   logData: DetailLog;
   isAuthor: boolean;
 }
-const LogThubmnail = ({ logData, isAuthor }: LogThubmnailProps) => {
+const LogThumbnail = ({ logData, isAuthor }: LogThumbnailProps) => {
   const { thumbnail_url, title, place, log_tag } = logData;
   const moods = log_tag.filter((item) => item.category === 'mood');
   const activities = log_tag.filter((item) => item.category === 'activity');
   return (
-    <section className="relative h-[488px] flex flex-col justify-between px-4 web:px-[50px] pt-4 pb-8">
+    <section className="relative overflow-hidden h-[488px] flex flex-col justify-between px-4 web:px-[50px] pt-4 pb-8 bg-black">
       <Image
         src={getStoragePublicImage(thumbnail_url as string)}
         alt="로그 썸네일 이미지"
         fill
-        className="object-cover"
+        className="object-cover web:blur-md"
       />
       <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient" />
 
@@ -67,4 +67,4 @@ const LogThubmnail = ({ logData, isAuthor }: LogThubmnailProps) => {
   );
 };
 
-export default LogThubmnail;
+export default LogThumbnail;

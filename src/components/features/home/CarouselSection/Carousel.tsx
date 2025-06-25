@@ -4,7 +4,7 @@ import { LogWithUserAndAddress } from '@/types/api/common';
 import { useEffect, useRef, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Autoplay, Pagination } from 'swiper/modules';
+import { Autoplay, Mousewheel, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 const Carousel = ({ logs }: { logs: LogWithUserAndAddress[] }) => {
@@ -41,12 +41,11 @@ const Carousel = ({ logs }: { logs: LogWithUserAndAddress[] }) => {
         />
       </span>
       <Swiper
-        simulateTouch={true} // 기본값이긴 하지만 명시적으로 넣어주는 것도 좋음
-        touchStartPreventDefault={false} // 트랙패드 스크롤을 막지 않도록 설정
         watchSlidesProgress
-        modules={[Autoplay, Pagination]}
+        modules={[Autoplay, Pagination, Mousewheel]}
         autoplay={{ delay: 3000 }}
         spaceBetween={15}
+        mousewheel={{ forceToAxis: true }}
         className="w-full"
         breakpoints={breakpoints}
         slidesPerGroup={slidesPerGroup}

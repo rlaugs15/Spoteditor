@@ -1,15 +1,18 @@
 'use client';
 import { Header3 } from '@/components/common/Header';
+import PlaceForm from '@/components/features/log/common/PlaceForm';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
-import PlaceForm from '@/components/features/log/register/PlaceForm';
 import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
+import { REGISTER_PATHS } from '@/constants/pathname';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
 import { LogformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/log';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -22,7 +25,18 @@ const initialPlace = {
 };
 
 const LogPage = () => {
+  const router = useRouter();
+  const country = useLogCreationStore((state) => state.country);
+  const city = useLogCreationStore((state) => state.city);
+  const sigungu = useLogCreationStore((state) => state.sigungu);
+  const hydrated = useLogCreationStore((state) => state.hydrated);
   const { mutate, isPending } = useLogCreateMutation();
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (!country || !city || !sigungu) router.replace(REGISTER_PATHS.MOOD);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated]);
   const form = useForm({
     resolver: zodResolver(LogformSchema),
     mode: 'onBlur',
@@ -66,6 +80,7 @@ const LogPage = () => {
   };
 
   const onSubmit = async (values: LogFormValues) => {
+    console.log(values);
     mutate({ values });
   };
 
@@ -91,7 +106,7 @@ const LogPage = () => {
       </Form>
 
       {/* footer */}
-      <div className="text-text-sm w-full h-9 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
+      <div className="text-[13px] w-full h-9 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
         부적절한 이미지 적발시 로그가 삭제될 수 있습니다.
       </div>
 

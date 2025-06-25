@@ -6,24 +6,25 @@ import imageCompression, { Options } from 'browser-image-compression';
 export async function compressImageToWebp(
   file: File,
   options?: Partial<Options>
-): Promise<Blob | undefined> {
+): Promise<File | undefined> {
   const defaultOptions: Partial<Options> = {
-    maxSizeMB: 1,
-    maxWidthOrHeight: 1024,
+    maxSizeMB: 3,
     useWebWorker: true,
     fileType: 'image/webp',
+    maxWidthOrHeight: 1600,
     ...options,
   };
 
   try {
-    const compressedBlob = await imageCompression(file, defaultOptions);
+    const compressedFile = await imageCompression(file, defaultOptions);
+
     // console.log('원본', returnFileSize(file.size), file.type);
-    if (!compressedBlob) {
-      console.error('압축된 Blob이 없습니다');
+    if (!compressedFile) {
+      console.error('압축된 File이 없습니다');
       return undefined;
     }
-    // console.log('압축 변환 완', returnFileSize(compressedBlob.size), compressedBlob.type);
-    return compressedBlob;
+    // console.log('압축 변환 완', returnFileSize(compressedFile.size), compressedFile.type);
+    return compressedFile;
   } catch (error) {
     console.error('이미지 압축 실패:', error);
   }

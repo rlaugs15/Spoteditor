@@ -37,12 +37,12 @@ const LogContent = ({ place, idx }: LogContentProps) => {
           </section>
         </div>
         <div className="flex flex-col web:w-[324px] gap-[2px]">
-          <div className="flex gap-1.5 text-light-400 text-text-sm web:text-text-lg">
-            <MapIcon className="w-4.5 h-4.5 mt-1" />
+          <div className="flex gap-1.5 text-light-400 text-text-sm web:text-text-lg items-center">
+            <MapIcon className="w-4.5 h-4.5" />
             <span className="break-words block min-w-0">{place.category}</span>
           </div>
-          <div className="flex items-start gap-1.5 text-light-400 text-text-sm web:text-text-lg">
-            <LocationIcon className="w-4.5 h-4.5 mt-1 flex-shrink-0" />
+          <div className="flex items-center gap-1.5 text-light-400 text-text-sm web:text-text-lg">
+            <LocationIcon className="w-4.5 h-4.5 flex-shrink-0" />
             <span className="break-words block min-w-0">{place.address}</span>
           </div>
         </div>

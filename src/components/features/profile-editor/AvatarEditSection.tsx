@@ -35,7 +35,7 @@ export default function AvatarEditSection({ imageUrl, onFileChange }: AvatarEdit
     if (!imageFile && imageUrl) {
       setImagePreview(imageUrl);
     }
-  }, [imageUrl]);
+  }, [imageFile, imageUrl]);
 
   //이미지 미리보기
   useEffect(() => {
