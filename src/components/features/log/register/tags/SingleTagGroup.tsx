@@ -7,6 +7,7 @@ import {
 } from '@/constants/cityData';
 import { TAG_SETS } from '@/constants/tagData';
 import { TagKeys, useLogCreationStore } from '@/stores/logCreationStore';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 import { PAGE_TAG_INTROS } from './constant';
@@ -50,12 +51,26 @@ const SingleTagGroup = ({ title, type, nextPath }: SingleTagGroupProps) => {
     [setSingleTag, type, nextPath]
   );
 
+  // type에 따른 네임스페이스 분기
+  const namespace = type === 'country' ? 'Register.CountryPage.options' : 'Region';
+
+  let localeTitle = '';
+  if (tagGroupTitle === '도시') {
+    localeTitle = 'Register.CityPage.city';
+  } else if (tagGroupTitle === '지역') {
+    localeTitle = 'Register.CityPage.area';
+  } else if (tagGroupTitle === '시/군/구') {
+    localeTitle = 'Register.sigungu.sigungu';
+  }
+  const t = useTranslations();
+
   return (
     <TagGroup
-      title={title || String(tagGroupTitle)}
+      title={title || String(t(localeTitle))}
       tags={tags}
       isSelected={(value) => selectedTag === value}
       onTagClick={handleTagClick}
+      namespace={namespace}
     />
   );
 };
