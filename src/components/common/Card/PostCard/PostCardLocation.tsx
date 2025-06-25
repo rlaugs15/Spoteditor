@@ -13,10 +13,7 @@ type PostCardLocationProps = Partial<{
 function PostCardLocation({ city, country = '', sigungu, category, modal }: PostCardLocationProps) {
   return (
     <h4
-      className={cn(
-        'flex items-center text-text-sm web:text-text-xl text-light-300 gap-2',
-        modal && '!text-text-xs'
-      )}
+      className={cn('flex items-center text-[16px] text-light-300 gap-2', modal && '!text-text-xs')}
     >
       {category ? (
         <span>{category}</span>

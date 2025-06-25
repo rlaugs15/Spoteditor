@@ -39,7 +39,7 @@ const ConfirmRegistrationDialog = ({
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <Button size={'xl'} className="font-bold w-full mt-2 mb-6" disabled={disabled}>
+        <Button size={'xl'} className="font-bold w-full mt-2 mb-6 text-[13px]" disabled={disabled}>
           {loading ? <Loading className="max-h-fit size-24" /> : '제출'}
         </Button>
       </AlertDialogTrigger>

@@ -21,7 +21,12 @@ const RegisterFooter = ({ tagTargets, nextPath, delayBtn }: RegisterFooterProps)
   const isDisabled = totalSelectedCount === 0;
   return (
     <div className="flex flex-col pt-2 pb-6 gap-[15px]">
-      <Button size={'xl'} className="font-bold" onClick={handleClick} disabled={isDisabled}>
+      <Button
+        size={'xl'}
+        className="font-bold text-[13px]"
+        onClick={handleClick}
+        disabled={isDisabled}
+      >
         다음
       </Button>
       {delayBtn && (
