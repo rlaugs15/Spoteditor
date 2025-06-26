@@ -1,279 +1,118 @@
 import NoticeHeader from '@/components/features/notice/NoticeHeader';
+import TermsArticleSection from '@/components/features/terms/TermsArticleSection';
+import { getTranslations } from 'next-intl/server';
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const t = await getTranslations('TermsPage');
   return (
     <main className="flex justify-center w-full">
       <div className="max-w-[724px] w-full">
-        <NoticeHeader title="이용약관" />
+        <NoticeHeader title={t('title')} />
         <section className="px-4 py-10 text-text-sm text-light-600 space-y-6">
-          <h2 className="text-lg font-semibold">더스팟에디터 서비스 이용약관</h2>
+          <h2 className="text-lg font-semibold">{t('subtitle')}</h2>
 
-          <h3 className="font-semibold">제1조 (목적)</h3>
-          <p>
-            본 약관은 킷폼(이하 &quot;회사&quot;)이 운영하는 더스팟에디터(Thespoteditor) 서비스(이하
-            &quot;서비스&quot;)의 이용조건 및 절차에 관한 사항을 규정함을 목적으로 합니다.
-          </p>
+          {/* 제1조 */}
+          <TermsArticleSection
+            title={t('articles.1.title')}
+            description={t('articles.1.description')}
+          />
 
-          <h3 className="font-semibold">제2조 (정의)</h3>
-          <p>본 약관에서 사용하는 용어의 정의는 다음과 같습니다.</p>
-          <ul className="pl-5 space-y-1">
-            <li>① &quot;회사&quot;라 함은 서비스를 제공하는 사업자 킷폼을 의미합니다.</li>
-            <li>
-              ② &quot;이용자&quot;라 함은 본 약관에 따라 회사가 제공하는 서비스를 받는 회원 및
-              비회원을 말합니다.
-            </li>
-            <li>
-              ③ &quot;회원&quot;이라 함은 회사에 개인정보를 제공하여 회원등록을 한 자로서, 회사의
-              정보를 지속적으로 제공받으며 회사가 제공하는 서비스를 계속적으로 이용할 수 있는 자를
-              말합니다.
-            </li>
-            <li>
-              ④ &quot;로그&quot;란 이용자가 자신이 방문한 장소에서 직접 촬영한 사진과 이에 대한
-              설명을 포함한 게시물을 말합니다.
-            </li>
-            <li>
-              ⑤ &quot;콘텐츠&quot;란 이용자가 서비스 상에 게시한 모든 글과 사진, 이미지, 영상 등
-              일체의 정보나 자료를 의미합니다.
-            </li>
-          </ul>
+          {/* 제2조 */}
+          <TermsArticleSection
+            title={t('articles.2.title')}
+            description={t('articles.2.description')}
+            items={Array.from({ length: 5 }, (_, i) => t(`articles.2.items.${i}`))}
+          />
 
-          <h3 className="font-semibold">제3조 (약관의 효력 및 변경)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>① 본 약관은 서비스를 이용하고자 하는 모든 이용자에 대하여 그 효력을 발생합니다.</li>
-            <li>
-              ② 회사는 합리적인 사유가 발생할 경우 약관을 변경할 수 있으며, 변경된 약관은 서비스 내
-              공지사항을 통해 게시된 날로부터 효력이 발생합니다.
-            </li>
-            <li>
-              ③ 이용자가 변경된 약관에 동의하지 아니하는 경우 서비스 이용을 중단하고 탈퇴할 수
-              있으며, 변경된 약관의 효력 발생일 이후에도 서비스를 계속 이용하는 경우에는 약관의
-              변경사항에 동의한 것으로 간주합니다.
-            </li>
-          </ul>
+          {/* 제3조 */}
+          <TermsArticleSection
+            title={t('articles.3.title')}
+            items={Array.from({ length: 3 }, (_, i) => t(`articles.3.items.${i}`))}
+          />
 
-          <h3 className="font-semibold">제4조 (서비스 이용)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>
-              ① 본 서비스는 원칙적으로 연령에 제한 없이 제공되나, 빠른 시일 내에 이용 정책을 변
-              경하여 14세 이상의 이용자에게만 서비스를 제공할 예정입니다. 변경 시 사전에 공지하 도록
-              하겠습니다.
-            </li>
-            <li>
-              ② 서비스는 연중무휴 1일 24시간 제공함을 원칙으로 하나, 회사의 업무상, 기술상의 특 별한
-              사유가 있는 경우 서비스 제공을 일시적으로 중단할 수 있습니다.
-            </li>
-            <li>
-              ③ 회사는 서비스 제공을 위해 정기점검을 실시할 수 있으며, 정기점검시간은 서비스 제
-              공화면에 공지한 대로입니다.
-            </li>
-          </ul>
+          {/* 제4조 */}
+          <TermsArticleSection
+            title={t('articles.4.title')}
+            items={Array.from({ length: 3 }, (_, i) => t(`articles.4.items.${i}`))}
+          />
 
-          <h3 className="font-semibold">제5조 (회원가입)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>
-              ① 회원가입은 SNS 계정(구글, 페이스북 등)을 통한 소셜로그인 방식으로만 가능합니다.
-            </li>
-            <li>
-              ② 이용자는 회원가입 시 다음의 개인정보를 제공합니다:
-              <ul className="list-disc pl-5 mt-1">
-                <li>SNS 계정의 이메일 주소</li>
-                <li>SNS 계정의 닉네임</li>
-                <li>SNS 계정의 프로필 사진</li>
-                <li>출생연도</li>
-              </ul>
-            </li>
-            <li>③ 회원에 대한 등급 구분은 별도로 적용하지 않습니다.</li>
-          </ul>
+          {/* 제5조 */}
+          <TermsArticleSection title={t('articles.5.title')} items={t.raw('articles.5.items')} />
 
-          <h3 className="font-semibold">제6조 (개인정보보호)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>
-              ① 회사는 이용자의 개인정보를 중요시하며, 「정보통신망 이용촉진 및 정보보호 등에 관 한
-              법률」, 「개인정보보호법」 등 관련 법령을 준수합니다.
-            </li>
-            <li>
-              ② 회사는 개인정보의 수집·이용, 제3자 제공, 처리위탁, 파기 등의 처리에 관한 구체적인
-              사항은 별도의 &lsquo;개인정보 처리방침&lsquo;으로 정하며, 이는 서비스 내에서 확인하실
-              수 있습니 다.
-            </li>
-            <li>③ 개인정보보호책임자는 장다혜이며, 연락처는 010-5092-9069입니다.</li>
-            <li>
-              ④ 회사는 이용자의 위치정보를 일시적으로 수집하여 장소 검색 기능에 활용한 후 즉시
-              파기합니다.
-            </li>
-            <li>
-              ⑤ 개인정보 처리방침에 관한 상세한 내용은 본 약관과 별도로 정한 개인정보 처리방침 에
-              따릅니다.
-            </li>
-          </ul>
+          {/* 제6조 */}
+          <TermsArticleSection
+            title={t('articles.6.title')}
+            items={Array.from({ length: 5 }, (_, i) => t(`articles.6.items.${i}`))}
+          />
 
-          <h3 className="font-semibold">제7조 (콘텐츠의 게시 및 관리)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>
-              ① 이용자는 서비스를 통해 자신이 방문한 장소에 대한 사진과 설명을 포함한 로그를 게 시할
-              수 있습니다.
-            </li>
-            <li>
-              ② 회사는 다음과 같은 콘텐츠에 대해 사전 통지 없이 삭제할 수 있습니다:
-              <ul className="list-disc pl-5 mt-1">
-                <li>선정적인 내용을 포함한 게시물</li>
-                <li>타인에게 불쾌감을 주는 게시물</li>
-                <li>기타 법령에 위배되거나 사회적 통념에 어긋나는 게시물</li>
-              </ul>
-            </li>
-            <li>
-              ③ 이용자는 게시물의 제목과 설명 텍스트는 수정할 수 있으나, 사진 및 이미지는 수정 할 수
-              없습니다.
-            </li>
-          </ul>
+          {/* 제7조 */}
+          <TermsArticleSection title={t('articles.7.title')} items={t.raw('articles.7.items')} />
 
-          <h3 className="font-semibold">제8조 (지식재산권)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>
-              ① 이용자가 작성한 게시물 및 콘텐츠에 대한 지식재산권(저작권 포함)은 이용자와 회사 가
-              공동으로 소유합니다.
-            </li>
-            <li>
-              ② 공동 소유된 지식재산권에 대하여 이용자와 회사는 상호 간 아무런 제한 없이 활용할 수
-              있으며, 이러한 활용으로 발생하는 수익에 대해서는 상대방에게 분배의무를 지지 않 습니다.
-            </li>
-            <li>
-              ③ 회사는 이용자가 게시한 콘텐츠를 마케팅 목적으로 활용할 수 있으며, 이용자는 이에
-              동의합니다.
-            </li>
-            <li>④ 서비스의 저작권 및 지식재산권 기타 권리는 회사에 귀속합니다.</li>
-          </ul>
+          {/* 제8조 */}
+          <TermsArticleSection
+            title={t('articles.8.title')}
+            items={Array.from({ length: 4 }, (_, i) => t(`articles.8.items.${i}`))}
+          />
 
-          <h3 className="font-semibold">제9조 (서비스 이용의 제한)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>
-              ① 회사는 이용자가 다음 각 호에 해당하는 행위를 하는 경우 사전 경고 없이 서비스 이 용을
-              일시적으로 제한하거나 이용계약을 해지할 수 있습니다:
-              <ul className="list-disc pl-5 mt-1">
-                <li>타인의 명예를 손상시키거나 불이익을 주는 행위</li>
-                <li>타인의 지식재산권을 침해하는 행위</li>
-                <li>
-                  공공질서 및 미풍양속에 위반되는 내용의 정보, 문장, 도형 등을 타인에게 유포하는
-                  행위
-                </li>
-                <li>기타 불법적이거나 부당한 행위</li>
-              </ul>
-            </li>
-          </ul>
+          {/* 제9조 */}
+          <TermsArticleSection title={t('articles.9.title')} items={t.raw('articles.9.items')} />
 
-          <h3 className="font-semibold">제10조 (서비스 이용 관계 기능)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>① 이용자는 타 이용자를 팔로우하는 기능을 이용할 수 있습니다.</li>
-            <li>② 댓글, 메시지 등의 기능은 추후 개발 예정이며 현재는 제공되지 않습니다.</li>
-            <li>
-              ③ 알림 서비스는 다음과 같은 경우에 제공됩니다:
-              <ul className="list-disc pl-5 mt-1">
-                <li>새로운 팔로워가 생성된 경우</li>
-                <li>팔로우 중인 이용자가 게시물을 등록한 경우</li>
-                <li>타 이용자가 자신의 게시물을 북마크한 경우</li>
-              </ul>
-            </li>
-          </ul>
+          {/* 제10조 */}
+          <TermsArticleSection title={t('articles.10.title')} items={t.raw('articles.10.items')} />
 
-          <h3 className="font-semibold">제11조 (게시물 신고 및 처리)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>① 이용자는 부적절한 게시물에 대해 문의하기 기능을 통해 신고할 수 있습니다.</li>
-            <li>
-              ② 회사는 신고된 게시물에 대해 내부 검토를 진행하며, 필요한 경우 해당 게시물을 삭 제
-              처리합니다.
-            </li>
-            <li>
-              ③ 회사는 선정적이거나 불쾌한 게시물 발견 시 내부 검토를 통해 삭제 처리할 수 있습 니다.
-            </li>
-          </ul>
+          {/* 제11조 */}
+          <TermsArticleSection
+            title={t('articles.11.title')}
+            items={Array.from({ length: 3 }, (_, i) => t(`articles.11.items.${i}`))}
+          />
 
-          <h3 className="font-semibold">제12조 (회원 탈퇴)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>
-              ① 이용자는 언제든지 회원 탈퇴를 요청할 수 있으며, 회사는 이용자의 요청이 있으면 즉시
-              회원 탈퇴를 처리합니다.
-            </li>
-            <li>② 회원 탈퇴 시 이용자의 모든 개인정보는 데이터베이스에서 즉시 삭제됩니다.</li>
-            <li>③ 단, 관계 법령에 따라 보관이 필요한 경우에는 예외로 합니다.</li>
-          </ul>
+          {/* 제12조 */}
+          <TermsArticleSection
+            title={t('articles.12.title')}
+            items={Array.from({ length: 3 }, (_, i) => t(`articles.12.items.${i}`))}
+          />
 
-          <h3 className="font-semibold">제13조 (장기 미이용자 관리)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>
-              ① 회원이 1년 이상 서비스를 이용하지 않은 경우 해당 이용자는 장기 미이용자에 해당
-              됩니다.
-            </li>
-            <li>
-              ② 장기 미이용자로 전환되는 경우 회사는 이용자에게 사전에 통지하며, 이용자의 개인
-              정보는 별도로 분리하여 보관합니다.
-            </li>
-            <li>
-              ③ 장기 미이용자가 다시 서비스를 이용하고자 하는 경우 본인 인증 절차를 거쳐 정상
-              이용자로 전환됩니다.
-            </li>
-            <li>
-              ④ 분리 보관된 개인정보는 별도의 동의를 받지 않는 한 이용하지 않으며, 관련 법령에 따라
-              보관기간이 경과한 경우 지체 없이 파기합니다.
-            </li>
-          </ul>
+          {/* 제13조 */}
+          <TermsArticleSection
+            title={t('articles.13.title')}
+            items={Array.from({ length: 4 }, (_, i) => t(`articles.13.items.${i}`))}
+          />
 
-          <h3 className="font-semibold">제14조 (이용계약 해지)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>
-              ① 회사는 이용자가 본 약관을 위반한 경우 사전 통지나 동의 없이 이용계약을 해지할 수
-              있습니다.
-            </li>
-            <li>
-              ② 계약 해지 시 서비스 이용은 즉시 중단되며, 해지된 계정의 모든 데이터는 삭제됩니다.
-            </li>
-          </ul>
+          {/* 제14조 */}
+          <TermsArticleSection
+            title={t('articles.14.title')}
+            items={Array.from({ length: 2 }, (_, i) => t(`articles.14.items.${i}`))}
+          />
 
-          <h3 className="font-semibold">제15조 (면책조항)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>
-              ① 회사는 천재지변, 전쟁, 테러, 시스템 장애 기타 불가항력적인 사유로 서비스를 제공 할
-              수 없는 경우 서비스 제공에 관한 책임이 면제됩니다.
-            </li>
-            <li>
-              ② 회사는 이용자의 귀책사유로 인한 서비스 이용 장애에 대하여 책임을 지지 않습니다.
-            </li>
-            <li>
-              ③ 회사는 이용자 간 또는 이용자와 제3자 간에 발생한 분쟁에 대해 개입할 의무가 없 으며,
-              이로 인한 손해를 배상할 책임이 없습니다.
-            </li>
-            <li>
-              ④ 회사는 이용자가 작성한 게시물의 내용에 대한 진실성, 신뢰성 등을 보장하지 않으며,
-              이로 인해 발생하는 모든 결과에 대한 책임은 이용자에게 있습니다.
-            </li>
-          </ul>
+          {/* 제15조 */}
+          <TermsArticleSection
+            title={t('articles.15.title')}
+            items={Array.from({ length: 4 }, (_, i) => t(`articles.15.items.${i}`))}
+          />
 
-          <h3 className="font-semibold">제16조 (손해배상)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>
-              ① 회사는 서비스에 관하여 고의 또는 중대한 과실로 이용자에게 손해를 끼친 경우에만 그
-              손해에 대하여 배상할 책임을 부담합니다.
-            </li>
-            <li>
-              ② 무료로 제공되는 서비스 중단, 변경, 장애로 인하여 이용자에게 발생한 손해에 대하여
-              회사는 원칙적으로 책임을 지지 않습니다.
-            </li>
-          </ul>
+          {/* 제16조 */}
+          <TermsArticleSection
+            title={t('articles.16.title')}
+            items={Array.from({ length: 2 }, (_, i) => t(`articles.16.items.${i}`))}
+          />
 
-          <h3 className="font-semibold">제17조 (준거법 및 관할법원)</h3>
-          <ul className="pl-5 space-y-1">
-            <li>① 회사와 이용자 간의 소송은 대한민국 법률을 준거법으로 합니다.</li>
-            <li>
-              ② 회사와 이용자 간 발생한 분쟁에 관한 소송은 민사소송법 상의 관할 법원에 제기합니다.
-              다만, 제소 시 이용자의 주소 또는 거소가 분명하지 않거나 외국 거주자인 경우 서울
-              중앙지방법원을 관할 법원으로 합니다.
-            </li>
-          </ul>
+          {/* 제17조 */}
+          <TermsArticleSection
+            title={t('articles.17.title')}
+            items={Array.from({ length: 2 }, (_, i) => t(`articles.17.items.${i}`))}
+          />
 
-          <h3 className="font-semibold">제18조 (서비스 이용 문의)</h3>
-          <p>서비스 이용과 관련한 문의사항은 서비스 내 문의하기 기능을 통해 접수하시기 바랍니다.</p>
+          {/* 제18조 */}
+          <TermsArticleSection
+            title={t('articles.18.title')}
+            description={t('articles.18.description')}
+          />
 
-          <h3 className="font-semibold">[부칙]</h3>
-          <p>제1조 (시행일) 본 약관은 2025년 6월 9일부터 시행됩니다.</p>
+          {/* 부칙 */}
+          <TermsArticleSection
+            title={t('articles.appendix.title')}
+            description={t('articles.appendix.description')}
+          />
         </section>
       </div>
     </main>
