@@ -1,4 +1,10 @@
 {
+  "Common": {
+    "toast": {
+      "copySuccess": "URL copied to clipboard!",
+      "copyError": "Failed to copy URL to clipboard."
+    }
+  },
   "LoginModal": {
     "title": "Spoteditor",
     "login": "Login",

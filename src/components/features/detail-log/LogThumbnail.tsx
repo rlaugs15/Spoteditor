@@ -16,6 +16,7 @@ interface LogThumbnailProps {
 const LogThumbnail = ({ logData, isAuthor }: LogThumbnailProps) => {
   const { thumbnail_url, title, place, log_tag } = logData;
   const moods = log_tag.filter((item) => item.category === 'mood');
+
   const activities = log_tag.filter((item) => item.category === 'activity');
   return (
     <section className="relative overflow-hidden h-[488px] flex flex-col justify-between px-4 web:px-[50px] pt-4 pb-8 bg-black">

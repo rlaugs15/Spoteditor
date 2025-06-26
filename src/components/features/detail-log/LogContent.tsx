@@ -4,6 +4,7 @@ import PlaceBookMarkButton from '@/components/common/Button/Bookmark/PlaceBookMa
 import { LocationIcon, MapIcon } from '@/components/common/Icons';
 import { formatCount } from '@/lib/utils';
 import { DetailLog } from '@/types/api/log';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import PlaceImageSlider from './PlaceImageSlider';
 
@@ -17,6 +18,7 @@ const LogContent = ({ place, idx }: LogContentProps) => {
   const handleToggleBookmark = (newStatus: boolean) => {
     setBookmarkCount((prev) => prev + (newStatus ? 1 : -1));
   };
+  const t = useTranslations('Category');
   return (
     <div className="web:grid grid-cols-[1fr_4fr] gap-[15px] border-t pt-[15px] web:pt-3 py-10 space-y-[15px]">
       <section className="flex flex-col gap-2 relative">
@@ -39,7 +41,7 @@ const LogContent = ({ place, idx }: LogContentProps) => {
         <div className="flex flex-col web:w-[324px] gap-[2px]">
           <div className="flex gap-1.5 text-light-400 text-text-sm web:text-text-lg items-center">
             <MapIcon className="w-4.5 h-4.5" />
-            <span className="break-words block min-w-0">{place.category}</span>
+            <span className="break-words block min-w-0">{t(`${place.category}`)}</span>
           </div>
           <div className="flex items-center gap-1.5 text-light-400 text-text-sm web:text-text-lg">
             <LocationIcon className="w-4.5 h-4.5 flex-shrink-0" />
