@@ -5,6 +5,7 @@ import Loading from '@/components/common/Loading/Loading';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { toast } from 'sonner';
 
@@ -16,6 +17,8 @@ interface AccountDeleteButtonProps {
 export default function AccountDeleteButton({ setIsSuccess, setMsg }: AccountDeleteButtonProps) {
   const [isPending, startTransition] = useTransition();
   const queryClient = useQueryClient();
+  const t = useTranslations('ProfileEditor.account.toast');
+  const c = useTranslations('ProfileEditor.common');
 
   const handleDelete = () => {
     if (isPending) return;
@@ -40,16 +43,16 @@ export default function AccountDeleteButton({ setIsSuccess, setMsg }: AccountDel
         });
 
         setIsSuccess(true);
-        toast.success('계정 삭제 성공');
+        toast.success(t('success'));
       } else {
-        toast.error('계정 삭제 실패');
+        toast.error(t('error'));
       }
       setMsg(result.msg);
     });
   };
   return (
     <Button onClick={handleDelete} size="sm" className="w-[100px] text-[13px]">
-      {isPending ? <Loading /> : '확인'}
+      {isPending ? <Loading /> : c('ok')}
     </Button>
   );
 }

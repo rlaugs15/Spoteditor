@@ -15,6 +15,7 @@ import { getStoragePublicImage } from '@/utils/getStorageImage';
 import { uploadSingleImage } from '@/utils/upload';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -34,6 +35,8 @@ export default function ProfileEditorPage() {
   const queryClient = useQueryClient();
 
   const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const t = useTranslations('ProfileEditor');
 
   const form = useForm({
     resolver: zodResolver(profileEditorSchema),
@@ -135,9 +138,9 @@ export default function ProfileEditorPage() {
       queryClient.removeQueries({ queryKey: searchKeys.all, exact: true });
 
       router.push(`/profile/${me.user_id}`);
-      toast.success('회원 정보 수정 성공');
+      toast.success(t('toast.success'));
     } catch {
-      toast.error('회원 정보 수정 실패');
+      toast.error(t('toast.error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -169,10 +172,10 @@ export default function ProfileEditorPage() {
                 variant="outline"
                 className="rounded-[6px] w-30 h-10.5"
               >
-                취소
+                {t('cancel')}
               </Button>
               <Button type="submit" className="rounded-[6px] w-30 h-10.5">
-                {isSubmitting ? <Loading /> : '저장'}
+                {isSubmitting ? <Loading /> : t('save')}
               </Button>
             </section>
           </form>

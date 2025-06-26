@@ -1,4 +1,4 @@
-import { LogIdParams } from '@/app/(root)/log/[logId]/page';
+import { LogIdParams } from '@/app/[locale]/(root)/log/[logId]/page';
 import { fetchLog } from '@/app/actions/log';
 import { HOME } from '@/constants/pathname';
 import { redirect } from 'next/navigation';

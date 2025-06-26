@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import useFollowMutation from '@/hooks/mutations/follow/userFollowMutation';
 import useIsFollowing from '@/hooks/queries/follow/useIsFollowing';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface FollowingButtonProps {
   userId: string;
@@ -11,6 +12,8 @@ interface FollowingButtonProps {
 }
 
 export default function FollowingButton({ userId, className = '' }: FollowingButtonProps) {
+  const t = useTranslations('Follow');
+
   const { data: followStatus, isPending } = useIsFollowing(userId);
   const isFollowing = followStatus?.isFollowing ?? false;
 
@@ -41,7 +44,7 @@ export default function FollowingButton({ userId, className = '' }: FollowingBut
           : 'bg-white border-light-100'
       )}
     >
-      {isFollowing ? '팔로잉' : '팔로우'}
+      {isFollowing ? t('button.following') : t('button.follow')}
     </Button>
   );
 }

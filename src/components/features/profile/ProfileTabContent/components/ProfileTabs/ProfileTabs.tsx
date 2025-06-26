@@ -5,6 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { REGISTER_PATHS } from '@/constants/pathname';
 import { useProfileTabStore } from '@/stores/profileStore';
 import { IUser } from '@/types/api/user';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import TabButton from './TabButton';
 
@@ -14,6 +15,8 @@ interface ProfileTabsProps {
 }
 
 export default function ProfileTabs({ me, userId }: ProfileTabsProps) {
+  const t = useTranslations('ProfilePage');
+
   const { tab, setTab } = useProfileTabStore();
   const router = useRouter();
   const handleGotoRegisterPage = () => router.push(`${REGISTER_PATHS.MOOD}`);
@@ -25,21 +28,21 @@ export default function ProfileTabs({ me, userId }: ProfileTabsProps) {
       <TabButton
         tabKey="myLog"
         userId={userId}
-        tabName="나의 로그"
+        tabName={t('tab.myLog')}
         tab={tab}
         onTabClick={onTabClick}
       />
       <TabButton
         tabKey="savedSpaces"
         userId={userId}
-        tabName="저장된 장소"
+        tabName={t('tab.savedSpaces')}
         tab={tab}
         onTabClick={onTabClick}
       />
       <TabButton
         tabKey="savedLog"
         userId={userId}
-        tabName="저장된 로그"
+        tabName={t('tab.savedLog')}
         tab={tab}
         onTabClick={onTabClick}
       />

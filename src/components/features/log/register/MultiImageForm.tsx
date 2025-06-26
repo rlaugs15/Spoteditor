@@ -6,6 +6,7 @@ import useMultipleImagePreview from '@/hooks/useMultipleImagePreview';
 import { LogFormValues } from '@/types/log';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import { Reorder } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
 import PlaceImage from '../common/PlaceImage';
@@ -17,6 +18,7 @@ interface MultiImageFormProps {
 const MAX_IMAGES_LENGTH = 8;
 
 const MultiImageForm = ({ idx }: MultiImageFormProps) => {
+  const t = useTranslations('Register.LogPage');
   const { control } = useFormContext<LogFormValues>();
   const { fields, append, remove, replace } = useFieldArray({
     control: control,
@@ -30,10 +32,10 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
     if (!fileList) return;
 
     if (fields.length >= MAX_IMAGES_LENGTH) {
-      toast.error('사진은 최대 8장만 가능합니다.');
+      toast.error(t('maxImageError'));
       return;
     }
-    if (fileList.length >= MAX_IMAGES_LENGTH) toast.info('사진은 최대 8장만 가능합니다.');
+    if (fileList.length >= MAX_IMAGES_LENGTH) toast.info(t('maxImageError'));
 
     const files = Array.from(fileList).slice(0, MAX_IMAGES_LENGTH - fields.length);
     const compressedFiles = await Promise.all(files.map((file) => compressImageToWebp(file)));
@@ -62,7 +64,8 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
         <div className="cursor-pointer text-text-sm w-full h-12 rounded-md flex items-center justify-center border border-dashed my-2.5 font-bold space-x-1.5 hover:bg-accent hover:text-accent-foreground">
           <AddCameraIcon />
           <span>
-            사진 첨부<span className="text-error-500">*</span> (최대 8장)
+            {t('uploadPictures')}
+            <span className="text-error-500">*</span> ({t('uploadPicturesLimit')})
           </span>
         </div>
       </FormLabel>

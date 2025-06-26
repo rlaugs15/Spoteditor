@@ -9,28 +9,28 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import AccountDeleteButton from './AccountDeleteButton';
 
 export default function AccountDeleteDialog() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [msg, setMsg] = useState('');
+
+  const t = useTranslations('ProfileEditor.account');
+  const c = useTranslations('ProfileEditor.common');
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="font-medium text-red-600 text-text-xs">삭제하기</button>
+        <button className="font-medium text-red-600 text-text-xs">{t('trigger')}</button>
       </DialogTrigger>
       <DialogContent className="w-[300px] web:w-[390px] p-6">
-        <DialogTitle className="w-full font-bold text-text-2xl">계정삭제</DialogTitle>
+        <DialogTitle className="w-full font-bold text-text-2xl">{t('dialog.title')}</DialogTitle>
         <DialogDescription className="w-full mt-2 mb-4 !text-primary-500 text-start !text-text-sm">
           {!isSuccess ? (
-            <span>
-              계정을 삭제시 등록된 로그는 영구삭제됩니다.
-              <br />
-              계정을 삭제하시겠어요?
-            </span>
+            <span>{t('dialog.confirm')}</span>
           ) : (
-            <span>{msg || '계정 삭제가 완료되었습니다.'}</span>
+            <span>{msg || t('dialog.success')}</span>
           )}
         </DialogDescription>
         <section className="flex justify-end w-full h-10.5 gap-x-2 font-pretendard">
@@ -38,7 +38,7 @@ export default function AccountDeleteDialog() {
             <>
               <DialogClose asChild>
                 <Button variant="outline" size="sm" className="w-[80px] text-[13px]">
-                  취소
+                  {c('cancel')}
                 </Button>
               </DialogClose>
               <AccountDeleteButton setIsSuccess={setIsSuccess} setMsg={setMsg} />
@@ -49,7 +49,7 @@ export default function AccountDeleteDialog() {
               size="sm"
               className="w-[100px] text-[13px]"
             >
-              확인
+              {c('ok')}
             </Button>
           )}
         </section>

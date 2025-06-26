@@ -17,6 +17,7 @@ import useBottomScrollTrigger from '@/hooks/useBottomScrollTrigger';
 import { cn } from '@/lib/utils';
 import { Follower } from '@/types/api/follow';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -26,6 +27,8 @@ interface FollowerListButtonProps {
 }
 
 export default function FollowerListButton({ userId, totalCount }: FollowerListButtonProps) {
+  const t = useTranslations('Follow');
+
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -53,7 +56,7 @@ export default function FollowerListButton({ userId, totalCount }: FollowerListB
               totalCount <= 0 && 'text-light-300'
             )}
           >
-            팔로워
+            {t('label.follower')}
           </DialogDescription>
           <span className="font-bold text-center text-text-md web:text-text-2xl">{totalCount}</span>
         </button>
@@ -62,7 +65,7 @@ export default function FollowerListButton({ userId, totalCount }: FollowerListB
         <DialogTitle className="grid grid-cols-3 w-full pb-2 text-text-2xl font-bold h-[50px] px-2.5 border-b-[1px] border-b-light-50">
           <div />
           <div className="flex items-center justify-center">
-            <span className="text-center">팔로워</span>
+            <span className="text-center">{t('modalTitle.follower')}</span>
           </div>
           <DialogClose asChild className="flex items-center justify-end w-full py-[13px] web:py-2">
             <div>

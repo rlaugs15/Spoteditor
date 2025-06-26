@@ -2,6 +2,7 @@
 import { XRemovePlaceImageIcon } from '@/components/common/Icons';
 import { LogEditFormValues } from '@/types/log';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -11,6 +12,7 @@ interface EditMultiImageFormProps {
 }
 
 const EditMultiImageForm = ({ idx }: EditMultiImageFormProps) => {
+  const t = useTranslations('Register.LogPage');
   const { control, setValue, getValues } = useFormContext<LogEditFormValues>();
   const { fields, remove } = useFieldArray({
     control: control,
@@ -18,7 +20,7 @@ const EditMultiImageForm = ({ idx }: EditMultiImageFormProps) => {
   });
 
   const handleDeleteClick = (imageIdx: number) => {
-    if (fields.length === 1) return toast.error('장소 이미지 1장은 필수입니다.');
+    if (fields.length === 1) return toast.error(`${t('imageDeleteLimit')}`);
 
     const deletedImagePath = fields[imageIdx].place_image_id; // 선 추출 후 빼기
     remove(imageIdx);

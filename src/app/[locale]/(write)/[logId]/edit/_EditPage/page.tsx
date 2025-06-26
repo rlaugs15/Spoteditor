@@ -13,11 +13,14 @@ import { DetailLog } from '@/types/api/log';
 import { LogEditFormValues } from '@/types/log';
 import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
+  const t = useTranslations('LogEditPage');
+
   const { mutate, isPending } = useLogEditMutation();
   const { title, thumbnail_url, description, place: places, log_tag, address, log_id } = logData;
   const initializeTags = useLogCreationStore((state) => state.initializeTags);
@@ -71,7 +74,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   }, [form, activity]);
 
   const handleDeletePlace = (idx: number) => {
-    if (fields.length === 1) return toast.error('1개의 장소는 필수입니다.');
+    if (fields.length === 1) return toast.error(t('place.minError'));
     const deletedPlaceId = form.getValues(`places.${idx}.id`);
     const prevDeleted = form.getValues('deletedPlace') ?? [];
     form.setValue('deletedPlace', [...prevDeleted, deletedPlaceId], { shouldDirty: true });
@@ -132,14 +135,14 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
           </div>
         </main>
         <>
-          <MultiTagGroup title="누구와" type="mood" />
-          <MultiTagGroup title="어떤 느낌으로" type="activity" />
+          <MultiTagGroup title={t('tag.mood')} type="mood" />
+          <MultiTagGroup title={t('tag.activity')} type="activity" />
         </>
       </Form>
 
       {/* footer */}
       <div className="text-text-sm w-full h-9 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
-        부적절한 이미지 적발시 로그가 삭제될 수 있습니다.
+        {t('warning.imagePolicy')}
       </div>
 
       <ConfirmRegistrationDialog
