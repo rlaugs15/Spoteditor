@@ -32,7 +32,9 @@ const ConfirmRegistrationDialog = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const t = useTranslations('Register.LogPage');
-  const confirmText = edit ? t('confirmEdit') : t('confirmCreate');
+  const confirmText = edit
+    ? t('confirmEdit', { logTitle: logTitle ?? '' })
+    : t('confirmCreate', { logTitle: logTitle ?? '' });
 
   const handleSubmit = async () => {
     try {
@@ -51,12 +53,15 @@ const ConfirmRegistrationDialog = ({
       <AlertDialogContent className="w-[400px]">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-text-2xl font-bold">
-            <span className="text-info-500">{logTitle}</span>
-            {confirmText}
+            {confirmText.split(logTitle ?? '').map((part, index, arr) => (
+              <span key={index}>
+                {part}
+                {index < arr.length - 1 && <span className="text-info-500">{logTitle}</span>}
+              </span>
+            ))}
           </AlertDialogTitle>
           <AlertDialogDescription hidden>
-            {logTitle}
-            {t('confirmCreate')}
+            {logTitle} {confirmText}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
