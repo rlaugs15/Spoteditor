@@ -208,6 +208,24 @@
       "actionEdit": "edit"
     }
   },
+  "LogEditPage": {
+    "delete": {
+      "delete": "Delete",
+      "confirmMessage": "Are you sure you want to delete this log?",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "place": {
+      "minError": "At least one place is required."
+    },
+    "warning": {
+      "imagePolicy": "Logs may be deleted if inappropriate images are detected."
+    },
+    "tag": {
+      "mood": "With whom",
+      "activity": "What kind of mood"
+    }
+  },
   "Category": {
     "레스토랑": "Restaurant",
     "카페/베이커리": "Cafe / Bakery",

@@ -208,6 +208,24 @@
       "actionEdit": "수정"
     }
   },
+  "LogEditPage": {
+    "delete": {
+      "delete": "삭제",
+      "confirmMessage": "로그를 삭제하시겠습니까?",
+      "cancel": "취소",
+      "confirm": "확인"
+    },
+    "place": {
+      "minError": "1개의 장소는 필수입니다."
+    },
+    "warning": {
+      "imagePolicy": "부적절한 이미지 적발시 로그가 삭제될 수 있습니다."
+    },
+    "tag": {
+      "mood": "누구와",
+      "activity": "어떤 느낌으로"
+    }
+  },
   "Category": {
     "레스토랑": "레스토랑",
     "카페/베이커리": "카페/베이커리",
