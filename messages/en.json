@@ -42,6 +42,138 @@
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service"
   },
+  "NoticePage": {
+    "title": "Notices"
+  },
+  "PrivacyPolicyPage": {
+    "title": "Privacy Policy",
+    "intro": "Kitform complies with relevant personal information protection regulations under the Act on Promotion of Information and Communications Network Utilization and the Personal Information Protection Act. We handle personal information lawfully and safely to protect the freedom and rights of data subjects. In accordance with Article 30 of the Personal Information Protection Act, we establish and disclose the following privacy policy to inform data subjects of the procedures and standards for processing and protecting personal information and to promptly handle related complaints.",
+    "articles": {
+      "1": {
+        "title": "Article 1 (Purpose of Personal Information Processing)",
+        "description": "Kitform processes personal information for the following purposes, and the collected information is not used for any other purposes. If the purpose of use changes, necessary measures will be taken in accordance with Article 18 of the Personal Information Protection Act, such as obtaining separate consent.",
+        "items": {
+          "0": "① Service provision and contract fulfillment: We process personal information for providing the Kitform sharing platform service, content delivery, personalized services, user authentication, and service usage analysis.",
+          "1": "② Member management: We process personal information for identity verification, managing membership status, preventing unauthorized use, delivering notices, and handling complaints.",
+          "2": "③ Marketing usage: We process personal information for developing new services, providing personalized services, displaying ads based on statistical traits, verifying service effectiveness, and providing promotional or advertising content (including blocking profile-based ads when users clearly express refusal).",
+          "3": "④ Service improvement: We process personal information for analyzing service usage, improving services, managing usage rights, responding to errors or disruptions, and statistical analysis."
+        }
+      },
+      "2": {
+        "title": "Article 2 (Items of Personal Data Collected)",
+        "description": "The following personal data items are collected by Kitform.",
+        "items": {
+          "0": "① Required Information: Email address, nickname, profile picture, and year of birth are collected during sign-up. \nThis information is essential for using the service.",
+          "1": "② Optional Information: Address information may be optionally collected and used for additional services with the user’s consent.",
+          "2": "③ Automatically Collected Information: Cookies, IP address, user location information (temporary), service usage history, access logs, and device information may be automatically collected during service use.",
+          "3": "④ Information Collected via Social Login: When using social login services such as Kakao or Google, email address, nickname, profile picture, and year of birth are collected from the respective social media platforms."
+        }
+      },
+      "3": {
+        "title": "Article 3 (Methods of Collecting Personal Information)",
+        "description": "Kitform collects personal information using the following methods.",
+        "items": {
+          "0": "① Provided by users during the sign-up and service usage process via social login services such as Kakao and Google.",
+          "1": "② Automatically generated and collected during the use of the service.",
+          "2": "③ Collected during participation in events or promotions (applicable for future events)."
+        }
+      },
+      "4": {
+        "title": "Article 4 (Use and Retention Period of Personal Information)",
+        "description": "Kitform processes and retains personal information within the retention and usage period defined by law or agreed upon when collecting the information from the data subject.",
+        "items": {
+          "0": "① Personal information is retained until the user withdraws membership and is immediately deleted from the database upon withdrawal.",
+          "1": "② Information of long-term inactive users is handled in the same manner as membership withdrawal.",
+          "2": "③ Currently, there are no personal information items that must be retained under applicable laws."
+        }
+      },
+      "5": {
+        "title": "Article 5 (Provision of Personal Information to Third Parties)",
+        "description": "Kitform does not provide personal information to third parties except in the following cases:",
+        "items": {
+          "0": "① When the data subject has given separate consent",
+          "1": "② When required by law or upon request by investigative agencies according to legal procedures and methods"
+        },
+        "footer": "Currently, Kitform does not provide personal information to any third parties."
+      },
+      "6": {
+        "title": "Article 6 (Outsourcing of Personal Information Processing)",
+        "description": "Kitform does not currently outsource personal information processing. However, for future operational efficiency and service quality improvement, such outsourcing may occur. In such cases, Kitform will stipulate necessary matters in contracts in accordance with relevant laws and ensure that the entrusted party safely manages the personal information."
+      },
+      "7": {
+        "title": "Article 7 (Rights and Obligations of Data Subjects and Their Legal Representatives)",
+        "items": {
+          "0": "① Data subjects may exercise the following rights regarding personal information protection at any time:\n- Request access to personal information\n- Request correction in case of errors\n- Request deletion\n- Request suspension of processing",
+          "1": "② The rights in Paragraph 1 may be exercised through writing, email, or fax in accordance with Article 41(1) of the Enforcement Decree of the Personal Information Protection Act. Kitform will respond without delay.",
+          "2": "③ The rights in Paragraph 1 may also be exercised by a legal representative or authorized agent. In this case, a power of attorney in the form prescribed by the Enforcement Rules of the Personal Information Protection Act must be submitted.",
+          "3": "④ Currently, users under the age of 14 can use the service, but the usage policy will be updated soon to restrict usage to those aged 14 and older."
+        }
+      },
+      "8": {
+        "title": "Article 8 (Destruction of Personal Information)",
+        "description": "When personal information becomes unnecessary due to the expiration of the retention period or achievement of the processing purpose, Kitform will destroy the information without delay.",
+        "items": {
+          "0": "① Destruction procedure: A destruction plan will be established for the relevant personal information.",
+          "1": "② Destruction method: Electronic files will be permanently deleted using technical methods, and printed materials will be shredded or incinerated.",
+          "2": "③ Personal information is immediately deleted from the database upon withdrawal, and there is no temporary storage feature."
+        }
+      },
+      "9": {
+        "title": "Article 9 (Measures to Ensure the Security of Personal Information)",
+        "description": "In accordance with Article 29 of the Personal Information Protection Act, Kitform implements the following technical, administrative, and physical measures to ensure the security of personal information.",
+        "items": {
+          "0": "① Minimization and training of personal information handlers: Only designated staff handle personal information, and access is restricted to minimize exposure.",
+          "1": "② Restriction of access to personal information: Access rights to personal information systems are granted, changed, and revoked through AWS security groups and IP restrictions. Intrusion prevention systems are used to block unauthorized access from outside.",
+          "2": "③ Retention and prevention of tampering with access records: Access logs to personal information systems are kept for at least six months and protected from forgery, theft, or loss.",
+          "3": "④ Encryption of personal information: No sensitive information currently requires encryption, but encryption measures will be implemented in the future if necessary.",
+          "4": "⑤ Installation and update of security programs: Security programs are installed and regularly updated and inspected to prevent leakage or damage of personal information due to hacking or viruses."
+        }
+      },
+      "10": {
+        "title": "Article 10 (Automatic Collection Devices for Personal Information)",
+        "items": {
+          "0": "① Kitform uses ‘cookies’ that save and retrieve usage information in order to provide personalized services to users.",
+          "1": "② Purpose of cookies:\n- Used for login/logout processing\n- Block IP duplication\n- Analyze service usage statistics",
+          "2": "③ Method to reject cookies: Kitform does not currently offer a dedicated method to reject cookies, but users can refuse cookie storage through their web browser settings.",
+          "3": "④ If cookies are rejected, some features such as content posting, following users, and bookmarking content may be limited."
+        }
+      },
+      "11": {
+        "title": "Article 11 (Personal Information Protection Officer)",
+        "items": {
+          "0": "① Kitform designates a personal information protection officer responsible for overall tasks related to personal information and for handling complaints and remedies from data subjects.",
+          "1": "② Protection officer:\n- Name: Dahye Jang\n- Contact: 010-5092-9069\n- Email: Please contact customer support via the in-app inquiry feature",
+          "2": "③ If you have any questions, complaints, or requests related to personal information while using Kitform services, you may contact the protection officer. Kitform will respond without delay."
+        }
+      },
+      "12": {
+        "title": "Article 12 (Remedies for Infringement of Rights)",
+        "description": "If you have suffered harm from personal information violations, you may request resolution or consultation from the Personal Information Dispute Mediation Committee or the Korea Internet & Security Agency (KISA). You may also contact the following institutions for other inquiries or complaints related to personal information.",
+        "items": {
+          "0": "① Personal Information Dispute Mediation Committee: 1833-6972 (www.kopico.go.kr)",
+          "1": "② Personal Information Infringement Report Center: 118 (privacy.kisa.or.kr)",
+          "2": "③ Supreme Prosecutors’ Office: 1301 (www.spo.go.kr)",
+          "3": "④ National Police Agency: 182 (cyberbureau.police.go.kr)"
+        }
+      },
+      "13": {
+        "title": "Article 13 (Use of Location Information)",
+        "items": {
+          "0": "① Kitform temporarily uses location information with the user's consent during location-based content registration to help search for places.",
+          "1": "② Location information is used only temporarily when needed during log registration and is not stored or retained.",
+          "2": "③ Location information is not shared with any third parties."
+        }
+      },
+      "14": {
+        "title": "Article 14 (Changes to the Privacy Policy)",
+        "items": {
+          "0": "① This Privacy Policy has been effective since June 9, 2025.",
+          "1": "② If the Privacy Policy is amended, changes will be announced in the in-app notice section at least 7 days before they take effect.",
+          "2": "③ In the case of significant changes, they will be announced at least 30 days in advance, and individual notification may be provided if necessary."
+        }
+      }
+    }
+  },
   "LoginStatus": {
     "loginOrSignup": "Sign Up / Login"
   },
