@@ -226,6 +226,10 @@
       "activity": "What kind of mood"
     }
   },
+  "CountryType": {
+    "국내": "Domestic",
+    "국외": "Overseas"
+  },
   "Category": {
     "레스토랑": "Restaurant",
     "카페/베이커리": "Cafe / Bakery",
