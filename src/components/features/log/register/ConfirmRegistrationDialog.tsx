@@ -12,6 +12,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 interface ConfirmRegistrationDialogProps {
   edit?: boolean;
@@ -29,6 +30,10 @@ const ConfirmRegistrationDialog = ({
   loading,
 }: ConfirmRegistrationDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const t = useTranslations('Register.LogPage');
+  const confirmText = edit ? t('confirmEdit') : t('confirmCreate');
+
   const handleSubmit = async () => {
     try {
       await onSubmitLogForm();
@@ -40,21 +45,24 @@ const ConfirmRegistrationDialog = ({
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
         <Button size={'xl'} className="font-bold w-full mt-2 mb-6 text-[13px]" disabled={disabled}>
-          {loading ? <Loading className="max-h-fit size-24" /> : '제출'}
+          {loading ? <Loading className="max-h-fit size-24" /> : t('submit')}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className="w-[400px]">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-text-2xl font-bold">
-            <span className="text-info-500">{logTitle} </span>
-            로그를 {edit ? '수정' : '등록'}하시겠어요?
+            <span className="text-info-500">{logTitle}</span>
+            {confirmText}
           </AlertDialogTitle>
-          <AlertDialogDescription hidden>{logTitle}로그를 등록하시겠어요?</AlertDialogDescription>
+          <AlertDialogDescription hidden>
+            {logTitle}
+            {t('confirmCreate')}
+          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="px-8">취소</AlertDialogCancel>
+          <AlertDialogCancel className="px-8">{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction className="px-8" onClick={handleSubmit}>
-            확인
+            {t('confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

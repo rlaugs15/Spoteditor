@@ -11,6 +11,7 @@ import { LogformSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/log';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -31,6 +32,8 @@ const LogPage = () => {
   const sigungu = useLogCreationStore((state) => state.sigungu);
   const hydrated = useLogCreationStore((state) => state.hydrated);
   const { mutate, isPending } = useLogCreateMutation();
+
+  const t = useTranslations('Register.LogPage');
 
   useEffect(() => {
     if (!hydrated) return;
@@ -64,7 +67,7 @@ const LogPage = () => {
 
   const handleAddNewPlace = () => {
     if (fields.length >= 10) {
-      toast.info('장소는 최대 10개까지 등록 가능합니다.');
+      toast.info(t('maxPlaceError'));
       return;
     }
     append(initialPlace);
@@ -107,7 +110,7 @@ const LogPage = () => {
 
       {/* footer */}
       <div className="text-[13px] w-full h-9 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
-        부적절한 이미지 적발시 로그가 삭제될 수 있습니다.
+        {t('deleteWarning')}
       </div>
 
       <ConfirmRegistrationDialog

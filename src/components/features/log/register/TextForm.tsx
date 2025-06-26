@@ -1,6 +1,7 @@
 'use client';
 import { FormField } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
+import { useTranslations } from 'next-intl';
 import { useFormContext } from 'react-hook-form';
 
 interface TextFormProps {
@@ -9,6 +10,7 @@ interface TextFormProps {
 
 const TextForm = ({ formFieldName }: TextFormProps) => {
   const { control } = useFormContext();
+  const t = useTranslations('Register.LogPage');
   return (
     <FormField
       control={control}
@@ -16,7 +18,7 @@ const TextForm = ({ formFieldName }: TextFormProps) => {
       render={({ field }) => (
         <Textarea
           {...field}
-          placeholder="내용을 입력해주세요. (최대 500자)"
+          placeholder={t('contentPlaceholder')}
           className="border-0"
           maxLength={500}
         />
