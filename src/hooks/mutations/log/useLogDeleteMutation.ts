@@ -2,6 +2,7 @@ import { logKeys, placeKeys, searchKeys } from '@/app/actions/keys';
 import { deleteLog } from '@/app/actions/log';
 import { HOME } from '@/constants/pathname';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -10,13 +11,14 @@ interface LogDeleteMutationProps {
 }
 
 const useLogDeleteMutation = () => {
+  const t = useTranslations('Toast.logDelete');
   const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ logId }: LogDeleteMutationProps) => deleteLog(logId),
     onSuccess: ({ success }) => {
       if (success) {
-        toast.success('로그가 삭제되었습니다.');
+        toast.success(t('success'));
         const keysToInvalidate = [logKeys.all, placeKeys.all, searchKeys.all];
 
         keysToInvalidate.forEach((key) => {
@@ -26,7 +28,7 @@ const useLogDeleteMutation = () => {
       }
     },
     onError: () => {
-      toast.error('로그 삭제를 실패했습니다. 다시 시도해주세요.');
+      toast.error(t('error'));
     },
   });
 };

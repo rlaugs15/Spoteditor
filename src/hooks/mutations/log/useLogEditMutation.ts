@@ -2,6 +2,7 @@ import { logKeys, placeKeys, searchKeys } from '@/app/actions/keys';
 import { updateLog } from '@/app/actions/log-update';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -11,6 +12,7 @@ interface LogEditMutationProps {
 }
 
 const useLogEditMutation = () => {
+  const t = useTranslations('Toast.logEdit');
   const router = useRouter();
   const queryClient = useQueryClient();
   const clearTag = useLogCreationStore((state) => state.clearTag);
@@ -27,11 +29,11 @@ const useLogEditMutation = () => {
         });
 
         router.replace(`/log/${logId}`);
-        toast.success('로그 수정 성공');
+        toast.success(t('success'));
       }
     },
     onError: () => {
-      toast.error('로그 수정 실패');
+      toast.error(t('error'));
     },
   });
 };

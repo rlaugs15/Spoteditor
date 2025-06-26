@@ -1,8 +1,32 @@
 {
-  "Common": {
-    "toast": {
+  "Toast": {
+    "clipboard": {
       "copySuccess": "URL이 클립보드에 복사되었습니다!",
       "copyError": "URL 복사에 실패했습니다."
+    },
+    "logCreate": {
+      "delayed": "이미지 업로드가 조금 오래 걸리고 있어요.",
+      "delayedDescription": "잠시만 기다려주세요...",
+      "stillUploading": "업로드 중입니다. 조금만 기다려 주세요.",
+      "success": "업로드가 성공적으로 완료되었습니다.",
+      "redirect": "페이지가 이동합니다. 잠시만 기다려 주세요.",
+      "error": "업로드가 실패했습니다. 다시 시도해주세요"
+    },
+    "logEdit": {
+      "success": "로그 수정 성공",
+      "error": "로그 수정 실패"
+    },
+    "logDelete": {
+      "success": "로그가 삭제되었습니다.",
+      "error": "로그 삭제를 실패했습니다. 다시 시도해주세요."
+    },
+    "account": {
+      "deleteSuccess": "계정 삭제 성공",
+      "deleteError": "계정 삭제 실패"
+    },
+    "auth": {
+      "logoutSuccess": "로그아웃 성공",
+      "logoutError": "로그아웃이 실패했습니다. 다시 시도해주세요."
     }
   },
   "LoginModal": {

@@ -1,8 +1,32 @@
 {
-  "Common": {
-    "toast": {
+  "Toast": {
+    "clipboard": {
       "copySuccess": "URL copied to clipboard!",
       "copyError": "Failed to copy URL to clipboard."
+    },
+    "logCreate": {
+      "delayed": "Image upload is taking a bit longer than usual.",
+      "delayedDescription": "Please wait a moment...",
+      "stillUploading": "Still uploading... Please wait a bit more.",
+      "success": "Upload completed successfully.",
+      "redirect": "Redirecting to the page. Please wait a moment.",
+      "error": "Upload failed. Please try again."
+    },
+    "logEdit": {
+      "success": "Log updated successfully",
+      "error": "Failed to update the log"
+    },
+    "logDelete": {
+      "success": "Log deleted successfully.",
+      "error": "Failed to delete the log. Please try again."
+    },
+    "account": {
+      "deleteSuccess": "Account deleted successfully",
+      "deleteError": "Failed to delete account"
+    },
+    "auth": {
+      "logoutSuccess": "Logout successful",
+      "logoutError": "Logout failed. Please try again."
     }
   },
   "LoginModal": {

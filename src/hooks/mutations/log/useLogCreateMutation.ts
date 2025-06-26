@@ -4,6 +4,7 @@ import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues, NewPlace, NewPlaceImage } from '@/types/log';
 import { uploadPlaces, uploadThumbnail } from '@/utils/upload';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -22,6 +23,7 @@ const useLogCreateMutation = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const clearTag = useLogCreationStore((state) => state.clearTag);
+  const t = useTranslations('Toast.logCreate');
   return useMutation({
     mutationFn: async ({ values }: LogCreateMutationProps) => {
       const logId = crypto.randomUUID();
@@ -53,15 +55,15 @@ const useLogCreateMutation = () => {
     },
     onMutate: () => {
       const firstTimeoutId = setTimeout(() => {
-        toast.info('이미지 업로드가 조금 오래 걸리고 있어요.', {
-          description: '잠시만 기다려주세요...',
+        toast.info(t('delayed'), {
+          description: t('delayedDescription'),
           id: 'delayed-upload-toast',
           duration: 20_000,
         });
       }, 10_000); // 10초
 
       const secondTimeoutId = setTimeout(() => {
-        toast.info('업로드 중입니다. 조금만 기다려 주세요.', {
+        toast.info(t('stillUploading'), {
           id: 'long-upload-toast',
           duration: 20_000,
         });
@@ -72,8 +74,8 @@ const useLogCreateMutation = () => {
 
     onSuccess: ({ success, data }) => {
       if (success) {
-        toast.success('업로드가 성공적으로 완료되었습니다.', {
-          description: '페이지가 이동합니다. 잠시만 기다려 주세요.',
+        toast.success(t('success'), {
+          description: t('redirect'),
         });
 
         clearTag();
@@ -86,7 +88,7 @@ const useLogCreateMutation = () => {
       }
     },
     onError: () => {
-      toast.error('업로드가 실패했습니다. 다시 시도해주세요');
+      toast.error(t('error'));
     },
     onSettled: (_data, _error, _variables, context) => {
       if (context?.firstTimeoutId) clearTimeout(context.firstTimeoutId);

@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { ShareIcon } from '../Icons';
 
 const ClipboardButton = () => {
-  const t = useTranslations('Common.toast');
+  const t = useTranslations('Toast.clipboard');
 
   const copyUrlToClipboard = () => {
     navigator.clipboard
