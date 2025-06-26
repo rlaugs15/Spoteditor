@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 import { Following } from '@/types/api/follow';
 import { IUser } from '@/types/api/user';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -29,6 +30,8 @@ interface FollowingListButtonProps {
 }
 
 export default function FollowingListButton({ userId, totalCount, me }: FollowingListButtonProps) {
+  const t = useTranslations('Follow');
+
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -57,7 +60,7 @@ export default function FollowingListButton({ userId, totalCount, me }: Followin
               totalCount <= 0 && 'text-light-300'
             )}
           >
-            팔로잉
+            {t('label.following')}
           </DialogDescription>
           <span className="font-bold text-center text-text-md web:text-text-2xl">{totalCount}</span>
         </button>
@@ -66,7 +69,7 @@ export default function FollowingListButton({ userId, totalCount, me }: Followin
         <DialogTitle className="grid grid-cols-3 w-full pb-2 text-text-2xl font-bold h-[50px] px-2.5 border-b-[1px] border-b-light-50">
           <div />
           <div className="flex items-center justify-center">
-            <span className="text-center">팔로잉</span>
+            <span className="text-center">{t('modalTitle.following')}</span>
           </div>
           <DialogClose asChild className="flex items-center justify-end w-full py-[13px] web:py-2">
             <div>

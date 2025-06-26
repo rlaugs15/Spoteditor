@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import useResponsive from '@/hooks/useResponsive';
 import { IUser } from '@/types/api/user';
+import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
@@ -24,6 +25,7 @@ interface LoginStatusButtonsProps {
 export default function LoginStatusButtons({ user }: LoginStatusButtonsProps) {
   const router = useRouter();
   const { isMobile } = useResponsive();
+  const t = useTranslations('LoginStatus');
 
   const handleLoginClick = () => {
     router.push('/login');
@@ -53,7 +55,7 @@ export default function LoginStatusButtons({ user }: LoginStatusButtonsProps) {
     <>
       {!user ? (
         <Button onClick={handleLoginClick} variant={'ghost'} className="font-bold">
-          회원가입/로그인
+          {t('loginOrSignup')}
         </Button>
       ) : (
         <UserProfileButton user={user} />

@@ -3,6 +3,7 @@
 import { XIcon } from '@/components/common/Icons';
 import { cityCategories, cityDistricts } from '@/constants/cityData';
 import { useCitySearchStore } from '@/stores/searchStore';
+import { useTranslations } from 'next-intl';
 import CitySearchButton from './CitySearchButton';
 import SigunguButtonList from './SigunguButtonList';
 
@@ -18,6 +19,9 @@ export default function CitySearchDropbox() {
     toggleSigunguDropBox,
   } = useCitySearchStore();
 
+  const t = useTranslations('HomePage.citySearchForm.dropbox');
+  const r = useTranslations('Region');
+
   const oncityClick = (city: string) => {
     setcity(city);
     setsigungu(cityDistricts[city]?.[0]);
@@ -32,10 +36,10 @@ export default function CitySearchDropbox() {
     <div className="will-change-transform">
       <header className="flex items-center justify-between py-3">
         <div className="flex justify-start gap-1 web:gap-2.5 flex-col font-pretendard web:flex-row web:justify-between web:items-center">
-          <h3 className="font-bold text-sm">{isSigunguDropBox ? '동네선택' : '도시선택'}</h3>
-          <h4 className="flex-1 text-text-xs text-primary-400">
-            에디터가 새로운 지역을 추가하면 새로운 지역이 생겨요!
-          </h4>
+          <h3 className="font-bold text-sm">
+            {isSigunguDropBox ? t('sigunguTitle') : t('cityTitle')}
+          </h3>
+          <h4 className="flex-1 text-text-xs text-primary-400">{t('subtitle')}</h4>
         </div>
         <div>
           <button
@@ -51,10 +55,16 @@ export default function CitySearchDropbox() {
         <section className="grid grid-cols-2 web:flex web:justify-start web:items-center gap-[5px] flex-wrap w-[343px] web:w-auto">
           {isCityDropBox &&
             cityCategories.map((city) => (
-              <CitySearchButton key={city} city={city} onClick={oncityClick} />
+              <CitySearchButton
+                key={city}
+                city={city}
+                label={r(city)} // 번역된 이름 보여주기
+                onClick={oncityClick}
+              />
             ))}
-
-          {isSigunguDropBox && <SigunguButtonList city={city} onSigunguClick={onSigunguClick} />}
+          {isSigunguDropBox && (
+            <SigunguButtonList city={city} onSigunguClick={onSigunguClick} tRegion={r} />
+          )}
         </section>
         <div
           onClick={() => closeDropBox()}

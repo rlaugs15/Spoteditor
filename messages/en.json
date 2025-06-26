@@ -1,0 +1,611 @@
+{
+  "Toast": {
+    "clipboard": {
+      "copySuccess": "URL copied to clipboard!",
+      "copyError": "Failed to copy URL to clipboard."
+    },
+    "logCreate": {
+      "delayed": "Image upload is taking a bit longer than usual.",
+      "delayedDescription": "Please wait a moment...",
+      "stillUploading": "Still uploading... Please wait a bit more.",
+      "success": "Upload completed successfully.",
+      "redirect": "Redirecting to the page. Please wait a moment.",
+      "error": "Upload failed. Please try again."
+    },
+    "logEdit": {
+      "success": "Log updated successfully",
+      "error": "Failed to update the log"
+    },
+    "logDelete": {
+      "success": "Log deleted successfully.",
+      "error": "Failed to delete the log. Please try again."
+    },
+    "account": {
+      "deleteSuccess": "Account deleted successfully",
+      "deleteError": "Failed to delete account"
+    },
+    "auth": {
+      "logoutSuccess": "Logout successful",
+      "logoutError": "Logout failed. Please try again."
+    }
+  },
+  "LoginModal": {
+    "title": "Spoteditor",
+    "login": "Login",
+    "description": "Log in now and stay updated with the latest news\nfrom Spoteditor every day.",
+    "agreementNotice": {
+      "beforeLinks": "By logging in, you agree to the",
+      "middle": "and",
+      "afterLinks": "."
+    },
+    "dataCollection": "We collect your email, name, and profile image to provide the service.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  },
+  "LoginStatus": {
+    "loginOrSignup": "Sign Up / Login"
+  },
+  "UserDropdown": {
+    "writeLog": "Write Log",
+    "contact": "Contact Us",
+    "logout": "Logout",
+    "notice": "Notice",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "viewProfile": "View Profile"
+  },
+  "Follow": {
+    "label": {
+      "follower": "Followers",
+      "following": "Following"
+    },
+    "button": {
+      "follow": "Follow",
+      "following": "Following"
+    },
+    "modalTitle": {
+      "follower": "Followers",
+      "following": "Following"
+    }
+  },
+  "HomePage": {
+    "title1": "Not sure where to go?",
+    "title2": "Meet curated courses made by trend-savvy",
+    "title3": "spot editors Just for you!",
+    "citySearchForm": {
+      "cityLabel": "Where do you want to go?",
+      "sigunguLabel": "Search more specifically!",
+      "cityPlaceholder": "Seoul",
+      "sigunguPlaceholder": "Songpa-gu",
+      "searchButton": "Search",
+      "dropbox": {
+        "cityTitle": "Select city",
+        "sigunguTitle": "Select neighborhood",
+        "subtitle": "New areas will appear when editors add new places!"
+      }
+    },
+    "registerCourse": "Register my recommended course",
+    "registerCourseDescription": {
+      "line1": "Share your favorite hidden spots and food places, and let others discover your route.",
+      "line2": "\"Someone spent a great day with the course I created!\", how awesome is that?",
+      "line3": "Isn't it just delightful to imagine? 🥰",
+      "line4": "Share your own course so others can use it as a reference.",
+      "line5": "The course you make will inspire many others!"
+    }
+  },
+  "ProfilePage": {
+    "defaultDescription": "A place to capture little joys and special moments ☕️\nFrom daily happiness to travel memories 🏞️",
+    "edit": "Edit",
+    "tab": {
+      "myLog": "My Logs",
+      "savedSpaces": "Saved Places",
+      "savedLog": "Saved Logs"
+    },
+    "fallback": {
+      "myLog": "Your personal log\nStart by uploading your first post!",
+      "empty": "No saved {resourceName} found.\nExplore logs and save your favorite places!"
+    },
+    "resource": {
+      "log": "log",
+      "place": "place"
+    }
+  },
+  "ProfileEditor": {
+    "title": "Edit Profile",
+    "nickname": {
+      "label": "Nickname"
+    },
+    "description": {
+      "label": "Profile Description",
+      "placeholder": "Enter your profile description."
+    },
+    "instagram": {
+      "label": "Instagram"
+    },
+    "cancel": "Cancel",
+    "save": "Save",
+    "toast": {
+      "success": "Profile updated successfully.",
+      "error": "Failed to update profile."
+    },
+    "account": {
+      "title": "Account Settings",
+      "label": "Delete Account",
+      "description": "When deleting your account, all data will be permanently deleted and cannot be recovered.\nPlease make your decision carefully.",
+      "trigger": "Delete",
+      "dialog": {
+        "title": "Delete Account",
+        "confirm": "Your logs will be permanently deleted.\nAre you sure you want to delete your account?",
+        "success": "Your account has been successfully deleted."
+      },
+      "toast": {
+        "success": "Account deletion successful",
+        "error": "Account deletion failed"
+      }
+    },
+    "common": {
+      "cancel": "Cancel",
+      "ok": "OK"
+    }
+  },
+  "SearchPage": {
+    "input": {
+      "placeholder": "What are you looking for..."
+    },
+    "result": {
+      "empty": "No results found."
+    }
+  },
+  "Register": {
+    "TagIntro": {
+      "mood": {
+        "title": "What kind of day was it?",
+        "description": "You can select multiple options (up to 10)"
+      },
+      "country": {
+        "title": "Please select a country.",
+        "description": "Choose the main country."
+      },
+      "city": {
+        "title": "Choose a City",
+        "description": "Please select your main City."
+      },
+      "area": {
+        "title": "Choose a Area",
+        "description": "Please select your main Area."
+      },
+      "sigungu": {
+        "title": "Choose a Si/Gun/Gu",
+        "description": "Please select your main Si/Gun/Gu."
+      }
+    },
+    "MoodPage": {
+      "group": {
+        "withWhom": "With whom",
+        "whatFeeling": "What kind of vibe"
+      }
+    },
+    "CountryPage": {
+      "groupTitle": "Country",
+      "options": {
+        "국내": "Domestic",
+        "국외": "Overseas"
+      }
+    },
+    "CityPage": {
+      "groupTitle": "Region",
+      "city": "City",
+      "area": "Area"
+    },
+    "sigungu": {
+      "groupTitle": "Si/Gun/Gu",
+      "sigungu": "Si/Gun/Gu",
+      "city": "City"
+    },
+    "Footer": {
+      "next": "Next",
+      "skip": "Do it later"
+    },
+    "LogPage": {
+      "loading": "Loading...",
+      "addPlace": "Add place",
+      "titlePlaceholder": "Enter a title. (Max 30 characters)",
+      "coverImage": "Cover Image",
+      "contentPlaceholder": "Enter the content. (Max 500 characters)",
+      "placeNameLabel": "Enter the name of the place",
+      "locationPlaceholder": "Enter the location.",
+      "uploadImage": "Upload Image",
+      "uploadPictures": "Upload Pictures",
+      "uploadPicturesLimit": "Up to 8",
+      "imageDeleteLimit": "At least one image is required per place.",
+      "maxPlaceError": "You can register up to 10 places.",
+      "maxImageError": "You can upload up to 8 images.",
+      "deleteWarning": "Logs may be deleted if inappropriate images are detected.",
+      "submit": "Submit",
+      "uploadedImageAlt": "Uploaded image",
+      "removeImageAriaLabel": "Remove image",
+      "confirmCreate": "Do you want to register the log {logTitle}?",
+      "confirmEdit": "Do you want to edit the log {logTitle}?",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "actionCreate": "create",
+      "actionEdit": "edit"
+    }
+  },
+  "LogEditPage": {
+    "delete": {
+      "delete": "Delete",
+      "confirmMessage": "Are you sure you want to delete this log?",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "place": {
+      "minError": "At least one place is required."
+    },
+    "warning": {
+      "imagePolicy": "Logs may be deleted if inappropriate images are detected."
+    },
+    "tag": {
+      "mood": "With whom",
+      "activity": "What kind of mood"
+    }
+  },
+  "CountryType": {
+    "국내": "Domestic",
+    "국외": "Overseas"
+  },
+  "Category": {
+    "레스토랑": "Restaurant",
+    "카페/베이커리": "Cafe / Bakery",
+    "미술관": "Art Museum",
+    "음악/공연장": "Music / Venue",
+    "힐링/여가": "Healing / Leisure",
+    "숙박/호텔": "Accommodation / Hotel",
+    "쇼핑": "Shopping",
+    "바": "Bar",
+    "서점/도서관": "Bookstore / Library",
+    "자연/공원": "Nature / Park",
+    "교통": "Transportation",
+    "헬스장": "Gym",
+    "병원/약국": "Hospital / Pharmacy",
+    "캠핑장": "Campground",
+    "그 외": "Others"
+  },
+  "MoodTags": {
+    "혼자": "Alone",
+    "친구랑": "With friends",
+    "연인과": "With a partner",
+    "가족과": "With family",
+    "동료와": "With coworkers",
+    "반려동물과": "With a pet",
+    "SNS 핫플레이스": "SNS Hotspot",
+    "체험 · 액티비티": "Experience · Activity",
+    "자연과 함께": "With nature",
+    "유명 관광지": "Famous tourist spot",
+    "여유롭게 힐링": "Relax and heal",
+    "미술관 · 갤러리": "Museum · Gallery",
+    "알차고 바쁘게!": "Busy and productive!",
+    "역사가 물든": "Rich in history",
+    "여행지": "Travel destination",
+    "쇼핑": "Shopping",
+    "맛집투어": "Food tour",
+    "음악": "Music",
+    "페스티벌": "Festival",
+    "독서하며 잔잔하게": "Quiet time with a book",
+    "모임 · 동호회": "Gathering · Club",
+    "가성비 굿": "Great value for money"
+  },
+  "Region": {
+    "가나": "Ghana",
+    "가평군": "Gapyeong-gun",
+    "강남구": "Gangnam-gu",
+    "강동구": "Gangdong-gu",
+    "강릉시": "Gangneung City",
+    "강북구": "Gangbuk-gu",
+    "강서구": "Gangseo-gu",
+    "강원": "Gangwon",
+    "강진군": "Gangjin-gun",
+    "강화군": "Gangwha-gun",
+    "거제시": "Geoje City",
+    "거창군": "Geochang-gun",
+    "경기": "Gyeonggi",
+    "경남": "Gyeongnam",
+    "경북": "Gyeongbuk",
+    "경산시": "Gyeongsan City",
+    "경주시": "Gyeongju City",
+    "계룡시": "Gyeryong City",
+    "계양구": "Gyeyang-gu",
+    "고령군": "Goryeong-gun",
+    "고성군": "Gosung-gun",
+    "고양시": "Goyang city",
+    "고창군": "Gochang-gun",
+    "고흥군": "Goheung-gun",
+    "곡성군": "Gokseong-gun",
+    "공주시": "Gongju City",
+    "과천시": "Gwacheon City",
+    "과테말라": "Guatemala",
+    "관악구": "Gwanak-gu",
+    "광명시": "Gwangmyeong City",
+    "광산구": "Gwangsan-gu",
+    "광양시": "Gwangyang City",
+    "광주": "Gwangju",
+    "광주시": "Gwangju City",
+    "광진구": "Gwangjin-gu",
+    "괴산군": "Goesan-gun",
+    "구례군": "Gurye-gun",
+    "구로구": "Guro-gu",
+    "구리시": "Guri City",
+    "구미시": "Gumi City",
+    "군산시": "Gunsan City",
+    "군위군": "Gunwi-gun",
+    "군포시": "Gunpo City",
+    "그리스": "Greece",
+    "금산군": "Geumsan-gun",
+    "금정구": "Geumjeong-gu",
+    "금천구": "Geumcheon-gu",
+    "기장군": "Gijang-gun",
+    "김제시": "Gimje City",
+    "김천시": "Gimcheon City",
+    "김포시": "Gimpo City",
+    "김해시": "Gimhae City",
+    "나이지리아": "Nigeria",
+    "나주시": "Naju City",
+    "남구": "Nam-gu",
+    "남동구": "Namdong-gu",
+    "남아메리카": "South America",
+    "남아프리카공화국": "South Africa",
+    "남양주시": "Namyangju City",
+    "남원시": "Namwon City",
+    "남해군": "Namhae-gun",
+    "네덜란드": "Netherlands",
+    "네팔": "Nepal",
+    "노르웨이": "Norway",
+    "노원구": "Nowon-gu",
+    "논산시": "Nonsan City",
+    "뉴질랜드": "New Zealand",
+    "단양군": "Danyang-gun",
+    "달서구": "Dalseo-gu",
+    "달성군": "Dal Sung-gun",
+    "담양군": "Damyang-gun",
+    "당진시": "Dangjin City",
+    "대구": "Daegu",
+    "대덕구": "Daedeok-gu",
+    "대만": "Taiwan",
+    "대전": "Daejeon",
+    "덕진구": "Deokjin-gu",
+    "덴마크": "Denmark",
+    "도미니카공화국": "Dominican Republic",
+    "도봉구": "Dobong-gu",
+    "독일": "Germany",
+    "동구": "Dong-gu",
+    "동대문구": "Dongdaemun-gu",
+    "동두천시": "Dongducheon City",
+    "동래구": "Dongrae-gu",
+    "동작구": "Dongjak-gu",
+    "동해시": "Donghae City",
+    "레바논": "Lebanon",
+    "마포구": "Mapo-gu",
+    "말레이시아": "Malaysia",
+    "멕시코": "Mexico",
+    "모로코": "Morocco",
+    "목포시": "Mokpo City",
+    "몽골": "Mongolia",
+    "무안군": "Muan-gun",
+    "무주군": "Muju-gun",
+    "문경시": "Mungyeong City",
+    "미국": "USA",
+    "미추홀구": "Michuhol-gu",
+    "밀양시": "Miryang City",
+    "베네수엘라": "Venezuela",
+    "베트남": "Vietnam",
+    "벨기에": "Belgium",
+    "보령시": "Boryeong City",
+    "보성군": "Boseong-gun",
+    "보은군": "Boeun-gun",
+    "볼리비아": "Bolivia",
+    "봉화군": "Bonghwa-gun",
+    "부산": "Busan",
+    "부산진구": "Busanjin-gu",
+    "부안군": "Buan-gun",
+    "부여군": "Buyeo-gun",
+    "부천시": "Bucheon City",
+    "부평구": "Bupyeong-gu",
+    "북구": "Buk-gu",
+    "북아메리카": "North America",
+    "브라질": "Brazil",
+    "사모아": "Samoa",
+    "사상구": "Sasang-gu",
+    "사우디아라비아": "Saudi Arabia",
+    "사천시": "Sacheon City",
+    "사하구": "Saha-gu",
+    "산청군": "Sancheong-gun",
+    "삼척시": "Samcheok City",
+    "상주시": "Sangju City",
+    "서구": "Western",
+    "서귀포시": "Seogwipo City",
+    "서대문구": "Seodaemun-gu",
+    "서산시": "Seosan City",
+    "서울": "Seoul",
+    "서천군": "Seocheon-gun",
+    "서초구": "Seocho-gu",
+    "성남시": "Seongnam City",
+    "성동구": "Seongdong-gu",
+    "성북구": "Seongbuk-gu",
+    "성주군": "Seongju-gun",
+    "세종": "Sejong",
+    "세종시": "Sejong City",
+    "속초시": "Sokcho City",
+    "송파구": "Songpa-gu",
+    "수성구": "Suseong-gu",
+    "수영구": "Suyeong-gu",
+    "수원시": "Suwon City",
+    "순창군": "Sunchang-gun",
+    "순천시": "Suncheon City",
+    "스리랑카": "Sri Lanka",
+    "스웨덴": "Sweden",
+    "스위스": "Swiss",
+    "스페인": "Spain",
+    "시흥시": "Siheung City",
+    "신안군": "Shinan-gun",
+    "싱가포르": "Singapore",
+    "아랍에미리트": "United Arab Emirates",
+    "아르헨티나": "Argentina",
+    "아산시": "Asan City",
+    "아시아": "Asia",
+    "아이슬란드": "Iceland",
+    "아프리카": "Africa",
+    "안동시": "Andong City",
+    "안산시": "Ansan City",
+    "안성시": "Anseong City",
+    "안양시": "Anyang City",
+    "알제리": "Algeria",
+    "양구군": "Yanggu-gun",
+    "양산시": "Yangsan City",
+    "양양군": "Yangyang-gun",
+    "양주시": "Yangju city",
+    "양천구": "Yangcheon-gu",
+    "양평군": "Yangpyeong-gun",
+    "에콰도르": "Ecuador",
+    "에티오피아": "Ethiopia",
+    "여수시": "Yeosu City",
+    "여주시": "Yeoju City",
+    "연수구": "Yeonsu-gu",
+    "연제구": "Yeonje-gu",
+    "연천군": "Yeoncheon-gun",
+    "영광군": "Yeonggwang-gun",
+    "영국": "United Kingdom",
+    "영덕군": "Yeongdeok-gun",
+    "영도구": "Yeongdo-gu",
+    "영동군": "Yeongdong-gun",
+    "영등포구": "Yeongdeungpo-gu",
+    "영암군": "Yeongam-gun",
+    "영양군": "Yeongyang-gun",
+    "영월군": "Yeongwol-gun",
+    "영주시": "Yeongju City",
+    "영천시": "Yeongcheon City",
+    "예산군": "Yesan-gun",
+    "예천군": "Yecheon-gun",
+    "오만": "Oman",
+    "오산시": "Osan City",
+    "오세아니아": "Oceania",
+    "오스트리아": "Austria",
+    "옥천군": "Okcheon-gun",
+    "옹진군": "Ongjin-gun",
+    "완도군": "Wando-gun",
+    "완주군": "Wanju-gun",
+    "요르단": "Jordan",
+    "용산구": "Yongsan-gu",
+    "용인시": "Yongin City",
+    "우루과이": "Uruguay",
+    "우즈베키스탄": "Uzbekistan",
+    "울릉군": "Ulleung-gun",
+    "울산": "Ulsan",
+    "울주군": "Ulju-gun",
+    "울진군": "Uljin-gun",
+    "원주시": "Wonju city",
+    "유럽": "Europe",
+    "유성구": "Yuseong-gu",
+    "은평구": "Eunpyeong-gu",
+    "음성군": "Eumseong-gun",
+    "의령군": "Uiryeong-gun",
+    "의성군": "Uiseong-gun",
+    "의왕시": "Uiwang City",
+    "의정부시": "Uijeongbu City",
+    "이라크": "Iraq",
+    "이란": "Iran",
+    "이스라엘": "Israel",
+    "이집트": "Egypt",
+    "이천시": "Icheon City",
+    "이탈리아": "Italy",
+    "익산시": "Iksan City",
+    "인도": "India",
+    "인도네시아": "Indonesia",
+    "인제군": "Inje-gun",
+    "인천": "Incheon",
+    "일본": "Japan",
+    "임실군": "Imsil-gun",
+    "장성군": "Jangseong-gun",
+    "장수군": "Jangsu-gun",
+    "장흥군": "Jangheung-gun",
+    "전남": "Jeonnam",
+    "전북": "Jeonbuk",
+    "전주시": "Jeonju city",
+    "정선군": "Jeongseon-gun",
+    "정읍시": "Jeongeup-gun",
+    "제주": "Jeju",
+    "제주시": "Jeju City",
+    "제천시": "Jecheon City",
+    "종로구": "Jongno-gu",
+    "중구": "Jung-gu",
+    "중국": "China",
+    "중동": "Middle East",
+    "중랑구": "Jungnang-gu",
+    "증평군": "Jeungpyeong-gun",
+    "진도군": "Jindo-gun",
+    "진안군": "Jinan-gun",
+    "진주시": "Jinju City",
+    "진천군": "Jincheon-gun",
+    "창녕군": "Changnyeong-gun",
+    "창원시": "Changwon City",
+    "천안시": "Cheonan City",
+    "철원군": "Cheorwon-gun",
+    "청도군": "Cheongdo-gun",
+    "청송군": "Cheongsong-gun",
+    "청양군": "Cheongyang-gun",
+    "청주시": "Cheongju City",
+    "체코": "Czechia",
+    "춘천시": "Chuncheon City",
+    "충남": "Chungnam",
+    "충북": "Chungbuk",
+    "충주시": "Chungju city",
+    "칠곡군": "Chilgok-gun",
+    "칠레": "Chile",
+    "카자흐스탄": "Kazakhstan",
+    "카타르": "Qatar",
+    "캐나다": "Canada",
+    "케냐": "Kenya",
+    "코스타리카": "Costa Rica",
+    "콜롬비아": "Colombia",
+    "쿠바": "Cuba",
+    "크로아티아": "Croatia",
+    "탄자니아": "Tanzania",
+    "태국": "Thailand",
+    "태백시": "Taebaek City",
+    "태안군": "Taean-gun",
+    "터키": "Türkiye",
+    "통가": "Tonga",
+    "통영시": "Tongyeong City",
+    "튀니지": "Tunisia",
+    "파나마": "Panama",
+    "파라과이": "Paraguay",
+    "파주시": "Paju City",
+    "파푸아뉴기니": "Papua New Guinea",
+    "페루": "Peru",
+    "평창군": "Pyeongchang-gun",
+    "평택시": "Pyeongtaek City",
+    "포르투갈": "Portugal",
+    "포천시": "Pocheon City",
+    "포항시": "Pohang City",
+    "폴란드": "Poland",
+    "프랑스": "France",
+    "피지": "Fiji",
+    "핀란드": "Finland",
+    "필리핀": "Philippines",
+    "하남시": "Hanam City",
+    "하동군": "Hadong-gun",
+    "함안군": "Haman-gun",
+    "함양군": "Hamyang-gun",
+    "함평군": "Hampyeong-gun",
+    "합천군": "Hapcheon-gun",
+    "해남군": "Haenam-gun",
+    "해운대구": "Haeundae-gu",
+    "헝가리": "Hungary",
+    "호주": "Australia",
+    "홍성군": "Hongseong-gun",
+    "홍천군": "Hongcheon-gun",
+    "화성시": "Hwaseong City",
+    "화순군": "Hwasun-gun",
+    "화천군": "Hwacheon-gun",
+    "횡성군": "Hoengseong-gun"
+  }
+}

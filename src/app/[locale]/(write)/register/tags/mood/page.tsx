@@ -2,14 +2,16 @@ import { RegisterFooter } from '@/components/common/Footer';
 import { PageIntro } from '@/components/features/log/register/tags';
 import MultiTagGroup from '@/components/features/log/register/tags/MultiTagGroup';
 import { REGISTER_PATHS } from '@/constants/pathname';
+import { getTranslations } from 'next-intl/server';
 
-const MoodSelectionPage = () => {
+const MoodSelectionPage = async () => {
+  const t = await getTranslations('Register.MoodPage.group');
   return (
     <>
       <PageIntro type="mood" />
       <div className="grow">
-        <MultiTagGroup title="누구와" type="mood" />
-        <MultiTagGroup title="어떤 느낌으로" type="activity" />
+        <MultiTagGroup title={t('withWhom')} type="mood" />
+        <MultiTagGroup title={t('whatFeeling')} type="activity" />
       </div>
       <RegisterFooter
         tagTargets={['mood', 'activity']}

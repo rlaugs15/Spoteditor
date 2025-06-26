@@ -5,6 +5,7 @@ import { FormField, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useImagePreview from '@/hooks/useImagePreview';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useFormContext } from 'react-hook-form';
 
@@ -18,6 +19,8 @@ const SingleImageForm = ({ name, label, edit }: SingleImageFormProps) => {
   const { control, getValues } = useFormContext();
   const initialImage = getValues(name);
   const { previewUrl, isLoading, handleFileChange, clearPreview } = useImagePreview(initialImage);
+
+  const t = useTranslations('Register.LogPage');
   return (
     <div className="flex flex-col">
       <FormLabel htmlFor="single-upload" className={cn(previewUrl && 'hidden')}>
@@ -34,7 +37,7 @@ const SingleImageForm = ({ name, label, edit }: SingleImageFormProps) => {
             <>
               <AddCameraIcon />
               <span>
-                {label || '이미지 업로드'}
+                {label || t('uploadImage')}
                 <span className="text-error-500">*</span>
               </span>
             </>
@@ -71,14 +74,14 @@ const SingleImageForm = ({ name, label, edit }: SingleImageFormProps) => {
             <Image
               src={previewUrl}
               fill
-              alt="업로드한 이미지"
+              alt={t('uploadedImageAlt')}
               className="object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             <button
               onClick={clearPreview}
               className={cn(edit && 'hidden')}
-              aria-label="이미지 제거"
+              aria-label={t('removeImageAriaLabel')}
               type="button"
             >
               <XRemoveThumbnailIcon className="absolute top-2 right-2 cursor-pointer hover:brightness-90" />

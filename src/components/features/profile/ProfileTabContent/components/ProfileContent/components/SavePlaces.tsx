@@ -15,6 +15,7 @@ import ProfileFallbackMessage from '@/components/features/profile/fallback/Profi
 import usePlacesBookmark from '@/hooks/queries/place/usePlacesBookmark';
 import useUser from '@/hooks/queries/user/useUser';
 import usePagination from '@/hooks/usePagination';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
@@ -25,6 +26,7 @@ interface SavePlacesProps {
 export default function SavePlaces({ userId }: SavePlacesProps) {
   const { data: me } = useUser();
   const { currentPage, handlePageChange } = usePagination();
+  const t = useTranslations('ProfilePage');
 
   const { data, isPending, refetch } = usePlacesBookmark({
     userId,
@@ -45,7 +47,7 @@ export default function SavePlaces({ userId }: SavePlacesProps) {
     return <Loading className="min-h-[350px]" />;
   }
   if (data && (!data.success || data.data.length === 0)) {
-    return <ProfileFallbackMessage resourceName="장소" />;
+    return <ProfileFallbackMessage resourceName={t('resource.place')} />;
   }
   return (
     <>
