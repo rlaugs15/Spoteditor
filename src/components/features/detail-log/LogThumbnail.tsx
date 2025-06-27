@@ -19,12 +19,12 @@ const LogThumbnail = ({ logData, isAuthor }: LogThumbnailProps) => {
 
   const activities = log_tag.filter((item) => item.category === 'activity');
   return (
-    <section className="relative overflow-hidden h-[488px] flex flex-col justify-between px-4 web:px-[50px] pt-4 pb-8 bg-black">
+    <section className="relative overflow-hidden h-[488px] flex flex-col justify-between px-4 web:px-[50px] pt-4 pb-8">
       <Image
         src={getStoragePublicImage(thumbnail_url as string)}
         alt="로그 썸네일 이미지"
         fill
-        className="object-cover web:blur-md"
+        className="object-cover web:blur-md scale-110"
       />
       <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient" />
 

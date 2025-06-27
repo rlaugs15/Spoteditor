@@ -1,18 +1,16 @@
 import { z } from 'zod';
 
 export const imageFileSchema = z.instanceof(Blob);
-
-export const PlaceimageSchema = z.object({
+export const PlaceImageSchema = z.object({
   file: imageFileSchema,
 });
-
 export const placeSchema = z.object({
   placeName: z.string().min(1, '장소 이름은 필수입니다.'),
   category: z.string().min(1, '카테고리명은 필수입니다.'),
   location: z.string().min(1, '위치 정보 필수입니다.'),
   description: z.string().nullable(),
   placeImages: z
-    .array(PlaceimageSchema)
+    .array(PlaceImageSchema)
     .max(8, { message: '최대 8장의 이미지만 업로드 가능합니다.' })
     .min(1, '장소 최소 1장은 필수입니다.'),
 });
@@ -28,7 +26,9 @@ export const addressSchema = z.object({
   sigungu: z.string(),
 });
 
-export const LogformSchema = z.object({
+export const AddedPlaceSchema = placeSchema; // 로그 수정 시 새로 추가된 장소
+
+export const LogFormSchema = z.object({
   logTitle: z.string().max(30).min(1, '로그 제목은 필수입니다.'),
   thumbnail: imageFileSchema,
   logDescription: z.string(),
@@ -51,13 +51,10 @@ export const SavedPlaceImageSchema = z.object({
 export const EditPlaceSchema = placeSchema.extend({
   id: z.string(),
   order: z.number(),
-  placeImages: z
-    .array(SavedPlaceImageSchema)
-    .max(15, { message: '최대 15장의 이미지만 업로드 가능합니다.' })
-    .min(1, '장소 최소 1장은 필수입니다.'),
+  placeImages: z.array(SavedPlaceImageSchema).min(1, '장소 최소 1장은 필수입니다.'),
 });
 
-export const LogEditformSchema = z.object({
+export const LogEditFormSchema = z.object({
   logTitle: z.string().max(30).min(1, '로그 제목은 필수입니다.'),
   thumbnail: z.string(),
   logDescription: z.string().nullable(),
@@ -65,4 +62,5 @@ export const LogEditformSchema = z.object({
   tags: tagsSchema,
   deletedPlace: z.array(z.string()),
   deletedPlaceImages: z.array(z.number()),
+  addedPlace: z.array(placeSchema), // 새로 추가된 장소
 });

@@ -57,6 +57,31 @@ export async function createLog(values: PreparedValues) {
   }
 }
 
+/* 장소 추가 */
+export async function addPlaceToLog(
+  placeDataList: NewPlace[],
+  placeImageDataList: NewPlaceImage[]
+) {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) throw new Error('유저 없음');
+
+    console.time('🗃️ DB 삽입');
+    await insertLogToDB({
+      placeDataList,
+      placeImageDataList,
+    });
+    console.timeEnd('🗃️ DB 삽입');
+    return { success: true };
+  } catch (e) {
+    console.error(e);
+    return { success: false, msg: '장소 추가 실패' };
+  }
+}
+
 /* 테이블에 데이터 삽입 */
 async function insertLogToDB({
   logData,
@@ -65,18 +90,20 @@ async function insertLogToDB({
   placeImageDataList,
   addressData,
 }: {
-  logData: NewLog;
+  logData?: NewLog;
   tagsData?: NewTag[];
-  placeDataList: NewPlace[];
-  placeImageDataList: NewPlaceImage[];
-  addressData: NewAddress;
+  placeDataList?: NewPlace[];
+  placeImageDataList?: NewPlaceImage[];
+  addressData?: NewAddress;
 }) {
   const supabase = await createClient();
 
-  const { error: logError } = await supabase.from('log').insert(logData);
-  if (logError) {
-    console.error(logError);
-    throw new Error('로그 테이블 업데이트 실패');
+  if (logData) {
+    const { error: logError } = await supabase.from('log').insert(logData);
+    if (logError) {
+      console.error(logError);
+      throw new Error('로그 테이블 업데이트 실패');
+    }
   }
 
   if (tagsData) {
@@ -87,21 +114,27 @@ async function insertLogToDB({
     }
   }
 
-  const { error: placeError } = await supabase.from('place').insert(placeDataList);
-  if (placeError) {
-    console.error(placeError);
-    throw new Error('장소 테이블 업데이트 실패');
+  if (placeDataList) {
+    const { error: placeError } = await supabase.from('place').insert(placeDataList);
+    if (placeError) {
+      console.error(placeError);
+      throw new Error('장소 테이블 업데이트 실패');
+    }
   }
 
-  const { error: addressError } = await supabase.from('address').insert(addressData);
-  if (addressError) {
-    console.error(addressError);
-    throw new Error('주소 테이블 업데이트 실패');
+  if (addressData) {
+    const { error: addressError } = await supabase.from('address').insert(addressData);
+    if (addressError) {
+      console.error(addressError);
+      throw new Error('주소 테이블 업데이트 실패');
+    }
   }
 
-  const { error: imageError } = await supabase.from('place_images').insert(placeImageDataList);
-  if (imageError) {
-    console.error(imageError);
-    throw new Error('장소 이미지 테이블 업데이트 실패');
+  if (placeImageDataList) {
+    const { error: imageError } = await supabase.from('place_images').insert(placeImageDataList);
+    if (imageError) {
+      console.error(imageError);
+      throw new Error('장소 이미지 테이블 업데이트 실패');
+    }
   }
 }

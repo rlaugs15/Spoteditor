@@ -6,8 +6,9 @@ import PhotoTextSection from '@/components/features/log/register/PhotoTextSectio
 import MultiTagGroup from '@/components/features/log/register/tags/MultiTagGroup';
 import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
+import useAddPlaceMutation from '@/hooks/mutations/log/useAddPlaceMutation';
 import useLogEditMutation from '@/hooks/mutations/log/useLogEditMutation';
-import { LogEditformSchema } from '@/lib/zod/logSchema';
+import { LogEditFormSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { DetailLog } from '@/types/api/log';
 import { LogEditFormValues } from '@/types/log';
@@ -19,9 +20,9 @@ import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
+  const { mutateAsync: editMutate, isPending: editIsPending } = useLogEditMutation();
+  const { mutateAsync: addPlaceMutate, isPending: addPlaceIsPending } = useAddPlaceMutation();
   const t = useTranslations('LogEditPage');
-
-  const { mutate, isPending } = useLogEditMutation();
   const { title, thumbnail_url, description, place: places, log_tag, address, log_id } = logData;
   const initializeTags = useLogCreationStore((state) => state.initializeTags);
   const moodTags = log_tag.filter((t) => t.category === 'mood').map((t) => t.tag);
@@ -30,7 +31,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   const activity = useLogCreationStore((state) => state.activity);
 
   const form = useForm({
-    resolver: zodResolver(LogEditformSchema),
+    resolver: zodResolver(LogEditFormSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
     defaultValues: {
@@ -44,20 +45,16 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
         location: place.address,
         description: place?.description ?? '',
         placeImages: place.place_images,
-        order: place.order,
+        order: place.order, // 이미지 순서
       })),
       tags: {
         mood: moodTags,
         activity: activityTags,
       },
+      addedPlace: [],
       deletedPlace: [],
       deletedPlaceImages: [],
     },
-  });
-
-  const { fields, remove, swap } = useFieldArray<LogEditFormValues>({
-    control: form.control,
-    name: 'places',
   });
 
   useEffect(() => {
@@ -73,40 +70,151 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     form.setValue('tags.activity', activity, { shouldDirty: true });
   }, [form, activity]);
 
-  const handleDeletePlace = (idx: number) => {
-    if (fields.length === 1) return toast.error(t('place.minError'));
-    const deletedPlaceId = form.getValues(`places.${idx}.id`);
-    const prevDeleted = form.getValues('deletedPlace') ?? [];
-    form.setValue('deletedPlace', [...prevDeleted, deletedPlaceId], { shouldDirty: true });
-    remove(idx);
-  };
-  const handleMovePlaceUp = (idx: number) => {
-    if (idx <= 0) return;
-    swap(idx, idx - 1);
-  };
-  const handleMovePlaceDown = (idx: number) => {
-    if (idx >= fields.length - 1) return;
-    swap(idx, idx + 1);
+  /* 기존 장소 */
+  const {
+    fields: existingPlaces,
+    remove: existingPlaceRemove,
+    swap: existingPlaceSwap,
+  } = useFieldArray<LogEditFormValues>({
+    control: form.control,
+    name: 'places',
+  });
+
+  /* 새 장소 */
+  const {
+    fields: addedPlaces,
+    append: addedPlaceAppend,
+    remove: addedPlaceRemove,
+    swap: addedPlaceSwap,
+  } = useFieldArray<LogEditFormValues>({
+    control: form.control,
+    name: 'addedPlace',
+  });
+
+  // 기존 장소와 새 장소를 합쳐서 렌더링
+  const allPlaces = [
+    ...existingPlaces.map((field, idx) => ({ ...field, type: 'existing', originalIdx: idx })),
+    ...addedPlaces.map((field, idx) => ({ ...field, type: 'added', originalIdx: idx })),
+  ];
+
+  // console.log('allPlaces', allPlaces);
+
+  const handleAddNewPlace = () => {
+    if (allPlaces.length >= 10) {
+      toast.info('장소는 최대 10개까지 등록 가능합니다.');
+      return;
+    }
+    addedPlaceAppend({
+      placeName: '',
+      category: '',
+      location: '',
+      description: '',
+      placeImages: [],
+    });
   };
 
-  const onSubmit = (values: LogEditFormValues) => {
+  const handleDeletePlace = (globalIdx: number) => {
+    if (allPlaces.length === 1) {
+      toast.error('1개의 장소는 필수입니다.');
+      return;
+    }
+
+    const place = allPlaces[globalIdx];
+
+    if (place.type === 'existing') {
+      // 기존 장소 삭제
+      const deletedPlaceId = form.getValues(`places.${place.originalIdx}.id`);
+      if (deletedPlaceId) {
+        const prevDeleted = form.getValues('deletedPlace') ?? [];
+        form.setValue('deletedPlace', [...prevDeleted, deletedPlaceId], { shouldDirty: true });
+      }
+      existingPlaceRemove(place.originalIdx);
+    } else {
+      // 새로 추가된 장소 삭제
+      addedPlaceRemove(place.originalIdx);
+    }
+  };
+
+  const handleMovePlaceUp = (globalIdx: number) => {
+    if (globalIdx <= 0) return;
+
+    const currentPlace = allPlaces[globalIdx];
+    const prevPlace = allPlaces[globalIdx - 1];
+
+    if (currentPlace.type === prevPlace.type) {
+      // 같은 타입끼리 순서 변경
+      if (currentPlace.type === 'existing') {
+        existingPlaceSwap(currentPlace.originalIdx, prevPlace.originalIdx);
+      } else {
+        addedPlaceSwap(currentPlace.originalIdx, prevPlace.originalIdx);
+      }
+    } else {
+      toast.error('기존과 신규 간 순서 변경은 지원하지 않습니다.', {
+        description: '등록 후 변경해주세요.',
+      });
+    }
+  };
+
+  const handleMovePlaceDown = (globalIdx: number) => {
+    if (globalIdx >= allPlaces.length - 1) return;
+
+    const currentPlace = allPlaces[globalIdx];
+    const nextPlace = allPlaces[globalIdx + 1];
+
+    if (currentPlace.type === 'existing' && nextPlace.type === 'existing') {
+      existingPlaceSwap(currentPlace.originalIdx, nextPlace.originalIdx);
+    } else if (currentPlace.type === 'added' && nextPlace.type === 'added') {
+      addedPlaceSwap(currentPlace.originalIdx, nextPlace.originalIdx);
+    } else {
+      toast.error('기존과 신규 간 순서 변경은 지원하지 않습니다.');
+    }
+  };
+
+  const onSubmit = async (values: LogEditFormValues) => {
     const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
 
-    const patchedDirtyValues = {
-      ...dirtyValues,
-      ...(dirtyValues.places && {
-        places: dirtyValues.places.map((place, idx) => ({
-          ...place,
-          id: form.getValues('places')[idx]?.id,
-          order: idx + 1,
-        })),
-      }),
-    };
+    // console.log('dirtyValues', dirtyValues['addedPlace']);
 
-    // console.log('보냅니다', patchedDirtyValues);
+    const hasNewPlaces = dirtyValues['addedPlace'] && dirtyValues['addedPlace'].length > 0;
+    const hasOtherChanges =
+      dirtyValues && Object.keys(dirtyValues).some((key) => key !== 'addedPlace');
 
-    const formData = createFormData(patchedDirtyValues);
-    mutate({ formData, logId: logData.log_id });
+    try {
+      // 새로운 장소가 있으면 먼저 추가
+      if (hasNewPlaces && dirtyValues['addedPlace']) {
+        // 기존 장소의 개수를 계산 (삭제된 장소 제외)
+        const existingPlacesCount = form.getValues('places').length;
+        const deletedPlacesCount = form.getValues('deletedPlace')?.length || 0;
+        const currentExistingPlacesCount = existingPlacesCount - deletedPlacesCount;
+
+        await addPlaceMutate({
+          values: dirtyValues['addedPlace'],
+          logId: logData.log_id,
+          existingOrderCount: currentExistingPlacesCount,
+        });
+      }
+
+      // 나머지 수정사항 처리
+      if (hasOtherChanges) {
+        const patchedDirtyValues = {
+          ...dirtyValues,
+          ...(dirtyValues.places && {
+            places: dirtyValues.places.map((place, idx) => ({
+              ...place,
+              id: form.getValues('places')[idx]?.id,
+              order: idx + 1,
+            })),
+          }),
+        };
+
+        // console.log('보냅니다', patchedDirtyValues);
+        const formData = createFormData(patchedDirtyValues);
+        await editMutate({ formData, logId: logData.log_id });
+      }
+    } catch (error) {
+      // mutation의 onError에서 이미 toast를 보여주므로 여기서는 추가 처리하지 않음
+      console.error('로그 수정 중 오류:', error);
+    }
   };
 
   return (
@@ -116,22 +224,27 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
         sigungu={address[0].sigungu}
         logTitle={title}
         logId={log_id}
+        onAddNewPlace={handleAddNewPlace}
       />
       <Form {...form}>
         <main className="grow bg-white pt-[54px]">
           <TitledInput />
           <PhotoTextSection thumbnail edit />
           <div className="flex flex-col gap-4">
-            {fields.map((field, idx) => (
-              <PlaceForm
-                key={field.id}
-                idx={idx}
-                onDeletePlace={handleDeletePlace}
-                onMoveUpPlace={handleMovePlaceUp}
-                onMoveDownPlace={handleMovePlaceDown}
-                edit
-              />
-            ))}
+            {allPlaces.map((field, globalIdx) => {
+              return (
+                <PlaceForm
+                  key={field.id}
+                  idx={field.originalIdx} // 각 필드별 인덱스
+                  type={field.type as 'existing' | 'added'}
+                  isEditPage
+                  globalIdx={globalIdx} // 전체 장소 배열에서의 인덱스
+                  onDeletePlace={handleDeletePlace}
+                  onMoveUpPlace={handleMovePlaceUp}
+                  onMoveDownPlace={handleMovePlaceDown}
+                />
+              );
+            })}
           </div>
         </main>
         <>
@@ -147,8 +260,13 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 
       <ConfirmRegistrationDialog
         edit
-        disabled={!form.formState.isValid || form.formState.isSubmitting || isPending}
-        loading={isPending}
+        disabled={
+          !form.formState.isValid ||
+          form.formState.isSubmitting ||
+          editIsPending ||
+          addPlaceIsPending
+        }
+        loading={editIsPending || addPlaceIsPending}
         onSubmitLogForm={form.handleSubmit(onSubmit)}
       />
     </div>
