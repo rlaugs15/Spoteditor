@@ -1,4 +1,4 @@
-import { fetchLog } from '@/app/actions/log';
+import { getLog } from '@/app/actions/log';
 import { getUser } from '@/app/actions/user';
 import { PenBlackIcon, TableIcon } from '@/components/common/Icons';
 import ExtraActionButton from '@/components/features/detail-log/ExtraActionButton';
@@ -19,7 +19,8 @@ interface LogDetailPageProps {
 
 const LogDetailPage = async ({ params }: LogDetailPageProps) => {
   const { logId } = await params;
-  const result = await fetchLog(logId);
+  const result = await getLog(logId);
+
   if (!result.success) {
     notFound();
   }

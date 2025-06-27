@@ -1,5 +1,5 @@
 import { LogIdParams } from '@/app/[locale]/(root)/log/[logId]/page';
-import { fetchLog } from '@/app/actions/log';
+import { getLog } from '@/app/actions/log';
 import XButton from '@/components/common/Button/XButton';
 import PlaceCard from '@/components/common/Card/PlaceCard.tsx/PlaceCard';
 import { ModalContent, ModalHeader } from '@/components/common/Modal';
@@ -9,7 +9,7 @@ interface PlaceCollectProps {
 }
 export default async function PlaceCollect({ params }: PlaceCollectProps) {
   const { logId } = await params;
-  const result = await fetchLog(logId);
+  const result = await getLog(logId);
   if (!result.success) {
     return null;
   }
