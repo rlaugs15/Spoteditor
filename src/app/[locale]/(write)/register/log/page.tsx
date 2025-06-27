@@ -7,7 +7,7 @@ import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
 import { REGISTER_PATHS } from '@/constants/pathname';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
-import { LogformSchema } from '@/lib/zod/logSchema';
+import { LogFormSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/log';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -41,7 +41,7 @@ const LogPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated]);
   const form = useForm({
-    resolver: zodResolver(LogformSchema),
+    resolver: zodResolver(LogFormSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
     defaultValues: {

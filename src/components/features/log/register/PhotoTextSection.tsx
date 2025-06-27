@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import EditMultiImageForm from '../../log/edit/EditMultiImageForm';
+import EditMultiImageForm from '../edit/EditMultiImageForm';
 import MultiImageForm from './MultiImageForm';
 import SingleImageForm from './SingleImageForm';
 import TextForm from './TextForm';
@@ -8,9 +8,10 @@ interface PhotoTextSectionProps {
   thumbnail?: boolean;
   idx?: number;
   edit?: boolean;
+  fieldName?: string;
 }
 
-const PhotoTextSection = ({ thumbnail, idx = 1, edit }: PhotoTextSectionProps) => {
+const PhotoTextSection = ({ thumbnail, idx = 1, edit, fieldName }: PhotoTextSectionProps) => {
   const t = useTranslations('Register.LogPage');
   return (
     <div className="mb-2.5">
@@ -19,9 +20,17 @@ const PhotoTextSection = ({ thumbnail, idx = 1, edit }: PhotoTextSectionProps) =
       ) : edit ? (
         <EditMultiImageForm idx={idx} />
       ) : (
-        <MultiImageForm idx={idx} />
+        <MultiImageForm idx={idx} fieldName={fieldName} />
       )}
-      <TextForm formFieldName={thumbnail ? 'logDescription' : `places.${idx}.description`} />
+      <TextForm
+        formFieldName={
+          thumbnail
+            ? 'logDescription'
+            : fieldName
+            ? `${fieldName}.description`
+            : `places.${idx}.description`
+        }
+      />
     </div>
   );
 };
