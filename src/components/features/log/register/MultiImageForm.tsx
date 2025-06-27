@@ -3,7 +3,6 @@ import { AddCameraIcon } from '@/components/common/Icons';
 import { FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useMultipleImagePreview from '@/hooks/useMultipleImagePreview';
-import { LogFormValues } from '@/types/log';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import { Reorder } from 'motion/react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
@@ -12,15 +11,16 @@ import PlaceImage from '../common/PlaceImage';
 
 interface MultiImageFormProps {
   idx: number;
+  fieldName?: string;
 }
 
 const MAX_IMAGES_LENGTH = 8;
 
-const MultiImageForm = ({ idx }: MultiImageFormProps) => {
-  const { control } = useFormContext<LogFormValues>();
+const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
+  const { control } = useFormContext<any>();
   const { fields, append, remove, replace } = useFieldArray({
     control: control,
-    name: `places.${idx}.placeImages`,
+    name: fieldName ? `${fieldName}.placeImages` : `places.${idx}.placeImages`,
   });
 
   const { addFile, removeByFile, reorderPreviews, getPreviewUrl } = useMultipleImagePreview();
@@ -52,7 +52,7 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
   };
 
   const handleReorder = (newOrder: typeof fields) => {
-    reorderPreviews(newOrder.map((item) => item.file));
+    reorderPreviews(newOrder.map((item) => (item as any).file));
     replace(newOrder);
   };
 
@@ -89,7 +89,7 @@ const MultiImageForm = ({ idx }: MultiImageFormProps) => {
             style={{ touchAction: 'pan-x' }}
           >
             {fields.map((field, imageIdx) => {
-              const file = field.file;
+              const file = (field as any).file;
               const previewUrl = getPreviewUrl(file);
 
               return (

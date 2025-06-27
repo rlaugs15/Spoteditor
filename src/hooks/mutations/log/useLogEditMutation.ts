@@ -27,7 +27,9 @@ const useLogEditMutation = () => {
         });
 
         router.replace(`/log/${logId}`);
-        toast.success('로그 수정 성공');
+        toast.success('로그가 성공적으로 수정되었습니다.', {
+          description: '페이지가 이동합니다. 잠시만 기다려 주세요.',
+        });
       }
     },
     onError: () => {
