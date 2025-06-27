@@ -97,7 +97,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     ...addedPlaces.map((field, idx) => ({ ...field, type: 'added', originalIdx: idx })),
   ];
 
-  console.log('allPlaces', allPlaces);
+  // console.log('allPlaces', allPlaces);
 
   const handleAddNewPlace = () => {
     if (allPlaces.length >= 10) {
@@ -173,7 +173,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   const onSubmit = async (values: LogEditFormValues) => {
     const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
 
-    console.log('dirtyValues', dirtyValues['addedPlace']);
+    // console.log('dirtyValues', dirtyValues['addedPlace']);
 
     const hasNewPlaces = dirtyValues['addedPlace'] && dirtyValues['addedPlace'].length > 0;
     const hasOtherChanges =
