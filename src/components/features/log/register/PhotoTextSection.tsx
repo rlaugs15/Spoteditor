@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import EditMultiImageForm from '../edit/EditMultiImageForm';
 import MultiImageForm from './MultiImageForm';
 import SingleImageForm from './SingleImageForm';
@@ -11,6 +12,7 @@ interface PhotoTextSectionProps {
 }
 
 const PhotoTextSection = ({ thumbnail, idx = 1, edit, fieldName }: PhotoTextSectionProps) => {
+  const t = useTranslations('Register.LogPage');
   return (
     <div className="mb-2.5">
       {thumbnail ? (
