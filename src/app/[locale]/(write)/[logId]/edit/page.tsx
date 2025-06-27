@@ -1,6 +1,6 @@
 import { LogIdParams } from '@/app/[locale]/(root)/log/[logId]/page';
 import { fetchLog } from '@/app/actions/log';
-import { HOME } from '@/constants/pathname';
+import { getLocale } from 'next-intl/server';
 import { redirect } from 'next/navigation';
 import LogEditPage from './_EditPage/page';
 interface LogEditServerPageProps {
@@ -9,8 +9,9 @@ interface LogEditServerPageProps {
 
 const LogEditServerPage = async ({ params }: LogEditServerPageProps) => {
   const { logId } = await params;
+  const locale = await getLocale();
   const result = await fetchLog(logId);
-  if (!result.success) redirect(HOME);
+  if (!result.success) redirect(`/${locale}`);
   const logData = result.data;
 
   return <LogEditPage logData={logData} />;
