@@ -23,8 +23,9 @@ export default function ProfileTabs({ me, userId }: ProfileTabsProps) {
   const onTabClick = (tab: 'myLog' | 'savedSpaces' | 'savedLog') => {
     setTab(tab);
   };
+
   return (
-    <nav className="w-full flex justify-center web:justify-start items-center gap-[21px] web:gap-7.5 mb-5 web:mb-7.5">
+    <nav className="w-full flex justify-center web:justify-start items-center gap-[14px] web:gap-7.5 max-[374px]:gap-[14px] mb-5 web:mb-7.5">
       <TabButton
         tabKey="myLog"
         userId={userId}

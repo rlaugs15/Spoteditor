@@ -11,7 +11,7 @@ export default function ToggleLocaleButton() {
   const nextLocale = locale === 'ko' ? 'en' : 'ko';
 
   return (
-    <Button variant={'ghost'} size={'icon'} className="relative group">
+    <Button variant={'ghost'} size={'icon'} asChild className="relative group">
       <Link href={{ pathname }} locale={nextLocale}>
         <GlobeIcon className="absolute group-hover:opacity-0" />
         <GlobeBlackIcon className="opacity-0 group-hover:opacity-100" />

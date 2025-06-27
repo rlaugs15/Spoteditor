@@ -108,6 +108,13 @@ export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
   }
 }
 
+export async function getLog(logId: string) {
+  return unstable_cache(() => fetchLog(logId), [...cacheTags.logDetail(logId)], {
+    tags: [cacheTags.logDetail(logId), globalTags.logAll], // 상위 그룹 태그 추가
+    revalidate: 300,
+  })();
+}
+
 // ===================================================================
 // 로그 삭제
 // ===================================================================
@@ -240,7 +247,7 @@ export async function getLogs(params: LogsParams) {
     () => fetchLogs(params),
     [...queryKey].map((v) => v ?? ''),
     {
-      tags: [tagKey, 'log:all'], // 상위 그룹 태그 추가
+      tags: [tagKey, globalTags.logAll], // 상위 그룹 태그 추가
       revalidate: 300,
     }
   )();
@@ -470,7 +477,7 @@ export async function getSearchLogs(params: SearchParams) {
   return unstable_cache(() => fetchSearchLogs(params), [...searchKeys.list(params)], {
     tags: [
       cacheTags.searchList(params), // 조건별로 구분되는 태그
-      'search:all', // 전체 무효화용 상위 태그
+      globalTags.searchAll, // 전체 무효화용 상위 태그
     ],
     revalidate: 300,
   })();

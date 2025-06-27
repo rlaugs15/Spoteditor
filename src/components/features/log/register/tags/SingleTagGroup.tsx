@@ -60,7 +60,7 @@ const SingleTagGroup = ({ title, type, nextPath }: SingleTagGroupProps) => {
   } else if (tagGroupTitle === '지역') {
     localeTitle = 'Register.CityPage.area';
   } else if (tagGroupTitle === '시/군/구') {
-    localeTitle = 'Register.sigungu.sigungu';
+    localeTitle = 'Register.sigunguPage.sigungu';
   }
   const t = useTranslations();
 
