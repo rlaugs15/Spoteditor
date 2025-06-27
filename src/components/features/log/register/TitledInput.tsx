@@ -2,12 +2,15 @@ import { XInputClearIcon } from '@/components/common/Icons';
 import { FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 const TitledInput = () => {
   const { control, setValue, formState } = useFormContext();
   const logTitle = useWatch({ control, name: 'logTitle' });
   const isError = !!formState.errors?.logTitle;
+
+  const t = useTranslations('Register.LogPage');
   return (
     <div className="flex items-center border-b border-light-100">
       <FormField
@@ -18,7 +21,7 @@ const TitledInput = () => {
             <Input
               {...field}
               type="text"
-              placeholder="제목을 입력해주세요.(최대 30자) *"
+              placeholder={`${t('titlePlaceholder')} *`}
               className={cn('!text-text-md my-2', isError && 'placeholder:text-error-500 ')}
               maxLength={30}
               required

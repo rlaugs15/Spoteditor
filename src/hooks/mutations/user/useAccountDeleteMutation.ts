@@ -1,6 +1,7 @@
 import { followKeys, logKeys, placeKeys, searchKeys, userKeys } from '@/app/actions/keys';
 import { createClient } from '@/lib/supabase/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 export default function useAccountDeleteMutation({
@@ -10,6 +11,7 @@ export default function useAccountDeleteMutation({
   onSuccess?: (msg: string) => void;
   onError?: (msg: string) => void;
 }) {
+  const t = useTranslations('Toast.account');
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -34,11 +36,11 @@ export default function useAccountDeleteMutation({
       return result.msg;
     },
     onSuccess: (msg) => {
-      toast.success('계정 삭제 성공');
+      toast.success(t('deleteSuccess'));
       onSuccess?.(msg);
     },
     onError: (err: Error) => {
-      toast.error('계정 삭제 실패');
+      toast.error(t('deleteError'));
       onError?.(err.message);
     },
   });

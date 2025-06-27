@@ -1,0 +1,914 @@
+{
+  "Toast": {
+    "clipboard": {
+      "copySuccess": "URL copied to clipboard!",
+      "copyError": "Failed to copy URL to clipboard."
+    },
+    "logCreate": {
+      "delayed": "Image upload is taking a bit longer than usual.",
+      "delayedDescription": "Please wait a moment...",
+      "stillUploading": "Still uploading... Please wait a bit more.",
+      "success": "Upload completed successfully.",
+      "redirect": "Redirecting to the page. Please wait a moment.",
+      "error": "Upload failed. Please try again."
+    },
+    "logEdit": {
+      "success": "Log updated successfully",
+      "error": "Failed to update the log"
+    },
+    "logDelete": {
+      "success": "Log deleted successfully.",
+      "error": "Failed to delete the log. Please try again."
+    },
+    "account": {
+      "deleteSuccess": "Account deleted successfully",
+      "deleteError": "Failed to delete account"
+    },
+    "auth": {
+      "logoutSuccess": "Logout successful",
+      "logoutError": "Logout failed. Please try again."
+    }
+  },
+  "LoginModal": {
+    "title": "Spoteditor",
+    "login": "Login",
+    "description": "Log in now and stay updated with the latest news\nfrom Spoteditor every day.",
+    "agreementNotice": {
+      "beforeLinks": "By logging in, you agree to the",
+      "middle": "and",
+      "afterLinks": "."
+    },
+    "dataCollection": "We collect your email, name, and profile image to provide the service.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  },
+  "NoticePage": {
+    "title": "Notices"
+  },
+  "PrivacyPolicyPage": {
+    "title": "Privacy Policy",
+    "intro": "Kitform complies with relevant personal information protection regulations under the Act on Promotion of Information and Communications Network Utilization and the Personal Information Protection Act. We handle personal information lawfully and safely to protect the freedom and rights of data subjects. In accordance with Article 30 of the Personal Information Protection Act, we establish and disclose the following privacy policy to inform data subjects of the procedures and standards for processing and protecting personal information and to promptly handle related complaints.",
+    "articles": {
+      "1": {
+        "title": "Article 1 (Purpose of Personal Information Processing)",
+        "description": "Kitform processes personal information for the following purposes, and the collected information is not used for any other purposes. If the purpose of use changes, necessary measures will be taken in accordance with Article 18 of the Personal Information Protection Act, such as obtaining separate consent.",
+        "items": {
+          "0": "① Service provision and contract fulfillment: We process personal information for providing the Kitform sharing platform service, content delivery, personalized services, user authentication, and service usage analysis.",
+          "1": "② Member management: We process personal information for identity verification, managing membership status, preventing unauthorized use, delivering notices, and handling complaints.",
+          "2": "③ Marketing usage: We process personal information for developing new services, providing personalized services, displaying ads based on statistical traits, verifying service effectiveness, and providing promotional or advertising content (including blocking profile-based ads when users clearly express refusal).",
+          "3": "④ Service improvement: We process personal information for analyzing service usage, improving services, managing usage rights, responding to errors or disruptions, and statistical analysis."
+        }
+      },
+      "2": {
+        "title": "Article 2 (Items of Personal Data Collected)",
+        "description": "The following personal data items are collected by Kitform.",
+        "items": {
+          "0": "① Required Information: Email address, nickname, profile picture, and year of birth are collected during sign-up. \nThis information is essential for using the service.",
+          "1": "② Optional Information: Address information may be optionally collected and used for additional services with the user’s consent.",
+          "2": "③ Automatically Collected Information: Cookies, IP address, user location information (temporary), service usage history, access logs, and device information may be automatically collected during service use.",
+          "3": "④ Information Collected via Social Login: When using social login services such as Kakao or Google, email address, nickname, profile picture, and year of birth are collected from the respective social media platforms."
+        }
+      },
+      "3": {
+        "title": "Article 3 (Methods of Collecting Personal Information)",
+        "description": "Kitform collects personal information using the following methods.",
+        "items": {
+          "0": "① Provided by users during the sign-up and service usage process via social login services such as Kakao and Google.",
+          "1": "② Automatically generated and collected during the use of the service.",
+          "2": "③ Collected during participation in events or promotions (applicable for future events)."
+        }
+      },
+      "4": {
+        "title": "Article 4 (Use and Retention Period of Personal Information)",
+        "description": "Kitform processes and retains personal information within the retention and usage period defined by law or agreed upon when collecting the information from the data subject.",
+        "items": {
+          "0": "① Personal information is retained until the user withdraws membership and is immediately deleted from the database upon withdrawal.",
+          "1": "② Information of long-term inactive users is handled in the same manner as membership withdrawal.",
+          "2": "③ Currently, there are no personal information items that must be retained under applicable laws."
+        }
+      },
+      "5": {
+        "title": "Article 5 (Provision of Personal Information to Third Parties)",
+        "description": "Kitform does not provide personal information to third parties except in the following cases:",
+        "items": {
+          "0": "① When the data subject has given separate consent",
+          "1": "② When required by law or upon request by investigative agencies according to legal procedures and methods"
+        },
+        "footer": "Currently, Kitform does not provide personal information to any third parties."
+      },
+      "6": {
+        "title": "Article 6 (Outsourcing of Personal Information Processing)",
+        "description": "Kitform does not currently outsource personal information processing. However, for future operational efficiency and service quality improvement, such outsourcing may occur. In such cases, Kitform will stipulate necessary matters in contracts in accordance with relevant laws and ensure that the entrusted party safely manages the personal information."
+      },
+      "7": {
+        "title": "Article 7 (Rights and Obligations of Data Subjects and Their Legal Representatives)",
+        "items": {
+          "0": "① Data subjects may exercise the following rights regarding personal information protection at any time:\n- Request access to personal information\n- Request correction in case of errors\n- Request deletion\n- Request suspension of processing",
+          "1": "② The rights in Paragraph 1 may be exercised through writing, email, or fax in accordance with Article 41(1) of the Enforcement Decree of the Personal Information Protection Act. Kitform will respond without delay.",
+          "2": "③ The rights in Paragraph 1 may also be exercised by a legal representative or authorized agent. In this case, a power of attorney in the form prescribed by the Enforcement Rules of the Personal Information Protection Act must be submitted.",
+          "3": "④ Currently, users under the age of 14 can use the service, but the usage policy will be updated soon to restrict usage to those aged 14 and older."
+        }
+      },
+      "8": {
+        "title": "Article 8 (Destruction of Personal Information)",
+        "description": "When personal information becomes unnecessary due to the expiration of the retention period or achievement of the processing purpose, Kitform will destroy the information without delay.",
+        "items": {
+          "0": "① Destruction procedure: A destruction plan will be established for the relevant personal information.",
+          "1": "② Destruction method: Electronic files will be permanently deleted using technical methods, and printed materials will be shredded or incinerated.",
+          "2": "③ Personal information is immediately deleted from the database upon withdrawal, and there is no temporary storage feature."
+        }
+      },
+      "9": {
+        "title": "Article 9 (Measures to Ensure the Security of Personal Information)",
+        "description": "In accordance with Article 29 of the Personal Information Protection Act, Kitform implements the following technical, administrative, and physical measures to ensure the security of personal information.",
+        "items": {
+          "0": "① Minimization and training of personal information handlers: Only designated staff handle personal information, and access is restricted to minimize exposure.",
+          "1": "② Restriction of access to personal information: Access rights to personal information systems are granted, changed, and revoked through AWS security groups and IP restrictions. Intrusion prevention systems are used to block unauthorized access from outside.",
+          "2": "③ Retention and prevention of tampering with access records: Access logs to personal information systems are kept for at least six months and protected from forgery, theft, or loss.",
+          "3": "④ Encryption of personal information: No sensitive information currently requires encryption, but encryption measures will be implemented in the future if necessary.",
+          "4": "⑤ Installation and update of security programs: Security programs are installed and regularly updated and inspected to prevent leakage or damage of personal information due to hacking or viruses."
+        }
+      },
+      "10": {
+        "title": "Article 10 (Automatic Collection Devices for Personal Information)",
+        "items": {
+          "0": "① Kitform uses ‘cookies’ that save and retrieve usage information in order to provide personalized services to users.",
+          "1": "② Purpose of cookies:\n- Used for login/logout processing\n- Block IP duplication\n- Analyze service usage statistics",
+          "2": "③ Method to reject cookies: Kitform does not currently offer a dedicated method to reject cookies, but users can refuse cookie storage through their web browser settings.",
+          "3": "④ If cookies are rejected, some features such as content posting, following users, and bookmarking content may be limited."
+        }
+      },
+      "11": {
+        "title": "Article 11 (Personal Information Protection Officer)",
+        "items": {
+          "0": "① Kitform designates a personal information protection officer responsible for overall tasks related to personal information and for handling complaints and remedies from data subjects.",
+          "1": "② Protection officer:\n- Name: Dahye Jang\n- Contact: 010-5092-9069\n- Email: Please contact customer support via the in-app inquiry feature",
+          "2": "③ If you have any questions, complaints, or requests related to personal information while using Kitform services, you may contact the protection officer. Kitform will respond without delay."
+        }
+      },
+      "12": {
+        "title": "Article 12 (Remedies for Infringement of Rights)",
+        "description": "If you have suffered harm from personal information violations, you may request resolution or consultation from the Personal Information Dispute Mediation Committee or the Korea Internet & Security Agency (KISA). You may also contact the following institutions for other inquiries or complaints related to personal information.",
+        "items": {
+          "0": "① Personal Information Dispute Mediation Committee: 1833-6972 (www.kopico.go.kr)",
+          "1": "② Personal Information Infringement Report Center: 118 (privacy.kisa.or.kr)",
+          "2": "③ Supreme Prosecutors’ Office: 1301 (www.spo.go.kr)",
+          "3": "④ National Police Agency: 182 (cyberbureau.police.go.kr)"
+        }
+      },
+      "13": {
+        "title": "Article 13 (Use of Location Information)",
+        "items": {
+          "0": "① Kitform temporarily uses location information with the user's consent during location-based content registration to help search for places.",
+          "1": "② Location information is used only temporarily when needed during log registration and is not stored or retained.",
+          "2": "③ Location information is not shared with any third parties."
+        }
+      },
+      "14": {
+        "title": "Article 14 (Changes to the Privacy Policy)",
+        "items": {
+          "0": "① This Privacy Policy has been effective since June 9, 2025.",
+          "1": "② If the Privacy Policy is amended, changes will be announced in the in-app notice section at least 7 days before they take effect.",
+          "2": "③ In the case of significant changes, they will be announced at least 30 days in advance, and individual notification may be provided if necessary."
+        }
+      }
+    }
+  },
+  "TermsPage": {
+    "title": "Terms of Service",
+    "subtitle": "Terms of Service for TheSpotEditor",
+    "articles": {
+      "1": {
+        "title": "Article 1 (Purpose)",
+        "description": "These terms set forth the conditions and procedures for using the service provided by Kitform (the “Company”) through TheSpotEditor (the “Service”)."
+      },
+      "2": {
+        "title": "Article 2 (Definitions)",
+        "description": "The definitions of terms used in these terms are as follows:",
+        "items": {
+          "0": "① “Company” refers to Kitform, the provider of the Service.",
+          "1": "② “User” refers to both members and non-members who use the Service provided by the Company in accordance with these terms.",
+          "2": "③ “Member” refers to a person who has registered by providing personal information and can continuously use the Service and receive information from the Company.",
+          "3": "④ “Log” refers to posts that include photos taken by users and descriptions of the places they visited.",
+          "4": "⑤ “Content” refers to all posts, photos, images, videos, and any other data or information posted by users on the Service."
+        }
+      },
+      "3": {
+        "title": "Article 3 (Effect and Changes to the Terms)",
+        "items": {
+          "0": "① These terms apply to all users who wish to use the Service.",
+          "1": "② The Company may change these terms for reasonable reasons, and the changed terms take effect from the date of posting via the notice section in the Service.",
+          "2": "③ If a user does not agree to the changed terms, they may stop using the Service and withdraw. Continued use after the effective date is considered agreement to the changes."
+        }
+      },
+      "4": {
+        "title": "Article 4 (Use of Service)",
+        "items": {
+          "0": "① In principle, the Service is available without age restriction, but it will soon be limited to users aged 14 or older, with prior notice.",
+          "1": "② The Service is available 24/7 in principle, but may be temporarily suspended due to business or technical reasons.",
+          "2": "③ The Company may conduct regular inspections, and the time will be announced on the service screen."
+        }
+      },
+      "5": {
+        "title": "Article 5 (Sign Up)",
+        "items": [
+          "① Sign-up is only available via social login (Google, Facebook, etc.).",
+          [
+            "② Users must provide the following personal information upon registration:",
+            "Email address from the SNS account",
+            "Nickname from the SNS account",
+            "Profile photo from the SNS account",
+            "Year of birth"
+          ],
+          "③ There is no distinction between membership levels."
+        ]
+      },
+      "6": {
+        "title": "Article 6 (Privacy Protection)",
+        "items": {
+          "0": "① The Company values user privacy and complies with the Act on Promotion of Information and Communications Network Utilization and Information Protection, the Personal Information Protection Act, and other relevant laws.",
+          "1": "② Details regarding the collection, use, third-party provision, outsourcing, and disposal of personal information are governed by the Privacy Policy, which can be accessed within the service.",
+          "2": "③ The Personal Information Protection Officer is Dahye Jang, and the contact number is 010-5092-9069.",
+          "3": "④ The Company temporarily collects user location information for search features and deletes it immediately afterward.",
+          "4": "⑤ The Privacy Policy contains detailed terms regarding personal information and is separate from these Terms."
+        }
+      },
+      "7": {
+        "title": "Article 7 (Posting and Management of Content)",
+        "items": [
+          "① Users may post logs including photos and descriptions of places they have visited through the service.",
+          "② The company may delete content without prior notice in the following cases:",
+          [
+            "Posts containing explicit content",
+            "Posts causing discomfort to others",
+            "Posts that violate laws or go against social norms"
+          ],
+          "③ Users may edit the title and description of posts, but not the photos or images."
+        ]
+      },
+      "8": {
+        "title": "Article 8 (Intellectual Property Rights)",
+        "items": {
+          "0": "① Intellectual property rights (including copyrights) to posts and content created by users are jointly owned by the user and the Company.",
+          "1": "② Both the user and the Company may use jointly owned intellectual property without restriction, and neither party is obliged to share profits.",
+          "2": "③ The Company may use user content for marketing purposes, and the user agrees to this.",
+          "3": "④ All copyrights and intellectual property rights of the Service belong to the Company."
+        }
+      },
+      "9": {
+        "title": "Article 9 (Restrictions on Service Use)",
+        "items": [
+          "① If a user engages in any of the following actions, the company may restrict service use or terminate the service agreement without prior notice:",
+          [
+            "Acts that damage or disadvantage the reputation of others",
+            "Infringement of intellectual property rights of others",
+            "Distribution of content that violates public order or morals, such as information, text, or images",
+            "Other illegal or inappropriate acts"
+          ]
+        ]
+      },
+      "10": {
+        "title": "Article 10 (Service Relationship Functions)",
+        "items": [
+          "① Users can follow other users through the follow feature.",
+          "② Comments and messaging features are planned for future development and are not currently available.",
+          "③ Notification services are provided in the following cases:",
+          [
+            "When a new follower is created",
+            "When a followed user posts new content",
+            "When another user bookmarks your post"
+          ]
+        ]
+      },
+      "11": {
+        "title": "Article 11 (Reporting and Handling of Posts)",
+        "items": {
+          "0": "① Users can report inappropriate posts using the inquiry function.",
+          "1": "② The Company will review reported posts and delete them if necessary.",
+          "2": "③ Posts deemed sexually explicit or offensive may be deleted after internal review."
+        }
+      },
+      "12": {
+        "title": "Article 12 (Membership Withdrawal)",
+        "items": {
+          "0": "① Users may request to withdraw their membership at any time, and the Company will immediately process such requests.",
+          "1": "② Upon withdrawal, all personal data of the user will be immediately deleted from the database.",
+          "2": "③ However, data may be retained if required by relevant laws."
+        }
+      },
+      "13": {
+        "title": "Article 13 (Inactive Account Management)",
+        "items": {
+          "0": "① A user who has not used the service for over one year will be classified as inactive.",
+          "1": "② Inactive users will be notified in advance, and their personal data will be separately stored.",
+          "2": "③ To use the service again, inactive users must go through an identity verification process.",
+          "3": "④ Separated data will not be used without separate consent and will be destroyed immediately after the legal retention period."
+        }
+      },
+      "14": {
+        "title": "Article 14 (Termination of Service Agreement)",
+        "items": {
+          "0": "① The Company may terminate the agreement without notice if the user violates these terms.",
+          "1": "② Upon termination, access to the service is immediately revoked, and all data is deleted."
+        }
+      },
+      "15": {
+        "title": "Article 15 (Disclaimer)",
+        "items": {
+          "0": "① The Company shall not be liable for service interruption due to force majeure such as natural disasters, war, terrorism, or system failures.",
+          "1": "② The Company is not responsible for issues caused by the user's fault.",
+          "2": "③ The Company is not obligated to intervene in disputes between users or between a user and a third party, and assumes no responsibility for any resulting damage.",
+          "3": "④ The Company does not guarantee the truthfulness or reliability of user-generated content and is not responsible for consequences resulting from it."
+        }
+      },
+      "16": {
+        "title": "Article 16 (Damages)",
+        "items": {
+          "0": "① The Company is only liable for damages caused to the user due to intentional or gross negligence.",
+          "1": "② The Company is not responsible for damages resulting from interruptions or changes to free services."
+        }
+      },
+      "17": {
+        "title": "Article 17 (Governing Law and Jurisdiction)",
+        "items": {
+          "0": "① Legal disputes between the Company and users shall be governed by the laws of the Republic of Korea.",
+          "1": "② Lawsuits regarding disputes between the Company and users shall be filed with the court having jurisdiction under the Civil Procedure Act. However, if the user's address is unclear or resides overseas, the Seoul Central District Court shall have jurisdiction."
+        }
+      },
+      "18": {
+        "title": "Article 18 (Service Inquiries)",
+        "description": "For inquiries regarding the use of the service, please use the inquiry feature within the service."
+      },
+      "appendix": {
+        "title": "[Appendix]",
+        "description": "Article 1 (Effective Date): These Terms of Service take effect from June 9, 2025."
+      }
+    }
+  },
+  "LoginStatus": {
+    "loginOrSignup": "Sign Up / Login"
+  },
+  "UserDropdown": {
+    "writeLog": "Write Log",
+    "contact": "Contact Us",
+    "logout": "Logout",
+    "notice": "Notice",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "viewProfile": "View Profile"
+  },
+  "Follow": {
+    "label": {
+      "follower": "Followers",
+      "following": "Following"
+    },
+    "button": {
+      "follow": "Follow",
+      "following": "Following"
+    },
+    "modalTitle": {
+      "follower": "Followers",
+      "following": "Following"
+    }
+  },
+  "HomePage": {
+    "title1": "Not sure where to go?",
+    "title2": "Meet curated courses made by trend-savvy",
+    "title3": "spot editors Just for you!",
+    "citySearchForm": {
+      "cityLabel": "Where do you want to go?",
+      "sigunguLabel": "Search more specifically!",
+      "cityPlaceholder": "Seoul",
+      "sigunguPlaceholder": "Songpa-gu",
+      "searchButton": "Search",
+      "dropbox": {
+        "cityTitle": "Select city",
+        "sigunguTitle": "Select neighborhood",
+        "subtitle": "New areas will appear when editors add new places!"
+      }
+    },
+    "registerCourse": "Register my recommended course",
+    "registerCourseDescription": {
+      "line1": "Share your favorite hidden spots and food places, and let others discover your route.",
+      "line2": "\"Someone spent a great day with the course I created!\", how awesome is that?",
+      "line3": "Isn't it just delightful to imagine? 🥰",
+      "line4": "Share your own course so others can use it as a reference.",
+      "line5": "The course you make will inspire many others!"
+    }
+  },
+  "ProfilePage": {
+    "defaultDescription": "A place to capture little joys and special moments ☕️\nFrom daily happiness to travel memories 🏞️",
+    "edit": "Edit",
+    "tab": {
+      "myLog": "My Logs",
+      "savedSpaces": "Saved Places",
+      "savedLog": "Saved Logs"
+    },
+    "fallback": {
+      "myLog": "Your personal log\nStart by uploading your first post!",
+      "empty": "No saved {resourceName} found.\nExplore logs and save your favorite places!"
+    },
+    "resource": {
+      "log": "log",
+      "place": "place"
+    }
+  },
+  "ProfileEditor": {
+    "title": "Edit Profile",
+    "nickname": {
+      "label": "Nickname"
+    },
+    "description": {
+      "label": "Profile Description",
+      "placeholder": "Enter your profile description."
+    },
+    "instagram": {
+      "label": "Instagram"
+    },
+    "cancel": "Cancel",
+    "save": "Save",
+    "toast": {
+      "success": "Profile updated successfully.",
+      "error": "Failed to update profile."
+    },
+    "account": {
+      "title": "Account Settings",
+      "label": "Delete Account",
+      "description": "When deleting your account, all data will be permanently deleted and cannot be recovered.\nPlease make your decision carefully.",
+      "trigger": "Delete",
+      "dialog": {
+        "title": "Delete Account",
+        "confirm": "Your logs will be permanently deleted.\nAre you sure you want to delete your account?",
+        "success": "Your account has been successfully deleted."
+      },
+      "toast": {
+        "success": "Account deletion successful",
+        "error": "Account deletion failed"
+      }
+    },
+    "common": {
+      "cancel": "Cancel",
+      "ok": "OK"
+    }
+  },
+  "SearchPage": {
+    "input": {
+      "placeholder": "What are you looking for..."
+    },
+    "result": {
+      "empty": "No results found."
+    }
+  },
+  "Register": {
+    "TagIntro": {
+      "mood": {
+        "title": "What kind of day was it?",
+        "description": "You can select multiple options (up to 10)"
+      },
+      "country": {
+        "title": "Please select a country.",
+        "description": "Choose the main country."
+      },
+      "city": {
+        "title": "Choose a City",
+        "description": "Please select your main City."
+      },
+      "area": {
+        "title": "Choose a Area",
+        "description": "Please select your main Area."
+      },
+      "sigungu": {
+        "title": "Choose a Si/Gun/Gu",
+        "description": "Please select your main Si/Gun/Gu."
+      }
+    },
+    "MoodPage": {
+      "group": {
+        "withWhom": "With whom",
+        "whatFeeling": "What kind of vibe"
+      }
+    },
+    "CountryPage": {
+      "groupTitle": "Country",
+      "options": {
+        "국내": "Domestic",
+        "국외": "Overseas"
+      }
+    },
+    "CityPage": {
+      "groupTitle": "Region",
+      "city": "City",
+      "area": "Area"
+    },
+    "sigungu": {
+      "groupTitle": "Si/Gun/Gu",
+      "sigungu": "Si/Gun/Gu",
+      "city": "City"
+    },
+    "Footer": {
+      "next": "Next",
+      "skip": "Do it later"
+    },
+    "LogPage": {
+      "loading": "Loading...",
+      "addPlace": "Add place",
+      "titlePlaceholder": "Enter a title. (Max 30 characters)",
+      "coverImage": "Cover Image",
+      "contentPlaceholder": "Enter the content. (Max 500 characters)",
+      "placeNameLabel": "Enter the name of the place",
+      "locationPlaceholder": "Enter the location.",
+      "uploadImage": "Upload Image",
+      "uploadPictures": "Upload Pictures",
+      "uploadPicturesLimit": "Up to 8",
+      "imageDeleteLimit": "At least one image is required per place.",
+      "maxPlaceError": "You can register up to 10 places.",
+      "maxImageError": "You can upload up to 8 images.",
+      "deleteWarning": "Logs may be deleted if inappropriate images are detected.",
+      "submit": "Submit",
+      "uploadedImageAlt": "Uploaded image",
+      "removeImageAriaLabel": "Remove image",
+      "confirmCreate": "Do you want to register the log {logTitle}?",
+      "confirmEdit": "Do you want to edit the log {logTitle}?",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "actionCreate": "create",
+      "actionEdit": "edit"
+    }
+  },
+  "LogEditPage": {
+    "delete": {
+      "delete": "Delete",
+      "confirmMessage": "Are you sure you want to delete this log?",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "place": {
+      "minError": "At least one place is required."
+    },
+    "warning": {
+      "imagePolicy": "Logs may be deleted if inappropriate images are detected."
+    },
+    "tag": {
+      "mood": "With whom",
+      "activity": "What kind of mood"
+    }
+  },
+  "CountryType": {
+    "국내": "Domestic",
+    "국외": "Overseas"
+  },
+  "Category": {
+    "레스토랑": "Restaurant",
+    "카페/베이커리": "Cafe / Bakery",
+    "미술관": "Art Museum",
+    "음악/공연장": "Music / Venue",
+    "힐링/여가": "Healing / Leisure",
+    "숙박/호텔": "Accommodation / Hotel",
+    "쇼핑": "Shopping",
+    "바": "Bar",
+    "서점/도서관": "Bookstore / Library",
+    "자연/공원": "Nature / Park",
+    "교통": "Transportation",
+    "헬스장": "Gym",
+    "병원/약국": "Hospital / Pharmacy",
+    "캠핑장": "Campground",
+    "그 외": "Others"
+  },
+  "MoodTags": {
+    "혼자": "Alone",
+    "친구랑": "With friends",
+    "연인과": "With a partner",
+    "가족과": "With family",
+    "동료와": "With coworkers",
+    "반려동물과": "With a pet",
+    "SNS 핫플레이스": "SNS Hotspot",
+    "체험 · 액티비티": "Experience · Activity",
+    "자연과 함께": "With nature",
+    "유명 관광지": "Famous tourist spot",
+    "여유롭게 힐링": "Relax and heal",
+    "미술관 · 갤러리": "Museum · Gallery",
+    "알차고 바쁘게!": "Busy and productive!",
+    "역사가 물든": "Rich in history",
+    "여행지": "Travel destination",
+    "쇼핑": "Shopping",
+    "맛집투어": "Food tour",
+    "음악": "Music",
+    "페스티벌": "Festival",
+    "독서하며 잔잔하게": "Quiet time with a book",
+    "모임 · 동호회": "Gathering · Club",
+    "가성비 굿": "Great value for money"
+  },
+  "Region": {
+    "가나": "Ghana",
+    "가평군": "Gapyeong-gun",
+    "강남구": "Gangnam-gu",
+    "강동구": "Gangdong-gu",
+    "강릉시": "Gangneung City",
+    "강북구": "Gangbuk-gu",
+    "강서구": "Gangseo-gu",
+    "강원": "Gangwon",
+    "강진군": "Gangjin-gun",
+    "강화군": "Gangwha-gun",
+    "거제시": "Geoje City",
+    "거창군": "Geochang-gun",
+    "경기": "Gyeonggi",
+    "경남": "Gyeongnam",
+    "경북": "Gyeongbuk",
+    "경산시": "Gyeongsan City",
+    "경주시": "Gyeongju City",
+    "계룡시": "Gyeryong City",
+    "계양구": "Gyeyang-gu",
+    "고령군": "Goryeong-gun",
+    "고성군": "Gosung-gun",
+    "고양시": "Goyang city",
+    "고창군": "Gochang-gun",
+    "고흥군": "Goheung-gun",
+    "곡성군": "Gokseong-gun",
+    "공주시": "Gongju City",
+    "과천시": "Gwacheon City",
+    "과테말라": "Guatemala",
+    "관악구": "Gwanak-gu",
+    "광명시": "Gwangmyeong City",
+    "광산구": "Gwangsan-gu",
+    "광양시": "Gwangyang City",
+    "광주": "Gwangju",
+    "광주시": "Gwangju City",
+    "광진구": "Gwangjin-gu",
+    "괴산군": "Goesan-gun",
+    "구례군": "Gurye-gun",
+    "구로구": "Guro-gu",
+    "구리시": "Guri City",
+    "구미시": "Gumi City",
+    "군산시": "Gunsan City",
+    "군위군": "Gunwi-gun",
+    "군포시": "Gunpo City",
+    "그리스": "Greece",
+    "금산군": "Geumsan-gun",
+    "금정구": "Geumjeong-gu",
+    "금천구": "Geumcheon-gu",
+    "기장군": "Gijang-gun",
+    "김제시": "Gimje City",
+    "김천시": "Gimcheon City",
+    "김포시": "Gimpo City",
+    "김해시": "Gimhae City",
+    "나이지리아": "Nigeria",
+    "나주시": "Naju City",
+    "남구": "Nam-gu",
+    "남동구": "Namdong-gu",
+    "남아메리카": "South America",
+    "남아프리카공화국": "South Africa",
+    "남양주시": "Namyangju City",
+    "남원시": "Namwon City",
+    "남해군": "Namhae-gun",
+    "네덜란드": "Netherlands",
+    "네팔": "Nepal",
+    "노르웨이": "Norway",
+    "노원구": "Nowon-gu",
+    "논산시": "Nonsan City",
+    "뉴질랜드": "New Zealand",
+    "단양군": "Danyang-gun",
+    "달서구": "Dalseo-gu",
+    "달성군": "Dal Sung-gun",
+    "담양군": "Damyang-gun",
+    "당진시": "Dangjin City",
+    "대구": "Daegu",
+    "대덕구": "Daedeok-gu",
+    "대만": "Taiwan",
+    "대전": "Daejeon",
+    "덕진구": "Deokjin-gu",
+    "덴마크": "Denmark",
+    "도미니카공화국": "Dominican Republic",
+    "도봉구": "Dobong-gu",
+    "독일": "Germany",
+    "동구": "Dong-gu",
+    "동대문구": "Dongdaemun-gu",
+    "동두천시": "Dongducheon City",
+    "동래구": "Dongrae-gu",
+    "동작구": "Dongjak-gu",
+    "동해시": "Donghae City",
+    "레바논": "Lebanon",
+    "마포구": "Mapo-gu",
+    "말레이시아": "Malaysia",
+    "멕시코": "Mexico",
+    "모로코": "Morocco",
+    "목포시": "Mokpo City",
+    "몽골": "Mongolia",
+    "무안군": "Muan-gun",
+    "무주군": "Muju-gun",
+    "문경시": "Mungyeong City",
+    "미국": "USA",
+    "미추홀구": "Michuhol-gu",
+    "밀양시": "Miryang City",
+    "베네수엘라": "Venezuela",
+    "베트남": "Vietnam",
+    "벨기에": "Belgium",
+    "보령시": "Boryeong City",
+    "보성군": "Boseong-gun",
+    "보은군": "Boeun-gun",
+    "볼리비아": "Bolivia",
+    "봉화군": "Bonghwa-gun",
+    "부산": "Busan",
+    "부산진구": "Busanjin-gu",
+    "부안군": "Buan-gun",
+    "부여군": "Buyeo-gun",
+    "부천시": "Bucheon City",
+    "부평구": "Bupyeong-gu",
+    "북구": "Buk-gu",
+    "북아메리카": "North America",
+    "브라질": "Brazil",
+    "사모아": "Samoa",
+    "사상구": "Sasang-gu",
+    "사우디아라비아": "Saudi Arabia",
+    "사천시": "Sacheon City",
+    "사하구": "Saha-gu",
+    "산청군": "Sancheong-gun",
+    "삼척시": "Samcheok City",
+    "상주시": "Sangju City",
+    "서구": "Western",
+    "서귀포시": "Seogwipo City",
+    "서대문구": "Seodaemun-gu",
+    "서산시": "Seosan City",
+    "서울": "Seoul",
+    "서천군": "Seocheon-gun",
+    "서초구": "Seocho-gu",
+    "성남시": "Seongnam City",
+    "성동구": "Seongdong-gu",
+    "성북구": "Seongbuk-gu",
+    "성주군": "Seongju-gun",
+    "세종": "Sejong",
+    "세종시": "Sejong City",
+    "속초시": "Sokcho City",
+    "송파구": "Songpa-gu",
+    "수성구": "Suseong-gu",
+    "수영구": "Suyeong-gu",
+    "수원시": "Suwon City",
+    "순창군": "Sunchang-gun",
+    "순천시": "Suncheon City",
+    "스리랑카": "Sri Lanka",
+    "스웨덴": "Sweden",
+    "스위스": "Swiss",
+    "스페인": "Spain",
+    "시흥시": "Siheung City",
+    "신안군": "Shinan-gun",
+    "싱가포르": "Singapore",
+    "아랍에미리트": "United Arab Emirates",
+    "아르헨티나": "Argentina",
+    "아산시": "Asan City",
+    "아시아": "Asia",
+    "아이슬란드": "Iceland",
+    "아프리카": "Africa",
+    "안동시": "Andong City",
+    "안산시": "Ansan City",
+    "안성시": "Anseong City",
+    "안양시": "Anyang City",
+    "알제리": "Algeria",
+    "양구군": "Yanggu-gun",
+    "양산시": "Yangsan City",
+    "양양군": "Yangyang-gun",
+    "양주시": "Yangju city",
+    "양천구": "Yangcheon-gu",
+    "양평군": "Yangpyeong-gun",
+    "에콰도르": "Ecuador",
+    "에티오피아": "Ethiopia",
+    "여수시": "Yeosu City",
+    "여주시": "Yeoju City",
+    "연수구": "Yeonsu-gu",
+    "연제구": "Yeonje-gu",
+    "연천군": "Yeoncheon-gun",
+    "영광군": "Yeonggwang-gun",
+    "영국": "United Kingdom",
+    "영덕군": "Yeongdeok-gun",
+    "영도구": "Yeongdo-gu",
+    "영동군": "Yeongdong-gun",
+    "영등포구": "Yeongdeungpo-gu",
+    "영암군": "Yeongam-gun",
+    "영양군": "Yeongyang-gun",
+    "영월군": "Yeongwol-gun",
+    "영주시": "Yeongju City",
+    "영천시": "Yeongcheon City",
+    "예산군": "Yesan-gun",
+    "예천군": "Yecheon-gun",
+    "오만": "Oman",
+    "오산시": "Osan City",
+    "오세아니아": "Oceania",
+    "오스트리아": "Austria",
+    "옥천군": "Okcheon-gun",
+    "옹진군": "Ongjin-gun",
+    "완도군": "Wando-gun",
+    "완주군": "Wanju-gun",
+    "요르단": "Jordan",
+    "용산구": "Yongsan-gu",
+    "용인시": "Yongin City",
+    "우루과이": "Uruguay",
+    "우즈베키스탄": "Uzbekistan",
+    "울릉군": "Ulleung-gun",
+    "울산": "Ulsan",
+    "울주군": "Ulju-gun",
+    "울진군": "Uljin-gun",
+    "원주시": "Wonju city",
+    "유럽": "Europe",
+    "유성구": "Yuseong-gu",
+    "은평구": "Eunpyeong-gu",
+    "음성군": "Eumseong-gun",
+    "의령군": "Uiryeong-gun",
+    "의성군": "Uiseong-gun",
+    "의왕시": "Uiwang City",
+    "의정부시": "Uijeongbu City",
+    "이라크": "Iraq",
+    "이란": "Iran",
+    "이스라엘": "Israel",
+    "이집트": "Egypt",
+    "이천시": "Icheon City",
+    "이탈리아": "Italy",
+    "익산시": "Iksan City",
+    "인도": "India",
+    "인도네시아": "Indonesia",
+    "인제군": "Inje-gun",
+    "인천": "Incheon",
+    "일본": "Japan",
+    "임실군": "Imsil-gun",
+    "장성군": "Jangseong-gun",
+    "장수군": "Jangsu-gun",
+    "장흥군": "Jangheung-gun",
+    "전남": "Jeonnam",
+    "전북": "Jeonbuk",
+    "전주시": "Jeonju city",
+    "정선군": "Jeongseon-gun",
+    "정읍시": "Jeongeup-gun",
+    "제주": "Jeju",
+    "제주시": "Jeju City",
+    "제천시": "Jecheon City",
+    "종로구": "Jongno-gu",
+    "중구": "Jung-gu",
+    "중국": "China",
+    "중동": "Middle East",
+    "중랑구": "Jungnang-gu",
+    "증평군": "Jeungpyeong-gun",
+    "진도군": "Jindo-gun",
+    "진안군": "Jinan-gun",
+    "진주시": "Jinju City",
+    "진천군": "Jincheon-gun",
+    "창녕군": "Changnyeong-gun",
+    "창원시": "Changwon City",
+    "천안시": "Cheonan City",
+    "철원군": "Cheorwon-gun",
+    "청도군": "Cheongdo-gun",
+    "청송군": "Cheongsong-gun",
+    "청양군": "Cheongyang-gun",
+    "청주시": "Cheongju City",
+    "체코": "Czechia",
+    "춘천시": "Chuncheon City",
+    "충남": "Chungnam",
+    "충북": "Chungbuk",
+    "충주시": "Chungju city",
+    "칠곡군": "Chilgok-gun",
+    "칠레": "Chile",
+    "카자흐스탄": "Kazakhstan",
+    "카타르": "Qatar",
+    "캐나다": "Canada",
+    "케냐": "Kenya",
+    "코스타리카": "Costa Rica",
+    "콜롬비아": "Colombia",
+    "쿠바": "Cuba",
+    "크로아티아": "Croatia",
+    "탄자니아": "Tanzania",
+    "태국": "Thailand",
+    "태백시": "Taebaek City",
+    "태안군": "Taean-gun",
+    "터키": "Türkiye",
+    "통가": "Tonga",
+    "통영시": "Tongyeong City",
+    "튀니지": "Tunisia",
+    "파나마": "Panama",
+    "파라과이": "Paraguay",
+    "파주시": "Paju City",
+    "파푸아뉴기니": "Papua New Guinea",
+    "페루": "Peru",
+    "평창군": "Pyeongchang-gun",
+    "평택시": "Pyeongtaek City",
+    "포르투갈": "Portugal",
+    "포천시": "Pocheon City",
+    "포항시": "Pohang City",
+    "폴란드": "Poland",
+    "프랑스": "France",
+    "피지": "Fiji",
+    "핀란드": "Finland",
+    "필리핀": "Philippines",
+    "하남시": "Hanam City",
+    "하동군": "Hadong-gun",
+    "함안군": "Haman-gun",
+    "함양군": "Hamyang-gun",
+    "함평군": "Hampyeong-gun",
+    "합천군": "Hapcheon-gun",
+    "해남군": "Haenam-gun",
+    "해운대구": "Haeundae-gu",
+    "헝가리": "Hungary",
+    "호주": "Australia",
+    "홍성군": "Hongseong-gun",
+    "홍천군": "Hongcheon-gun",
+    "화성시": "Hwaseong City",
+    "화순군": "Hwasun-gun",
+    "화천군": "Hwacheon-gun",
+    "횡성군": "Hoengseong-gun"
+  }
+}

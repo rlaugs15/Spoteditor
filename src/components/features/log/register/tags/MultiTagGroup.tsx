@@ -15,12 +15,16 @@ const MultiTagGroup = ({ title, type }: MultiTagGroupProps) => {
   const isTagSelected = (value: string) =>
     Array.isArray(selectedTags) && selectedTags.includes(value);
 
+  // 태그 타입에 따른 네임스페이스 설정
+  const namespace = type === 'mood' || type === 'activity' ? 'MoodTags' : '';
+
   return (
     <TagGroup
       title={title}
       tags={TAG_SETS[type]}
       isSelected={isTagSelected}
       onTagClick={handleTagClick}
+      namespace={namespace}
     />
   );
 };

@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { CATEGORIES } from '@/constants/categoryData';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import PhotoTextSection from '../register/PhotoTextSection';
@@ -42,6 +43,8 @@ const PlaceForm = ({
     isEditPage ? (type === 'existing' ? 'places' : 'addedPlace') : 'places'
   ]?.[idx];
 
+  const tLog = useTranslations('Register.LogPage');
+  const tCategory = useTranslations('Category');
   return (
     <div className="py-[5px]">
       <div className="flex justify-between h-[16px]">
@@ -83,7 +86,7 @@ const PlaceForm = ({
               <Input
                 {...field}
                 type="text"
-                placeholder="위치를 적어주세요. *"
+                placeholder={`${tLog('locationPlaceholder')} *`}
                 className={cn(
                   'font-medium !text-text-sm h-6 placeholder:text-light-300 line-height-[10px]',
                   placeErrors?.location && 'placeholder:text-error-500'
@@ -113,7 +116,7 @@ const PlaceForm = ({
                         value={category}
                         className="text-[12px] !text-light-300 rounded-full min-w-[50px] h-[26px] w-fit px-3 border"
                       >
-                        {category}
+                        {tCategory(category)}
                       </ToggleGroupItem>
                     ))}
                   </ToggleGroup>

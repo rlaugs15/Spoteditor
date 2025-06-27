@@ -4,6 +4,7 @@ import FollowingButton from '@/components/common/Button/FollowingButton';
 import { Button } from '@/components/ui/button';
 import { PROFILE_PATHS } from '@/constants/pathname';
 import { IUser } from '@/types/api/user';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 
 interface ProfileActionButtonProps {
@@ -17,6 +18,8 @@ export default function ProfileActionButton({
   userId,
   className = '',
 }: ProfileActionButtonProps) {
+  const t = useTranslations('ProfilePage');
+
   if (!me) return null;
 
   const isMe = me.user_id === userId;
@@ -26,7 +29,7 @@ export default function ProfileActionButton({
       {isMe ? (
         <Link href={PROFILE_PATHS.EDITOR}>
           <Button variant="outline" className={className}>
-            편집
+            {t('edit')}
           </Button>
         </Link>
       ) : (

@@ -1,6 +1,7 @@
 import ClipboardButton from '@/components/common/Button/ClipboardButton';
 import UserImage from '@/components/common/UserImage';
 import { IUser, PublicUser } from '@/types/api/user';
+import { getTranslations } from 'next-intl/server';
 import FollowButtons from './components/FollowButtons';
 import ProfileActionButton from './components/ProfileActionButton';
 
@@ -10,7 +11,9 @@ interface ProfileHeaderProps {
   isMe: boolean;
 }
 
-export default function ProfileHeader({ me, user, isMe }: ProfileHeaderProps) {
+export default async function ProfileHeader({ me, user, isMe }: ProfileHeaderProps) {
+  const t = await getTranslations('ProfilePage');
+  const defaultDescription: string[] = t.raw('defaultDescription').split('\n');
   return (
     <section className="relative flex flex-col items-center justify-start w-full pb-7.5 web:pb-10">
       <div className="absolute top-0 right-[15px] web:right-0">
@@ -33,8 +36,12 @@ export default function ProfileHeader({ me, user, isMe }: ProfileHeaderProps) {
             user?.description
           ) : (
             <>
-              소소한 하루, 특별한 순간들을 기록하는 공간 ☕️ <br /> 일상의 작은 행복부터 여행의
-              찰나까지 🏞️
+              {defaultDescription.map((line, i) => (
+                <span key={i}>
+                  {line}
+                  <br />
+                </span>
+              ))}
             </>
           )}
         </h3>

@@ -2,11 +2,14 @@
 
 import { PlusIcon } from '@/components/common/Icons';
 import useUser from '@/hooks/queries/user/useUser';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 
 export default function ProfileMyLogFallback() {
   const router = useRouter();
   const { data: user, isLoading } = useUser();
+  const t = useTranslations('ProfilePage');
+
   const onRegisterClick = () => {
     if (isLoading) return;
     if (!user) {
@@ -23,7 +26,14 @@ export default function ProfileMyLogFallback() {
       >
         <PlusIcon className="w-6 h-6 stroke-[1.2] stroke-primary-200" />
         <p className="font-bold text-center text-text-sm text-primary-200">
-          나만의 로그 <br /> 첫 게시물을 올려보세요!
+          {t('fallback.myLog')
+            .split('\n')
+            .map((line, i) => (
+              <span key={i}>
+                {line}
+                <br />
+              </span>
+            ))}
         </p>
       </button>
     </section>

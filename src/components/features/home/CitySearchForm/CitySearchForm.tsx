@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { citySearchSchema } from '@/lib/zod/searchSchema';
 import { useCitySearchStore } from '@/stores/searchStore';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -13,6 +14,8 @@ import { z } from 'zod';
 import SearchDropBox from './SearchDropBox/SearchDropBox';
 
 export default function CitySearchForm() {
+  const t = useTranslations('HomePage.citySearchForm');
+  const r = useTranslations('Region');
   const router = useRouter();
   const { isDropBox, city, sigungu, isCityDropBox, toggleSigunguDropBox } = useCitySearchStore();
 
@@ -66,50 +69,61 @@ export default function CitySearchForm() {
             <FormField
               control={form.control}
               name="city"
-              render={({ field }) => (
-                <FormItem className="flex flex-col bg-white web:px-5 px-3 web:py-5 web:pb-3 py-2.5 gap-2">
-                  <FormLabel className="!text-light-400 text-xs web:text-[16px]">
-                    어디로 놀러갈까요?
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      onClick={opencityDropBoxClick}
-                      placeholder="서울"
-                      readOnly
-                      {...field}
-                      className="p-0 font-bold text-black grow !text-[22px] placeholder:text-black web:text-sm"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const translatedValue = r(field.value); // 여기서 번역된 문자열만 추출
+                return (
+                  <FormItem className="flex flex-col bg-white web:px-5 px-3 web:py-5 web:pb-3 py-2.5 gap-2">
+                    <FormLabel className="!text-light-400 text-xs web:text-[16px]">
+                      {t('cityLabel')}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        onClick={opencityDropBoxClick}
+                        placeholder={t('cityPlaceholder')}
+                        readOnly
+                        name={field.name}
+                        ref={field.ref}
+                        onChange={() => {}} // 필수
+                        value={translatedValue} // 번역된 값만 표시
+                        className="p-0 font-bold text-black grow !text-[22px] placeholder:text-black web:text-sm"
+                      />
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
             />
 
             <FormField
               control={form.control}
               name="sigungu"
-              render={({ field }) => (
-                <FormItem className="flex flex-col bg-white web:px-5 px-3 web:py-5 web:pb-3 py-2.5 gap-2">
-                  <FormLabel className="!text-light-400 text-xs web:text-[16px]">
-                    더 상세히 검색!
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      onClick={opensigunguDropBoxClick}
-                      placeholder="송파구"
-                      readOnly
-                      {...field}
-                      className="p-0 font-bold text-black grow !text-[22px] placeholder:text-black web:text-sm"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const translatedValue = r(field.value);
+                return (
+                  <FormItem className="flex flex-col bg-white web:px-5 px-3 web:py-5 web:pb-3 py-2.5 gap-2">
+                    <FormLabel className="!text-light-400 text-xs web:text-[16px]">
+                      {t('sigunguLabel')}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        onClick={opensigunguDropBoxClick}
+                        placeholder={t('sigunguPlaceholder')}
+                        readOnly
+                        {...field}
+                        onChange={() => {}} // value만 설정하면 제어 컴포넌트로 간주되어 필수. 빈 함수라도 있어야 경고 방지됨
+                        value={translatedValue} // 번역된 값만 표시
+                        className="p-0 font-bold text-black grow !text-[22px] placeholder:text-black web:text-sm"
+                      />
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
             />
           </div>
           <Button
             type="submit"
             className="h-full font-medium text-white rounded-none bg-light-950 !text-text-md hover:bg-primary-900"
           >
-            검색
+            {t('searchButton')}
           </Button>
           <SearchDropBox />
         </form>
