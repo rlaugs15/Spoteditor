@@ -20,8 +20,8 @@ import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
-  const { mutate: editMutate, isPending: editIsPending } = useLogEditMutation();
-  const { mutate: addPlaceMutate, isPending: addPlaceIsPending } = useAddPlaceMutation();
+  const { mutateAsync: editMutate, isPending: editIsPending } = useLogEditMutation();
+  const { mutateAsync: addPlaceMutate, isPending: addPlaceIsPending } = useAddPlaceMutation();
   const t = useTranslations('LogEditPage');
   const { title, thumbnail_url, description, place: places, log_tag, address, log_id } = logData;
   const initializeTags = useLogCreationStore((state) => state.initializeTags);
@@ -149,7 +149,9 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
         addedPlaceSwap(currentPlace.originalIdx, prevPlace.originalIdx);
       }
     } else {
-      toast.error('기존과 신규 간 순서 변경은 지원하지 않습니다.');
+      toast.error('기존과 신규 간 순서 변경은 지원하지 않습니다.', {
+        description: '등록 후 변경해주세요.',
+      });
     }
   };
 
@@ -180,7 +182,16 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     try {
       // 새로운 장소가 있으면 먼저 추가
       if (hasNewPlaces && dirtyValues['addedPlace']) {
-        await addPlaceMutate({ values: dirtyValues['addedPlace'], logId: logData.log_id });
+        // 기존 장소의 개수를 계산 (삭제된 장소 제외)
+        const existingPlacesCount = form.getValues('places').length;
+        const deletedPlacesCount = form.getValues('deletedPlace')?.length || 0;
+        const currentExistingPlacesCount = existingPlacesCount - deletedPlacesCount;
+
+        await addPlaceMutate({
+          values: dirtyValues['addedPlace'],
+          logId: logData.log_id,
+          existingOrderCount: currentExistingPlacesCount,
+        });
       }
 
       // 나머지 수정사항 처리
@@ -196,13 +207,13 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
           }),
         };
 
-        console.log('보냅니다', patchedDirtyValues);
+        // console.log('보냅니다', patchedDirtyValues);
         const formData = createFormData(patchedDirtyValues);
         await editMutate({ formData, logId: logData.log_id });
       }
     } catch (error) {
+      // mutation의 onError에서 이미 toast를 보여주므로 여기서는 추가 처리하지 않음
       console.error('로그 수정 중 오류:', error);
-      toast.error('로그 수정에 실패했습니다.');
     }
   };
 

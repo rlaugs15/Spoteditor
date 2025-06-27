@@ -101,7 +101,11 @@ export async function uploadThumbnail(thumbnail: Blob, logId: string) {
 }
 
 /* 장소 이미지 업로드 */
-export async function uploadPlaces(places: LogFormValues['places'], logId: string) {
+export async function uploadPlaces(
+  places: LogFormValues['places'],
+  logId: string,
+  existingOrderCount = 0
+) {
   const placeDataList: NewPlace[] = places.map(
     ({ placeName, description, location, category }, idx) => ({
       place_id: crypto.randomUUID(),
@@ -110,7 +114,7 @@ export async function uploadPlaces(places: LogFormValues['places'], logId: strin
       description,
       address: location,
       category,
-      order: idx + 1,
+      order: existingOrderCount + idx + 1, // 로그 수정에서 새로운 장소추가할 때, 마지막 번호 다음부터 시작
     })
   );
   const placeImageDataList: NewPlaceImage[] = [];

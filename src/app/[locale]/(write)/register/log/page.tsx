@@ -4,7 +4,6 @@ import PlaceForm from '@/components/features/log/common/PlaceForm';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
 import TitledInput from '@/components/features/log/register/TitledInput';
-import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { REGISTER_PATHS } from '@/constants/pathname';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
@@ -108,8 +107,6 @@ const LogPage = () => {
           </div>
         </main>
       </Form>
-
-      <Button onClick={() => console.log(form.formState.errors)}>tet</Button>
 
       {/* footer */}
       <div className="text-[13px] w-full h-9 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
