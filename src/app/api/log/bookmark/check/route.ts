@@ -1,3 +1,4 @@
+import { revalidateLog } from '@/app/actions/log';
 import { getUser } from '@/app/actions/user';
 import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
@@ -103,6 +104,10 @@ export async function POST(req: NextRequest) {
         log_id: String(logId),
       },
     });
+
+    /* 북마크 시 로그 서버캐시 무효화(버그 수정) */
+    await revalidateLog(logId);
+
     return NextResponse.json({ success: true, isBookmark: true }, { status: 200 });
   } catch (_error) {
     console.error(_error);
@@ -162,6 +167,9 @@ export async function DELETE(req: NextRequest) {
         { status: 404 }
       );
     }
+
+    /* 북마크 시 로그 서버캐시 무효화(버그 수정) */
+    await revalidateLog(logId);
 
     return NextResponse.json(
       {
