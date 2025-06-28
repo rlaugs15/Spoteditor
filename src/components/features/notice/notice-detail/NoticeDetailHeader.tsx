@@ -1,8 +1,8 @@
 'use client';
 
 import { ArrowLeftIcon } from '@/components/common/Icons';
+import { useRouter } from '@/i18n/navigation';
 import { AnimatePresence, motion, useScroll } from 'motion/react';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface NoticeDetailHeaderProps {

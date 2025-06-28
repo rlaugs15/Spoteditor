@@ -15,8 +15,8 @@ import ProfileFallbackMessage from '@/components/features/profile/fallback/Profi
 import useLogsBookmark from '@/hooks/queries/log/useLogsBookmark';
 import useUser from '@/hooks/queries/user/useUser';
 import usePagination from '@/hooks/usePagination';
+import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { useEffect } from 'react';
 
 interface SavaLogsProps {

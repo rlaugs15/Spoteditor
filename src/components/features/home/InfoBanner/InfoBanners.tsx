@@ -1,8 +1,8 @@
 import { ArrowUpRightIcon } from '@/components/common/Icons';
 import { Button } from '@/components/ui/button';
 import { REGISTER_PATHS } from '@/constants/pathname';
+import { Link } from '@/i18n/navigation';
 import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
 import InfoBanner from './InfoBanner';
 import TypingText from './TypingText';
 

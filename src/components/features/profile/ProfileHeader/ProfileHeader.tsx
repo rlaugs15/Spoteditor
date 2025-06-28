@@ -20,7 +20,7 @@ export default async function ProfileHeader({ me, user, isMe }: ProfileHeaderPro
         <ClipboardButton />
       </div>
       <section>
-        <UserImage imgSrc={String(user?.image_url)} />
+        <UserImage imgSrc={String(user?.image_url)} priority />
       </section>
       <section className="gap-[6px] flex justify-center items-center my-3">
         {/* VerifiedLabelIcon 도입 시 h2 태그에 pl-3 추가 */}

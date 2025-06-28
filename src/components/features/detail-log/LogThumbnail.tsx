@@ -3,10 +3,10 @@ import ClipboardButton from '@/components/common/Button/ClipboardButton';
 import { PenIcon, WhiteLocationIcon } from '@/components/common/Icons';
 import ExtraActionButton from '@/components/features/detail-log/ExtraActionButton';
 import { Badge } from '@/components/ui/badge';
+import { Link } from '@/i18n/navigation';
 import { DetailLog } from '@/types/api/log';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
 import Image from 'next/image';
-import Link from 'next/link';
 import TagRow from './TagRow';
 
 interface LogThumbnailProps {

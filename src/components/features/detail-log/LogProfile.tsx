@@ -2,7 +2,7 @@ import { getUser } from '@/app/actions/user';
 import FollowingButton from '@/components/common/Button/FollowingButton';
 import UserImage from '@/components/common/UserImage';
 import { PROFILE_PATHS } from '@/constants/pathname';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 
 interface LogProfileProps {
   userId: string;

@@ -3,12 +3,12 @@
 import { SearchIcon } from '@/components/common/Icons';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useRouter } from '@/i18n/navigation';
 import { SearchForm, searchSchema } from '@/lib/zod/searchSchema';
 import { useSearchStore } from '@/stores/searchStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AnimatePresence, motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 

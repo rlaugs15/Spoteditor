@@ -10,9 +10,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { NOTICE_PATHS, PRIVACY_PATHS, REGISTER_PATHS, TERMS_PATHS } from '@/constants/pathname';
+import { Link } from '@/i18n/navigation';
 import { IUser } from '@/types/api/user';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import MyProfileButton from './components/MyProfileButton';
 

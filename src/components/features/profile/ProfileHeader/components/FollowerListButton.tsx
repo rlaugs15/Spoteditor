@@ -14,11 +14,11 @@ import {
 } from '@/components/ui/dialog';
 import useFollowers from '@/hooks/queries/follow/useFollowers';
 import useBottomScrollTrigger from '@/hooks/useBottomScrollTrigger';
+import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { Follower } from '@/types/api/follow';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { useState } from 'react';
 
 interface FollowerListButtonProps {

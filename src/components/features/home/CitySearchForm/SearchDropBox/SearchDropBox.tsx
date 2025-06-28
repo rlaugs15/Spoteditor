@@ -1,8 +1,8 @@
 'use client';
 
+import { usePathname } from '@/i18n/navigation';
 import { useCitySearchStore } from '@/stores/searchStore';
 import { AnimatePresence, motion, useMotionTemplate, Variants } from 'motion/react';
-import { usePathname } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
 import CitySearchDropbox from './components/CitySearchDropbox';
 

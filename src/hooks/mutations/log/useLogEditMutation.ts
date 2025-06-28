@@ -1,9 +1,9 @@
 import { logKeys, placeKeys, searchKeys } from '@/app/actions/keys';
 import { updateLog } from '@/app/actions/log-update';
+import { useRouter } from '@/i18n/navigation';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 interface LogEditMutationProps {

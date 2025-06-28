@@ -1,4 +1,5 @@
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from '@/i18n/navigation';
+import { useSearchParams } from 'next/navigation';
 import { RefObject, useEffect, useState } from 'react';
 
 const usePagination = (initialPage = 1, scrollTargetRef?: RefObject<HTMLElement | null>) => {

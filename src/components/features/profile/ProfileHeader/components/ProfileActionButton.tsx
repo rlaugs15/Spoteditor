@@ -3,9 +3,9 @@
 import FollowingButton from '@/components/common/Button/FollowingButton';
 import { Button } from '@/components/ui/button';
 import { PROFILE_PATHS } from '@/constants/pathname';
+import { Link } from '@/i18n/navigation';
 import { IUser } from '@/types/api/user';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 
 interface ProfileActionButtonProps {
   me?: IUser;

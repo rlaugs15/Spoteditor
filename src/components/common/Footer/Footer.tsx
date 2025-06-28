@@ -1,5 +1,5 @@
 import { PRIVACY_PATHS, TERMS_PATHS } from '@/constants/pathname';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import ContactLink from './ContactLink';
 
 const Footer = () => {

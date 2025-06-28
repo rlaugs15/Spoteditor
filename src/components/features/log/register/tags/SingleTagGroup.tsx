@@ -6,9 +6,9 @@ import {
   globalRegions,
 } from '@/constants/cityData';
 import { TAG_SETS } from '@/constants/tagData';
+import { useRouter } from '@/i18n/navigation';
 import { TagKeys, useLogCreationStore } from '@/stores/logCreationStore';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 import { PAGE_TAG_INTROS } from './constant';
 import TagGroup from './TagGroup';

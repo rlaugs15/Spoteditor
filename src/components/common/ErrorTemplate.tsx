@@ -1,8 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { useRouter } from '@/i18n/navigation';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 interface ErrorTemplateProps {
   title?: string;
   message?: string;

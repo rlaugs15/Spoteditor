@@ -3,26 +3,20 @@ import { BookMarkIcon } from '@/components/common/Icons';
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLogBookmarkCheck from '@/hooks/queries/log/useLogBookmarkCheck';
 import useUser from '@/hooks/queries/user/useUser';
+import { useRouter } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
 
 interface LogBookMarkButtonProps {
   logId: string;
   modal?: boolean;
   className?: string;
-  onToggle?: (isBookmarked: boolean) => void;
 }
 
-export default function LogBookMarkButton({
-  logId,
-  modal,
-  className,
-  onToggle,
-}: LogBookMarkButtonProps) {
+export default function LogBookMarkButton({ logId, modal, className }: LogBookMarkButtonProps) {
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
   const { data, isLoading } = useLogBookmarkCheck({ logId, userId: user?.user_id || null });
-  const { mutate } = useLogBookmarkMutation(onToggle);
+  const { mutate } = useLogBookmarkMutation();
 
   const onBookMarkClick = () => {
     if (userIsLoading) return;

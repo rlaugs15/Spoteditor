@@ -1,8 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { Link } from '@/i18n/navigation';
 import { IUser } from '@/types/api/user';
-import Link from 'next/link';
 
 interface MyProfileButtonProps {
   user: IUser;

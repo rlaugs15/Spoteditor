@@ -1,7 +1,7 @@
+import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { LogWithUserAndAddress } from '@/types/api/common';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import PostCardImage from './PostCardImage';
 import PostCardLocation from './PostCardLocation';
 import PostCardTitle from './PostCardTitle';
