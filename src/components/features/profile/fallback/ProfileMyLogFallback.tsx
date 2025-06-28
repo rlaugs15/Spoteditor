@@ -2,8 +2,8 @@
 
 import { PlusIcon } from '@/components/common/Icons';
 import useUser from '@/hooks/queries/user/useUser';
+import { useRouter } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 
 export default function ProfileMyLogFallback() {
   const router = useRouter();

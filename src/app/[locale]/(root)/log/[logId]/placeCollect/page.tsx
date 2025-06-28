@@ -1,4 +1,5 @@
-import { redirect } from 'next/navigation';
+import { redirect } from '@/i18n/navigation';
+import { getLocale } from 'next-intl/server';
 
 interface Props {
   params: Promise<{ logId: string }>;
@@ -6,5 +7,9 @@ interface Props {
 
 export default async function Page({ params }: Props) {
   const { logId } = await params;
-  redirect(`/log/${logId}`);
+  const locale = await getLocale();
+  redirect({
+    href: `/log/${logId}`,
+    locale,
+  });
 }

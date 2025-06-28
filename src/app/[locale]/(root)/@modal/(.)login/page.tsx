@@ -2,8 +2,8 @@ import XButton from '@/components/common/Button/XButton';
 import { ModalContent, ModalHeader } from '@/components/common/Modal';
 import SocialLoginButtons from '@/components/features/login/SocialLoginButtons';
 import { PRIVACY_PATHS, TERMS_PATHS } from '@/constants/pathname';
+import { Link } from '@/i18n/navigation';
 import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
 
 export default async function LoginModal() {
   const t = await getTranslations('LoginModal');

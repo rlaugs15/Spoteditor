@@ -3,10 +3,10 @@ import ClipboardButton from '@/components/common/Button/ClipboardButton';
 import { PenIcon, WhiteLocationIcon } from '@/components/common/Icons';
 import ExtraActionButton from '@/components/features/detail-log/ExtraActionButton';
 import { Badge } from '@/components/ui/badge';
+import { Link } from '@/i18n/navigation';
 import { DetailLog } from '@/types/api/log';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
 import Image from 'next/image';
-import Link from 'next/link';
 import TagRow from './TagRow';
 
 interface LogThumbnailProps {
@@ -24,7 +24,7 @@ const LogThumbnail = ({ logData, isAuthor }: LogThumbnailProps) => {
         src={getStoragePublicImage(thumbnail_url as string)}
         alt="로그 썸네일 이미지"
         fill
-        className="object-cover web:blur-md scale-110"
+        className="object-cover web:blur-md web:scale-110"
       />
       <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient" />
 

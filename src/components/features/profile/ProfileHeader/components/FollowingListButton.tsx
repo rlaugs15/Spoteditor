@@ -15,12 +15,12 @@ import {
 } from '@/components/ui/dialog';
 import useFollowings from '@/hooks/queries/follow/useFollowings';
 import useBottomScrollTrigger from '@/hooks/useBottomScrollTrigger';
+import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { Following } from '@/types/api/follow';
 import { IUser } from '@/types/api/user';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { useState } from 'react';
 
 interface FollowingListButtonProps {

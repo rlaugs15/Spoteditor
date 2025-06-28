@@ -8,8 +8,8 @@ import Loading from '@/components/common/Loading/Loading';
 import { SectionTitle } from '@/components/common/SectionBlock';
 import useSearchLogs from '@/hooks/queries/search/useSearchLogs';
 import useQueryPagination from '@/hooks/useQueryPagination';
+import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { useRef } from 'react';
 interface SearchContentProps {
   keyword: string;

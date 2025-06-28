@@ -1,12 +1,10 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { REGISTER_PATHS } from '@/constants/pathname';
+import { Link, useRouter } from '@/i18n/navigation';
 import { TagKeys, useLogCreationStore } from '@/stores/logCreationStore';
 import { RegisterPath } from '@/types/path';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-
 interface RegisterFooterProps {
   tagTargets?: TagKeys[];
   nextPath: RegisterPath;

@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowLeftIcon } from '@/components/common/Icons';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 
 interface NoticeHeaderProps {
   title: string;
