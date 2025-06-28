@@ -1,3 +1,4 @@
+import { logKeys } from '@/app/actions/keys';
 import { getLog } from '@/app/actions/log';
 import { getUser } from '@/app/actions/user';
 import { PenBlackIcon, TableIcon } from '@/components/common/Icons';
@@ -7,6 +8,7 @@ import LogBookmarkWithCount from '@/components/features/detail-log/LogBookmarkWi
 import LogContent from '@/components/features/detail-log/LogContent';
 import LogThumbnail from '@/components/features/detail-log/LogThumbnail';
 import { Link } from '@/i18n/navigation';
+import { getQueryClient } from '@/lib/utils';
 import { PlaceWithImages } from '@/types/api/log';
 import { notFound } from 'next/navigation';
 export interface LogIdParams {
@@ -26,6 +28,10 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
   const { data: logData } = result;
   const user = await getUser();
   const isAuthor = user?.user_id === logData.user_id;
+
+  const queryClient = getQueryClient();
+
+  queryClient.setQueryData(logKeys.detail(logId), result);
   return (
     <div>
       <LogThumbnail logData={logData} isAuthor={isAuthor} />
@@ -49,10 +55,7 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
             </Link>
           </ExtraActionButton>
         ) : (
-          <LogBookmarkWithCount
-            logId={logData.log_id}
-            initialCount={logData._count?.log_bookmark ?? 0}
-          />
+          <LogBookmarkWithCount logId={logData.log_id} />
         )}
         <ExtraActionButton className="w-11 h-11" asChild>
           <Link href={`/log/${logData.log_id}/placeCollect`}>
