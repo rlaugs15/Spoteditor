@@ -115,6 +115,11 @@ export async function getLog(logId: string) {
   })();
 }
 
+/* 북마크 시 서버캐시 무효화 */
+export async function revalidateLog(logId: string) {
+  revalidateTag(cacheTags.logDetail(logId));
+}
+
 // ===================================================================
 // 로그 삭제
 // ===================================================================
