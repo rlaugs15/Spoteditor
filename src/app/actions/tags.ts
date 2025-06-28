@@ -1,5 +1,5 @@
 import { PaginationParams } from '@/types/api/common';
-import { logBookmarkListParmas, LogsParams } from '@/types/api/log';
+import { logBookmarkListParams, LogsParams } from '@/types/api/log';
 import { SearchParams } from '@/types/api/search';
 import { followKeys, logKeys, placeKeys, searchKeys, userKeys } from './keys';
 
@@ -45,14 +45,14 @@ export const cacheTags = {
   logDetail: (logId: string) => cacheTags.fromKey([...logKeys.detail(logId), 'single']),
   logList: (params: LogsParams) => cacheTags.fromKey(logKeys.list(params)),
   logListByUser: (params: LogsParams) => cacheTags.fromKey(logKeys.listByUser(params)),
-  logBookmarkList: (params: logBookmarkListParmas) =>
+  logBookmarkList: (params: logBookmarkListParams) =>
     cacheTags.fromKey(logKeys.bookmarkList(params)),
   logMyList: (userId: string) => cacheTags.fromKey([...logKeys.all, 'myList', userId, 'list']),
 
   /* 장소 */
   placeDetail: (placeId: string) => cacheTags.fromKey([...placeKeys.detail(placeId), 'single']),
   placeList: (params: PaginationParams) => cacheTags.fromKey(placeKeys.list(params)),
-  placeBookmarkList: (params: logBookmarkListParmas) =>
+  placeBookmarkList: (params: logBookmarkListParams) =>
     cacheTags.fromKey(placeKeys.bookmarkList(params)),
 
   /* 북마크 */

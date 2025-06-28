@@ -4,7 +4,7 @@ import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { createClient } from '@/lib/supabase/server';
 import { ApiResponse } from '@/types/api/common';
-import { DetailLog, logBookmarkListParmas, LogsParams, LogsReseponse } from '@/types/api/log';
+import { DetailLog, logBookmarkListParams, LogsParams, LogsResponse } from '@/types/api/log';
 import { SearchParams, SearchReseponse } from '@/types/api/search';
 import { Prisma } from '@prisma/client';
 import { revalidateTag, unstable_cache } from 'next/cache';
@@ -174,7 +174,7 @@ async function fetchLogs({
   pageSize = 12,
   sort = 'latest',
   userId,
-}: LogsParams): Promise<LogsReseponse> {
+}: LogsParams): Promise<LogsResponse> {
   try {
     const safePage = Math.max(1, currentPage);
     const safeSize = Math.min(Math.max(1, pageSize), 30);
@@ -260,7 +260,7 @@ export async function fetchBookmarkedLogs({
   userId,
   currentPage = 1,
   pageSize = 12,
-}: logBookmarkListParmas): Promise<LogsReseponse> {
+}: logBookmarkListParams): Promise<LogsResponse> {
   try {
     const safePage = Math.max(1, currentPage);
     const safeSize = Math.min(Math.max(1, pageSize), 30);
@@ -330,7 +330,7 @@ export async function fetchBookmarkedLogs({
   }
 }
 
-export async function getBookmarkedLogs(params: logBookmarkListParmas) {
+export async function getBookmarkedLogs(params: logBookmarkListParams) {
   return unstable_cache(() => fetchBookmarkedLogs(params), [...logKeys.bookmarkList(params)], {
     tags: [
       cacheTags.logBookmarkList(params), // 특정 페이지 북마크 리스트

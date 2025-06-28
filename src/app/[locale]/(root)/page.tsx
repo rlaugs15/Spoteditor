@@ -1,7 +1,7 @@
 import CarouselSection from '@/components/features/home/CarouselSection/CarouselSection';
 import Hero from '@/components/features/home/Hero';
 import InfoBanners from '@/components/features/home/InfoBanner/InfoBanners';
-import LatestLogConentSection from '@/components/features/home/LatestLogConentSection/LatestLogConentSection';
+import LatestLogContentSection from '@/components/features/home/LatestLogContentSection/LatestLogContentSection';
 
 interface MainPageProps {
   searchParams: Promise<{ logPage: string; popularityPage: string }>;
@@ -26,7 +26,7 @@ const MainPage = async ({ searchParams }: MainPageProps) => {
       <div className="pt-[60px] pb-[140px] px-4 web:px-[50px] space-y-20">
         <CarouselSection currentPage={currentPopularityPage} />
         <InfoBanners />
-        <LatestLogConentSection currentPage={currentLogPage} />
+        <LatestLogContentSection currentPage={currentLogPage} />
       </div>
     </div>
   );

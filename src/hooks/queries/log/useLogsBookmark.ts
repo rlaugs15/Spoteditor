@@ -2,10 +2,10 @@ import { logKeys } from '@/app/actions/keys';
 import { toQueryString } from '@/lib/utils';
 import { useProfileTabStore } from '@/stores/profileStore';
 import { BookmarkParams } from '@/types/api/common';
-import { LogsReseponse } from '@/types/api/log';
+import { LogsResponse } from '@/types/api/log';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
-async function fetchUseLogsBookmark(params: BookmarkParams): Promise<LogsReseponse> {
+async function fetchUseLogsBookmark(params: BookmarkParams): Promise<LogsResponse> {
   const query = toQueryString(params);
   const res = await fetch(`/api/logs/bookmark?${query}`);
   const data = await res.json();

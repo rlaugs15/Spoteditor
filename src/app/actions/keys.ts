@@ -1,6 +1,6 @@
 import { PaginationParams } from '@/types/api/common';
 import { FollowListParams } from '@/types/api/follow';
-import { logBookmarkListParmas, LogsParams } from '@/types/api/log';
+import { logBookmarkListParams, LogsParams } from '@/types/api/log';
 import { SearchParams } from '@/types/api/search';
 
 /* 유저 */
@@ -48,7 +48,7 @@ export const logKeys = {
     ] as const,
   listByUser: ({ userId, currentPage = 1, pageSize = 10 }: LogsParams) =>
     [...logKeys.all, 'byUser', userId ?? '', `${currentPage}`, `${pageSize}`] as const,
-  bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParmas) =>
+  bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParams) =>
     [...logKeys.all, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
 
   // 단일 로그 북마크
@@ -62,7 +62,7 @@ export const placeKeys = {
   detail: (placeId: string) => [...placeKeys.all, placeId] as const,
   list: ({ currentPage = 1, pageSize = 10 }: PaginationParams) =>
     [...placeKeys.all, 'list', `${currentPage}`, `${pageSize}`] as const,
-  bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParmas) =>
+  bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParams) =>
     [...placeKeys.all, 'bookmark', `${userId}`, `${currentPage}`, `${pageSize}`] as const,
 
   // 단일 장소 북마크
