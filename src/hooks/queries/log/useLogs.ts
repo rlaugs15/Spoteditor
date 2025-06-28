@@ -11,13 +11,14 @@ async function fetchUseLogs(params: LogsParams): Promise<LogsResponse> {
 }
 
 export default function useLogs(
-  { userId, currentPage = 1, pageSize = 12 }: Partial<LogsParams> = {},
+  { userId, currentPage = 1, pageSize = 12, sort }: Partial<LogsParams> = {},
   options?: Partial<UseQueryOptions<LogsResponse, Error>>
 ) {
   const params = {
     userId,
     currentPage,
     pageSize,
+    sort,
   };
   return useQuery({
     queryKey: userId ? logKeys.listByUser(params) : logKeys.list(params),

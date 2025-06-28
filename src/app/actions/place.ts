@@ -114,13 +114,17 @@ export async function fetchBookmarkedPlaces({
 }
 
 export async function getBookmarkedPlaces(params: PlaceBookmarkListParmas) {
-  return unstable_cache(() => fetchBookmarkedPlaces(params), [...logKeys.bookmarkList(params)], {
-    tags: [
-      cacheTags.placeBookmarkList(params), // 개별 사용자별 태그
-      'place:bookmark:all', // 전체 북마크 무효화용 태그
-    ],
-    revalidate: 300,
-  })();
+  return unstable_cache(
+    () => fetchBookmarkedPlaces(params),
+    [...logKeys.bookmarkList(params)].filter((v) => v !== undefined && v !== null),
+    {
+      tags: [
+        cacheTags.placeBookmarkList(params), // 개별 사용자별 태그
+        'place:bookmark:all', // 전체 북마크 무효화용 태그
+      ],
+      revalidate: 300,
+    }
+  )();
 }
 
 /* 북마크 시 서버캐시 무효화 */
