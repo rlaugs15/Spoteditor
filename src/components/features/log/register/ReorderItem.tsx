@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { Grip } from 'lucide-react';
 import { Reorder, useDragControls } from 'motion/react';
 import PlaceImage from '../common/PlaceImage';
@@ -36,12 +37,20 @@ const ReorderItem = ({ item, imageUrl, onDeleteClick, imageIdx }: ReorderItemPro
         }}
       >
         <PlaceImage imageUrl={imageUrl} onDeleteClick={onDeleteClick} imageIdx={imageIdx} />
-        <div
+        <Button
+          variant={'ghost'}
+          size={'icon'}
           className="absolute bottom-2 right-2 cursor-grab active:cursor-grabbing"
           onPointerDown={(e) => controls.start(e)}
+          style={{
+            touchAction: 'none',
+            WebkitTouchCallout: 'none',
+            WebkitUserSelect: 'none',
+            userSelect: 'none',
+          }}
         >
           <Grip color="white" />
-        </div>
+        </Button>
       </Reorder.Item>
     </>
   );
