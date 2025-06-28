@@ -8,9 +8,10 @@ export const ERROR_MESSAGES = {
   },
   LOG: {
     NOT_FOUND: '해당 로그가 존재하지 않습니다.',
-    LIST_EMPTY: '조회 가능한 로그가 존재하지 않습니다.',
+    LIST_EMPTY: '조회 가능한 로그들이 존재하지 않습니다.',
     CREATE_FAILED: '로그 생성에 실패했습니다.',
     DELETE_FAILED: '로그 삭제에 실패했습니다.',
+    MISSING_ID: 'logId가 누락되었습니다.',
   },
   PLACE: {
     NOT_FOUND: '해당 장소가 존재하지 않습니다.',
