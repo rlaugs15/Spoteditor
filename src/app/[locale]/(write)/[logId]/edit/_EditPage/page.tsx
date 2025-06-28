@@ -171,8 +171,9 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   };
 
   const onSubmit = async (values: LogEditFormValues) => {
+    // console.log('values', values);
     const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
-
+    // console.log('dirtyValues', dirtyValues);
     // console.log('dirtyValues', dirtyValues['addedPlace']);
 
     const hasNewPlaces = dirtyValues['addedPlace'] && dirtyValues['addedPlace'].length > 0;

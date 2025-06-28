@@ -24,7 +24,7 @@ const LogThumbnail = ({ logData, isAuthor }: LogThumbnailProps) => {
         src={getStoragePublicImage(thumbnail_url as string)}
         alt="로그 썸네일 이미지"
         fill
-        className="object-cover web:blur-md scale-110"
+        className="object-cover web:blur-md web:scale-110"
       />
       <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient" />
 

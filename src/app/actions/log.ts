@@ -4,7 +4,7 @@ import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { createClient } from '@/lib/supabase/server';
 import { ApiResponse } from '@/types/api/common';
-import { DetailLog, logBookmarkListParmas, LogsParams, LogsReseponse } from '@/types/api/log';
+import { DetailLog, logBookmarkListParams, LogsParams, LogsResponse } from '@/types/api/log';
 import { SearchParams, SearchReseponse } from '@/types/api/search';
 import { Prisma } from '@prisma/client';
 import { revalidateTag, unstable_cache } from 'next/cache';
@@ -174,7 +174,7 @@ async function fetchLogs({
   pageSize = 12,
   sort = 'latest',
   userId,
-}: LogsParams): Promise<LogsReseponse> {
+}: LogsParams): Promise<LogsResponse> {
   try {
     const safePage = Math.max(1, currentPage);
     const safeSize = Math.min(Math.max(1, pageSize), 30);
@@ -245,7 +245,7 @@ export async function getLogs(params: LogsParams) {
 
   return unstable_cache(
     () => fetchLogs(params),
-    [...queryKey].map((v) => v ?? ''),
+    [...queryKey].filter((v) => v !== undefined && v !== null),
     {
       tags: [tagKey, globalTags.logAll], // 상위 그룹 태그 추가
       revalidate: 300,
@@ -260,7 +260,7 @@ export async function fetchBookmarkedLogs({
   userId,
   currentPage = 1,
   pageSize = 12,
-}: logBookmarkListParmas): Promise<LogsReseponse> {
+}: logBookmarkListParams): Promise<LogsResponse> {
   try {
     const safePage = Math.max(1, currentPage);
     const safeSize = Math.min(Math.max(1, pageSize), 30);
@@ -330,14 +330,18 @@ export async function fetchBookmarkedLogs({
   }
 }
 
-export async function getBookmarkedLogs(params: logBookmarkListParmas) {
-  return unstable_cache(() => fetchBookmarkedLogs(params), [...logKeys.bookmarkList(params)], {
-    tags: [
-      cacheTags.logBookmarkList(params), // 특정 페이지 북마크 리스트
-      globalTags.logBookmarkAll, // 전체 북마크 리스트 무효화용 상위 태그
-    ],
-    revalidate: 300,
-  })();
+export async function getBookmarkedLogs(params: logBookmarkListParams) {
+  return unstable_cache(
+    () => fetchBookmarkedLogs(params),
+    [...logKeys.bookmarkList(params)].filter((v) => v !== undefined && v !== null),
+    {
+      tags: [
+        cacheTags.logBookmarkList(params), // 특정 페이지 북마크 리스트
+        globalTags.logBookmarkAll, // 전체 북마크 리스트 무효화용 상위 태그
+      ],
+      revalidate: 300,
+    }
+  )();
 }
 
 /* 북마크 시 서버캐시 무효화 */
@@ -474,11 +478,15 @@ async function fetchSearchLogs({
 }
 
 export async function getSearchLogs(params: SearchParams) {
-  return unstable_cache(() => fetchSearchLogs(params), [...searchKeys.list(params)], {
-    tags: [
-      cacheTags.searchList(params), // 조건별로 구분되는 태그
-      globalTags.searchAll, // 전체 무효화용 상위 태그
-    ],
-    revalidate: 300,
-  })();
+  return unstable_cache(
+    () => fetchSearchLogs(params),
+    [...searchKeys.list(params)].filter((v) => v !== undefined && v !== null),
+    {
+      tags: [
+        cacheTags.searchList(params), // 조건별로 구분되는 태그
+        globalTags.searchAll, // 전체 무효화용 상위 태그
+      ],
+      revalidate: 300,
+    }
+  )();
 }

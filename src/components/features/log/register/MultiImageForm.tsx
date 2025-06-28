@@ -3,12 +3,13 @@ import { AddCameraIcon } from '@/components/common/Icons';
 import { FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useMultipleImagePreview from '@/hooks/useMultipleImagePreview';
+import { cn } from '@/lib/utils';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import { Reorder } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
-import PlaceImage from '../common/PlaceImage';
+import ReorderItem from './ReorderItem';
 
 interface MultiImageFormProps {
   idx: number;
@@ -79,50 +80,33 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
         accept=".jpg,.jpeg,.png,.webp,.avif"
       />
 
-      {fields.length > 0 && (
-        <div
-          className="overflow-x-auto mb-2.5 pb-1.5 web:scrollbar-thin"
-          style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch' }}
-        >
-          <Reorder.Group
-            axis="x"
-            values={fields}
-            onReorder={handleReorder}
-            className="flex gap-1"
-            style={{ touchAction: 'pan-x' }}
-          >
-            {fields.map((field, imageIdx) => {
-              const file = (field as any).file;
-              const previewUrl = getPreviewUrl(file);
+      <div
+        className={cn(
+          'overflow-x-auto overflow-y-hidden web:scrollbar-thin',
+          fields.length && 'mb-2.5'
+        )}
+        style={{
+          touchAction: 'pan-x',
+          WebkitOverflowScrolling: 'touch',
+        }}
+      >
+        <Reorder.Group axis="x" values={fields} onReorder={handleReorder} className="flex gap-1">
+          {fields.map((field, imageIdx) => {
+            const file = (field as any).file;
+            const previewUrl = getPreviewUrl(file);
 
-              return (
-                <Reorder.Item
-                  key={field.id}
-                  value={field}
-                  className="relative w-[220px] h-[300px] shrink-0 cursor-grab active:cursor-grabbing"
-                  whileDrag={{
-                    scale: 1.05,
-                    zIndex: 100,
-                    boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
-                    rotate: 2,
-                  }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 600,
-                    damping: 30,
-                  }}
-                >
-                  <PlaceImage
-                    imageUrl={previewUrl}
-                    onDeleteClick={() => handleRemove(imageIdx, file)}
-                    imageIdx={imageIdx}
-                  />
-                </Reorder.Item>
-              );
-            })}
-          </Reorder.Group>
-        </div>
-      )}
+            return (
+              <ReorderItem
+                key={field.id}
+                item={field}
+                imageUrl={previewUrl}
+                onDeleteClick={() => handleRemove(imageIdx, file)}
+                imageIdx={imageIdx}
+              />
+            );
+          })}
+        </Reorder.Group>
+      </div>
     </div>
   );
 };

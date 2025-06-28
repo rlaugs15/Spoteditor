@@ -63,6 +63,7 @@ export async function updateLog(formData: FormData, logId: string) {
         if (place.category) placeData.category = place.category;
         if (place.location) placeData.address = place.location;
         if (place.order) placeData.order = place.order;
+
         placeData.updated_at = new Date();
 
         const { error: placeError } = await supabase
@@ -73,6 +74,25 @@ export async function updateLog(formData: FormData, logId: string) {
         if (placeError) {
           console.error('장소 테이블 업데이트 실패', placeError);
           throw new Error(`place_id ${place.id} 업데이트 실패`);
+        }
+
+        // place_images 장소 이미지 수정 시
+        if (place.placeImages && Array.isArray(place.placeImages)) {
+          const imageUpdatePromises = place.placeImages.map(async (image, index) => {
+            const { error: placeImgError } = await supabase
+              .from('place_images')
+              .update({
+                order: index + 1,
+              })
+              .eq('place_image_id', image.place_image_id);
+
+            if (placeImgError) {
+              console.error('이미지 order 업데이트 실패', placeImgError);
+              throw new Error(`이미지 ${image.place_image_id} order 업데이트 실패`);
+            }
+          });
+
+          await Promise.all(imageUpdatePromises);
         }
       });
 

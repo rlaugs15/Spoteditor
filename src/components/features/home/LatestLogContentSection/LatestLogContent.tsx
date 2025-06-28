@@ -11,11 +11,11 @@ import useQueryPagination from '@/hooks/useQueryPagination';
 import { cn } from '@/lib/utils';
 import { useRef } from 'react';
 
-interface LatestLogConentProps {
+interface LatestLogContentProps {
   currentPage: number;
 }
 
-export default function LatestLogConent({ currentPage }: LatestLogConentProps) {
+export default function LatestLogContent({ currentPage }: LatestLogContentProps) {
   const contentRef = useRef<HTMLElement | null>(null);
   const { handlePageChange } = useQueryPagination('logPage', currentPage, contentRef);
   const { data } = useLogs({ currentPage, pageSize: 13, sort: 'latest' });

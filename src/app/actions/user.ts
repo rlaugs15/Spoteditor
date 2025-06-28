@@ -130,10 +130,14 @@ async function fetchPublicUser(userId: string): Promise<PublicUser | null> {
 }
 
 export async function getPublicUser(userId: string) {
-  return unstable_cache(() => fetchPublicUser(userId), [...userKeys.publicUser(userId)], {
-    tags: [cacheTags.publicUser(userId), globalTags.userAll],
-    revalidate: 300,
-  })();
+  return unstable_cache(
+    () => fetchPublicUser(userId),
+    [...userKeys.publicUser(userId)].filter((v) => v !== undefined && v !== null),
+    {
+      tags: [cacheTags.publicUser(userId), globalTags.userAll],
+      revalidate: 300,
+    }
+  )();
 }
 
 //----------------------------------------------------서버액션--------------------------------------

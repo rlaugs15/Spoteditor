@@ -19,11 +19,11 @@ export type DetailLog = Tables<'log'> & {
 };
 
 /* 로그리스트 */
-export type LogsReseponse = ApiResponse<LogWithUserAndAddress[]>;
+export type LogsResponse = ApiResponse<LogWithUserAndAddress[]>;
 export interface LogsParams extends PaginationParams {
   userId?: string;
 }
-export interface logBookmarkListParmas extends PaginationParams {
+export interface logBookmarkListParams extends PaginationParams {
   userId: string;
 }
 

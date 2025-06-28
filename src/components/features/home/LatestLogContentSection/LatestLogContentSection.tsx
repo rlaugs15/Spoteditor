@@ -2,13 +2,15 @@ import { logKeys } from '@/app/actions/keys';
 import { getLogs } from '@/app/actions/log';
 import { getQueryClient } from '@/lib/utils';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import LatestLogConent from './LatestLogConent';
+import LatestLogContent from './LatestLogContent';
 
-interface LatestLogConentSectionProps {
+interface LatestLogContentSectionProps {
   currentPage: number;
 }
 
-export default async function LatestLogConentSection({ currentPage }: LatestLogConentSectionProps) {
+export default async function LatestLogContentSection({
+  currentPage,
+}: LatestLogContentSectionProps) {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
@@ -17,7 +19,7 @@ export default async function LatestLogConentSection({ currentPage }: LatestLogC
   });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <LatestLogConent currentPage={currentPage} />
+      <LatestLogContent currentPage={currentPage} />
     </HydrationBoundary>
   );
 }
