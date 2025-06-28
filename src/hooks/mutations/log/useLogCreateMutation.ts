@@ -1,11 +1,11 @@
 import { logKeys, searchKeys } from '@/app/actions/keys';
 import { createLog } from '@/app/actions/log-register';
+import { useRouter } from '@/i18n/navigation';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues, NewPlace, NewPlaceImage } from '@/types/log';
 import { uploadPlaces, uploadThumbnail } from '@/utils/upload';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 interface LogCreateMutationProps {

@@ -8,6 +8,7 @@ import ProfileFormFields from '@/components/features/profile-editor/ProfileFormF
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import useUser from '@/hooks/queries/user/useUser';
+import { useRouter } from '@/i18n/navigation';
 import { removeImageIfNeeded } from '@/lib/utils';
 import { profileEditorSchema } from '@/lib/zod/profileSchema';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
@@ -17,7 +18,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';

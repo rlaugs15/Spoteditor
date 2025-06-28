@@ -20,6 +20,7 @@ const signInWith = (provider: Provider) => async () => {
     console.log(error);
   }
 
+  //Supabase OAuth처럼 외부 URL은 next-intl의 redirect()을 사용하지 않는다.
   redirect(data.url as string);
 };
 

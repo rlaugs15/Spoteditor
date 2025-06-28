@@ -6,10 +6,9 @@ import LogAuthorIntro from '@/components/features/detail-log/LogAuthorIntro';
 import LogBookmarkWithCount from '@/components/features/detail-log/LogBookmarkWithCount';
 import LogContent from '@/components/features/detail-log/LogContent';
 import LogThumbnail from '@/components/features/detail-log/LogThumbnail';
+import { Link } from '@/i18n/navigation';
 import { PlaceWithImages } from '@/types/api/log';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-
 export interface LogIdParams {
   logId: string;
 }

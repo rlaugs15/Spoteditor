@@ -1,8 +1,8 @@
 import { logKeys, placeKeys, searchKeys } from '@/app/actions/keys';
 import { deleteLog } from '@/app/actions/log';
+import { useRouter } from '@/i18n/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 interface LogDeleteMutationProps {

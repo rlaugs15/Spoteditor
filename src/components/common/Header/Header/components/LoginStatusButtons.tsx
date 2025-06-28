@@ -4,10 +4,10 @@ import { UserBlackIcon, UserIcon } from '@/components/common/Icons';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import useResponsive from '@/hooks/useResponsive';
+import { useRouter } from '@/i18n/navigation';
 import { IUser } from '@/types/api/user';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
 
 const UserProfileButton = dynamic(() => import('./UserProfileButton/UserProfileButton'), {
   ssr: false,

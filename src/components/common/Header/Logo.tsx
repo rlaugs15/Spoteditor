@@ -1,10 +1,9 @@
-import { getLocale } from 'next-intl/server';
-import Link from 'next/link';
+import { HOME } from '@/constants/pathname';
+import { Link } from '@/i18n/navigation';
 
-const Logo = async () => {
-  const locale = await getLocale();
+const Logo = () => {
   return (
-    <Link href={`/${locale}`} className="text-white text-[23px] font-prompt">
+    <Link href={HOME} className="text-white text-[23px] font-prompt">
       Spoteditor
     </Link>
   );

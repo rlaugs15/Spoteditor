@@ -3,8 +3,8 @@ import { BookMarkIcon } from '@/components/common/Icons';
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLogBookmarkCheck from '@/hooks/queries/log/useLogBookmarkCheck';
 import useUser from '@/hooks/queries/user/useUser';
+import { useRouter } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
 
 interface LogBookMarkButtonProps {
   logId: string;

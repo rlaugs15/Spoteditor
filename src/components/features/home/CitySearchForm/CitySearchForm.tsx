@@ -3,11 +3,11 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useRouter } from '@/i18n/navigation';
 import { citySearchSchema } from '@/lib/zod/searchSchema';
 import { useCitySearchStore } from '@/stores/searchStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';

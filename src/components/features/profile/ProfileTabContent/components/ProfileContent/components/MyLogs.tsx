@@ -15,7 +15,7 @@ import ProfileMyLogFallback from '@/components/features/profile/fallback/Profile
 import useLogs from '@/hooks/queries/log/useLogs';
 import useUser from '@/hooks/queries/user/useUser';
 import usePagination from '@/hooks/usePagination';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { useEffect } from 'react';
 
 interface MyLogsProps {

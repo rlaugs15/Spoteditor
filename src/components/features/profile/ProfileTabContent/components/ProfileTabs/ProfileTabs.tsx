@@ -3,10 +3,10 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { REGISTER_PATHS } from '@/constants/pathname';
+import { useRouter } from '@/i18n/navigation';
 import { useProfileTabStore } from '@/stores/profileStore';
 import { IUser } from '@/types/api/user';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import TabButton from './TabButton';
 
 interface ProfileTabsProps {

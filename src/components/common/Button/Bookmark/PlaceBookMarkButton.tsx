@@ -3,8 +3,8 @@ import { BookMarkIcon } from '@/components/common/Icons';
 import usePlaceBookmarkMutation from '@/hooks/mutations/place/usePlaceBookmarkMutation';
 import usePlaceBookmarkCheck from '@/hooks/queries/place/useIsPlaceBookmarkCheck';
 import useUser from '@/hooks/queries/user/useUser';
+import { useRouter } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
 
 interface PlaceBookMarkButtonProps {
   placeId: string;
