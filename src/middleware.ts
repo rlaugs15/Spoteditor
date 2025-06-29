@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
     const isLoggedIn = !!userId;
 
     if (!isLoggedIn) {
-      return Response.redirect(new URL(`/${locale}`, request.url));
+      return Response.redirect(new URL(`/${locale}/login`, request.url));
     }
   }
 
