@@ -53,13 +53,6 @@ export default function usePlaceBookmarkMutation() {
         })
       );
 
-      queryClient.setQueryData(
-        logKeys.bookmarkStatus(logId, String(user?.user_id)),
-        (old: BookmarkResponse) => ({
-          ...old,
-          isBookmark: !isBookmark,
-        })
-      );
       queryClient.setQueryData(logKeys.detail(logId), (old: ApiResponse<DetailLog>) => {
         if (!old?.success) return old;
 
