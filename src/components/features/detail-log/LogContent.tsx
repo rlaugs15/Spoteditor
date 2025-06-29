@@ -5,7 +5,6 @@ import { LocationIcon, MapIcon } from '@/components/common/Icons';
 import { formatCount } from '@/lib/utils';
 import { DetailLog } from '@/types/api/log';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
 import PlaceImageSlider from './PlaceImageSlider';
 
 interface LogContentProps {
@@ -14,11 +13,8 @@ interface LogContentProps {
 }
 
 const LogContent = ({ place, idx }: LogContentProps) => {
-  const [bookmarkCount, setBookmarkCount] = useState(place._count?.place_bookmark ?? 0);
-  const handleToggleBookmark = (newStatus: boolean) => {
-    setBookmarkCount((prev) => prev + (newStatus ? 1 : -1));
-  };
   const t = useTranslations('Category');
+
   return (
     <div className="web:grid grid-cols-[1fr_4fr] gap-[15px] border-t pt-[15px] web:pt-3 py-10 space-y-[15px]">
       <section className="flex flex-col gap-2 relative">
@@ -30,11 +26,10 @@ const LogContent = ({ place, idx }: LogContentProps) => {
           <section className="absolute top-0 right-0 flex flex-col items-center">
             <PlaceBookMarkButton
               placeId={place.place_id}
-              onToggle={handleToggleBookmark}
               className="!top-0 !right-0 !relative w-9 h-9"
             />
             <span className="font-medium text-text-sm text-light-300">
-              {formatCount(bookmarkCount)}
+              {formatCount(Number(place._count?.place_bookmark) || 0)}
             </span>
           </section>
         </div>

@@ -67,7 +67,7 @@ const PlaceForm = ({
           <Input
             {...field}
             type="text"
-            placeholder="장소명을 적어주세요 *"
+            placeholder={`${tLog('placeNameLabel')} *`}
             className={cn(
               'font-medium !text-text-lg placeholder:text-light-300',
               placeErrors?.placeName && 'placeholder:text-error-500'
