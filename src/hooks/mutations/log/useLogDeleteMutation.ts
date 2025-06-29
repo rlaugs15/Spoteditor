@@ -1,5 +1,6 @@
 import { logKeys, placeKeys, searchKeys } from '@/app/actions/keys';
 import { deleteLog } from '@/app/actions/log';
+import { HOME } from '@/constants/pathname';
 import { useRouter } from '@/i18n/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
@@ -24,7 +25,7 @@ const useLogDeleteMutation = () => {
         keysToInvalidate.forEach((key) => {
           queryClient.removeQueries({ queryKey: key, exact: false });
         });
-        router.replace(`/${locale}`);
+        router.replace(HOME);
       }
     },
     onError: () => {
