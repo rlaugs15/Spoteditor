@@ -1,8 +1,9 @@
 import { logKeys, placeKeys, searchKeys } from '@/app/actions/keys';
 import { deleteLog } from '@/app/actions/log';
+import { HOME } from '@/constants/pathname';
 import { useRouter } from '@/i18n/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 interface LogDeleteMutationProps {
@@ -11,7 +12,6 @@ interface LogDeleteMutationProps {
 
 const useLogDeleteMutation = () => {
   const t = useTranslations('Toast.logDelete');
-  const locale = useLocale();
   const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
@@ -24,7 +24,7 @@ const useLogDeleteMutation = () => {
         keysToInvalidate.forEach((key) => {
           queryClient.removeQueries({ queryKey: key, exact: false });
         });
-        router.replace(`/${locale}`);
+        router.replace(HOME);
       }
     },
     onError: () => {

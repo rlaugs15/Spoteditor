@@ -41,6 +41,7 @@ export default function UserProfileButton({ user }: UserProfileButtonProps) {
       <DropdownMenuContent
         // autoFocus를 끄면 포커스를 잡지 않음(에러방지)
         autoFocus={false}
+        forceMount
         className="w-[264px]"
       >
         <DropdownMenuItem className="font-bold text-text-lg flex justify-start gap-[5px] px-4 items-center">

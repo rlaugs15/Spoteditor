@@ -17,12 +17,11 @@ export default function PlaceBookMarkButton({
   placeId,
   modal,
   className,
-  onToggle,
 }: PlaceBookMarkButtonProps) {
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
   const { data, isLoading } = usePlaceBookmarkCheck({ placeId, userId: user?.user_id || null });
-  const { mutate } = usePlaceBookmarkMutation(onToggle);
+  const { mutate } = usePlaceBookmarkMutation();
 
   const onBookMarkClick = () => {
     if (userIsLoading) return;
