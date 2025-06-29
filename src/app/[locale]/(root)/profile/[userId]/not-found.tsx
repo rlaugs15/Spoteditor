@@ -1,5 +1,7 @@
 import ErrorTemplate from '@/components/common/ErrorTemplate';
+import { getTranslations } from 'next-intl/server';
 
-export default function NotFound() {
-  return <ErrorTemplate message="존재하지 않는 유저입니다." />;
+export default async function NotFound() {
+  const t = await getTranslations('NotFoundPage');
+  return <ErrorTemplate message={t('userMessage')} />;
 }
