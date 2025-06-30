@@ -84,7 +84,7 @@ export const useLogCreationStore = create<LogCreationStoreType>()(
         sigungu: state.sigungu,
       }),
       onRehydrateStorage: () => {
-        console.log('hydration starts');
+        // console.log('hydration starts');
 
         return (state, error) => {
           if (!error && state) state.hydrated = true;

@@ -97,7 +97,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     ...addedPlaces.map((field, idx) => ({ ...field, type: 'added', originalIdx: idx })),
   ];
 
-  // console.log('allPlaces', allPlaces);
+  // // console.log('allPlaces', allPlaces);
 
   const handleAddNewPlace = () => {
     if (allPlaces.length >= 10) {
