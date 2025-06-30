@@ -8,6 +8,7 @@ import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
 import useAddPlaceMutation from '@/hooks/mutations/log/useAddPlaceMutation';
 import useLogEditMutation from '@/hooks/mutations/log/useLogEditMutation';
+import { trackLogEditEvent } from '@/lib/analytics';
 import { LogEditFormSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { DetailLog } from '@/types/api/log';
@@ -97,7 +98,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     ...addedPlaces.map((field, idx) => ({ ...field, type: 'added', originalIdx: idx })),
   ];
 
-  // console.log('allPlaces', allPlaces);
+  // // console.log('allPlaces', allPlaces);
 
   const handleAddNewPlace = () => {
     if (allPlaces.length >= 10) {
@@ -171,6 +172,9 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   };
 
   const onSubmit = async (values: LogEditFormValues) => {
+    // GA 이벤트 추적 - 로그 수정 시작
+    trackLogEditEvent('start');
+
     // console.log('values', values);
     const dirtyValues = extractDirtyValues<LogEditFormValues>(form.formState.dirtyFields, values);
     // console.log('dirtyValues', dirtyValues);

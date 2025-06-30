@@ -150,12 +150,7 @@ export default function ProfileEditorPage() {
     <main className="flex flex-col pt-7.5 web:pt-15 mx-4 web:mx-12.5 mb-35 web:mb-25">
       <div className="w-full web:w-[661px] flex flex-col px-4 web:px-0 web:mx-auto">
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit, (errors) => {
-              console.log('폼 에러 발생', errors);
-            })}
-            className="flex flex-col w-full"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col w-full">
             {/* 아바타 섹션 */}
             <AvatarEditSection imageUrl={me?.image_url ?? ''} onFileChange={handleImageChange} />
 
