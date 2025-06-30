@@ -1,8 +1,6 @@
 import { getUser } from '@/app/actions/user';
 import FollowingButton from '@/components/common/Button/FollowingButton';
-import UserImage from '@/components/common/UserImage';
-import { PROFILE_PATHS } from '@/constants/pathname';
-import { Link } from '@/i18n/navigation';
+import LogProfileLink from './LogProfileLink';
 
 interface LogProfileProps {
   userId: string;
@@ -15,10 +13,7 @@ const LogProfile = async ({ userId, userImage, userNickname }: LogProfileProps) 
   return (
     <div className="flex items-start py-1.5">
       <div className="flex items-center gap-4">
-        <Link href={`${PROFILE_PATHS.PROFILE}/${userId}`} className="flex items-center gap-2">
-          <UserImage imgSrc={userImage} className="w-6 h-6" />
-          <span className="text-text-sm web:text-text-md font-semibold">{userNickname}</span>
-        </Link>
+        <LogProfileLink userId={userId} userImage={userImage} userNickname={userNickname} />
         {me && me?.user_id !== userId && <FollowingButton userId={userId} />}
       </div>
     </div>
