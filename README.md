@@ -1,4 +1,4 @@
-# [Spoteditor](https://www.thespoteditor.com/)
+# [Spoteditor](https://spoteditor-test-spoteditorteams-projects.vercel.app/ko)
 
 **계획된 일정, 완벽한 하루**
 
@@ -73,12 +73,6 @@
 3. [**프로필 페이지 이미지 업로드 속도 개선 (11,009ms 단축)**](https://github.com/project2025-a/project2025-next/wiki/%ED%94%84%EB%A1%9C%ED%95%84%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C-%EC%86%8D%EB%8F%84%EA%B0%9C%EC%84%A0)
 
    - 업로드 방식을 변경해 이미지 업로드 속도를 약 3배 빠르게 개선했습니다.
-
-4. [**이미지 업로드 최적화 트러블슈팅 (react-image-file-resizer → browser-image-compression)**](https://nayah.tistory.com/190)
-
-   - 라이브러리 변경으로 화질 저하 없이 파일 크기를 80% 이상 줄였습니다.
-
-<br/>
 
 ## Demo
 
