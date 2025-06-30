@@ -8,6 +8,7 @@ import { Form } from '@/components/ui/form';
 import { REGISTER_PATHS } from '@/constants/pathname';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
 import { useRouter } from '@/i18n/navigation';
+import { trackLogCreateEvent } from '@/lib/analytics';
 import { LogFormSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/log';
@@ -83,6 +84,9 @@ const LogPage = () => {
   };
 
   const onSubmit = async (values: LogFormValues) => {
+    // GA 이벤트 추적 - 로그 등록 시작
+    trackLogCreateEvent('start');
+
     // console.log(values);
     mutate({ values });
   };

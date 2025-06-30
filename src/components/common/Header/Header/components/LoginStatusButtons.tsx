@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import useResponsive from '@/hooks/useResponsive';
 import { useRouter } from '@/i18n/navigation';
+import { trackLoginEvent } from '@/lib/analytics';
 import { IUser } from '@/types/api/user';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
@@ -28,6 +29,7 @@ export default function LoginStatusButtons({ user }: LoginStatusButtonsProps) {
   const t = useTranslations('LoginStatus');
 
   const handleLoginClick = () => {
+    trackLoginEvent('header');
     router.push('/login');
   };
 

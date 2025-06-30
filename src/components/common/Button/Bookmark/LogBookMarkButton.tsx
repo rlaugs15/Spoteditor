@@ -4,6 +4,7 @@ import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation
 import useLogBookmarkCheck from '@/hooks/queries/log/useLogBookmarkCheck';
 import useUser from '@/hooks/queries/user/useUser';
 import { useRouter } from '@/i18n/navigation';
+import { trackBookmarkEvent } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
 interface LogBookMarkButtonProps {
@@ -25,6 +26,11 @@ export default function LogBookMarkButton({ logId, modal, className }: LogBookMa
       return;
     }
     if (!data) return;
+
+    // GA 이벤트 추적
+    const action = data.isBookmark ? 'remove' : 'add';
+    trackBookmarkEvent('log', action);
+
     mutate({ logId, isBookmark: data.isBookmark });
   };
   return (
