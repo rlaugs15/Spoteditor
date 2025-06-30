@@ -29,6 +29,13 @@
       "logoutError": "Logout failed. Please try again."
     }
   },
+  "NotFoundPage": {
+    "title": "Page not found.",
+    "defaultMessage": "Please check the URL.",
+    "logMessage": "The log does not exist.",
+    "userMessage": "The user does not exist.",
+    "button": "Go to Home"
+  },
   "LoginModal": {
     "title": "Spoteditor",
     "login": "Login",
@@ -560,6 +567,7 @@
   "Category": {
     "레스토랑": "Restaurant",
     "카페/베이커리": "Cafe / Bakery",
+    "카페": "Cafe / Bakery",
     "미술관": "Art Museum",
     "음악/공연장": "Music / Venue",
     "힐링/여가": "Healing / Leisure",
