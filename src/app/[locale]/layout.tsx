@@ -3,6 +3,7 @@ import { routing } from '@/i18n/routing';
 import { pretendard, prompt, untitled } from '@/lib/fonts';
 import Providers from '@/providers';
 import '@/styles/globals.css';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
@@ -53,6 +54,7 @@ export default async function RootLayout({
           <Providers>{children}</Providers>
           <Toaster position="top-right" richColors />
         </NextIntlClientProvider>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
       </body>
     </html>
   );
