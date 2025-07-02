@@ -403,7 +403,7 @@ model place {
 }
 
 model place_bookmark {
-  place_bookmark_id BigInt       @id
+  place_bookmark_id BigInt       @id @default(autoincrement())
   user_id           String       @db.Uuid
   place_id          String       @db.Uuid
   place             place        @relation(fields: [place_id], references: [place_id], onDelete: Cascade, onUpdate: NoAction)
