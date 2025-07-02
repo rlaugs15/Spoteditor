@@ -3,5 +3,6 @@ declare namespace NodeJS {
     NEXT_PUBLIC_SITE_URL_LOCAL: string;
     NEXT_PUBLIC_GA_ID: string;
     NEXT_PUBLIC_CLARITY_ID: string;
+    NEXT_PUBLIC_HOTJAR_ID: string;
   }
 }
