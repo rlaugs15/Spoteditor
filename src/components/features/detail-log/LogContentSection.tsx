@@ -8,7 +8,7 @@ interface LogContentSectionProps {
 }
 
 export default function LogContentSection({ logId }: LogContentSectionProps) {
-  const { data } = useLog(logId);
+  const { data } = useLog(logId, {enabled: !!logId});
 
   if (!data?.success) return null;
 

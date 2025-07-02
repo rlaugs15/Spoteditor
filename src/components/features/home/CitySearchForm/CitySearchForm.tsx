@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useRouter } from '@/i18n/navigation';
+import { trackPlaceSearchEvent } from '@/lib/analytics';
 import { citySearchSchema } from '@/lib/zod/searchSchema';
 import { useCitySearchStore } from '@/stores/searchStore';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -40,6 +41,9 @@ export default function CitySearchForm() {
   }, [city, sigungu, form]);
 
   const onSearchSubmit = async ({ sigungu }: z.infer<typeof citySearchSchema>) => {
+    // GA 이벤트 추적 - 시군구 검색
+    trackPlaceSearchEvent('sigungu', sigungu);
+
     /* 추후 모달창 닫혔을 경우 검색할 수 있는 기능 추가 */
     router.push(`/search?keyword=${sigungu}`);
   };

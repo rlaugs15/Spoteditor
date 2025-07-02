@@ -1,6 +1,7 @@
 import { logKeys, searchKeys } from '@/app/actions/keys';
 import { createLog } from '@/app/actions/log-register';
 import { useRouter } from '@/i18n/navigation';
+import { trackLogCreateEvent } from '@/lib/analytics';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues, NewPlace, NewPlaceImage } from '@/types/log';
 import { uploadPlaces, uploadThumbnail } from '@/utils/upload';
@@ -71,30 +72,40 @@ const useLogCreateMutation = () => {
 
       return { firstTimeoutId, secondTimeoutId };
     },
+    onSuccess: ({ success, data }, _variables, context) => {
+      if (context) {
+        clearTimeout(context.firstTimeoutId);
+        clearTimeout(context.secondTimeoutId);
+      }
 
-    onSuccess: ({ success, data }) => {
       if (success) {
+        // GA 이벤트 추적 - 로그 등록 완료
+        trackLogCreateEvent('complete');
+
+        clearTag();
+
+        const keysToInvalidate = [logKeys.all, searchKeys.all];
+
+        keysToInvalidate.forEach((key) => {
+          queryClient.removeQueries({ queryKey: key, exact: false });
+        });
+
+        router.replace(`/log/${data}`);
         toast.success(t('success'), {
           description: t('redirect'),
         });
-
-        clearTag();
-        router.replace(`/log/${data}`);
-
-        const keysToInvalidate = [logKeys.all, searchKeys.all];
-        keysToInvalidate.forEach((key) =>
-          queryClient.removeQueries({ queryKey: key, exact: false })
-        );
       }
     },
-    onError: () => {
+    onError: (error, _variables, context) => {
+      if (context) {
+        clearTimeout(context.firstTimeoutId);
+        clearTimeout(context.secondTimeoutId);
+      }
+
+      // GA 이벤트 추적 - 로그 등록 실패
+      trackLogCreateEvent('cancel');
+
       toast.error(t('error'));
-    },
-    onSettled: (_data, _error, _variables, context) => {
-      if (context?.firstTimeoutId) clearTimeout(context.firstTimeoutId);
-      if (context?.secondTimeoutId) clearTimeout(context.secondTimeoutId);
-      toast.dismiss('delayed-upload-toast');
-      toast.dismiss('long-upload-toast');
     },
   });
 };

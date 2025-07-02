@@ -3,6 +3,7 @@ import { routing } from '@/i18n/routing';
 import { pretendard, prompt, untitled } from '@/lib/fonts';
 import Providers from '@/providers';
 import '@/styles/globals.css';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
@@ -45,6 +46,36 @@ export default async function RootLayout({
           href="/favicons/android-icon-192x192.png"
         />
         <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png" />
+        {/* Clarity */}
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_ID}");
+    `,
+          }}
+        />
+        {/* Hotjar */}
+        {process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_HOTJAR_ID && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+        (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:${JSON.stringify(process.env.NEXT_PUBLIC_HOTJAR_ID)},hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+      `,
+            }}
+          />
+        )}
       </head>
       <body
         className={`${pretendard.variable} ${untitled.variable} ${prompt.variable} antialiased`}
@@ -53,6 +84,7 @@ export default async function RootLayout({
           <Providers>{children}</Providers>
           <Toaster position="top-right" richColors />
         </NextIntlClientProvider>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
       </body>
     </html>
   );

@@ -57,13 +57,13 @@ export const logKeys = {
   detail: (logId: string) => [...logKeys.all, 'detail', logId] as const,
 
   // 로그 목록 (전체)
-  list: (params: LogsParams) =>
+  list: ({ currentPage = 1, pageSize = 10, sort = 'latest' }: LogsParams) =>
     [
       ...logKeys.all,
       'list',
-      `page-${params.currentPage}`,
-      `size-${params.pageSize}`,
-      `sort-${params.sort || 'latest'}`,
+      `page-${currentPage}`,
+      `size-${pageSize}`,
+      `sort-${sort || 'latest'}`,
     ] as const,
 
   // 특정 유저 로그 목록
@@ -99,7 +99,7 @@ export const placeKeys = {
     [...placeKeys.all, 'list', `page-${currentPage}`, `size-${pageSize}`] as const,
 
   // 북마크된 장소 목록
-  bookmarkList: ({ userId, currentPage, pageSize }: logBookmarkListParams) =>
+  bookmarkList: ({ userId, currentPage = 1, pageSize = 12 }: logBookmarkListParams) =>
     [
       ...placeKeys.all,
       'bookmarks',

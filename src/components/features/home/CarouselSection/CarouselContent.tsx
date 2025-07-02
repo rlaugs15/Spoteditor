@@ -6,8 +6,12 @@ import useLogs from '@/hooks/queries/log/useLogs';
 import Carousel from './Carousel';
 import CarouselSkeleton from './CarouselSkeleton';
 
-export default function CarouselContent() {
-  const { data, isPending } = useLogs({ pageSize: 12, sort: 'popular' });
+interface CarouselContentProps {
+  currentPage: number;
+}
+
+export default function CarouselContent({ currentPage }: CarouselContentProps) {
+  const { data, isPending } = useLogs({ currentPage, pageSize: 12, sort: 'popular' });
   if (isPending) return <CarouselSkeleton />;
 
   if ((data && !data?.success) || data?.data.length === 0) {

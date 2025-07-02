@@ -4,6 +4,7 @@ import { SearchIcon } from '@/components/common/Icons';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useRouter } from '@/i18n/navigation';
+import { trackPlaceSearchEvent } from '@/lib/analytics';
 import { SearchForm, searchSchema } from '@/lib/zod/searchSchema';
 import { useSearchStore } from '@/stores/searchStore';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,6 +29,9 @@ export default function SearchBar() {
   const { toggleSearchBar } = useSearchStore();
 
   const onSearchSubmit = ({ keyword }: SearchForm) => {
+    // GA 이벤트 추적 - 키워드 검색
+    trackPlaceSearchEvent('keyword', keyword);
+
     form.reset();
     router.push(`/search?keyword=${keyword}`);
     toggleSearchBar();

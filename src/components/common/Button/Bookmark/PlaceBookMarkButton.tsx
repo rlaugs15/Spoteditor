@@ -4,6 +4,7 @@ import usePlaceBookmarkMutation from '@/hooks/mutations/place/usePlaceBookmarkMu
 import usePlaceBookmarkCheck from '@/hooks/queries/place/useIsPlaceBookmarkCheck';
 import useUser from '@/hooks/queries/user/useUser';
 import { useRouter } from '@/i18n/navigation';
+import { trackBookmarkEvent } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
 interface PlaceBookMarkButtonProps {
@@ -30,6 +31,11 @@ export default function PlaceBookMarkButton({
       return;
     }
     if (!data) return;
+
+    // GA 이벤트 추적
+    const action = data.isBookmark ? 'remove' : 'add';
+    trackBookmarkEvent('place', action);
+
     mutate({
       placeId,
       isBookmark: data.isBookmark,
