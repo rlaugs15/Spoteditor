@@ -1,4 +1,4 @@
-# [Spoteditor](https://spoteditor-test.vercel.app)
+# [Spoteditor](https://spoteditor.vercel.app)
 
 **계획된 일정, 완벽한 하루**
 

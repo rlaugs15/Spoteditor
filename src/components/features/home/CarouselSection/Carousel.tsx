@@ -25,10 +25,11 @@ const Carousel = ({ logs }: { logs: LogWithUserAndAddress[] }) => {
     return () => window.removeEventListener('resize', updateSlidesPerGroup);
   }, []);
 
+  // SSR-safe: Swiper가 알아서 처리함. slidesPerGroup을 상태로 관리하지 않음
   const breakpoints = {
-    0: { slidesPerView: 2 },
-    640: { slidesPerView: 3 },
-    1024: { slidesPerView: 4 },
+    0: { slidesPerView: 2, slidesPerGroup: 2 },
+    640: { slidesPerView: 3, slidesPerGroup: 3 },
+    1024: { slidesPerView: 4, slidesPerGroup: 4 },
   };
 
   return (
@@ -36,7 +37,7 @@ const Carousel = ({ logs }: { logs: LogWithUserAndAddress[] }) => {
       <span className="w-[80px] ml-auto flex bg-gray-200 h-1 absolute top-[50px] right-0 rounded-full">
         <span
           ref={progressBarRef}
-          className="bg-black h-full absolute left-0 top-0 transition-all duration-500 rounded-full "
+          className="bg-black h-full absolute left-0 top-0 transition-all duration-500 rounded-full"
           style={{ width: '0%' }}
         />
       </span>
@@ -52,10 +53,9 @@ const Carousel = ({ logs }: { logs: LogWithUserAndAddress[] }) => {
         speed={800}
         onSlideChange={(swiper) => {
           if (!progressBarRef.current) return;
-
-          const realIndex = swiper.realIndex;
-          const progressRatio = Math.min((realIndex + slidesPerGroup) / logs?.length, 1);
-
+          const { realIndex, params } = swiper;
+          const groupSize = params.slidesPerGroup || 1;
+          const progressRatio = Math.min((realIndex + groupSize) / logs.length, 1);
           progressBarRef.current.style.width = `${progressRatio * 100}%`;
         }}
       >
