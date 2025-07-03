@@ -391,6 +391,13 @@ async function fetchSearchLogs({
                     },
                   },
                 },
+                {
+                  log_tag: {
+                    some: {
+                      OR: [{ tag: { contains: keyword, mode: 'insensitive' } }],
+                    },
+                  },
+                },
               ],
             }
           : undefined,
