@@ -80,21 +80,18 @@ export type Database = {
       log: {
         Row: {
           created_at: string
-          description: string | null
           log_id: string
           title: string
           user_id: string
         }
         Insert: {
           created_at?: string
-          description?: string | null
           log_id?: string
           title: string
           user_id?: string
         }
         Update: {
           created_at?: string
-          description?: string | null
           log_id?: string
           title?: string
           user_id?: string

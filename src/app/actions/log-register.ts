@@ -18,8 +18,6 @@ export async function createLog(values: PreparedValues) {
     const logData = {
       log_id: values.logId,
       title: values.logTitle,
-      description: values.logDescription,
-      thumbnail_url: values.thumbnailUrl,
     };
 
     const tagsData =

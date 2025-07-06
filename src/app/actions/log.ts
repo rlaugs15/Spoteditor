@@ -183,7 +183,6 @@ async function fetchLogs({
         select: {
           log_id: true,
           title: true,
-          description: true,
           place: {
             take: 1,
             orderBy: {
@@ -285,7 +284,6 @@ export async function fetchBookmarkedLogs({
           select: {
             log_id: true,
             title: true,
-            description: true,
             place: {
               take: 1,
               select: {
@@ -441,7 +439,6 @@ async function fetchSearchLogs({
         select: {
           log_id: true,
           title: true,
-          description: true,
           place: {
             take: 1,
             select: {

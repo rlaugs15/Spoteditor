@@ -44,7 +44,6 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
             userId={logData.user_id}
             userNickname={String(logData.users.nickname)}
             userImgUrl={String(logData.users.image_url)}
-            logDescription={logData.description ?? ''}
           />
           <LogContentSection logId={logId} />
         </main>

@@ -49,7 +49,6 @@ const LogPage = () => {
     reValidateMode: 'onChange',
     defaultValues: {
       logTitle: '',
-      logDescription: '',
       places: [initialPlace],
       tags: {
         mood: useLogCreationStore.getState().mood,

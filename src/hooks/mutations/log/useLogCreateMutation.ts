@@ -17,7 +17,7 @@ export type PreparedValues = {
   logId: string;
   placeDataList: NewPlace[];
   placeImageDataList: NewPlaceImage[];
-} & Pick<LogFormValues, 'logTitle' | 'logDescription' | 'address' | 'tags'>;
+} & Pick<LogFormValues, 'logTitle' | 'address' | 'tags'>;
 
 const useLogCreateMutation = () => {
   const router = useRouter();
@@ -37,7 +37,6 @@ const useLogCreateMutation = () => {
       const preparedValues: PreparedValues = {
         logId,
         logTitle: values.logTitle,
-        logDescription: values.logDescription,
         tags: values.tags,
         address: values.address,
         placeDataList,

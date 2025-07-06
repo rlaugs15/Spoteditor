@@ -351,7 +351,6 @@ model follow {
 model log {
   log_id       String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at   DateTime       @default(now()) @db.Timestamptz(6)
-  description  String?
   title        String
   user_id      String         @default(dbgenerated("auth.uid()")) @db.Uuid
   address      address[]
