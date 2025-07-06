@@ -2,6 +2,7 @@
 
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { createClient } from '@/lib/supabase/server';
+import { safeKey } from '@/lib/utils';
 import { PublicUser } from '@/types/api/user';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { revalidateTag, unstable_cache } from 'next/cache';
@@ -73,7 +74,7 @@ const cacheUser = unstable_cache(
     //console.log('캐시 제대로 되나', userId);
     return await fetchUserPrisma(userId);
   },
-  [...userKeys.me()],
+  safeKey(...userKeys.me()),
   {
     tags: [cacheTags.me(), globalTags.userAll],
     revalidate: 300,
@@ -130,14 +131,10 @@ async function fetchPublicUser(userId: string): Promise<PublicUser | null> {
 }
 
 export async function getPublicUser(userId: string) {
-  return unstable_cache(
-    () => fetchPublicUser(userId),
-    [...userKeys.publicUser(userId)].filter((v) => v !== undefined && v !== null),
-    {
-      tags: [cacheTags.publicUser(userId), globalTags.userAll],
-      revalidate: 300,
-    }
-  )();
+  return unstable_cache(() => fetchPublicUser(userId), safeKey(...userKeys.publicUser(userId)), {
+    tags: [cacheTags.publicUser(userId), globalTags.userAll],
+    revalidate: 300,
+  })();
 }
 
 //----------------------------------------------------서버액션--------------------------------------
