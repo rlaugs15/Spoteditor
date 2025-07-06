@@ -1,7 +1,7 @@
 'use client';
 import { PostCard } from '@/components/common/Card/PostCard';
 import { LogWithUserAndAddress } from '@/types/api/common';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Autoplay, Mousewheel, Pagination } from 'swiper/modules';
@@ -9,21 +9,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 const Carousel = ({ logs }: { logs: LogWithUserAndAddress[] }) => {
   const progressBarRef = useRef<HTMLDivElement>(null);
-  const [slidesPerGroup, setSlidesPerGroup] = useState(2);
-
-  useEffect(() => {
-    const updateSlidesPerGroup = () => {
-      const width = window.innerWidth;
-      if (width < 640) setSlidesPerGroup(2);
-      else if (width < 1024) setSlidesPerGroup(3);
-      else setSlidesPerGroup(4);
-    };
-
-    updateSlidesPerGroup();
-
-    window.addEventListener('resize', updateSlidesPerGroup);
-    return () => window.removeEventListener('resize', updateSlidesPerGroup);
-  }, []);
 
   // SSR-safe: Swiper가 알아서 처리함. slidesPerGroup을 상태로 관리하지 않음
   const breakpoints = {
@@ -49,7 +34,6 @@ const Carousel = ({ logs }: { logs: LogWithUserAndAddress[] }) => {
         mousewheel={{ forceToAxis: true }}
         className="w-full"
         breakpoints={breakpoints}
-        slidesPerGroup={slidesPerGroup}
         speed={800}
         onSlideChange={(swiper) => {
           if (!progressBarRef.current) return;

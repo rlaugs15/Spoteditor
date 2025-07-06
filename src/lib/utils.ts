@@ -87,3 +87,10 @@ export function formatCount(count: number): string {
   }
   return count.toString();
 }
+
+/* 쿼리키에서 undefined나 null 제거하는 함수 */
+export function safeKey(...args: (string | number | undefined | null)[]) {
+  return args
+    .filter((v): v is string | number => v !== undefined && v !== null)
+    .map((v) => String(v));
+}

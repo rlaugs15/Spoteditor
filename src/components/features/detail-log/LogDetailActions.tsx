@@ -8,9 +8,14 @@ import LogBookmarkWithCount from './LogBookmarkWithCount';
 interface LogDetailActionsProps {
   isAuthor: boolean;
   logId: string;
+  logBookmarkCount: number;
 }
 
-export default function LogDetailActions({ isAuthor, logId }: LogDetailActionsProps) {
+export default function LogDetailActions({
+  isAuthor,
+  logId,
+  logBookmarkCount = 0,
+}: LogDetailActionsProps) {
   return (
     <div className="flex flex-col items-center gap-2 fixed z-10 bottom-10 web:right-[50px] right-4">
       {isAuthor ? (
@@ -20,7 +25,7 @@ export default function LogDetailActions({ isAuthor, logId }: LogDetailActionsPr
           </Link>
         </ExtraActionButton>
       ) : (
-        <LogBookmarkWithCount logId={logId} />
+        <LogBookmarkWithCount logId={logId} initialCount={logBookmarkCount} />
       )}
       <ExtraActionButton className="w-11 h-11" asChild>
         <Link href={`/log/${logId}/placeCollect`}>

@@ -248,14 +248,10 @@ export async function getLogs(params: LogsParams) {
 
   const tagKey = params.userId ? cacheTags.logListByUser(params) : cacheTags.logList(params);
 
-  return unstable_cache(
-    () => fetchLogs(params),
-    [...queryKey].filter((v) => v !== undefined && v !== null),
-    {
-      tags: [tagKey, globalTags.logAll], // 상위 그룹 태그 추가
-      revalidate: 300,
-    }
-  )();
+  return unstable_cache(() => fetchLogs(params), queryKey, {
+    tags: [tagKey, globalTags.logAll], // 상위 그룹 태그 추가
+    revalidate: 300,
+  })();
 }
 
 // ===================================================================
@@ -336,17 +332,13 @@ export async function fetchBookmarkedLogs({
 }
 
 export async function getBookmarkedLogs(params: logBookmarkListParams) {
-  return unstable_cache(
-    () => fetchBookmarkedLogs(params),
-    [...logKeys.bookmarkList(params)].filter((v) => v !== undefined && v !== null),
-    {
-      tags: [
-        cacheTags.logBookmarkList(params), // 특정 페이지 북마크 리스트
-        globalTags.logBookmarkAll, // 전체 북마크 리스트 무효화용 상위 태그
-      ],
-      revalidate: 300,
-    }
-  )();
+  return unstable_cache(() => fetchBookmarkedLogs(params), logKeys.bookmarkList(params), {
+    tags: [
+      cacheTags.logBookmarkList(params), // 특정 페이지 북마크 리스트
+      globalTags.logBookmarkAll, // 전체 북마크 리스트 무효화용 상위 태그
+    ],
+    revalidate: 300,
+  })();
 }
 
 /* 북마크 시 서버캐시 무효화 */
@@ -388,6 +380,13 @@ async function fetchSearchLogs({
                   address: {
                     some: {
                       sigungu: { contains: keyword, mode: 'insensitive' },
+                    },
+                  },
+                },
+                {
+                  log_tag: {
+                    some: {
+                      OR: [{ tag: { contains: keyword, mode: 'insensitive' } }],
                     },
                   },
                 },
@@ -483,15 +482,11 @@ async function fetchSearchLogs({
 }
 
 export async function getSearchLogs(params: SearchParams) {
-  return unstable_cache(
-    () => fetchSearchLogs(params),
-    [...searchKeys.list(params)].filter((v) => v !== undefined && v !== null),
-    {
-      tags: [
-        cacheTags.searchList(params), // 조건별로 구분되는 태그
-        globalTags.searchAll, // 전체 무효화용 상위 태그
-      ],
-      revalidate: 300,
-    }
-  )();
+  return unstable_cache(() => fetchSearchLogs(params), searchKeys.list(params), {
+    tags: [
+      cacheTags.searchList(params), // 조건별로 구분되는 태그
+      globalTags.searchAll, // 전체 무효화용 상위 태그
+    ],
+    revalidate: 300,
+  })();
 }
