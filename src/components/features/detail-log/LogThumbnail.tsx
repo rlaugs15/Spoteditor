@@ -14,14 +14,14 @@ interface LogThumbnailProps {
   isAuthor: boolean;
 }
 const LogThumbnail = ({ logData, isAuthor }: LogThumbnailProps) => {
-  const { thumbnail_url, title, place, log_tag } = logData;
+  const { title, place, log_tag } = logData;
   const moods = log_tag.filter((item) => item.category === 'mood');
 
   const activities = log_tag.filter((item) => item.category === 'activity');
   return (
     <section className="relative overflow-hidden h-[488px] flex flex-col justify-between px-4 web:px-[50px] pt-4 pb-8">
       <Image
-        src={getStoragePublicImage(thumbnail_url as string)}
+        src={getStoragePublicImage(place[0].place_images[0].image_path as string)}
         alt="로그 썸네일 이미지"
         fill
         className="object-cover web:blur-md web:scale-110"

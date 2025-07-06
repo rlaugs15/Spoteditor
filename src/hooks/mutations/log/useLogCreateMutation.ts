@@ -4,7 +4,7 @@ import { useRouter } from '@/i18n/navigation';
 import { trackLogCreateEvent } from '@/lib/analytics';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues, NewPlace, NewPlaceImage } from '@/types/log';
-import { uploadPlaces, uploadThumbnail } from '@/utils/upload';
+import { uploadPlaces } from '@/utils/upload';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -15,7 +15,6 @@ interface LogCreateMutationProps {
 
 export type PreparedValues = {
   logId: string;
-  thumbnailUrl: string;
   placeDataList: NewPlace[];
   placeImageDataList: NewPlaceImage[];
 } & Pick<LogFormValues, 'logTitle' | 'logDescription' | 'address' | 'tags'>;
@@ -29,12 +28,6 @@ const useLogCreateMutation = () => {
     mutationFn: async ({ values }: LogCreateMutationProps) => {
       const logId = crypto.randomUUID();
 
-      /* 썸네일 업로드 */
-      // console.time('🖼️ 썸네일 업로드');
-      const thumbnailUploadResult = await uploadThumbnail(values.thumbnail, logId);
-      // console.timeEnd('🖼️ 썸네일 업로드');
-      if (!thumbnailUploadResult?.success) throw new Error(thumbnailUploadResult?.msg);
-
       /* 장소 이미지 업로드 */
       // console.time('📍 장소 이미지 업로드');
       const { placeDataList, placeImageDataList } = await uploadPlaces(values.places, logId);
@@ -47,7 +40,6 @@ const useLogCreateMutation = () => {
         logDescription: values.logDescription,
         tags: values.tags,
         address: values.address,
-        thumbnailUrl: thumbnailUploadResult.data,
         placeDataList,
         placeImageDataList,
       };

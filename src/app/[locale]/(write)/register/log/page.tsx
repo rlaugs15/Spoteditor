@@ -1,9 +1,10 @@
 'use client';
-import { Header3 } from '@/components/common/Header';
+
+import { LogRegisterHeader } from '@/components/common/Header';
 import PlaceForm from '@/components/features/log/common/PlaceForm';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
-import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
 import TitledInput from '@/components/features/log/register/TitledInput';
+import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { REGISTER_PATHS } from '@/constants/pathname';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
@@ -13,6 +14,7 @@ import { LogFormSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/log';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -41,13 +43,13 @@ const LogPage = () => {
     if (!country || !city || !sigungu) router.replace(REGISTER_PATHS.MOOD);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated]);
+
   const form = useForm({
     resolver: zodResolver(LogFormSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
     defaultValues: {
       logTitle: '',
-      thumbnail: undefined,
       logDescription: '',
       places: [initialPlace],
       tags: {
@@ -61,6 +63,7 @@ const LogPage = () => {
       },
     },
   });
+
   const { fields, append, remove, swap } = useFieldArray<LogFormValues>({
     control: form.control,
     name: 'places',
@@ -93,12 +96,11 @@ const LogPage = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <Header3 onAddNewPlace={handleAddNewPlace} />
+      <LogRegisterHeader onAddNewPlace={handleAddNewPlace} />
       <Form {...form}>
         <main className="grow bg-white pt-[54px]">
           <TitledInput />
-          <PhotoTextSection thumbnail />
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             {fields.map((field, idx) => (
               <PlaceForm
                 key={field.id}
@@ -109,6 +111,14 @@ const LogPage = () => {
               />
             ))}
           </div>
+          <Button
+            variant={'outline'}
+            size={'lg'}
+            className="w-full my-5"
+            onClick={handleAddNewPlace}
+          >
+            <Plus className="text-light-500 size-4" /> 장소추가
+          </Button>
         </main>
       </Form>
 
