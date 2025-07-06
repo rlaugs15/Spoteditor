@@ -5,7 +5,7 @@ import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { createClient } from '@/lib/supabase/server';
 import { ApiResponse } from '@/types/api/common';
 import { DetailLog, logBookmarkListParams, LogsParams, LogsResponse } from '@/types/api/log';
-import { SearchParams, SearchReseponse } from '@/types/api/search';
+import { SearchParams, SearchResponse } from '@/types/api/search';
 import { Prisma } from '@prisma/client';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
@@ -14,43 +14,16 @@ import { deleteNestedFolderFiles } from './storage';
 import { cacheTags, globalTags } from './tags';
 import { getUser } from './user';
 
+const DEFAULT_PAGE_SIZE = 12;
+const MAX_PAGE_SIZE = 30;
+const CACHE_REVALIDATE_TIME = 300; // 5분
+
 // ===================================================================
 // 단일 로그
 // ===================================================================
+
 export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
   try {
-    /* const supabase = await createClient();
-    const { data, error } = await supabase
-      .from('log')
-      .select(
-        `
-        *,
-        users:user_id(user_id, nickname, image_url),
-         place(*,
-         place_images(*)
-         ) ,
-         log_tag(
-          category, tag
-         ),
-         address(
-         country, city, sigungu
-         )
-      `
-      )
-      .order('order', { referencedTable: 'place', ascending: true })
-      .eq('log_id', logId)
-      .single();
-
-    console.log('data', data);
-
-    if (!data || error?.code === 'PGRST116') {
-      return {
-        success: false,
-        msg: ERROR_MESSAGES.LOG.NOT_FOUND,
-        errorCode: ERROR_CODES.LOG.NOT_FOUND,
-      };
-    } */
-
     const log = await prisma.log.findUnique({
       where: { log_id: logId },
       include: {
@@ -108,10 +81,11 @@ export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
   }
 }
 
+/* 로그 상세 조회 */
 export async function getLog(logId: string) {
   return unstable_cache(() => fetchLog(logId), [...cacheTags.logDetail(logId)], {
     tags: [cacheTags.logDetail(logId), globalTags.logAll], // 상위 그룹 태그 추가
-    revalidate: 300,
+    revalidate: CACHE_REVALIDATE_TIME,
   })();
 }
 
@@ -123,10 +97,15 @@ export async function revalidateLog(logId: string) {
 // ===================================================================
 // 로그 삭제
 // ===================================================================
+
 export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
   const me = await getUser();
   if (!me) {
-    return { success: false, msg: '로그인 상태가 아닙니다.' };
+    return {
+      success: false,
+      msg: ERROR_MESSAGES.COMMON.UNAUTHORIZED,
+      errorCode: ERROR_CODES.COMMON.UNAUTHORIZED,
+    };
   }
   try {
     const supabase = await createClient();
@@ -167,22 +146,27 @@ export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
     return { success: true, data: null };
   } catch (e) {
     console.error('로그 삭제 전체 실패:', e);
-    return { success: false, msg: '로그 삭제 실패' };
+    return {
+      success: false,
+      msg: ERROR_MESSAGES.LOG.DELETE_FAILED,
+      errorCode: ERROR_CODES.LOG.DELETE_FAILED,
+    };
   }
 }
 
 // ===================================================================
 // 로그 리스트
 // ===================================================================
+
 async function fetchLogs({
   currentPage = 1,
-  pageSize = 12,
+  pageSize = DEFAULT_PAGE_SIZE,
   sort = 'latest',
   userId,
 }: LogsParams): Promise<LogsResponse> {
   try {
     const safePage = Math.max(1, currentPage);
-    const safeSize = Math.min(Math.max(1, pageSize), 30);
+    const safeSize = Math.min(Math.max(1, pageSize), MAX_PAGE_SIZE);
     const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
 
     /* userId가 있을 경우 마이로그에서 쓸 로그리스트 반환 */
@@ -200,7 +184,23 @@ async function fetchLogs({
           log_id: true,
           title: true,
           description: true,
-          thumbnail_url: true,
+          place: {
+            take: 1,
+            orderBy: {
+              order: 'asc',
+            },
+            select: {
+              place_images: {
+                take: 1,
+                orderBy: {
+                  order: 'asc',
+                },
+                select: {
+                  image_path: true,
+                },
+              },
+            },
+          },
           users: {
             select: {
               user_id: true,
@@ -253,7 +253,7 @@ export async function getLogs(params: LogsParams) {
     [...queryKey].filter((v) => v !== undefined && v !== null),
     {
       tags: [tagKey, globalTags.logAll], // 상위 그룹 태그 추가
-      revalidate: 300,
+      revalidate: CACHE_REVALIDATE_TIME,
     }
   )();
 }
@@ -264,11 +264,11 @@ export async function getLogs(params: LogsParams) {
 export async function fetchBookmarkedLogs({
   userId,
   currentPage = 1,
-  pageSize = 12,
+  pageSize = DEFAULT_PAGE_SIZE,
 }: logBookmarkListParams): Promise<LogsResponse> {
   try {
     const safePage = Math.max(1, currentPage);
-    const safeSize = Math.min(Math.max(1, pageSize), 30);
+    const safeSize = Math.min(Math.max(1, pageSize), MAX_PAGE_SIZE);
     const skip = (safePage - 1) * safeSize;
 
     const bookmarkedLogs = await prisma.log_bookmark.findMany({
@@ -286,7 +286,17 @@ export async function fetchBookmarkedLogs({
             log_id: true,
             title: true,
             description: true,
-            thumbnail_url: true,
+            place: {
+              take: 1,
+              select: {
+                place_images: {
+                  take: 1,
+                  select: {
+                    image_path: true,
+                  },
+                },
+              },
+            },
             users: {
               select: {
                 user_id: true,
@@ -344,7 +354,7 @@ export async function getBookmarkedLogs(params: logBookmarkListParams) {
         cacheTags.logBookmarkList(params), // 특정 페이지 북마크 리스트
         globalTags.logBookmarkAll, // 전체 북마크 리스트 무효화용 상위 태그
       ],
-      revalidate: 300,
+      revalidate: CACHE_REVALIDATE_TIME,
     }
   )();
 }
@@ -357,66 +367,68 @@ export async function revalidateBookmarkLogs() {
 // ===================================================================
 // 검색 결과 로그 리스트
 // ===================================================================
+
 async function fetchSearchLogs({
   keyword,
   city,
   sigungu,
   currentPage = 1,
-  pageSize = 12,
+  pageSize = DEFAULT_PAGE_SIZE,
   sort = 'latest',
-}: SearchParams): Promise<SearchReseponse> {
+}: SearchParams): Promise<SearchResponse> {
   try {
     const safePage = Math.max(1, currentPage);
-    const safeSize = Math.min(Math.max(1, pageSize), 30);
+    const safeSize = Math.min(Math.max(1, pageSize), MAX_PAGE_SIZE);
     const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
 
-    const whereCondition = {
-      AND: [
-        keyword
-          ? {
-              OR: [
-                { title: { contains: keyword, mode: 'insensitive' } },
-                { place: { some: { name: { contains: keyword, mode: 'insensitive' } } } },
-                {
-                  address: {
-                    some: {
-                      city: { contains: keyword, mode: 'insensitive' },
-                    },
-                  },
-                },
-                {
-                  address: {
-                    some: {
-                      sigungu: { contains: keyword, mode: 'insensitive' },
-                    },
-                  },
-                },
-              ],
-            }
-          : undefined,
-        city
-          ? {
-              address: {
-                some: {
-                  city: { equals: city },
-                },
+    // 검색 조건 구성
+    const searchConditions = [];
+
+    if (keyword) {
+      searchConditions.push({
+        OR: [
+          { title: { contains: keyword, mode: 'insensitive' } },
+          { place: { some: { name: { contains: keyword, mode: 'insensitive' } } } },
+          {
+            address: {
+              some: {
+                city: { contains: keyword, mode: 'insensitive' },
               },
-            }
-          : undefined,
-        sigungu
-          ? {
-              address: {
-                some: {
-                  sigungu: { contains: sigungu, mode: 'insensitive' },
-                },
+            },
+          },
+          {
+            address: {
+              some: {
+                sigungu: { contains: keyword, mode: 'insensitive' },
               },
-            }
-          : undefined,
-        // undefined 제거 + 타입 오류 방지
-        // filter(Boolean)만으로는 타입이 좁혀지지 않기 때문에
-        // 명시적으로 logWhereInput[]로 단언해줘야 타입스크립트 에러가 발생하지 않음
-      ].filter(Boolean) as Prisma.logWhereInput[],
-    };
+            },
+          },
+        ],
+      });
+    }
+
+    if (city) {
+      searchConditions.push({
+        address: {
+          some: {
+            city: { equals: city },
+          },
+        },
+      });
+    }
+
+    if (sigungu) {
+      searchConditions.push({
+        address: {
+          some: {
+            sigungu: { contains: sigungu, mode: 'insensitive' },
+          },
+        },
+      });
+    }
+
+    const whereCondition =
+      searchConditions.length > 0 ? { AND: searchConditions as Prisma.logWhereInput[] } : {};
 
     const [searchData, totalCount] = await Promise.all([
       prisma.log.findMany({
@@ -430,7 +442,17 @@ async function fetchSearchLogs({
           log_id: true,
           title: true,
           description: true,
-          thumbnail_url: true,
+          place: {
+            take: 1,
+            select: {
+              place_images: {
+                take: 1,
+                select: {
+                  image_path: true,
+                },
+              },
+            },
+          },
           users: {
             select: {
               user_id: true,
@@ -491,7 +513,7 @@ export async function getSearchLogs(params: SearchParams) {
         cacheTags.searchList(params), // 조건별로 구분되는 태그
         globalTags.searchAll, // 전체 무효화용 상위 태그
       ],
-      revalidate: 300,
+      revalidate: CACHE_REVALIDATE_TIME,
     }
   )();
 }

@@ -6,4 +6,4 @@ export interface SearchParams extends PaginationParams {
   sigungu?: string; // 예: '강남구'
 }
 
-export type SearchReseponse = ApiResponse<LogWithUserAndAddress[]>;
+export type SearchResponse = ApiResponse<LogWithUserAndAddress[]>;
