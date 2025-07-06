@@ -1,10 +1,9 @@
 'use client';
 
-import PlaceBookMarkButton from '@/components/common/Button/Bookmark/PlaceBookMarkButton';
 import { LocationIcon, MapIcon } from '@/components/common/Icons';
-import { formatCount } from '@/lib/utils';
 import { DetailLog } from '@/types/api/log';
 import { useTranslations } from 'next-intl';
+import PlaceBookmarkWithCount from './PlaceBookmarkWithCount';
 import PlaceImageSlider from './PlaceImageSlider';
 
 interface LogContentProps {
@@ -23,15 +22,10 @@ const LogContent = ({ place, idx }: LogContentProps) => {
             <span>{String(idx).padStart(2, '0')}</span>
             <span>{place.name}</span>
           </div>
-          <section className="absolute top-0 right-0 flex flex-col items-center">
-            <PlaceBookMarkButton
-              placeId={place.place_id}
-              className="!top-0 !right-0 !relative w-9 h-9"
-            />
-            <span className="font-medium text-text-sm text-light-300">
-              {formatCount(Number(place._count?.place_bookmark) || 0)}
-            </span>
-          </section>
+          <PlaceBookmarkWithCount
+            placeId={place.place_id}
+            placeBookmarkCount={Number(place._count?.place_bookmark)}
+          />
         </div>
         <div className="flex flex-col web:w-[324px] gap-[2px]">
           <div className="flex gap-1.5 text-light-400 text-text-sm web:text-text-lg items-center">
