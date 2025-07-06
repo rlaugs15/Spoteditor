@@ -1,6 +1,5 @@
 import { placeKeys } from '@/app/actions/keys';
 import useUser from '@/hooks/queries/user/useUser';
-import { usePathname } from '@/i18n/navigation';
 import { BookmarkResponse } from '@/types/api/common';
 import { PlaceBookmarkParams } from '@/types/api/place';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -24,10 +23,6 @@ async function fetchPlaceBookmark({
 export default function usePlaceBookmarkMutation(onToggle?: (newStatus: boolean) => void) {
   const { data: user } = useUser();
   const queryClient = useQueryClient();
-
-  const pathname = usePathname();
-
-  const logId = String(getLogIdFromPath(pathname));
 
   return useMutation({
     mutationFn: fetchPlaceBookmark,
