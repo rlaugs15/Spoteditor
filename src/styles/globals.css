@@ -224,6 +224,12 @@
   }
 }
 
+@layer components {
+  .image-upload-button {
+    @apply cursor-pointer text-text-sm w-full h-12 rounded-md flex items-center justify-center border my-2.5 font-bold space-x-1.5 hover:bg-accent hover:text-accent-foreground;
+  }
+}
+
 @layer utilities {
   .bg-cover-gradient {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 34.9%, rgba(0, 0, 0, 0) 96.19%);

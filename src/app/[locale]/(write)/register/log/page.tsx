@@ -4,7 +4,6 @@ import { LogRegisterHeader } from '@/components/common/Header';
 import PlaceForm from '@/components/features/log/common/PlaceForm';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import TitledInput from '@/components/features/log/register/TitledInput';
-import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { REGISTER_PATHS } from '@/constants/pathname';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
@@ -111,14 +110,9 @@ const LogPage = () => {
               />
             ))}
           </div>
-          <Button
-            variant={'outline'}
-            size={'lg'}
-            className="w-full my-5"
-            onClick={handleAddNewPlace}
-          >
+          <button className="image-upload-button" onClick={handleAddNewPlace}>
             <Plus className="text-light-500 size-4" /> 장소추가
-          </Button>
+          </button>
         </main>
       </Form>
 
