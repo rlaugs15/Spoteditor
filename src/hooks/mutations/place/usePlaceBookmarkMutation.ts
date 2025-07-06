@@ -4,11 +4,6 @@ import { BookmarkResponse } from '@/types/api/common';
 import { PlaceBookmarkParams } from '@/types/api/place';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-function getLogIdFromPath(pathname: string): string | null {
-  const match = pathname.match(/\/log\/([a-f0-9-]{36})/); // UUID 패턴
-  return match ? match[1] : null;
-}
-
 async function fetchPlaceBookmark({
   placeId,
   isBookmark,
