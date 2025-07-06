@@ -30,7 +30,7 @@ export const AddedPlaceSchema = placeSchema; // 로그 수정 시 새로 추가�
 
 export const LogFormSchema = z.object({
   logTitle: z.string().max(30).min(1, '로그 제목은 필수입니다.'),
-  thumbnail: imageFileSchema,
+  // thumbnail: imageFileSchema,
   logDescription: z.string(),
   places: z
     .array(placeSchema)
@@ -56,7 +56,7 @@ export const EditPlaceSchema = placeSchema.extend({
 
 export const LogEditFormSchema = z.object({
   logTitle: z.string().max(30).min(1, '로그 제목은 필수입니다.'),
-  thumbnail: z.string(),
+  // thumbnail: z.string(),
   logDescription: z.string().nullable(),
   places: z.array(EditPlaceSchema).min(1, '장소 1개 이상은 필수입니다.'),
   tags: tagsSchema,

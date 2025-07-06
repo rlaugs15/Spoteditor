@@ -82,7 +82,6 @@ export type Database = {
           created_at: string
           description: string | null
           log_id: string
-          thumbnail_url: string
           title: string
           user_id: string
         }
@@ -90,7 +89,6 @@ export type Database = {
           created_at?: string
           description?: string | null
           log_id?: string
-          thumbnail_url: string
           title: string
           user_id?: string
         }
@@ -98,7 +96,6 @@ export type Database = {
           created_at?: string
           description?: string | null
           log_id?: string
-          thumbnail_url?: string
           title?: string
           user_id?: string
         }
