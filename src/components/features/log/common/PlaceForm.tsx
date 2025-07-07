@@ -8,8 +8,9 @@ import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import PhotoTextSection from '../register/PhotoTextSection';
 import PlaceDrawer from '../register/PlaceDrawer';
+import ImageSection from '../register/place-item/ImageSection';
+import TextSection from '../register/place-item/TextSection';
 
 interface PlaceFormProps {
   idx: number;
@@ -46,7 +47,9 @@ const PlaceForm = ({
   const tLog = useTranslations('Register.LogPage');
   const tCategory = useTranslations('Category');
   return (
-    <div className="py-[5px]">
+    <div>
+      <ImageSection idx={idx} fieldName={fieldName} edit={isEditPage && type === 'existing'} />
+
       <div className="flex justify-between h-[16px]">
         <span className="text-text-lg font-bold">
           {String((globalIdx ?? idx) + 1).padStart(2, '0')}
@@ -76,7 +79,7 @@ const PlaceForm = ({
         )}
       />
 
-      <div className="pt-2 pb-[6px] space-y-[6px]">
+      <div className="py-4 space-y-2">
         <div className="flex items-center gap-[10px]">
           <LocationIcon className="shrink-0 pt-[2px]" />
           <FormField
@@ -127,7 +130,7 @@ const PlaceForm = ({
         </div>
       </div>
 
-      <PhotoTextSection idx={idx} edit={isEditPage && type === 'existing'} fieldName={fieldName} />
+      <TextSection idx={idx} fieldName={fieldName} />
     </div>
   );
 };

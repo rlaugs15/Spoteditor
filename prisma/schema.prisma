@@ -349,17 +349,15 @@ model follow {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model log {
-  log_id        String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  created_at    DateTime       @default(now()) @db.Timestamptz(6)
-  description   String?
-  thumbnail_url String
-  title         String
-  user_id       String         @default(dbgenerated("auth.uid()")) @db.Uuid
-  address       address[]
-  users         public_users   @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
-  log_bookmark  log_bookmark[]
-  log_tag       log_tag[]
-  place         place[]
+  log_id       String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at   DateTime       @default(now()) @db.Timestamptz(6)
+  title        String
+  user_id      String         @default(dbgenerated("auth.uid()")) @db.Uuid
+  address      address[]
+  users        public_users   @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
+  log_bookmark log_bookmark[]
+  log_tag      log_tag[]
+  place        place[]
 
   @@schema("public")
 }

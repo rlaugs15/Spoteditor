@@ -62,7 +62,7 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
   return (
     <div className="flex flex-col">
       <FormLabel htmlFor={`file-upload-${idx}`}>
-        <div className="cursor-pointer text-text-sm w-full h-12 rounded-md flex items-center justify-center border border-dashed my-2.5 font-bold space-x-1.5 hover:bg-accent hover:text-accent-foreground">
+        <div className="image-upload-button border-dashed ">
           <AddCameraIcon />
           <span>
             {t('uploadPictures')}

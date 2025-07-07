@@ -3,7 +3,6 @@ import { createClient } from '@/lib/supabase/server';
 import { ApiResponse } from '@/types/api/common';
 import type { FileObject } from '@supabase/storage-js';
 import { StorageBucket } from '../../types/api/storage';
-import { getUser } from './user';
 
 /* 단일 Signed upload URL 발급 */
 export async function getSignedUploadUrl(
@@ -256,45 +255,3 @@ export async function deleteNestedFolderFiles(parentFolder: string, bucket: stri
     console.log('삭제할 파일 없음');
   }
 }
-
-export async function generateFilePaths(
-  folder: string | undefined,
-  subfolder: string | undefined,
-  fileCount: number,
-  filename?: string
-): Promise<string[]> {
-  const me = await getUser();
-  if (!me) throw new Error('유저 없음');
-
-  return Array.from({ length: fileCount }).map((_, i) => {
-    const resolvedFilename = filename
-      ? fileCount === 1
-        ? filename
-        : `${i}_${filename}`
-      : `${i}.webp`;
-
-    return [me.user_id, folder, subfolder, resolvedFilename].filter(Boolean).join('/');
-  });
-}
-
-// export async function withRetry<T>(
-//   fn: () => Promise<T>,
-//   maxRetries = 2,
-//   delayMs = 300
-// ): Promise<T> {
-//   let lastError: unknown;
-
-//   for (let attempt = 0; attempt < maxRetries; attempt++) {
-//     try {
-//       return await fn();
-//     } catch (err) {
-//       lastError = err;
-//       console.warn(`재시도 ${attempt + 1}/${maxRetries} 실패:`, err);
-//       if (attempt < maxRetries - 1) {
-//         await delay(delayMs);
-//       }
-//     }
-//   }
-
-//   throw lastError;
-// }

@@ -1,13 +1,13 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import { useLogCreationStore } from '@/stores/logCreationStore';
+import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import BackButton from '../Button/BackButton';
 
-interface Header3Props {
+interface LogRegisterHeaderProps {
   onAddNewPlace: () => void;
 }
-const Header3 = ({ onAddNewPlace }: Header3Props) => {
+const LogRegisterHeader = ({ onAddNewPlace }: LogRegisterHeaderProps) => {
   const city = useLogCreationStore((state) => state.city);
   const sigungu = useLogCreationStore((state) => state.sigungu);
 
@@ -26,16 +26,15 @@ const Header3 = ({ onAddNewPlace }: Header3Props) => {
             <p className="text-text-2xl font-bold">{tLog('loading')}</p>
           )}
         </div>
-        <Button
-          variant="ghost"
-          className="font-bold text-text-md !text-light-300 px-0 hover:!text-light-400 hover:!bg-transparent"
+        <button
+          className="flex items-center gap-1 font-bold text-text-md !text-black px-0 hover:!text-light-400 hover:!bg-transparent"
           onClick={onAddNewPlace}
         >
-          {tLog('addPlace')}
-        </Button>
+          <Plus className="text-light-500 size-4" /> {tLog('addPlace')}
+        </button>
       </div>
     </header>
   );
 };
 
-export default Header3;
+export default LogRegisterHeader;

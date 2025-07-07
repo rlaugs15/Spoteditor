@@ -1,7 +1,7 @@
 import { logKeys, placeKeys } from '@/app/actions/keys';
 import { addPlaceToLog } from '@/app/actions/log-register';
 import { AddedPlaceValues } from '@/types/log';
-import { uploadPlaces } from '@/utils/upload';
+import { uploadPlacesDirect } from '@/utils/imageUpload';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -20,7 +20,7 @@ const useAddPlaceMutation = () => {
     mutationFn: async ({ values, logId, existingOrderCount = 0 }: AddPlaceMutationProps) => {
       /* 장소 이미지 업로드 */
       console.time('📍 추가된 장소 이미지 업로드');
-      const { placeDataList, placeImageDataList } = await uploadPlaces(
+      const { placeDataList, placeImageDataList } = await uploadPlacesDirect(
         values,
         logId,
         existingOrderCount

@@ -23,7 +23,7 @@ const PostCard = ({ log, vertical, modal }: PostCardProps) => {
       <Link href={`/log/${log?.log_id}`} className="flex flex-col h-full">
         <PostCardImage
           author={String(log?.users?.nickname)}
-          imageUrl={log?.thumbnail_url}
+          imageUrl={log?.place?.[0]?.place_images?.[0]?.image_path}
           vertical={vertical}
         />
         <PostCardTitle title={String(log?.title)} modal={modal} />

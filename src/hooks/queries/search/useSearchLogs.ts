@@ -1,9 +1,9 @@
 import { searchKeys } from '@/app/actions/keys';
 import { toQueryString } from '@/lib/utils';
-import { SearchParams, SearchReseponse } from '@/types/api/search';
+import { SearchParams, SearchResponse } from '@/types/api/search';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
-async function fetchuseSearch(params: SearchParams): Promise<SearchReseponse> {
+async function fetchuseSearch(params: SearchParams): Promise<SearchResponse> {
   const query = toQueryString(params);
   const res = await fetch(`/api/logs/search?${query}`);
   const data = await res.json();

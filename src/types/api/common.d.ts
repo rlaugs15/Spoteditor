@@ -51,5 +51,10 @@ export type LogWithUserAndAddress =
   | (Log & {
       users: User;
       address: Address[];
+      place: {
+        place_images: {
+          image_path: string;
+        }[];
+      }[];
     })
   | null;
