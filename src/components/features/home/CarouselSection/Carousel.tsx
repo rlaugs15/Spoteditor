@@ -1,7 +1,7 @@
 'use client';
 import { PostCard } from '@/components/common/Card/PostCard';
 import { LogWithUserAndAddress } from '@/types/api/common';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Autoplay, Mousewheel, Pagination } from 'swiper/modules';
@@ -9,26 +9,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 const Carousel = ({ logs }: { logs: LogWithUserAndAddress[] }) => {
   const progressBarRef = useRef<HTMLDivElement>(null);
-  const [slidesPerGroup, setSlidesPerGroup] = useState(2);
-
-  useEffect(() => {
-    const updateSlidesPerGroup = () => {
-      const width = window.innerWidth;
-      if (width < 640) setSlidesPerGroup(2);
-      else if (width < 1024) setSlidesPerGroup(3);
-      else setSlidesPerGroup(4);
-    };
-
-    updateSlidesPerGroup();
-
-    window.addEventListener('resize', updateSlidesPerGroup);
-    return () => window.removeEventListener('resize', updateSlidesPerGroup);
-  }, []);
 
   const breakpoints = {
-    0: { slidesPerView: 2 },
-    640: { slidesPerView: 3 },
-    1024: { slidesPerView: 4 },
+    0: { slidesPerView: 2, slidesPerGroup: 2 },
+    640: { slidesPerView: 3, slidesPerGroup: 3 },
+    1024: { slidesPerView: 4, slidesPerGroup: 4 },
   };
 
   return (
@@ -36,7 +21,7 @@ const Carousel = ({ logs }: { logs: LogWithUserAndAddress[] }) => {
       <span className="w-[80px] ml-auto flex bg-gray-200 h-1 absolute top-[50px] right-0 rounded-full">
         <span
           ref={progressBarRef}
-          className="bg-black h-full absolute left-0 top-0 transition-all duration-500 rounded-full "
+          className="bg-black h-full absolute left-0 top-0 transition-all duration-500 rounded-full"
           style={{ width: '0%' }}
         />
       </span>
@@ -48,14 +33,12 @@ const Carousel = ({ logs }: { logs: LogWithUserAndAddress[] }) => {
         mousewheel={{ forceToAxis: true }}
         className="w-full"
         breakpoints={breakpoints}
-        slidesPerGroup={slidesPerGroup}
         speed={800}
         onSlideChange={(swiper) => {
           if (!progressBarRef.current) return;
-
-          const realIndex = swiper.realIndex;
-          const progressRatio = Math.min((realIndex + slidesPerGroup) / logs?.length, 1);
-
+          const { realIndex, params } = swiper;
+          const groupSize = params.slidesPerGroup || 1;
+          const progressRatio = Math.min((realIndex + groupSize) / logs.length, 1);
           progressBarRef.current.style.width = `${progressRatio * 100}%`;
         }}
       >
