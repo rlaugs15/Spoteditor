@@ -23,21 +23,25 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
   const isAuthor = user?.user_id === logData.user_id;
 
   return (
-    <HydrationBoundary state={dehydratedState}>
-      <div>
-        <LogThumbnail logData={logData} isAuthor={isAuthor} />
-        <main className="flex flex-col px-4 web:px-[50px] pb-[200px]">
-          <LogAuthorIntro
-            userId={logData.user_id}
-            userNickname={String(logData.users.nickname)}
-            userImgUrl={String(logData.users.image_url)}
-          />
-          <LogContentSection logId={logId} />
-        </main>
-        
+    <div>
+      <LogThumbnail logData={logData} isAuthor={isAuthor} />
+      <main className="flex flex-col px-4 web:px-[50px] pb-[200px]">
+        <LogAuthorIntro
+          userId={logData.user_id}
+          userNickname={String(logData.users.nickname)}
+          userImgUrl={String(logData.users.image_url)}
+        />
+        <>
+          {logData.place.map((place, idx) => (
+            <LogContent key={place.place_id} place={place} idx={idx + 1} />
+          ))}
+        </>
+      </main>
+
       <LogDetailActions
         isAuthor={isAuthor}
         logId={logId}
+        logBookmarkCount={Number(logData._count?.log_bookmark)}
       />
     </div>
   );
