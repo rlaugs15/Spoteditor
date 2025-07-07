@@ -247,14 +247,10 @@ export async function getLogs(params: LogsParams) {
 
   const tagKey = params.userId ? cacheTags.logListByUser(params) : cacheTags.logList(params);
 
-  return unstable_cache(
-    () => fetchLogs(params),
-    [...queryKey].filter((v) => v !== undefined && v !== null),
-    {
-      tags: [tagKey, globalTags.logAll], // 상위 그룹 태그 추가
-      revalidate: CACHE_REVALIDATE_TIME,
-    }
-  )();
+  return unstable_cache(() => fetchLogs(params), [...queryKey].filter(Boolean), {
+    tags: [tagKey, globalTags.logAll], // 상위 그룹 태그 추가
+    revalidate: CACHE_REVALIDATE_TIME,
+  })();
 }
 
 // ===================================================================
@@ -346,7 +342,7 @@ export async function fetchBookmarkedLogs({
 export async function getBookmarkedLogs(params: logBookmarkListParams) {
   return unstable_cache(
     () => fetchBookmarkedLogs(params),
-    [...logKeys.bookmarkList(params)].filter((v) => v !== undefined && v !== null),
+    [...logKeys.bookmarkList(params)].filter(Boolean),
     {
       tags: [
         cacheTags.logBookmarkList(params), // 특정 페이지 북마크 리스트
@@ -504,7 +500,7 @@ async function fetchSearchLogs({
 export async function getSearchLogs(params: SearchParams) {
   return unstable_cache(
     () => fetchSearchLogs(params),
-    [...searchKeys.list(params)].filter((v) => v !== undefined && v !== null),
+    [...searchKeys.list(params)].filter(Boolean),
     {
       tags: [
         cacheTags.searchList(params), // 조건별로 구분되는 태그
