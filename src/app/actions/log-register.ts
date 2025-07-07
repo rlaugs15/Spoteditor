@@ -1,13 +1,13 @@
 'use server';
 
-import { PreparedValues } from '@/hooks/mutations/log/useLogCreateMutation';
+import { LogCreatePayload } from '@/hooks/mutations/log/useLogCreateMutation';
 import { createClient } from '@/lib/supabase/server';
 import { NewAddress, NewLog, NewPlace, NewPlaceImage, NewTag } from '@/types/log';
 import { revalidateTag } from 'next/cache';
 import { globalTags } from './tags';
 
 /* 로그 등록 */
-export async function createLog(values: PreparedValues) {
+export async function createLog(values: LogCreatePayload) {
   try {
     const supabase = await createClient();
     const {

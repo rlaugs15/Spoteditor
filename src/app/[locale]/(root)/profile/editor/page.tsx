@@ -13,7 +13,7 @@ import { removeImageIfNeeded } from '@/lib/utils';
 import { profileEditorSchema } from '@/lib/zod/profileSchema';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
 import { getStoragePublicImage } from '@/utils/getStorageImage';
-import { uploadSingleImage } from '@/utils/upload';
+import { uploadSingleImage } from '@/utils/imageUpload';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
@@ -106,8 +106,7 @@ export default function ProfileEditorPage() {
 
         /** 3.서버에서 PreSigned URL 발급 + fetch 업로드 */
         const result = await uploadSingleImage('profiles', resizingFile, {
-          folder: undefined,
-          filename: `profile${Date.now()}.webp`,
+          fileName: `profile${Date.now()}.webp`,
         });
 
         if (!result.success) {

@@ -4,7 +4,7 @@ import { useRouter } from '@/i18n/navigation';
 import { trackLogCreateEvent } from '@/lib/analytics';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues, NewPlace, NewPlaceImage } from '@/types/log';
-import { uploadPlaces } from '@/utils/upload';
+import { uploadPlacesDirect } from '@/utils/imageUpload';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -12,8 +12,8 @@ import { toast } from 'sonner';
 interface LogCreateMutationProps {
   values: LogFormValues;
 }
-
-export type PreparedValues = {
+// 로그 등록 위해 서버로 보낼 데이터 (db 갱신용)
+export type LogCreatePayload = {
   logId: string;
   placeDataList: NewPlace[];
   placeImageDataList: NewPlaceImage[];
@@ -24,17 +24,16 @@ const useLogCreateMutation = () => {
   const queryClient = useQueryClient();
   const clearTag = useLogCreationStore((state) => state.clearTag);
   const t = useTranslations('Toast.logCreate');
+
   return useMutation({
     mutationFn: async ({ values }: LogCreateMutationProps) => {
-      const logId = crypto.randomUUID();
+      const logId = crypto.randomUUID(); // 로그 고유 id
 
-      /* 장소 이미지 업로드 */
-      // console.time('📍 장소 이미지 업로드');
-      const { placeDataList, placeImageDataList } = await uploadPlaces(values.places, logId);
-      // console.timeEnd('📍 장소 이미지 업로드');
+      // 1. 장소 이미지 업로드
+      const { placeDataList, placeImageDataList } = await uploadPlacesDirect(values.places, logId);
 
-      // 서버로 보낼 데이터 모아서 보내기
-      const preparedValues: PreparedValues = {
+      // 2. 이미지 업로드 후 페이로드 생성
+      const logCreatePayload: LogCreatePayload = {
         logId,
         logTitle: values.logTitle,
         tags: values.tags,
@@ -43,7 +42,8 @@ const useLogCreateMutation = () => {
         placeImageDataList,
       };
 
-      return await createLog(preparedValues);
+      // 3. 로그 등록
+      return await createLog(logCreatePayload);
     },
     onMutate: () => {
       const firstTimeoutId = setTimeout(() => {
@@ -92,7 +92,6 @@ const useLogCreateMutation = () => {
         clearTimeout(context.firstTimeoutId);
         clearTimeout(context.secondTimeoutId);
       }
-
       // GA 이벤트 추적 - 로그 등록 실패
       trackLogCreateEvent('cancel');
 
