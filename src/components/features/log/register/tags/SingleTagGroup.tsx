@@ -6,7 +6,6 @@ import {
   globalRegions,
 } from '@/constants/cityData';
 import { TAG_SETS } from '@/constants/tagData';
-import { useRouter } from '@/i18n/navigation';
 import { TagKeys, useLogCreationStore } from '@/stores/logCreationStore';
 import { useTranslations } from 'next-intl';
 import { useCallback, useMemo } from 'react';
@@ -16,11 +15,9 @@ import TagGroup from './TagGroup';
 interface SingleTagGroupProps {
   title?: string;
   type: Extract<TagKeys, 'country' | 'city' | 'sigungu'>;
-  nextPath?: string;
 }
 
-const SingleTagGroup = ({ title, type, nextPath }: SingleTagGroupProps) => {
-  const router = useRouter();
+const SingleTagGroup = ({ title, type }: SingleTagGroupProps) => {
   const selectedTag = useLogCreationStore((state) => state[type]);
   const setSingleTag = useLogCreationStore((state) => state.setSingleTag);
   const selectedCity = useLogCreationStore((state) => state['city']);
@@ -46,9 +43,8 @@ const SingleTagGroup = ({ title, type, nextPath }: SingleTagGroupProps) => {
   const handleTagClick = useCallback(
     (value: string) => {
       setSingleTag(type, value);
-      if (nextPath) router.push(nextPath);
     },
-    [setSingleTag, type, nextPath, router]
+    [setSingleTag, type]
   );
 
   // type에 따른 네임스페이스 분기
@@ -66,7 +62,7 @@ const SingleTagGroup = ({ title, type, nextPath }: SingleTagGroupProps) => {
 
   return (
     <TagGroup
-      title={title || String(t(localeTitle))}
+      title={title || (localeTitle ? String(t(localeTitle)) : '')}
       tags={tags}
       isSelected={(value) => selectedTag === value}
       onTagClick={handleTagClick}

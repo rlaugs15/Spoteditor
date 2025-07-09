@@ -30,7 +30,7 @@ const RegisterFooter = ({ tagTargets, nextPath, delayBtn }: RegisterFooterProps)
         {t('next')}
       </Button>
       {delayBtn && (
-        <Link href={REGISTER_PATHS.COUNTRY} className="text-center text-text-xs text-light-300">
+        <Link href={REGISTER_PATHS.LOCATION} className="text-center text-text-xs text-light-300">
           {t('skip')}
         </Link>
       )}
