@@ -24,6 +24,7 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
   const locale = useLocale();
   const { control, setValue, getValues } = useFormContext<any>();
   const t = useTranslations('Register.LogPage');
+  const tToast = useTranslations('Toast.logCreate');
   const { fields, append, remove, replace } = useFieldArray({
     control: control,
     name: fieldName ? `${fieldName}.placeImages` : `places.${idx}.placeImages`,
@@ -55,7 +56,7 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
           const currentValue = getValues(placeAddressFieldName);
 
           if (currentValue) {
-            toast.info('이미 주소가 등록되어 있어 자동 입력을 생략했습니다.');
+            toast.info(tToast('autoAddressSkipped'));
           } else {
             const address = await getAddressFromCoords({
               lat: gps.latitude,
@@ -65,9 +66,9 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
 
             if (address.success) {
               setValue(placeAddressFieldName, address.data.address);
-              toast.success('사진의 위치 정보로 주소가 자동 입력되었습니다.');
+              toast.success(tToast('autoAddressSuccess'));
             } else {
-              toast.warning('위치 정보를 기반으로 주소를 찾을 수 없습니다.');
+              toast.warning(tToast('autoAddressFailed'));
             }
           }
         }
