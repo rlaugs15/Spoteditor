@@ -5,7 +5,7 @@ import PlaceForm from '@/components/features/log/common/PlaceForm';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
-import { REGISTER_PATHS } from '@/constants/pathname';
+import { HOME } from '@/constants/pathname';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
 import { useRouter } from '@/i18n/navigation';
 import { trackLogCreateEvent } from '@/lib/analytics';
@@ -39,7 +39,10 @@ const LogPage = () => {
 
   useEffect(() => {
     if (!hydrated) return;
-    if (!country || !city || !sigungu) router.replace(REGISTER_PATHS.MOOD);
+    if (!country || !city || !sigungu) {
+      toast.error('등록할 장소가 선택되지 않았습니다. 다시 시도해주세요.');
+      router.replace(HOME);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated]);
 

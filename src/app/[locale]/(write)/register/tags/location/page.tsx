@@ -11,13 +11,13 @@ const LocationSelectionPage = () => {
   return (
     <>
       <div className="grow space-y-6">
-        {/* Country Selection */}
+        {/* Country  */}
         <div className="space-y-3">
           <PageIntro type="country" />
           <SingleTagGroup type="country" />
         </div>
 
-        {/* City Selection - only show if country is selected */}
+        {/* City */}
         {selectedCountry && (
           <div className="space-y-3">
             <PageIntro type="city" />
@@ -25,7 +25,7 @@ const LocationSelectionPage = () => {
           </div>
         )}
 
-        {/* Sigungu Selection - only show if city is selected */}
+        {/* Sigungu */}
         {selectedCity && (
           <div className="space-y-3">
             <PageIntro type="sigungu" />

@@ -18,16 +18,14 @@ interface SingleTagGroupProps {
 }
 
 const SingleTagGroup = ({ title, type }: SingleTagGroupProps) => {
+  const t = useTranslations();
   const selectedTag = useLogCreationStore((state) => state[type]);
   const setSingleTag = useLogCreationStore((state) => state.setSingleTag);
   const selectedCity = useLogCreationStore((state) => state['city']);
   const selectedCountry = useLogCreationStore((state) => state['country']);
-
   const isDomestic = selectedCountry === '국내';
-  const tagGroupTitle =
-    (type === 'city' || type === 'sigungu') &&
-    PAGE_TAG_INTROS[type][isDomestic ? 'domestic' : 'aboard'].tagGroupTitle;
 
+  // 선택한 값에 따라 다음 태그가 결정
   const tags = useMemo(() => {
     switch (type) {
       case 'sigungu':
@@ -40,25 +38,46 @@ const SingleTagGroup = ({ title, type }: SingleTagGroupProps) => {
     }
   }, [type, selectedCity, isDomestic]);
 
+  // 상위 태그 변경 시 하위 태그 초기화
+  const clearDependentTags = useCallback(
+    (changedType: TagKeys) => {
+      if (changedType === 'country') {
+        setSingleTag('city', '');
+        setSingleTag('sigungu', '');
+      } else if (changedType === 'city') {
+        setSingleTag('sigungu', '');
+      }
+    },
+    [setSingleTag]
+  );
+
   const handleTagClick = useCallback(
     (value: string) => {
       setSingleTag(type, value);
+      clearDependentTags(type);
     },
-    [setSingleTag, type]
+    [setSingleTag, type, clearDependentTags]
   );
 
-  // type에 따른 네임스페이스 분기
-  const namespace = type === 'country' ? 'Register.CountryPage.options' : 'Region';
+  // 번역
+  const { localeTitle, namespace } = useMemo(() => {
+    const tagGroupTitle =
+      (type === 'city' || type === 'sigungu') &&
+      PAGE_TAG_INTROS[type][isDomestic ? 'domestic' : 'aboard'].tagGroupTitle;
 
-  let localeTitle = '';
-  if (tagGroupTitle === '도시') {
-    localeTitle = 'Register.CityPage.city';
-  } else if (tagGroupTitle === '지역') {
-    localeTitle = 'Register.CityPage.area';
-  } else if (tagGroupTitle === '시/군/구') {
-    localeTitle = 'Register.sigunguPage.sigungu';
-  }
-  const t = useTranslations();
+    let localeTitle = '';
+    if (tagGroupTitle === '도시') {
+      localeTitle = 'Register.CityPage.city';
+    } else if (tagGroupTitle === '지역') {
+      localeTitle = 'Register.CityPage.area';
+    } else if (tagGroupTitle === '시/군/구') {
+      localeTitle = 'Register.sigunguPage.sigungu';
+    }
+
+    const namespace = type === 'country' ? 'Register.CountryPage.options' : 'Region';
+
+    return { localeTitle, namespace };
+  }, [type, isDomestic]);
 
   return (
     <TagGroup
