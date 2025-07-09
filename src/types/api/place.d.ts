@@ -25,4 +25,4 @@ export interface PlaceBookmarkParams {
 }
 
 //사진 메타에이터 장소 타입
-export type PhotoMetadataReseponse = ApiResponse<{ adress: string }>;
+export type PhotoMetadataReseponse = ApiResponse<{ address: string }>;
