@@ -5,8 +5,10 @@ import { Input } from '@/components/ui/input';
 import useMultipleImagePreview from '@/hooks/useMultipleImagePreview';
 import { cn } from '@/lib/utils';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
+import { getAddressFromCoords } from '@/utils/getAddressFromCoords';
+import exifr from 'exifr';
 import { Reorder } from 'motion/react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
 import ReorderItem from './ReorderItem';
@@ -19,7 +21,8 @@ interface MultiImageFormProps {
 const MAX_IMAGES_LENGTH = 8;
 
 const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
-  const { control } = useFormContext<any>();
+  const locale = useLocale();
+  const { control, setValue, getValues } = useFormContext<any>();
   const t = useTranslations('Register.LogPage');
   const { fields, append, remove, replace } = useFieldArray({
     control: control,
@@ -39,6 +42,40 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
     if (fileList.length >= MAX_IMAGES_LENGTH) toast.info(t('maxImageError'));
 
     const files = Array.from(fileList).slice(0, MAX_IMAGES_LENGTH - fields.length);
+
+    const placeAddressFieldName = fieldName ? `${fieldName}.placeName` : `places.${idx}.placeName`;
+
+    /** 이미지마다 GPS 정보 추출 시도 */
+    for (const file of files) {
+      try {
+        const gps = await exifr.gps(file);
+
+        if (gps?.latitude && gps?.longitude) {
+          // reverse-geocode API 호출(좌표 -> 주소)
+          const currentValue = getValues(placeAddressFieldName);
+
+          if (currentValue) {
+            toast.info('이미 주소가 등록되어 있어 자동 입력을 생략했습니다.');
+          } else {
+            const address = await getAddressFromCoords({
+              lat: gps.latitude,
+              lng: gps.longitude,
+              locale,
+            });
+
+            if (address.success) {
+              setValue(placeAddressFieldName, address.data.address);
+              toast.success('사진의 위치 정보로 주소가 자동 입력되었습니다.');
+            } else {
+              toast.warning('위치 정보를 기반으로 주소를 찾을 수 없습니다.');
+            }
+          }
+        }
+      } catch (err) {
+        console.error('GPS 추출 중 오류:', err);
+      }
+    }
+
     const compressedFiles = await Promise.all(files.map((file) => compressImageToWebp(file)));
 
     compressedFiles
