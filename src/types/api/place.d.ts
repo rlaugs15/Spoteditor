@@ -23,3 +23,6 @@ export interface PlaceBookmarkParams {
   placeId: string;
   isBookmark: boolean;
 }
+
+//사진 메타에이터 장소 타입
+export type PhotoMetadataReseponse = ApiResponse<{ adress: string }>;
