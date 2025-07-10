@@ -110,7 +110,7 @@ const LogPage = () => {
             ))}
           </div>
           <button className="image-upload-button" onClick={handleAddNewPlace}>
-            <Plus className="text-light-500 size-4" /> 장소추가
+            <Plus className="text-light-500 size-4" /> {t('addPlace')}
           </button>
         </main>
       </Form>

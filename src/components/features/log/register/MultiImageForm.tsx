@@ -5,8 +5,10 @@ import { Input } from '@/components/ui/input';
 import useMultipleImagePreview from '@/hooks/useMultipleImagePreview';
 import { cn } from '@/lib/utils';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
+import { getAddressFromCoords } from '@/utils/getAddressFromCoords';
+import exifr from 'exifr';
 import { Reorder } from 'motion/react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
 import ReorderItem from './ReorderItem';
@@ -19,8 +21,10 @@ interface MultiImageFormProps {
 const MAX_IMAGES_LENGTH = 8;
 
 const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
-  const { control } = useFormContext<any>();
+  const locale = useLocale();
+  const { control, setValue, getValues } = useFormContext<any>();
   const t = useTranslations('Register.LogPage');
+  const tToast = useTranslations('Toast.logCreate');
   const { fields, append, remove, replace } = useFieldArray({
     control: control,
     name: fieldName ? `${fieldName}.placeImages` : `places.${idx}.placeImages`,
@@ -39,6 +43,40 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
     if (fileList.length >= MAX_IMAGES_LENGTH) toast.info(t('maxImageError'));
 
     const files = Array.from(fileList).slice(0, MAX_IMAGES_LENGTH - fields.length);
+
+    const placeAddressFieldName = fieldName ? `${fieldName}.placeName` : `places.${idx}.placeName`;
+
+    /** 이미지마다 GPS 정보 추출 시도 */
+    for (const file of files) {
+      try {
+        const gps = await exifr.gps(file);
+
+        if (gps?.latitude && gps?.longitude) {
+          // reverse-geocode API 호출(좌표 -> 주소)
+          const currentValue = getValues(placeAddressFieldName);
+
+          if (currentValue) {
+            toast.info(tToast('autoAddressSkipped'));
+          } else {
+            const address = await getAddressFromCoords({
+              lat: gps.latitude,
+              lng: gps.longitude,
+              locale,
+            });
+
+            if (address.success) {
+              setValue(placeAddressFieldName, address.data.address);
+              toast.success(tToast('autoAddressSuccess'));
+            } else {
+              toast.warning(tToast('autoAddressFailed'));
+            }
+          }
+        }
+      } catch (err) {
+        console.error('GPS 추출 중 오류:', err);
+      }
+    }
+
     const compressedFiles = await Promise.all(files.map((file) => compressImageToWebp(file)));
 
     compressedFiles

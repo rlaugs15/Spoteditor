@@ -10,7 +10,10 @@
       "stillUploading": "Still uploading... Please wait a bit more.",
       "success": "Upload completed successfully.",
       "redirect": "Redirecting to the page. Please wait a moment.",
-      "error": "Upload failed. Please try again."
+      "error": "Upload failed. Please try again.",
+      "autoAddressSuccess": "Address has been automatically filled from photo's location.",
+      "autoAddressFailed": "Failed to retrieve address from location data.",
+      "autoAddressSkipped": "Address already exists. Skipping auto input."
     },
     "logEdit": {
       "success": "Log updated successfully",
