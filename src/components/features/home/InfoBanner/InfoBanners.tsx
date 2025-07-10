@@ -6,7 +6,7 @@ import TypingText from './TypingText';
 const InfoBanners = async () => {
   const t = await getTranslations('HomePage');
   return (
-    <div className="grid grid-rows-2 web:grid-rows-1 web:grid-cols-2 web:gap-[30px] bg-black text-white px-4 web:px-[50px]">
+    <div className="grid grid-rows-2 web:grid-rows-1 web:grid-cols-2 web:gap-[50px] bg-white text-black px-4 web:px-[50px] h-[240px]">
       <InfoBanner>
         <TypingText />
         <RegisterLinkButtons label={t('registerCourse')} />

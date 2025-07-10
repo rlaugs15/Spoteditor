@@ -9,7 +9,7 @@ const InfoBanner = ({ children, className }: InfoBannerProps) => {
   return (
     <div
       className={cn(
-        'flex flex-col justify-between !text-light-300 text-text-sm web:text-text-lg border-b border-light-100 py-5 web:py-12',
+        'flex flex-col justify-between !text-light-400 text-text-sm web:text-text-lg py-4 web:py-15',
         className
       )}
     >
