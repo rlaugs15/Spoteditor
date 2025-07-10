@@ -5,6 +5,9 @@ export const ERROR_MESSAGES = {
     UNAUTHORIZED: '로그인이 필요합니다.',
     FORBIDDEN: '접근 권한이 없습니다.',
     BAD_REQUEST: '잘못된 요청입니다.',
+    COORDINATES_REQUIRED: '위도와 경도 값이 필요합니다.',
+    EXTERNAL_API_FAILED: '위치 정보를 가져오는 데 실패했습니다.',
+    INVALID_RESPONSE: '유효하지 않은 응답 형식입니다.',
   },
   LOG: {
     NOT_FOUND: '해당 로그가 존재하지 않습니다.',
@@ -18,6 +21,8 @@ export const ERROR_MESSAGES = {
     LIST_EMPTY: '조회 가능한 장소가 존재하지 않습니다.',
     CREATE_FAILED: '장소 생성에 실패했습니다.',
     DELETE_FAILED: '장소 삭제에 실패했습니다.',
+    REVERSE_GEOCODE_FAILED: '좌표로부터 주소를 찾는 데 실패했습니다.',
+    NO_ADDRESS_FOUND: '해당 좌표에 해당하는 주소를 찾을 수 없습니다.',
   },
   FOLLOW: {
     NOT_FOUND: '해당 팔로워가 존재하지 않습니다.',
