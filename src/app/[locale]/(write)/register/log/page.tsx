@@ -15,7 +15,7 @@ import { LogFormValues } from '@/types/log';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -29,41 +29,60 @@ const initialPlace = {
 
 const LogPage = () => {
   const router = useRouter();
+  const { mutate, isPending } = useLogCreateMutation();
+  const t = useTranslations('Register.LogPage');
+
   const country = useLogCreationStore((state) => state.country);
   const city = useLogCreationStore((state) => state.city);
   const sigungu = useLogCreationStore((state) => state.sigungu);
+  const mood = useLogCreationStore((state) => state.mood);
+  const activity = useLogCreationStore((state) => state.activity);
   const hydrated = useLogCreationStore((state) => state.hydrated);
-  const { mutate, isPending } = useLogCreateMutation();
 
-  const t = useTranslations('Register.LogPage');
-
-  useEffect(() => {
-    if (!hydrated) return;
-    if (!country || !city || !sigungu) {
-      toast.error('등록할 장소가 선택되지 않았습니다. 다시 시도해주세요.');
-      router.replace(HOME);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated]);
-
-  const form = useForm({
-    resolver: zodResolver(LogFormSchema),
-    mode: 'onBlur',
-    reValidateMode: 'onChange',
-    defaultValues: {
+  const defaultValues = useMemo(
+    () => ({
       logTitle: '',
       places: [initialPlace],
       tags: {
-        mood: useLogCreationStore.getState().mood,
-        activity: useLogCreationStore.getState().activity,
+        mood,
+        activity,
       },
       address: {
-        country: useLogCreationStore.getState().country,
-        city: useLogCreationStore.getState().city,
-        sigungu: useLogCreationStore.getState().sigungu,
+        country,
+        city,
+        sigungu,
       },
-    },
+    }),
+    [country, city, sigungu, mood, activity]
+  );
+
+  const form = useForm<LogFormValues>({
+    resolver: zodResolver(LogFormSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
+    defaultValues,
   });
+
+  // 스토어 준비된 후 폼 초기화
+  useEffect(() => {
+    if (hydrated) {
+      form.setValue('tags.mood', mood || []);
+      form.setValue('tags.activity', activity || []);
+      form.setValue('address.country', country || '');
+      form.setValue('address.city', city || '');
+      form.setValue('address.sigungu', sigungu || '');
+    }
+  }, [form, hydrated, mood, activity, country, city, sigungu]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+
+    if (!country || !city || !sigungu) {
+      toast.error('등록할 장소가 선택되지 않았습니다. 다시 시도해주세요.');
+      router.replace(HOME);
+      return;
+    }
+  }, [hydrated, country, city, sigungu, router]);
 
   const { fields, append, remove, swap } = useFieldArray<LogFormValues>({
     control: form.control,
@@ -77,11 +96,20 @@ const LogPage = () => {
     }
     append(initialPlace);
   };
-  const handleDeletePlace = (idx: number) => remove(idx);
+
+  const handleDeletePlace = (idx: number) => {
+    if (fields.length <= 1) {
+      toast.error('최소 1개의 장소는 필요합니다.');
+      return;
+    }
+    remove(idx);
+  };
+
   const handleMovePlaceUp = (idx: number) => {
     if (idx <= 0) return;
     swap(idx, idx - 1);
   };
+
   const handleMovePlaceDown = (idx: number) => {
     if (idx >= fields.length - 1) return;
     swap(idx, idx + 1);
@@ -112,7 +140,12 @@ const LogPage = () => {
               />
             ))}
           </div>
-          <button className="image-upload-button" onClick={handleAddNewPlace}>
+          <button
+            type="button"
+            className="image-upload-button"
+            onClick={handleAddNewPlace}
+            disabled={fields.length >= 10}
+          >
             <Plus className="text-light-500 size-4" /> {t('addPlace')}
           </button>
         </main>
