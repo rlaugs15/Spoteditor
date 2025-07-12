@@ -25,7 +25,7 @@ interface PlaceFormProps {
 const PlaceForm = ({
   idx,
   type = 'existing',
-  globalIdx,
+  globalIdx, // 기존 + 추가장소 포함 인덱스
   isEditPage = false,
   onDeletePlace,
   onMoveUpPlace,

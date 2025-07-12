@@ -82,7 +82,8 @@ const LogPage = () => {
       router.replace(HOME);
       return;
     }
-  }, [hydrated, country, city, sigungu, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { fields, append, remove, swap } = useFieldArray<LogFormValues>({
     control: form.control,

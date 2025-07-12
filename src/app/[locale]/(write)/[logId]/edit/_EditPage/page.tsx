@@ -2,7 +2,6 @@
 import { LogEditHeader } from '@/components/common/Header';
 import PlaceForm from '@/components/features/log/common/PlaceForm';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
-import PhotoTextSection from '@/components/features/log/register/PhotoTextSection';
 import MultiTagGroup from '@/components/features/log/register/tags/MultiTagGroup';
 import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
@@ -24,7 +23,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   const { mutateAsync: editMutate, isPending: editIsPending } = useLogEditMutation();
   const { mutateAsync: addPlaceMutate, isPending: addPlaceIsPending } = useAddPlaceMutation();
   const t = useTranslations('LogEditPage');
-  const { title, thumbnail_url, description, place: places, log_tag, address, log_id } = logData;
+  const { title, place: places, log_tag, address, log_id } = logData;
   const initializeTags = useLogCreationStore((state) => state.initializeTags);
   const moodTags = log_tag.filter((t) => t.category === 'mood').map((t) => t.tag);
   const activityTags = log_tag.filter((t) => t.category === 'activity').map((t) => t.tag);
@@ -37,8 +36,6 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     reValidateMode: 'onChange',
     defaultValues: {
       logTitle: title,
-      thumbnail: thumbnail_url,
-      logDescription: description ?? '',
       places: places.map((place) => ({
         id: place.place_id,
         placeName: place.name,
@@ -234,7 +231,6 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
       <Form {...form}>
         <main className="grow bg-white pt-[54px]">
           <TitledInput />
-          <PhotoTextSection thumbnail edit />
           <div className="flex flex-col gap-4">
             {allPlaces.map((field, globalIdx) => {
               return (
