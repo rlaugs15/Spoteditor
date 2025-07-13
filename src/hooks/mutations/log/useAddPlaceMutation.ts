@@ -1,5 +1,5 @@
 import { logKeys, placeKeys } from '@/app/actions/keys';
-import { addPlaceToLog } from '@/app/actions/log-register';
+import { addPlacesToExistingLog } from '@/app/actions/log-register';
 import { AddedPlaceValues } from '@/types/log';
 import { uploadPlacesDirect } from '@/utils/imageUpload';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -27,7 +27,7 @@ const useAddPlaceMutation = () => {
       );
       console.timeEnd('📍 추가된 장소 이미지 업로드');
 
-      return await addPlaceToLog(placeDataList, placeImageDataList);
+      return await addPlacesToExistingLog(placeDataList, placeImageDataList);
     },
     onSuccess: ({ success }) => {
       if (success) {
