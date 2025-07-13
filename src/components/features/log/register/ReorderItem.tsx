@@ -8,9 +8,16 @@ interface ReorderItemProps {
   imageUrl: string;
   onDeleteClick: () => void;
   imageIdx: number;
+  representative: boolean;
 }
 
-const ReorderItem = ({ item, imageUrl, onDeleteClick, imageIdx }: ReorderItemProps) => {
+const ReorderItem = ({
+  item,
+  imageUrl,
+  onDeleteClick,
+  imageIdx,
+  representative,
+}: ReorderItemProps) => {
   const controls = useDragControls();
 
   return (
@@ -36,7 +43,12 @@ const ReorderItem = ({ item, imageUrl, onDeleteClick, imageIdx }: ReorderItemPro
           userSelect: 'none',
         }}
       >
-        <PlaceImage imageUrl={imageUrl} onDeleteClick={onDeleteClick} imageIdx={imageIdx} />
+        <PlaceImage
+          imageUrl={imageUrl}
+          onDeleteClick={onDeleteClick}
+          imageIdx={imageIdx}
+          representative={representative}
+        />
         <Button
           variant={'ghost'}
           size={'icon'}

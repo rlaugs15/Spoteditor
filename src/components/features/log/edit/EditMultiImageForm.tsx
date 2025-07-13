@@ -57,6 +57,7 @@ const EditMultiImageForm = ({ idx }: EditMultiImageFormProps) => {
           return (
             <ReorderItem
               key={field.id}
+              representative={idx === 0}
               item={field}
               imageUrl={previewUrl}
               onDeleteClick={() => handleRemove(imageIdx)}
