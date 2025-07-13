@@ -120,8 +120,8 @@ const LogPage = () => {
     // GA 이벤트 추적 - 로그 등록 시작
     trackLogCreateEvent('start');
 
-    // console.log(values);
-    mutate({ values });
+    // console.log(values, { values });
+    mutate(values);
   };
 
   return (
