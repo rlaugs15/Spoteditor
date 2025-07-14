@@ -21,7 +21,7 @@ export async function createLog(values: LogCreatePayload) {
     await performDatabaseInserts(supabase, values);
 
     // 캐시 무효화
-    await invalidateCache();
+    invalidateCache();
 
     return { success: true, data: values.logId };
   } catch (error) {
@@ -47,7 +47,7 @@ export async function addPlacesToExistingLog(
     await performPlaceInserts(supabase, placeDataList, placeImageDataList);
 
     // 캐시 무효화
-    await invalidateCache();
+    invalidateCache();
 
     return { success: true };
   } catch (error) {
@@ -172,7 +172,7 @@ async function insertPlaceImageData(supabase: SupabaseClient, placeImageDataList
 }
 
 // 캐시 무효화 함수
-async function invalidateCache() {
+function invalidateCache() {
   const tagsToInvalidate = [globalTags.logAll, globalTags.logListAll, globalTags.searchAll];
 
   tagsToInvalidate.forEach((tag) => revalidateTag(tag));

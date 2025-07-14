@@ -35,7 +35,7 @@ export default function MyLogs({ userId }: MyLogsProps) {
     if (!me?.user_id) return;
 
     const revalidateAndRefetch = async () => {
-      await revalidateBookmarkLogs();
+      revalidateBookmarkLogs();
       refetch();
     };
 

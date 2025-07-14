@@ -90,7 +90,7 @@ export async function getLog(logId: string) {
 }
 
 /* 북마크 시 서버캐시 무효화 */
-export async function revalidateLog(logId: string) {
+export function revalidateLog(logId: string) {
   revalidateTag(cacheTags.logDetail(logId));
 }
 
@@ -354,7 +354,7 @@ export async function getBookmarkedLogs(params: logBookmarkListParams) {
 }
 
 /* 북마크 시 서버캐시 무효화 */
-export async function revalidateBookmarkLogs() {
+export function revalidateBookmarkLogs() {
   revalidateTag(globalTags.logBookmarkAll); // 특정 유저·페이지 무관하게 전체 무효화
 }
 

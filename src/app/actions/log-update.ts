@@ -24,7 +24,7 @@ export async function updateLog(formData: FormData, logId: string) {
     await performStorageOperations(supabase, user.id, logId, parseResult);
 
     // 캐시 무효화
-    await invalidateCache();
+    invalidateCache();
 
     return { success: true };
   } catch (error) {
@@ -215,7 +215,7 @@ async function deletePlaceImagesFromStorage(supabase: SupabaseClient, imageIds: 
   }
 }
 
-async function invalidateCache() {
+function invalidateCache() {
   const tagsToInvalidate = [
     globalTags.logAll,
     globalTags.logBookmarkAll,

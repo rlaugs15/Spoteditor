@@ -124,6 +124,6 @@ export async function getBookmarkedPlaces(params: PlaceBookmarkListParmas) {
 }
 
 /* 북마크 시 서버캐시 무효화 */
-export async function revalidateBookmarkPlaces() {
+export function revalidateBookmarkPlaces() {
   revalidateTag(globalTags.placeBookmarkAll);
 }
