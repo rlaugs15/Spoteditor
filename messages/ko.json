@@ -373,7 +373,7 @@
     }
   },
   "UserDropdown": {
-    "writeLog": "로그 작성하기",
+    "writeLog": "기록하기",
     "contact": "문의하기",
     "logout": "로그아웃",
     "notice": "공지사항",
@@ -397,13 +397,11 @@
         "subtitle": "에디터가 새로운 지역을 추가하면 새로운 지역이 생겨요!"
       }
     },
-    "registerCourse": "나의 추천 코스 등록하기",
+    "registerCourse": "기록하기",
     "registerCourseDescription": {
-      "line1": "내가 좋아하는 숨은 명소와 맛집을 공유하고, 다른 유저들이 여러분의 루트를 참고하며",
-      "line2": "\"내가 만든 코스로 누군가 즐거운 하루를 보냈구나!\" 하는 느낌!",
-      "line3": "상상만 해도 행복하지 않나요? 🥰",
-      "line4": "다른 유저들이 참고할 수 있도록 여러분만의 코스를 나눠보세요.",
-      "line5": "여러분이 만들어준 코스는 많은 사람들에게 새로운 영감을 줄 거예요!"
+      "line1": "나의 작은 순간이 누군가의 하루가 될 수 있어요.",
+      "line2": "좋아하는 장소, 경험, 취향을 담아",
+      "line3": "당신만의 모먼트를 기록하고 공유해보세요."
     }
   },
   "ProfilePage": {
@@ -476,19 +474,19 @@
         "description": "여러개를 선택할 수 있어요 (최대 10개)"
       },
       "country": {
-        "title": "국가를 선택해주세요.",
+        "title": "",
         "description": "메인 국가를 선택해주세요."
       },
       "city": {
-        "title": "도시를 선택해주세요.",
+        "title": "",
         "description": "메인 도시를 선택해주세요."
       },
       "area": {
-        "title": "지역을 선택해주세요.",
+        "title": "",
         "description": "메인 지역을 선택해주세요."
       },
       "sigungu": {
-        "title": "시/군/구를 선택해주세요.",
+        "title": "",
         "description": "메인 시/군/구를 선택해주세요."
       }
     },
@@ -499,7 +497,7 @@
       }
     },
     "CountryPage": {
-      "groupTitle": "국가",
+      "groupTitle": "국가를 선택해주세요.",
       "options": {
         "국내": "국내",
         "국외": "국외"
@@ -507,12 +505,12 @@
     },
     "CityPage": {
       "groupTitle": "지역",
-      "city": "도시",
+      "city": "도시를 선택해주세요.",
       "area": "지역"
     },
     "sigunguPage": {
       "groupTitle": "시/군/구",
-      "sigungu": "시/군/구",
+      "sigungu": "시/군/구를 선택해주세요.",
       "city": "도시"
     },
     "Footer": {
@@ -525,8 +523,10 @@
       "titlePlaceholder": "제목을 입력해주세요. (최대 30자)",
       "coverImage": "커버 이미지",
       "contentPlaceholder": "내용을 입력해주세요. (최대 500자)",
-      "placeNameLabel": "장소명을 적어주세요",
-      "locationPlaceholder": "위치를 적어주세요.",
+      "placeNameLabel": "장소명",
+      "placeNamePlaceholder": "예) 국립현대미술관 서울 ",
+      "locationLabel": "주소",
+      "locationPlaceholder": "예) 서울 종로구 삼청로 30",
       "uploadImage": "이미지 업로드",
       "uploadPictures": "사진 첨부",
       "uploadPicturesLimit": "최대 8장",

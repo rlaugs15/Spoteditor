@@ -14,7 +14,6 @@ import { LogFormSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/log';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -96,14 +95,18 @@ const LogPage = () => {
               />
             ))}
           </div>
-          <button
-            type="button"
-            className="image-upload-button"
-            onClick={handleAddNewPlace}
-            disabled={fields.length >= 10}
-          >
-            <Plus className="text-light-500 size-4" /> {t('addPlace')}
-          </button>
+          <div className="flex justify-center mt-4 mb-4">
+            <button
+              className="flex items-center justify-center gap-1.5 font-semibold text-text-md
+             bg-black text-white rounded-full px-4 py-2
+             hover:bg-light-900 hover:text-white"
+              onClick={handleAddNewPlace}
+              disabled={fields.length >= 10}
+            >
+              <img src="/icons/PlusSemibold.svg" alt="plus" className="w-4 h-4 fill=light-500" />
+              {t('addPlace')}
+            </button>
+          </div>
         </main>
       </Form>
 
