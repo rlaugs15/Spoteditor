@@ -12,6 +12,8 @@ type PostCardLocationProps = Partial<{
 };
 
 function PostCardLocation({ city, country = '', sigungu, category, modal }: PostCardLocationProps) {
+  console.log('city, country', city, country, sigungu, category);
+
   const t = useTranslations();
   return (
     <h4
@@ -21,12 +23,12 @@ function PostCardLocation({ city, country = '', sigungu, category, modal }: Post
         <span>{t(`Category.${category}`)}</span>
       ) : (
         <>
-          <span>{t(`Region.${city}`, { default: String(city) })}</span>
+          {city && <span>{t(`Region.${city}`)}</span>}
           <div className="h-3 inline-block align-middle">
             <Separator orientation="vertical" className="h-3 bg-light-300" />
           </div>
-          {country && <span>{t(`CountryType.${country}`, { default: String(country) })}</span>}
-          {sigungu && <span>{t(`Region.${sigungu}`, { default: String(sigungu) })}</span>}
+          {country && <span>{t(`CountryType.${country}`)}</span>}
+          {sigungu && <span>{t(`Region.${sigungu}`)}</span>}
         </>
       )}
     </h4>
