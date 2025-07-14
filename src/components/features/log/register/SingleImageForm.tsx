@@ -61,7 +61,7 @@ const SingleImageForm = ({ name, label, edit }: SingleImageFormProps) => {
             className="hidden"
             multiple
             maxLength={3}
-            accept=".jpg,.jpeg,.png,.webp,.avif"
+            accept=".jpg,.jpeg,.png,.webp,.avif,.heic"
             disabled={isLoading}
           />
         )}
