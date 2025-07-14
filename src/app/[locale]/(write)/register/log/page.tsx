@@ -58,7 +58,7 @@ const LogPage = () => {
 
   const form = useForm<LogFormValues>({
     resolver: zodResolver(LogFormSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
     reValidateMode: 'onChange',
     defaultValues,
   });
