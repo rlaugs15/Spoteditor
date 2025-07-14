@@ -1,17 +1,15 @@
 import { logKeys, searchKeys } from '@/app/actions/keys';
 import { createLog } from '@/app/actions/log-register';
+import { HOME } from '@/constants/pathname';
 import { useRouter } from '@/i18n/navigation';
 import { trackLogCreateEvent } from '@/lib/analytics';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues, NewPlace, NewPlaceImage } from '@/types/log';
-import { uploadPlacesDirect } from '@/utils/imageUpload';
+import { uploadPlacesOptimized } from '@/utils/imageUpload';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
-interface LogCreateMutationProps {
-  values: LogFormValues;
-}
 // 로그 등록 위해 서버로 보낼 데이터 (db 갱신용)
 export type LogCreatePayload = {
   logId: string;
@@ -26,11 +24,14 @@ const useLogCreateMutation = () => {
   const t = useTranslations('Toast.logCreate');
 
   return useMutation({
-    mutationFn: async ({ values }: LogCreateMutationProps) => {
+    mutationFn: async (values: LogFormValues) => {
       const logId = crypto.randomUUID(); // 로그 고유 id
 
       // 1. 장소 이미지 업로드
-      const { placeDataList, placeImageDataList } = await uploadPlacesDirect(values.places, logId);
+      const { placeDataList, placeImageDataList } = await uploadPlacesOptimized(
+        values.places,
+        logId
+      );
 
       // 2. 이미지 업로드 후 페이로드 생성
       const logCreatePayload: LogCreatePayload = {
@@ -63,7 +64,7 @@ const useLogCreateMutation = () => {
 
       return { firstTimeoutId, secondTimeoutId };
     },
-    onSuccess: ({ success, data }, _variables, context) => {
+    onSuccess: ({ success }, _variables, context) => {
       if (context) {
         clearTimeout(context.firstTimeoutId);
         clearTimeout(context.secondTimeoutId);
@@ -81,7 +82,8 @@ const useLogCreateMutation = () => {
           queryClient.removeQueries({ queryKey: key, exact: false });
         });
 
-        router.replace(`/log/${data}`);
+        // router.replace(`/log/${data}`);
+        router.replace(HOME);
         toast.success(t('success'), {
           description: t('redirect'),
         });

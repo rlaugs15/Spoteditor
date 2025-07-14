@@ -2,6 +2,7 @@ import { getUser } from '../user';
 
 /* 
   단일 파일은 folders 없이 "버킷 / 유저id / 파일명"으로 저장됨
+  + 중복 방지를 위해서 Date.now() 추가
   ex ) await generateFilePaths(); // ['userId/0.webp']
   ex ) await generateFilePaths({ folders: ['mainFolder', 'subFolder'] }); // ['userId/mainFolder/subFolder/0.webp']
   ex ) await generateFilePaths({ folders: ['mainFolder', 'subFolder'], fileCount: 3 }); // ["userId/mainFolder/subFolder/0.webp", ...]
@@ -25,10 +26,10 @@ export async function generateFilePaths(options: GenerateFilePathsOptions = {}):
       if (fileCount === 1) {
         resolvedFileName = fileName;
       } else {
-        resolvedFileName = `${i}_${fileName}`;
+        resolvedFileName = `${i}_${Date.now()}_${fileName}`;
       }
     } else {
-      resolvedFileName = `${i}.webp`;
+      resolvedFileName = `${i}_${Date.now()}.webp`;
     }
 
     return [me.user_id, ...folders, resolvedFileName].join('/');

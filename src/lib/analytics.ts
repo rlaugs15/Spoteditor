@@ -15,6 +15,10 @@ declare global {
   }
 }
 
+const isProduction = () => {
+  return process.env.NODE_ENV === 'production';
+};
+
 /**
  * GA 이벤트를 전송하는 함수
  * @param eventName 이벤트 이름 (예: 'login_click', 'bookmark_click')
@@ -29,6 +33,11 @@ export const trackEvent = (
     [key: string]: any;
   }
 ) => {
+  // 배포 환경에서만 이벤트 추적 실행
+  if (!isProduction()) {
+    return;
+  }
+
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', eventName, {
       event_category: 'user_interaction',

@@ -44,6 +44,9 @@ type UploadMultipleImagesOptions = {
   files: Blob[];
   bucketName: StorageBucket;
   folders?: string[];
+  maxConcurrency?: number;
+  retryAttempts?: number;
+  retryDelay?: number;
 };
 
 /* Signed URL 방식 */
@@ -87,40 +90,90 @@ type UploadMultipleImagesOptions = {
 // }
 
 /* Direct Upload 방식 */
-export async function uploadMultipleImagesDirect({
+export async function uploadMultipleImagesOptimized({
   files,
   bucketName,
   folders,
+  maxConcurrency = 3, // 동시 업로드 수 제한
+  retryAttempts = 3, // 재시도 횟수
+  retryDelay = 1000, // 재시도 간격 (ms)
 }: UploadMultipleImagesOptions): Promise<ApiResponse<string[]>> {
   try {
     const supabase = await createClient();
-
     const filePaths = await generateFilePaths({
       folders,
       fileCount: files.length,
     });
 
     performanceMonitor.start('🚀 Direct Upload로 이미지 업로드');
-    const limit = pLimit(5);
-    const uploadPromises = files.map((file, idx) =>
-      limit(async () => {
-        const filePath = filePaths[idx];
+
+    // 동시 업로드 제한
+    const limit = pLimit(maxConcurrency);
+
+    // 재시도 로직이 포함된 업로드 함수
+    const uploadWithRetry = async (file: Blob, filePath: string, attempt = 1): Promise<string> => {
+      try {
         const { data, error } = await supabase.storage.from(bucketName).upload(filePath, file, {
           cacheControl: '3600',
+          upsert: false, // 중복 방지
         });
-        if (error) throw new Error(`파일 업로드 실패: ${filePath}`);
-        return data?.fullPath;
-      })
-    );
 
-    const urls = await Promise.all(uploadPromises);
-    performanceMonitor.end('🚀Direct Upload로 이미지 업로드');
-    return { success: true, data: urls };
+        if (error) {
+          throw new Error(`업로드 실패: ${filePath} - ${error.message}`);
+        }
+
+        return data?.fullPath || '';
+      } catch (error) {
+        if (attempt < retryAttempts) {
+          console.warn(`업로드 재시도 ${attempt}/${retryAttempts}: ${filePath}`);
+          await new Promise((resolve) => setTimeout(resolve, retryDelay * attempt));
+          return uploadWithRetry(file, filePath, attempt + 1);
+        }
+        throw error;
+      }
+    };
+
+    // 배치 처리로 업로드 진행
+    const batchSize = 10; // 한 번에 처리할 파일 수
+    const results: string[] = [];
+
+    for (let i = 0; i < files.length; i += batchSize) {
+      const batch = files.slice(i, i + batchSize);
+      const batchPaths = filePaths.slice(i, i + batchSize);
+
+      const batchPromises = batch.map((file, idx) =>
+        limit(() => uploadWithRetry(file, batchPaths[idx]))
+      );
+
+      const batchResults = await Promise.allSettled(batchPromises);
+
+      // 배치 결과 처리
+      batchResults.forEach((result, idx) => {
+        if (result.status === 'fulfilled') {
+          results.push(result.value);
+        } else {
+          console.error(`배치 ${i + idx} 업로드 실패:`, result.reason);
+          throw new Error(`배치 업로드 실패: ${result.reason}`);
+        }
+      });
+
+      // 배치 간 간격 (서버 부하 분산)
+      if (i + batchSize < files.length) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+    }
+
+    performanceMonitor.end('🚀 Direct Upload로 이미지 업로드');
+    return { success: true, data: results };
   } catch (error) {
     console.error('다중 이미지 업로드 실패:', error);
     return { success: false, msg: '이미지 업로드 중 오류가 발생했습니다.' };
   }
 }
+
+// ===================================================================
+// 장소 이미지 업로드 (개선된 버전)
+// ===================================================================
 
 /* 장소 이미지 업로드 - Signed URL 방식 */
 // export async function uploadPlaces(
@@ -174,7 +227,7 @@ export async function uploadMultipleImagesDirect({
 // }
 
 /* 장소 이미지 업로드 - Direct Upload 방식 */
-export async function uploadPlacesDirect(
+export async function uploadPlacesOptimized(
   places: LogFormValues['places'],
   logId: string,
   existingOrderCount = 0
@@ -186,38 +239,61 @@ export async function uploadPlacesDirect(
     existingOrderCount
   );
 
-  const uploadTasks = places.map(async (place, idx) => {
-    const placeId = placeDataList[idx].place_id;
-    const files = place.placeImages.map((img) => img.file); // 해당 장소의 이미지 파일들
-
-    try {
-      // 장소 이미지 업로드
-      const uploadResult = await uploadMultipleImagesDirect({
-        files,
-        bucketName: 'places',
-        folders: [logId, placeId],
+  // 2. 모든 이미지 파일을 하나의 배열로 수집
+  const allFiles: { file: Blob; placeId: string; placeName: string; index: number }[] = [];
+  places.forEach((place, placeIdx) => {
+    const placeId = placeDataList[placeIdx].place_id;
+    place.placeImages.forEach((img, imgIdx) => {
+      allFiles.push({
+        file: img.file,
+        placeId,
+        placeName: place.placeName,
+        index: imgIdx,
       });
+    });
+  });
 
-      if (!uploadResult.success) {
-        console.error(`❌ 장소 이미지 업로드 실패 (${place.placeName}):`, uploadResult.msg);
-        throw new Error(uploadResult.msg || '장소 이미지 업로드 실패');
-      }
+  try {
+    // 3. 모든 이미지를 한 번에 업로드
+    const uploadResult = await uploadMultipleImagesOptimized({
+      files: allFiles.map((f) => f.file),
+      bucketName: 'places',
+      folders: [logId],
+      maxConcurrency: 3, // 동시 업로드 수 제한
+      retryAttempts: 3, // 재시도 횟수
+    });
+
+    if (!uploadResult.success) {
+      throw new Error(uploadResult.msg || '장소 이미지 업로드 실패');
+    }
+
+    // 4. 업로드된 이미지들을 장소별로 분류
+    const uploadedUrls = uploadResult.data;
+    let urlIndex = 0;
+
+    places.forEach((place, placeIdx) => {
+      const placeId = placeDataList[placeIdx].place_id;
+      const imageCount = place.placeImages.length;
+
+      // 해당 장소의 이미지들만 추출
+      const placeImages = uploadedUrls.slice(urlIndex, urlIndex + imageCount);
 
       // 장소 이미지 메타 데이터 생성
-      const uploadedImages = uploadResult.data.map((url, idx) => ({
+      const uploadedImages = placeImages.map((url, idx) => ({
         place_id: placeId,
         image_path: url,
         order: idx + 1,
       }));
-      placeImageDataList.push(...uploadedImages);
-    } catch (err) {
-      console.error(`❌ 장소 "${place.placeName}" 업로드 재시도 후 실패:`, err);
-      throw err;
-    }
-  });
 
-  await Promise.all(uploadTasks);
-  return { placeDataList, placeImageDataList };
+      placeImageDataList.push(...uploadedImages);
+      urlIndex += imageCount;
+    });
+
+    return { placeDataList, placeImageDataList };
+  } catch (error) {
+    console.error('장소 이미지 업로드 실패:', error);
+    throw error;
+  }
 }
 
 function makePlaceAndImageDataList(
