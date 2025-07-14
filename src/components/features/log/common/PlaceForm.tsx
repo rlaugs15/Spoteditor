@@ -1,5 +1,4 @@
 'use client';
-import { LocationIcon, MapIcon } from '@/components/common/Icons';
 import { FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -8,8 +7,9 @@ import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import PhotoTextSection from '../register/PhotoTextSection';
 import PlaceDrawer from '../register/PlaceDrawer';
+import ImageSection from '../register/place-item/ImageSection';
+import TextSection from '../register/place-item/TextSection';
 
 interface PlaceFormProps {
   idx: number;
@@ -24,7 +24,7 @@ interface PlaceFormProps {
 const PlaceForm = ({
   idx,
   type = 'existing',
-  globalIdx,
+  globalIdx, // 기존 + 추가장소 포함 인덱스
   isEditPage = false,
   onDeletePlace,
   onMoveUpPlace,
@@ -33,22 +33,23 @@ const PlaceForm = ({
   const { control, formState } = useFormContext();
   const [isChecked, setIsChecked] = useState(false);
 
-  // 로그 등록 vs 로그 수정에 따라 필드명 결정
   const fieldName = isEditPage
     ? type === 'existing'
       ? `places.${idx}`
       : `addedPlace.${idx}`
-    : `places.${idx}`; // 로그 등록에서는 항상 places.${idx}
+    : `places.${idx}`;
+
   const placeErrors = (formState.errors as any)[
     isEditPage ? (type === 'existing' ? 'places' : 'addedPlace') : 'places'
   ]?.[idx];
 
   const tLog = useTranslations('Register.LogPage');
   const tCategory = useTranslations('Category');
+
   return (
-    <div className="py-[5px]">
-      <div className="flex justify-between h-[16px]">
-        <span className="text-text-lg font-bold">
+    <div className="mt-6">
+      <div className="flex justify-between">
+        <span className="text-[14px] font-semibold text-black">
           {String((globalIdx ?? idx) + 1).padStart(2, '0')}
         </span>
         <PlaceDrawer
@@ -60,45 +61,62 @@ const PlaceForm = ({
         />
       </div>
 
-      <FormField
-        control={control}
-        name={`${fieldName}.placeName`}
-        render={({ field }) => (
-          <Input
-            {...field}
-            type="text"
-            placeholder={`${tLog('placeNameLabel')} *`}
-            className={cn(
-              'font-medium !text-text-lg placeholder:text-light-300',
-              placeErrors?.placeName && 'placeholder:text-error-500'
-            )}
-          />
-        )}
-      />
+      <ImageSection idx={idx} fieldName={fieldName} edit={isEditPage && type === 'existing'} />
 
-      <div className="pt-2 pb-[6px] space-y-[6px]">
-        <div className="flex items-center gap-[10px]">
-          <LocationIcon className="shrink-0 pt-[2px]" />
+      <div className="mt-2">
+        {/* Place Name */}
+        <FormField
+          control={control}
+          name={`${fieldName}.placeName`}
+          render={({ field }) => (
+            <div className="space-y-1">
+              <label className="block text-[14px] font-semibold text-black">
+                {tLog('placeNameLabel')}
+                <span className="text-error-500"> *</span>
+              </label>
+              <Input
+                {...field}
+                type="text"
+                placeholder={`${tLog('placeNamePlaceholder')}`}
+                className={cn(
+                  'block w-full px-4 py-5 rounded-[8px] bg-light-50 text-black',
+                  'placeholder:text-light-300 !text-[14px] focus:outline-none',
+                  placeErrors?.placeName && 'placeholder:text-error-500'
+                )}
+              />
+            </div>
+          )}
+        />
+
+        {/* Address or Location */}
+        <div className="mt-4 mb-2">
           <FormField
             control={control}
             name={`${fieldName}.location`}
             render={({ field }) => (
-              <Input
-                {...field}
-                type="text"
-                placeholder={`${tLog('locationPlaceholder')} *`}
-                className={cn(
-                  'font-medium !text-text-sm h-6 placeholder:text-light-300 line-height-[10px]',
-                  placeErrors?.location && 'placeholder:text-error-500'
-                )}
-              />
+              <div className="space-y-1">
+                <label className="block text-[14px] font-semibold text-black">
+                  {tLog('locationLabel')}
+                  <span className="text-error-500"> *</span>
+                </label>
+                <Input
+                  {...field}
+                  type="text"
+                  placeholder={`${tLog('locationPlaceholder')}`}
+                  className={cn(
+                    'block w-full px-4 py-5 rounded-[8px] bg-light-50 text-black',
+                    'placeholder:text-light-300 !text-[14px]  focus:outline-none',
+                    placeErrors?.location && 'placeholder:text-error-500'
+                  )}
+                />
+              </div>
             )}
           />
         </div>
-
-        <div>
+        {/* Category */}
+        <div className="mt-0">
           <div className="flex items-center web:items-start gap-2">
-            <MapIcon className="shrink-0 pt-1" />
+            {/* <MapIcon className="shrink-0 pt-1" /> */}
             <FormField
               control={control}
               name={`${fieldName}.category`}
@@ -108,7 +126,7 @@ const PlaceForm = ({
                     type="single"
                     value={field.value ?? ''}
                     onValueChange={(value) => field.onChange(value)}
-                    className="flex gap-1.5 web:flex-wrap"
+                    className="flex gap-[4px] web:flex-wrap"
                   >
                     {CATEGORIES.map((category) => (
                       <ToggleGroupItem
@@ -127,7 +145,9 @@ const PlaceForm = ({
         </div>
       </div>
 
-      <PhotoTextSection idx={idx} edit={isEditPage && type === 'existing'} fieldName={fieldName} />
+      <div className="mt-4">
+        <TextSection idx={idx} fieldName={fieldName} />
+      </div>
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import CarouselSection from '@/components/features/home/CarouselSection/CarouselSection';
-import Hero from '@/components/features/home/Hero';
 import InfoBanners from '@/components/features/home/InfoBanner/InfoBanners';
 import LatestLogContentSection from '@/components/features/home/LatestLogContentSection/LatestLogContentSection';
 
@@ -19,16 +18,15 @@ const MainPage = async ({ searchParams }: MainPageProps) => {
   const currentLogPage = isNaN(parsedLogPage) || parsedLogPage < 1 ? 1 : parsedLogPage;
 
   return (
-    <div className="h-full">
+    <main className="h-full">
       {/* <Login /> */}
-      <Hero />
-
+      {/* <Hero /> */}
+      <InfoBanners />
       <div className="pt-[60px] pb-[140px] px-4 web:px-[50px] space-y-20">
         <CarouselSection currentPage={currentPopularityPage} />
-        <InfoBanners />
         <LatestLogContentSection currentPage={currentLogPage} />
       </div>
-    </div>
+    </main>
   );
 };
 

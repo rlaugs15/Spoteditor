@@ -2,6 +2,7 @@
 import { AddCameraIcon } from '@/components/common/Icons';
 import { FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useGpsAddressExtraction } from '@/hooks/useGpsAddressExtraction';
 import useMultipleImagePreview from '@/hooks/useMultipleImagePreview';
 import { cn } from '@/lib/utils';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
@@ -19,14 +20,25 @@ interface MultiImageFormProps {
 const MAX_IMAGES_LENGTH = 8;
 
 const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
-  const { control } = useFormContext<any>();
+  const { control, setValue, getValues } = useFormContext<any>();
   const t = useTranslations('Register.LogPage');
+  const tToast = useTranslations('Toast.logCreate');
   const { fields, append, remove, replace } = useFieldArray({
     control: control,
     name: fieldName ? `${fieldName}.placeImages` : `places.${idx}.placeImages`,
   });
 
-  const { addFile, removeByFile, reorderPreviews, getPreviewUrl } = useMultipleImagePreview();
+  const { addFile, removeByFile, getPreviewUrl } = useMultipleImagePreview();
+
+  // GPS 추출 훅 사용
+  const placeAddressFieldName = fieldName ? `${fieldName}` : `places.${idx}.placeName`;
+  const currentAddress = getValues(`${placeAddressFieldName}.location`);
+
+  const { extractGpsAndSetAddress } = useGpsAddressExtraction({
+    onAddressSet: (address: string) => setValue(`${placeAddressFieldName}.location`, address),
+    currentAddress,
+    onSkip: () => toast.info(tToast('autoAddressSkipped')),
+  });
 
   const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
@@ -39,6 +51,10 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
     if (fileList.length >= MAX_IMAGES_LENGTH) toast.info(t('maxImageError'));
 
     const files = Array.from(fileList).slice(0, MAX_IMAGES_LENGTH - fields.length);
+
+    // GPS 정보 추출 및 주소 자동 설정
+    await extractGpsAndSetAddress(files);
+
     const compressedFiles = await Promise.all(files.map((file) => compressImageToWebp(file)));
 
     compressedFiles
@@ -55,18 +71,19 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
   };
 
   const handleReorder = (newOrder: typeof fields) => {
-    reorderPreviews(newOrder.map((item) => (item as any).file));
+    // reorderPreviews(newOrder.map((item) => (item as any).file));
     replace(newOrder);
   };
 
   return (
     <div className="flex flex-col">
       <FormLabel htmlFor={`file-upload-${idx}`}>
-        <div className="cursor-pointer text-text-sm w-full h-12 rounded-md flex items-center justify-center border border-dashed my-2.5 font-bold space-x-1.5 hover:bg-accent hover:text-accent-foreground">
+        <div className="image-upload-button border-dashed">
           <AddCameraIcon />
-          <span>
+          <span className="text-[14px] text-light-700 font-medium">
             {t('uploadPictures')}
-            <span className="text-error-500">*</span> ({t('uploadPicturesLimit')})
+            <span className="text-error-500">*</span>
+            <span className="text-light-300"> ({t('uploadPicturesLimit')})</span>
           </span>
         </div>
       </FormLabel>
@@ -77,7 +94,7 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
         className="hidden"
         multiple
         maxLength={8}
-        accept=".jpg,.jpeg,.png,.webp,.avif"
+        accept=".jpg,.jpeg,.png,.webp,.avif,.heic"
       />
 
       <div
@@ -99,6 +116,7 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
               <ReorderItem
                 key={field.id}
                 item={field}
+                representative={idx === 0}
                 imageUrl={previewUrl}
                 onDeleteClick={() => handleRemove(imageIdx, file)}
                 imageIdx={imageIdx}

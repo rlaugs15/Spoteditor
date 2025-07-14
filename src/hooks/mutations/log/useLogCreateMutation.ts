@@ -1,58 +1,50 @@
 import { logKeys, searchKeys } from '@/app/actions/keys';
 import { createLog } from '@/app/actions/log-register';
+import { HOME } from '@/constants/pathname';
 import { useRouter } from '@/i18n/navigation';
 import { trackLogCreateEvent } from '@/lib/analytics';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues, NewPlace, NewPlaceImage } from '@/types/log';
-import { uploadPlaces, uploadThumbnail } from '@/utils/upload';
+import { uploadPlacesOptimized } from '@/utils/imageUpload';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
-interface LogCreateMutationProps {
-  values: LogFormValues;
-}
-
-export type PreparedValues = {
+// 로그 등록 위해 서버로 보낼 데이터 (db 갱신용)
+export type LogCreatePayload = {
   logId: string;
-  thumbnailUrl: string;
   placeDataList: NewPlace[];
   placeImageDataList: NewPlaceImage[];
-} & Pick<LogFormValues, 'logTitle' | 'logDescription' | 'address' | 'tags'>;
+} & Pick<LogFormValues, 'logTitle' | 'address' | 'tags'>;
 
 const useLogCreateMutation = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const clearTag = useLogCreationStore((state) => state.clearTag);
   const t = useTranslations('Toast.logCreate');
+
   return useMutation({
-    mutationFn: async ({ values }: LogCreateMutationProps) => {
-      const logId = crypto.randomUUID();
+    mutationFn: async (values: LogFormValues) => {
+      const logId = crypto.randomUUID(); // 로그 고유 id
 
-      /* 썸네일 업로드 */
-      // console.time('🖼️ 썸네일 업로드');
-      const thumbnailUploadResult = await uploadThumbnail(values.thumbnail, logId);
-      // console.timeEnd('🖼️ 썸네일 업로드');
-      if (!thumbnailUploadResult?.success) throw new Error(thumbnailUploadResult?.msg);
+      // 1. 장소 이미지 업로드
+      const { placeDataList, placeImageDataList } = await uploadPlacesOptimized(
+        values.places,
+        logId
+      );
 
-      /* 장소 이미지 업로드 */
-      // console.time('📍 장소 이미지 업로드');
-      const { placeDataList, placeImageDataList } = await uploadPlaces(values.places, logId);
-      // console.timeEnd('📍 장소 이미지 업로드');
-
-      // 서버로 보낼 데이터 모아서 보내기
-      const preparedValues: PreparedValues = {
+      // 2. 이미지 업로드 후 페이로드 생성
+      const logCreatePayload: LogCreatePayload = {
         logId,
         logTitle: values.logTitle,
-        logDescription: values.logDescription,
         tags: values.tags,
         address: values.address,
-        thumbnailUrl: thumbnailUploadResult.data,
         placeDataList,
         placeImageDataList,
       };
 
-      return await createLog(preparedValues);
+      // 3. 로그 등록
+      return await createLog(logCreatePayload);
     },
     onMutate: () => {
       const firstTimeoutId = setTimeout(() => {
@@ -72,7 +64,7 @@ const useLogCreateMutation = () => {
 
       return { firstTimeoutId, secondTimeoutId };
     },
-    onSuccess: ({ success, data }, _variables, context) => {
+    onSuccess: ({ success }, _variables, context) => {
       if (context) {
         clearTimeout(context.firstTimeoutId);
         clearTimeout(context.secondTimeoutId);
@@ -90,7 +82,8 @@ const useLogCreateMutation = () => {
           queryClient.removeQueries({ queryKey: key, exact: false });
         });
 
-        router.replace(`/log/${data}`);
+        // router.replace(`/log/${data}`);
+        router.replace(HOME);
         toast.success(t('success'), {
           description: t('redirect'),
         });
@@ -101,7 +94,6 @@ const useLogCreateMutation = () => {
         clearTimeout(context.firstTimeoutId);
         clearTimeout(context.secondTimeoutId);
       }
-
       // GA 이벤트 추적 - 로그 등록 실패
       trackLogCreateEvent('cancel');
 

@@ -114,7 +114,7 @@ export async function fetchBookmarkedPlaces({
 }
 
 export async function getBookmarkedPlaces(params: PlaceBookmarkListParmas) {
-  return unstable_cache(() => fetchBookmarkedPlaces(params), placeKeys.bookmarkList(params), {
+  return unstable_cache(() => fetchBookmarkedPlaces(params), [...placeKeys.bookmarkList(params)], {
     tags: [
       cacheTags.placeBookmarkList(params), // 개별 사용자별 태그
       globalTags.placeBookmarkAll, // 전체 북마크 무효화용 태그

@@ -15,7 +15,7 @@ const MoodSelectionPage = async () => {
       </div>
       <RegisterFooter
         tagTargets={['mood', 'activity']}
-        nextPath={REGISTER_PATHS.COUNTRY}
+        nextPath={REGISTER_PATHS.LOCATION}
         delayBtn
       />
     </>

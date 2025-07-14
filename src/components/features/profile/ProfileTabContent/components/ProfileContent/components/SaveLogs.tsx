@@ -41,7 +41,7 @@ export default function SaveLogs({ userId }: SavaLogsProps) {
     if (!me?.user_id) return;
 
     const revalidateAndRefetch = async () => {
-      await revalidateBookmarkLogs();
+      revalidateBookmarkLogs();
       refetch();
     };
 
@@ -62,7 +62,7 @@ export default function SaveLogs({ userId }: SavaLogsProps) {
             <Link href={`/log/${log?.log_id}`}>
               <PostCardImage
                 author={String(log?.users?.nickname)}
-                imageUrl={String(log?.thumbnail_url)}
+                imageUrl={String(log?.place[0].place_images[0].image_path)}
               />
               <PostCardTitle title={String(log?.title)} />
               <PostCardLocation

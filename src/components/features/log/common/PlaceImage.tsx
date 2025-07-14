@@ -5,9 +5,10 @@ interface PlaceImageProps {
   imageUrl: string;
   onDeleteClick: () => void;
   imageIdx: number;
+  representative: boolean;
 }
 
-const PlaceImage = ({ imageUrl, onDeleteClick, imageIdx }: PlaceImageProps) => {
+const PlaceImage = ({ imageUrl, onDeleteClick, imageIdx, representative }: PlaceImageProps) => {
   return (
     <>
       <Image
@@ -21,6 +22,12 @@ const PlaceImage = ({ imageUrl, onDeleteClick, imageIdx }: PlaceImageProps) => {
       <button onClick={onDeleteClick} type="button" className="absolute top-2 right-2">
         <XRemovePlaceImageIcon className="cursor-pointer hover:brightness-90" />
       </button>
+
+      {representative && imageIdx === 0 && (
+        <div className="absolute top-2 left-2 bg-white text-black text-xs px-2 py-1 rounded">
+          대표
+        </div>
+      )}
 
       <div className="absolute bottom-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
         {imageIdx + 1}

@@ -3,7 +3,11 @@ export const PAGE_TAG_INTROS = {
     title: '어떤 하루인가요?',
     des: '여러개를 선택할 수 있어요 (최대 16개)',
   },
-  country: { title: '국가를 선택해주세요.', des: '메인 국가를 선택해주세요.' },
+  country: {
+    title: '',
+    des: '메인 국가를 선택해주세요.',
+    tagGroupTitle: '국가',
+  },
   city: {
     domestic: {
       title: '도시를 선택해주세요.',

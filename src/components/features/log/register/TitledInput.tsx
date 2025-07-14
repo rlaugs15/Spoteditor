@@ -11,8 +11,9 @@ const TitledInput = () => {
   const isError = !!formState.errors?.logTitle;
 
   const t = useTranslations('Register.LogPage');
+
   return (
-    <div className="flex items-center border-b border-light-100">
+    <div className="relative flex items-center mt-4">
       <FormField
         control={control}
         name="logTitle"
@@ -22,13 +23,18 @@ const TitledInput = () => {
               {...field}
               type="text"
               placeholder={`${t('titlePlaceholder')} *`}
-              className={cn('!text-text-md my-2', isError && 'placeholder:text-error-500 ')}
+              className={cn(
+                'block w-full px-4 py-6 rounded-[8px] bg-light-50 text-black',
+                'placeholder:text-light-300 !text-[14px] focus:outline-none',
+                isError && 'placeholder:text-error-500'
+              )}
               maxLength={30}
               required
             />
             <button
+              type="button"
               className={cn(
-                'p-2 transition-opacity duration-300',
+                'absolute right-2 p-2 transition-opacity duration-300',
                 logTitle ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
               )}
               onClick={() => setValue('logTitle', '')}

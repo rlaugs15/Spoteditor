@@ -5,9 +5,9 @@ const TypingText = () => {
   return (
     <TypeAnimation
       sequence={[
-        '모든 유저가 특별한 “에디터"가 될 수 있어요!',
+        '당신의 취향이 누군가의 영감이 될 수 있어요',
         1200,
-        'Anyone can become a special "Editor"!',
+        'Your favorites could spark someone else’s discovery',
         1200,
       ]}
       speed={40}

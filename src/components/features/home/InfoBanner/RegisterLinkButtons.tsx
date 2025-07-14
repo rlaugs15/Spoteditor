@@ -11,19 +11,26 @@ interface RegisterLinkButtonsProps {
 
 export default function RegisterLinkButtons({ label }: RegisterLinkButtonsProps) {
   return (
-    <div className="flex items-center">
-      <Button
-        className="rounded-full !text-text-sm web:!text-text-md font-medium text-white"
-        size="lg"
-        asChild
-      >
-        <Link href={REGISTER_PATHS.MOOD}>{label}</Link>
-      </Button>
-      <Button className="rounded-full" size="icon" asChild>
-        <Link href={REGISTER_PATHS.MOOD}>
-          <ArrowUpRightIcon />
-        </Link>
-      </Button>
-    </div>
+    <Link href={REGISTER_PATHS.MOOD} className="group inline-flex items-center">
+      {/* 텍스트 버튼 */}
+      <div>
+        <Button
+          className="pointer-events-none rounded-full w-56 h-15 !text-text-lg web:!text-text-lg font-medium bg-black text-white group-hover:bg-light-900 group-hover:text-white transition-colors duration-200"
+          size="lg"
+        >
+          {label}
+        </Button>
+      </div>
+
+      {/* 아이콘 버튼 */}
+      <div>
+        <Button
+          className="pointer-events-none rounded-full w-15 h-15 bg-black group-hover:bg-light-900 transition-colors duration-200"
+          size="icon"
+        >
+          <ArrowUpRightIcon className="w-9 h-9" />
+        </Button>
+      </div>
+    </Link>
   );
 }
