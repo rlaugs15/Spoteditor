@@ -7,6 +7,7 @@ import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
 import { HOME } from '@/constants/pathname';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
+import { INITIAL_PLACE, usePlacesHandlers } from '@/hooks/usePlacesHandlers';
 import { useRouter } from '@/i18n/navigation';
 import { trackLogCreateEvent } from '@/lib/analytics';
 import { LogFormSchema } from '@/lib/zod/logSchema';
@@ -15,17 +16,9 @@ import { LogFormValues } from '@/types/log';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-
-const initialPlace = {
-  placeName: '',
-  category: '',
-  location: '',
-  description: '',
-  placeImages: [],
-};
 
 const LogPage = () => {
   const router = useRouter();
@@ -39,10 +32,13 @@ const LogPage = () => {
   const activity = useLogCreationStore((state) => state.activity);
   const hydrated = useLogCreationStore((state) => state.hydrated);
 
-  const defaultValues = useMemo(
-    () => ({
+  const form = useForm<LogFormValues>({
+    resolver: zodResolver(LogFormSchema),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    defaultValues: {
       logTitle: '',
-      places: [initialPlace],
+      places: [INITIAL_PLACE],
       tags: {
         mood,
         activity,
@@ -52,27 +48,8 @@ const LogPage = () => {
         city,
         sigungu,
       },
-    }),
-    [country, city, sigungu, mood, activity]
-  );
-
-  const form = useForm<LogFormValues>({
-    resolver: zodResolver(LogFormSchema),
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    defaultValues,
+    },
   });
-
-  // 스토어 준비된 후 폼 초기화
-  useEffect(() => {
-    if (hydrated) {
-      form.setValue('tags.mood', mood || []);
-      form.setValue('tags.activity', activity || []);
-      form.setValue('address.country', country || '');
-      form.setValue('address.city', city || '');
-      form.setValue('address.sigungu', sigungu || '');
-    }
-  }, [form, hydrated, mood, activity, country, city, sigungu]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -90,31 +67,9 @@ const LogPage = () => {
     name: 'places',
   });
 
-  const handleAddNewPlace = () => {
-    if (fields.length >= 10) {
-      toast.info(t('maxPlaceError'));
-      return;
-    }
-    append(initialPlace);
-  };
-
-  const handleDeletePlace = (idx: number) => {
-    if (fields.length <= 1) {
-      toast.error('최소 1개의 장소는 필요합니다.');
-      return;
-    }
-    remove(idx);
-  };
-
-  const handleMovePlaceUp = (idx: number) => {
-    if (idx <= 0) return;
-    swap(idx, idx - 1);
-  };
-
-  const handleMovePlaceDown = (idx: number) => {
-    if (idx >= fields.length - 1) return;
-    swap(idx, idx + 1);
-  };
+  // 장소 관련 핸들러
+  const { handleAddNewPlace, handleDeletePlace, handleMovePlaceUp, handleMovePlaceDown } =
+    usePlacesHandlers(fields, append, remove, swap, t);
 
   const onSubmit = async (values: LogFormValues) => {
     // GA 이벤트 추적 - 로그 등록 시작

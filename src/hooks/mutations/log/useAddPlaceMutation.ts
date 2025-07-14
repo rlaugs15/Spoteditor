@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 interface AddPlaceMutationProps {
   values: AddedPlaceValues[];
   logId: string;
-  existingOrderCount?: number;
+  existingOrderCount?: number; // 기존 장소 + 1 부터 번호 매기기 위해
 }
 
 // 이미지 업로드
