@@ -7,92 +7,75 @@ import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
 import { HOME } from '@/constants/pathname';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
+import { INITIAL_PLACE, usePlacesHandlers } from '@/hooks/usePlacesHandlers';
 import { useRouter } from '@/i18n/navigation';
 import { trackLogCreateEvent } from '@/lib/analytics';
 import { LogFormSchema } from '@/lib/zod/logSchema';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/log';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-const initialPlace = {
-  placeName: '',
-  category: '',
-  location: '',
-  description: '',
-  placeImages: [],
-};
-
 const LogPage = () => {
   const router = useRouter();
+  const { mutate, isPending } = useLogCreateMutation();
+  const t = useTranslations('Register.LogPage');
+
   const country = useLogCreationStore((state) => state.country);
   const city = useLogCreationStore((state) => state.city);
   const sigungu = useLogCreationStore((state) => state.sigungu);
+  const mood = useLogCreationStore((state) => state.mood);
+  const activity = useLogCreationStore((state) => state.activity);
   const hydrated = useLogCreationStore((state) => state.hydrated);
-  const { mutate, isPending } = useLogCreateMutation();
 
-  const t = useTranslations('Register.LogPage');
-
-  useEffect(() => {
-    if (!hydrated) return;
-    if (!country || !city || !sigungu) {
-      toast.error('등록할 장소가 선택되지 않았습니다. 다시 시도해주세요.');
-      router.replace(HOME);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated]);
-
-  const form = useForm({
+  const form = useForm<LogFormValues>({
     resolver: zodResolver(LogFormSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
     reValidateMode: 'onChange',
     defaultValues: {
       logTitle: '',
-      places: [initialPlace],
+      places: [INITIAL_PLACE],
       tags: {
-        mood: useLogCreationStore.getState().mood,
-        activity: useLogCreationStore.getState().activity,
+        mood,
+        activity,
       },
       address: {
-        country: useLogCreationStore.getState().country,
-        city: useLogCreationStore.getState().city,
-        sigungu: useLogCreationStore.getState().sigungu,
+        country,
+        city,
+        sigungu,
       },
     },
   });
+
+  useEffect(() => {
+    if (!hydrated) return;
+
+    if (!country || !city || !sigungu) {
+      toast.error('등록할 장소가 선택되지 않았습니다. 다시 시도해주세요.');
+      router.replace(HOME);
+      return;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { fields, append, remove, swap } = useFieldArray<LogFormValues>({
     control: form.control,
     name: 'places',
   });
 
-  const handleAddNewPlace = () => {
-    if (fields.length >= 10) {
-      toast.info(t('maxPlaceError'));
-      return;
-    }
-    append(initialPlace);
-  };
-  const handleDeletePlace = (idx: number) => remove(idx);
-  const handleMovePlaceUp = (idx: number) => {
-    if (idx <= 0) return;
-    swap(idx, idx - 1);
-  };
-  const handleMovePlaceDown = (idx: number) => {
-    if (idx >= fields.length - 1) return;
-    swap(idx, idx + 1);
-  };
+  // 장소 관련 핸들러
+  const { handleAddNewPlace, handleDeletePlace, handleMovePlaceUp, handleMovePlaceDown } =
+    usePlacesHandlers(fields, append, remove, swap, t);
 
   const onSubmit = async (values: LogFormValues) => {
     // GA 이벤트 추적 - 로그 등록 시작
     trackLogCreateEvent('start');
 
-    // console.log(values);
-    mutate({ values });
+    // console.log(values, { values });
+    mutate(values);
   };
 
   return (
@@ -118,6 +101,7 @@ const LogPage = () => {
              bg-black text-white rounded-full px-4 py-2
              hover:bg-light-900 hover:text-white"
               onClick={handleAddNewPlace}
+              disabled={fields.length >= 10}
             >
               <img src="/icons/PlusSemibold.svg" alt="plus" className="w-4 h-4 fill=light-500" />
               {t('addPlace')}

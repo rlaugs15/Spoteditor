@@ -26,8 +26,6 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
     setSelectedImageIndex(index);
   };
 
-  const sortedImages = placeImages.sort((a, b) => a.order - b.order);
-
   return (
     <>
       <Swiper
@@ -38,7 +36,7 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
         spaceBetween={15}
         className="w-full cursor-pointer"
       >
-        {sortedImages.map((img, index) => (
+        {placeImages.map((img, index) => (
           <SwiperSlide
             key={img.place_image_id}
             className="w-[40vw] max-w-[300px] aspect-[3/4] relative"
@@ -70,7 +68,7 @@ const PlaceImageSlider = ({ placeImages }: PlaceImageSliderProps) => {
               swiperRef.current = swiper;
             }}
           >
-            {sortedImages.map((img) => (
+            {placeImages.map((img) => (
               <SwiperSlide key={img.place_image_id} className="flex items-center justify-center">
                 <ImageWithLoader
                   src={getStoragePublicImage(img.image_path as string)}

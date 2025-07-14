@@ -2,13 +2,12 @@
 import { AddCameraIcon } from '@/components/common/Icons';
 import { FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useGpsAddressExtraction } from '@/hooks/useGpsAddressExtraction';
 import useMultipleImagePreview from '@/hooks/useMultipleImagePreview';
 import { cn } from '@/lib/utils';
 import { compressImageToWebp } from '@/utils/compressImageToWebp';
-import { getAddressFromCoords } from '@/utils/getAddressFromCoords';
-import exifr from 'exifr';
 import { Reorder } from 'motion/react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
 import ReorderItem from './ReorderItem';
@@ -21,7 +20,6 @@ interface MultiImageFormProps {
 const MAX_IMAGES_LENGTH = 8;
 
 const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
-  const locale = useLocale();
   const { control, setValue, getValues } = useFormContext<any>();
   const t = useTranslations('Register.LogPage');
   const tToast = useTranslations('Toast.logCreate');
@@ -30,7 +28,17 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
     name: fieldName ? `${fieldName}.placeImages` : `places.${idx}.placeImages`,
   });
 
-  const { addFile, removeByFile, reorderPreviews, getPreviewUrl } = useMultipleImagePreview();
+  const { addFile, removeByFile, getPreviewUrl } = useMultipleImagePreview();
+
+  // GPS 추출 훅 사용
+  const placeAddressFieldName = fieldName ? `${fieldName}` : `places.${idx}.placeName`;
+  const currentAddress = getValues(`${placeAddressFieldName}.location`);
+
+  const { extractGpsAndSetAddress } = useGpsAddressExtraction({
+    onAddressSet: (address: string) => setValue(`${placeAddressFieldName}.location`, address),
+    currentAddress,
+    onSkip: () => toast.info(tToast('autoAddressSkipped')),
+  });
 
   const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
@@ -44,38 +52,8 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
 
     const files = Array.from(fileList).slice(0, MAX_IMAGES_LENGTH - fields.length);
 
-    const placeAddressFieldName = fieldName ? `${fieldName}.placeName` : `places.${idx}.placeName`;
-
-    /** 이미지마다 GPS 정보 추출 시도 */
-    for (const file of files) {
-      try {
-        const gps = await exifr.gps(file);
-
-        if (gps?.latitude && gps?.longitude) {
-          // reverse-geocode API 호출(좌표 -> 주소)
-          const currentValue = getValues(placeAddressFieldName);
-
-          if (currentValue) {
-            toast.info(tToast('autoAddressSkipped'));
-          } else {
-            const address = await getAddressFromCoords({
-              lat: gps.latitude,
-              lng: gps.longitude,
-              locale,
-            });
-
-            if (address.success) {
-              setValue(placeAddressFieldName, address.data.address);
-              toast.success(tToast('autoAddressSuccess'));
-            } else {
-              toast.warning(tToast('autoAddressFailed'));
-            }
-          }
-        }
-      } catch (err) {
-        console.error('GPS 추출 중 오류:', err);
-      }
-    }
+    // GPS 정보 추출 및 주소 자동 설정
+    await extractGpsAndSetAddress(files);
 
     const compressedFiles = await Promise.all(files.map((file) => compressImageToWebp(file)));
 
@@ -93,7 +71,7 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
   };
 
   const handleReorder = (newOrder: typeof fields) => {
-    reorderPreviews(newOrder.map((item) => (item as any).file));
+    // reorderPreviews(newOrder.map((item) => (item as any).file));
     replace(newOrder);
   };
 
@@ -138,6 +116,7 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
               <ReorderItem
                 key={field.id}
                 item={field}
+                representative={idx === 0}
                 imageUrl={previewUrl}
                 onDeleteClick={() => handleRemove(imageIdx, file)}
                 imageIdx={imageIdx}

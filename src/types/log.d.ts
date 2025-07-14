@@ -11,6 +11,9 @@ export type NewTag = {
   tag: string;
   log_id: string;
 };
-export type NewPlaceImage = Omit<Tables<'place_images'>, 'created_at' | 'updated_at'>;
+export type NewPlaceImage = Omit<
+  Tables<'place_images'>,
+  'place_image_id' | 'created_at' | 'updated_at'
+>;
 export type NewAddress = Omit<Tables<'address'>, 'created_at'>;
 export type NewLog = Omit<Tables<'log'>, 'created_at'>;
