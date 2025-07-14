@@ -12,7 +12,7 @@ interface TagGroupProps {
 const TagGroup = ({ title, tags, namespace, isSelected, onTagClick }: TagGroupProps) => {
   return (
     <div className="mb-5">
-      {title && <h5 className="text-text-xs font-bold py-2.5">{title}</h5>}
+      {title && <h5 className="text-text-base font-bold py-4">{title}</h5>}
       <div className="flex flex-wrap gap-2">
         {tags.map((value) => (
           <TagButton

@@ -5,11 +5,12 @@ interface InfoBannerProps {
   children: React.ReactNode;
   className?: string;
 }
+
 const InfoBanner = ({ children, className }: InfoBannerProps) => {
   return (
     <div
       className={cn(
-        'flex flex-col justify-between !text-light-400 text-text-sm web:text-text-lg py-4 web:py-15',
+        'flex flex-col items-center justify-center h-full !text-light-400 text-text-sm web:text-text-lg web:py-10 space-y-6 text-center',
         className
       )}
     >

@@ -1,18 +1,20 @@
 'use client';
+
 import { useLogCreationStore } from '@/stores/logCreationStore';
-import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import BackButton from '../Button/BackButton';
 
 interface LogRegisterHeaderProps {
   onAddNewPlace: () => void;
 }
+
 const LogRegisterHeader = ({ onAddNewPlace }: LogRegisterHeaderProps) => {
   const city = useLogCreationStore((state) => state.city);
   const sigungu = useLogCreationStore((state) => state.sigungu);
 
   const tRegion = useTranslations('Region');
   const tLog = useTranslations('Register.LogPage');
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-[54px] bg-white">
       <div className="py-[15px] flex items-center justify-between w-full min-w-[343px] max-w-[724px] mx-auto px-4">
@@ -27,10 +29,11 @@ const LogRegisterHeader = ({ onAddNewPlace }: LogRegisterHeaderProps) => {
           )}
         </div>
         <button
-          className="flex items-center gap-1 font-bold text-text-md !text-black px-0 hover:!text-light-400 hover:!bg-transparent"
+          className="flex items-center justify-center gap-1.5 font-semibold text-text-md bg-black text-white rounded-full px-3 py-1.5 hover:bg-light-900 hover:text-white"
           onClick={onAddNewPlace}
         >
-          <Plus className="text-light-500 size-4" /> {tLog('addPlace')}
+          <img src="/icons/PlusSemibold.svg" alt="Plus" className="w-4 h-4" />
+          {tLog('addPlace')}
         </button>
       </div>
     </header>

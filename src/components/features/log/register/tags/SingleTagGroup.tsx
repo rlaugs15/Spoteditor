@@ -66,7 +66,9 @@ const SingleTagGroup = ({ title, type }: SingleTagGroupProps) => {
       PAGE_TAG_INTROS[type][isDomestic ? 'domestic' : 'aboard'].tagGroupTitle;
 
     let localeTitle = '';
-    if (tagGroupTitle === '도시') {
+    if (type === 'country') {
+      localeTitle = 'Register.CountryPage.groupTitle'; // ✅ 국가도 타이틀 설정
+    } else if (tagGroupTitle === '도시') {
       localeTitle = 'Register.CityPage.city';
     } else if (tagGroupTitle === '지역') {
       localeTitle = 'Register.CityPage.area';

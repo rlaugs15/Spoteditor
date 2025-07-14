@@ -112,9 +112,17 @@ const LogPage = () => {
               />
             ))}
           </div>
-          <button className="image-upload-button" onClick={handleAddNewPlace}>
-            <Plus className="text-light-500 size-4" /> {t('addPlace')}
-          </button>
+          <div className="flex justify-center mt-4 mb-4">
+            <button
+              className="flex items-center justify-center gap-1.5 font-semibold text-text-md
+             bg-black text-white rounded-full px-4 py-2
+             hover:bg-light-900 hover:text-white"
+              onClick={handleAddNewPlace}
+            >
+              <img src="/icons/PlusSemibold.svg" alt="plus" className="w-4 h-4 fill=light-500" />
+              {t('addPlace')}
+            </button>
+          </div>
         </main>
       </Form>
 

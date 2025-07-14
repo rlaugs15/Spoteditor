@@ -100,11 +100,12 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
   return (
     <div className="flex flex-col">
       <FormLabel htmlFor={`file-upload-${idx}`}>
-        <div className="image-upload-button border-dashed ">
+        <div className="image-upload-button border-dashed">
           <AddCameraIcon />
-          <span>
+          <span className="text-[14px] text-light-700 font-medium">
             {t('uploadPictures')}
-            <span className="text-error-500">*</span> ({t('uploadPicturesLimit')})
+            <span className="text-error-500">*</span>
+            <span className="text-light-300"> ({t('uploadPicturesLimit')})</span>
           </span>
         </div>
       </FormLabel>

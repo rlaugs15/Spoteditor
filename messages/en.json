@@ -359,7 +359,7 @@
     "loginOrSignup": "Sign Up / Login"
   },
   "UserDropdown": {
-    "writeLog": "Write Log",
+    "writeLog": "Write",
     "contact": "Contact Us",
     "logout": "Logout",
     "notice": "Notice",
@@ -397,13 +397,11 @@
         "subtitle": "New areas will appear when editors add new places!"
       }
     },
-    "registerCourse": "Register my recommended course",
+    "registerCourse": "Write",
     "registerCourseDescription": {
-      "line1": "Share your favorite hidden spots and food places, and let others discover your route.",
-      "line2": "\"Someone spent a great day with the course I created!\", how awesome is that?",
-      "line3": "Isn't it just delightful to imagine? 🥰",
-      "line4": "Share your own course so others can use it as a reference.",
-      "line5": "The course you make will inspire many others!"
+      "line1": "Your small moment could brighten someone’s whole day.",
+      "line2": "Share your favorite places, experiences, and personal tastes —",
+      "line3": "your own unique moment."
     }
   },
   "ProfilePage": {
@@ -525,6 +523,10 @@
       "titlePlaceholder": "Enter a title. (Max 30 characters)",
       "coverImage": "Cover Image",
       "contentPlaceholder": "Enter the content. (Max 500 characters)",
+      "placeNameLabel": "Place Name",
+      "placeNamePlaceholder": "장소명을 입력하세요",
+      "locationLabel": "Address",
+      "locationPlaceholder": "위치를 입력하세요",
       "placeNameLabel": "Enter the name of the place",
       "locationPlaceholder": "Enter the location.",
       "uploadImage": "Upload Image",

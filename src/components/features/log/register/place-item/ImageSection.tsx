@@ -9,7 +9,7 @@ interface ImageSectionProps {
 
 const ImageSection = ({ idx = 1, edit, fieldName }: ImageSectionProps) => {
   return (
-    <div className="mb-2.5">
+    <div className="">
       {edit ? <EditMultiImageForm idx={idx} /> : <MultiImageForm idx={idx} fieldName={fieldName} />}
     </div>
   );
