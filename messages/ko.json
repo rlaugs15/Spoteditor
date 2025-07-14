@@ -408,12 +408,12 @@
     "defaultDescription": "소소한 하루, 특별한 순간들을 기록하는 공간 ☕️\n일상의 작은 행복부터 여행의 찰나까지 🏞️",
     "edit": "편집",
     "tab": {
-      "myLog": "나의 로그",
+      "myLog": "나의 기록",
       "savedSpaces": "저장된 장소",
       "savedLog": "저장된 로그"
     },
     "fallback": {
-      "myLog": "나만의 로그\n첫 게시물을 올려보세요!",
+      "myLog": "나의 기록\n첫 게시물을 올려보세요!",
       "empty": "저장된 {resourceName}가 없습니다.\n로그를 둘러본뒤 관심있는 장소를 저장해보세요!"
     },
     "resource": {

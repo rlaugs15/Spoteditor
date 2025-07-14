@@ -22,7 +22,7 @@ const PageIntro = ({ type }: PageIntro) => {
     localeIntro = isDomestic ? 'sigungu' : 'city';
   }
   return (
-    <div className="flex flex-col items-start justify-center text-left mb-0">
+    <div className="flex flex-col items-center justify-center text-center w-full mb-0">
       <h3 className="!text-[18px] text-black font-bold">{t(`${localeIntro}.title`)}</h3>
       {/* <p className="text-text-sm font-medium text-light-300">{t(`${localeIntro}.description`)}</p> */}
     </div>

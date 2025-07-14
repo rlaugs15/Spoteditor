@@ -15,7 +15,7 @@ export default function RegisterLinkButtons({ label }: RegisterLinkButtonsProps)
       {/* 텍스트 버튼 */}
       <div>
         <Button
-          className="pointer-events-none rounded-full w-56 h-15 !text-text-sm web:!text-text-md font-medium bg-black text-white group-hover:bg-light-900 group-hover:text-white transition-colors duration-200"
+          className="pointer-events-none rounded-full w-56 h-15 !text-text-lg web:!text-text-lg font-medium bg-black text-white group-hover:bg-light-900 group-hover:text-white transition-colors duration-200"
           size="lg"
         >
           {label}
