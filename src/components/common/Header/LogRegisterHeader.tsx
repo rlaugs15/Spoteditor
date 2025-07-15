@@ -2,6 +2,7 @@
 
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import BackButton from '../Button/BackButton';
 
 interface LogRegisterHeaderProps {
@@ -32,7 +33,7 @@ const LogRegisterHeader = ({ onAddNewPlace }: LogRegisterHeaderProps) => {
           className="flex items-center justify-center gap-1.5 font-semibold text-text-md bg-black text-white rounded-full px-3 py-1.5 hover:bg-light-900 hover:text-white"
           onClick={onAddNewPlace}
         >
-          <img src="/icons/PlusSemibold.svg" alt="Plus" className="w-4 h-4" />
+          <Image src="/icons/PlusSemibold.svg" alt="Plus" className="w-4 h-4" />
           {tLog('addPlace')}
         </button>
       </div>
