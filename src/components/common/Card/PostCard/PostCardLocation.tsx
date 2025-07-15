@@ -12,8 +12,6 @@ type PostCardLocationProps = Partial<{
 };
 
 function PostCardLocation({ city, country = '', sigungu, category, modal }: PostCardLocationProps) {
-  console.log('city, country', city, country, sigungu, category);
-
   const t = useTranslations();
   return (
     <h4

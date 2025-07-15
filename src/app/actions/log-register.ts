@@ -2,7 +2,7 @@
 
 import { LogCreatePayload } from '@/hooks/mutations/log/useLogCreateMutation';
 import { createClient } from '@/lib/supabase/server';
-import { NewAddress, NewLog, NewPlace, NewPlaceImage } from '@/types/log';
+import { LogFormValues, NewAddress, NewLog, NewPlace, NewPlaceImage } from '@/types/log';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { revalidateTag } from 'next/cache';
 import { globalTags } from './tags';
@@ -123,8 +123,8 @@ async function insertLogData(supabase: SupabaseClient, logData: NewLog) {
 // 태그 데이터 삽입
 async function insertTagsData(
   supabase: SupabaseClient,
-  tags: Record<string, string | string[]>,
-  logId: string
+  tags: LogFormValues['tags'],
+  logId: LogCreatePayload['logId']
 ) {
   const tagsData = Object.entries(tags).flatMap(([category, tag]) =>
     Array.isArray(tag)
@@ -140,7 +140,11 @@ async function insertTagsData(
 }
 
 // 주소 데이터 삽입
-async function insertAddressData(supabase: SupabaseClient, address: any, logId: string) {
+async function insertAddressData(
+  supabase: SupabaseClient,
+  address: LogFormValues['address'],
+  logId: LogCreatePayload['logId']
+) {
   const addressData: NewAddress = {
     log_id: logId,
     ...address,

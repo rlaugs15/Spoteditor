@@ -13,9 +13,12 @@ import { toast } from 'sonner';
 // 로그 등록 위해 서버로 보낼 데이터 (db 갱신용)
 export type LogCreatePayload = {
   logId: string;
+  logTitle: LogFormValues['logTitle'];
+  tags: LogFormValues['tags'];
+  address: LogFormValues['address'];
   placeDataList: NewPlace[];
   placeImageDataList: NewPlaceImage[];
-} & Pick<LogFormValues, 'logTitle' | 'address' | 'tags'>;
+};
 
 const useLogCreateMutation = () => {
   const router = useRouter();
