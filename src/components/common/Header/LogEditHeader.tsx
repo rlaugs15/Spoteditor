@@ -24,14 +24,21 @@ const LogEditHeader = ({ city, sigungu, logTitle, logId, onAddNewPlace }: LogEdi
             {t(`Region.${city}`)} · {t(`Region.${sigungu}`)}
           </p>
         </div>
-        <div className="space-x-[14px]">
-          <Button
+        <div className="flex items-center space-x-[14px] gap-2">
+          <button
+            className="flex items-center justify-center gap-1.5 font-semibold text-text-md bg-black text-white rounded-full px-3 py-1.5 hover:bg-light-900 hover:text-white"
+            onClick={onAddNewPlace}
+          >
+            <img src="/icons/PlusSemibold.svg" alt="Plus" className="w-4 h-4" />
+            {t('Register.LogPage.addPlace')}
+          </button>
+          {/* <Button
             variant="ghost"
             className="font-bold text-text-md !text-light-300 px-0 hover:!text-light-400 hover:!bg-transparent"
             onClick={onAddNewPlace}
           >
             {t('Register.LogPage.addPlace')}
-          </Button>
+          </Button> */}
           <ConfirmDeleteDialog logTitle={logTitle} logId={logId} />
         </div>
       </div>

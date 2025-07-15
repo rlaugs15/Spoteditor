@@ -98,6 +98,9 @@ const PlaceForm = ({
                 <label className="block text-[14px] font-semibold text-black">
                   {tLog('locationLabel')}
                   <span className="text-error-500"> *</span>
+                  <span className="text-[12px] font-normal text-light-300 ml-1.5">
+                    {tLog('placeNameNote')}
+                  </span>
                 </label>
                 <Input
                   {...field}

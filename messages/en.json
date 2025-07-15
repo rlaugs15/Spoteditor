@@ -530,6 +530,7 @@
       "coverImage": "Cover Image",
       "contentPlaceholder": "Enter the content. (Max 500 characters)",
       "placeNameLabel": "Place Name",
+      "placeNameNote": "Place Name Note",
       "placeNamePlaceholder": "장소명을 입력하세요",
       "locationLabel": "Address",
       "locationPlaceholder": "Enter the location.",
