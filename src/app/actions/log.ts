@@ -35,7 +35,9 @@ export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
         },
         place: {
           include: {
-            place_images: true,
+            place_images: {
+              orderBy: { order: 'asc' },
+            },
             _count: { select: { place_bookmark: true } },
           },
           orderBy: {
