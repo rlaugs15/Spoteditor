@@ -24,13 +24,16 @@ const LogPage = () => {
   const router = useRouter();
   const { mutate, isPending } = useLogCreateMutation();
   const t = useTranslations('Register.LogPage');
-
+  const tToast = useTranslations('Toast.logCreate');
   const country = useLogCreationStore((state) => state.country);
   const city = useLogCreationStore((state) => state.city);
   const sigungu = useLogCreationStore((state) => state.sigungu);
   const mood = useLogCreationStore((state) => state.mood);
   const activity = useLogCreationStore((state) => state.activity);
   const hydrated = useLogCreationStore((state) => state.hydrated);
+
+  // 로그 등록 완료 여부(로그 제출 중에 태그가 초기화되는 것을 방지)
+  const submitted = useLogCreationStore((state) => state.submitted);
 
   const form = useForm<LogFormValues>({
     resolver: zodResolver(LogFormSchema),
@@ -52,15 +55,13 @@ const LogPage = () => {
   });
 
   useEffect(() => {
-    if (hydrated || (country && city && sigungu)) {
-      if (!country || !city || !sigungu) {
-        toast.error('등록할 장소가 선택되지 않았습니다. 다시 시도해주세요.');
-        router.replace(REGISTER_PATHS.LOCATION);
-        return;
-      }
+    const isAddressMissing = !country || !city || !sigungu;
+
+    if (hydrated && isAddressMissing && !submitted) {
+      toast.error(tToast('locationMissing'));
+      router.replace(REGISTER_PATHS.LOCATION);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [hydrated, country, city, sigungu, submitted, router, tToast]);
 
   const { fields, append, remove, swap } = useFieldArray<LogFormValues>({
     control: form.control,

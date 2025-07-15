@@ -13,7 +13,8 @@
       "error": "Upload failed. Please try again.",
       "autoAddressSuccess": "Address has been automatically filled from photo's location.",
       "autoAddressFailed": "Failed to retrieve address from location data.",
-      "autoAddressSkipped": "Address already exists. Skipping auto input."
+      "autoAddressSkipped": "Address already exists. Skipping auto input.",
+      "locationMissing": "No place selected. Please try again."
     },
     "logEdit": {
       "success": "Log updated successfully",
