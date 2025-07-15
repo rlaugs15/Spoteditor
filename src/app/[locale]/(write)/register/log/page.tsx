@@ -5,7 +5,7 @@ import PlaceForm from '@/components/features/log/common/PlaceForm';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import TitledInput from '@/components/features/log/register/TitledInput';
 import { Form } from '@/components/ui/form';
-import { HOME } from '@/constants/pathname';
+import { REGISTER_PATHS } from '@/constants/pathname';
 import useLogCreateMutation from '@/hooks/mutations/log/useLogCreateMutation';
 import { INITIAL_PLACE, usePlacesHandlers } from '@/hooks/usePlacesHandlers';
 import { useRouter } from '@/i18n/navigation';
@@ -51,12 +51,12 @@ const LogPage = () => {
   });
 
   useEffect(() => {
-    if (!hydrated) return;
-
-    if (!country || !city || !sigungu) {
-      toast.error('등록할 장소가 선택되지 않았습니다. 다시 시도해주세요.');
-      router.replace(HOME);
-      return;
+    if (hydrated || (country && city && sigungu)) {
+      if (!country || !city || !sigungu) {
+        toast.error('등록할 장소가 선택되지 않았습니다. 다시 시도해주세요.');
+        router.replace(REGISTER_PATHS.LOCATION);
+        return;
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -68,7 +68,7 @@ const LogPage = () => {
 
   // 장소 관련 핸들러
   const { handleAddNewPlace, handleDeletePlace, handleMovePlaceUp, handleMovePlaceDown } =
-    usePlacesHandlers(fields, append, remove, swap, t);
+    usePlacesHandlers(fields, append, remove, swap);
 
   const onSubmit = async (values: LogFormValues) => {
     // GA 이벤트 추적 - 로그 등록 시작
@@ -76,6 +76,7 @@ const LogPage = () => {
 
     // console.log(values, { values });
     mutate(values);
+    console.log('values', values);
   };
 
   return (
@@ -101,7 +102,6 @@ const LogPage = () => {
              bg-black text-white rounded-full px-4 py-2
              hover:bg-light-900 hover:text-white"
               onClick={handleAddNewPlace}
-              disabled={fields.length >= 10}
             >
               <img src="/icons/PlusSemibold.svg" alt="plus" className="w-4 h-4 fill=light-500" />
               {t('addPlace')}

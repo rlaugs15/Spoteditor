@@ -54,7 +54,7 @@ export default function ProfileTabs({ me, userId }: ProfileTabsProps) {
           </div>
           <Button
             size="s"
-            className="rounded-[60px] px-4 pt-[11px] pb-[13px] h-7 web:h-9 web:text-text-sm font-untitled text-white"
+            className="rounded-[60px] px-4 pt-[11px] pb-[13px] h-7 web:h-9 web:text-text-sm !text-text-sm font-untitled text-white"
             onClick={handleGotoRegisterPage}
           >
             Upload

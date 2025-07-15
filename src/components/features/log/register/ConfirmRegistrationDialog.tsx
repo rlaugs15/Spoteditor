@@ -65,8 +65,8 @@ const ConfirmRegistrationDialog = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="px-8">{t('cancel')}</AlertDialogCancel>
-          <AlertDialogAction className="px-8" onClick={handleSubmit}>
+          <AlertDialogCancel className="px-8 !text-[13px]">{t('cancel')}</AlertDialogCancel>
+          <AlertDialogAction className="px-8 text-[13px]" onClick={handleSubmit}>
             {t('confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>

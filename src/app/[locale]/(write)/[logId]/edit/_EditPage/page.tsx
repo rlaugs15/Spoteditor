@@ -17,13 +17,15 @@ import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
-import { Controller, FieldValues, useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { extractDirtyValues, hasImageOrderChanged, pickDirtyFields } from './utils';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   const { mutateAsync: editMutate, isPending: editIsPending } = useLogEditMutation();
   const { mutateAsync: addPlaceMutate, isPending: addPlaceIsPending } = useAddPlaceMutation();
   const t = useTranslations('LogEditPage');
+  const tToast = useTranslations('Toast.PlaceDrawer');
   const { title, place: places, log_tag, address, log_id } = logData;
   const initializeTags = useLogCreationStore((state) => state.initializeTags);
   const initialMoodTags = log_tag.filter((t) => t.category === 'mood').map((t) => t.tag);
@@ -79,41 +81,36 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     existingPlaces,
     existingPlaceAppend,
     existingPlaceRemove,
-    existingPlaceSwap,
-    t
+    existingPlaceSwap
   );
 
   // 기존 장소 수정 처리 함수
-  const handleEditExistingPlaces = async (dirtyValues: any) => {
-    // 순서/이미지 변경이 있으면 order만 업데이트하고, 나머지 필드는 dirtyValues에서 가져오기
-    const currentPlaces = form.getValues('places');
-    const orderChanged = isOrderChanged();
-    const imageOrderChanged = isImageOrderChanged();
+  const handleEditExistingPlaces = async (dirtyValues: Partial<LogEditFormValues>) => {
+    const currentPlaces = form.getValues('places'); // 현재 장소 데이터
+    const prevPlaces = places; // 초기값 저장
 
     const patchedDirtyValues = {
       ...dirtyValues,
-      places:
-        orderChanged || imageOrderChanged
-          ? currentPlaces.map((place, idx) => {
-              const dirtyPlace = dirtyValues.places?.[idx];
-              return {
-                id: place.id,
-                order: idx + 1,
-                ...(dirtyPlace && {
-                  ...(dirtyPlace.placeName !== undefined && { placeName: dirtyPlace.placeName }),
-                  ...(dirtyPlace.category !== undefined && { category: dirtyPlace.category }),
-                  ...(dirtyPlace.location !== undefined && { location: dirtyPlace.location }),
-                  ...(dirtyPlace.description !== undefined && {
-                    description: dirtyPlace.description,
-                  }),
-                  ...(dirtyPlace.placeImages !== undefined && {
-                    placeImages: dirtyPlace.placeImages,
-                  }),
-                }),
-              };
-            })
-          : dirtyValues.places,
+      places: currentPlaces.map((place, idx) => {
+        const dirtyPlace = dirtyValues.places?.[idx];
+        const prevPlace = prevPlaces[idx];
+        const imageOrderChanged = hasImageOrderChanged(prevPlace?.place_images, place.placeImages);
+
+        return {
+          id: place.id,
+          order: idx + 1,
+          ...pickDirtyFields<LogEditFormValues['places'][number]>(dirtyPlace, [
+            'placeName',
+            'category',
+            'location',
+            'description',
+          ]),
+          ...(imageOrderChanged && { placeImages: place.placeImages }),
+        };
+      }),
     };
+
+    // console.log(patchedDirtyValues);
     const formData = createFormData(patchedDirtyValues);
     await editMutate({ formData, logId: logData.log_id });
   };
@@ -135,7 +132,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     handleDeletePlace: handleDeleteNewPlace,
     handleMovePlaceUp: handleMoveNewPlaceUp,
     handleMovePlaceDown: handleMoveNewPlaceDown,
-  } = usePlacesHandlers(addedPlaces, addedPlaceAppend, addedPlaceRemove, addedPlaceSwap, t);
+  } = usePlacesHandlers(addedPlaces, addedPlaceAppend, addedPlaceRemove, addedPlaceSwap);
 
   // 기존 장소와 새 장소를 합쳐서 렌더링
   const allPlaces = [
@@ -144,40 +141,68 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   ];
 
   // 새 장소 추가
-  const handleAddNewPlaces = async (dirtyValues: any) => {
+  const handleAddNewPlaces = async (newPlaces: LogEditFormValues['addedPlace']) => {
     const existingPlacesCount = form.getValues('places').length;
     const deletedPlacesCount = form.getValues('deletedPlace')?.length || 0;
     const currentExistingPlacesCount = existingPlacesCount - deletedPlacesCount;
 
     await addPlaceMutate({
-      values: dirtyValues['addedPlace'],
+      values: newPlaces,
       logId: logData.log_id,
       existingOrderCount: currentExistingPlacesCount,
     });
   };
 
-  const onSubmit = async () => {
+  /* 변경 상태 확인 */
+  const getChangeStatus = () => {
+    const values = form.getValues();
+    const dirtyValues = extractDirtyValues(form.formState.dirtyFields, values);
+
+    return {
+      hasAddedPlace: values.addedPlace && values.addedPlace.length > 0,
+      hasFieldChanges: Object.keys(dirtyValues).some((key) => key !== 'addedPlace'),
+      hasOrderChanged: isOrderChanged(),
+      hasImageOrderChanged: isImageOrderChanged(),
+      dirtyValues,
+    };
+  };
+
+  /* 이미지 순서 변경 확인용 */
+  const isImageOrderChanged = () => {
+    const currentPlaces = form.getValues('places');
+    const initialPlaces = places;
+    if (currentPlaces.length !== initialPlaces.length) return true;
+    return currentPlaces.some((current, idx) => {
+      const initial = initialPlaces[idx];
+      if (!initial) return false;
+      return hasImageOrderChanged(initial.place_images, current.placeImages);
+    });
+  };
+
+  /* 순서 변경 확인용 */
+  const isOrderChanged = () => {
+    const currentPlaces = form.getValues('places');
+    const initialPlaces = places;
+
+    if (currentPlaces.length !== initialPlaces.length) return true;
+
+    return currentPlaces.some((current, idx) => current.id !== initialPlaces[idx].place_id);
+  };
+
+  const onSubmit = async (values: LogEditFormValues) => {
     // GA 이벤트 추적 - 로그 수정 시작
     trackLogEditEvent('start');
 
-    const dirtyValues = extractDirtyValues(form.formState.dirtyFields, form.getValues());
-    const hasAddedPlace = !!dirtyValues.addedPlace && dirtyValues.addedPlace.length > 0;
-    const hasOtherChanges = Object.keys(dirtyValues).some((key) => key !== 'addedPlace');
-    const orderChanged = isOrderChanged();
-    const imageOrderChanged = isImageOrderChanged();
+    const { hasAddedPlace, hasFieldChanges, hasOrderChanged, hasImageOrderChanged, dirtyValues } =
+      getChangeStatus();
 
-    try {
-      // 새로운 장소가 있으면 먼저 추가
-      if (hasAddedPlace) {
-        await handleAddNewPlaces(dirtyValues);
-      }
-      // 나머지 수정사항 처리 (dirty, 순서, 이미지 순서 변경 중 하나라도 있으면)
-      if (hasOtherChanges || orderChanged || imageOrderChanged) {
-        await handleEditExistingPlaces(dirtyValues);
-      }
-    } catch (error) {
-      // mutation의 onError에서 이미 toast를 보여주므로 여기서는 추가 처리하지 않음
-      console.error('로그 수정 중 오류:', error);
+    // 새로운 장소가 있으면 먼저 추가
+    if (hasAddedPlace) {
+      await handleAddNewPlaces(values.addedPlace);
+    }
+    // 나머지 수정사항 처리
+    if (hasFieldChanges || hasOrderChanged || hasImageOrderChanged) {
+      await handleEditExistingPlaces(dirtyValues);
     }
   };
   // 전체 장소(globalIdx) 기준 위로 이동
@@ -186,15 +211,15 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     const currentPlace = allPlaces[globalIdx];
     const prevPlace = allPlaces[globalIdx - 1];
     if (currentPlace.type !== prevPlace.type) {
-      toast.error('기존과 신규 간 순서 변경은 지원하지 않습니다.', {
-        description: '등록 후 변경해주세요.',
+      toast.error(tToast('orderTypeError'), {
+        description: tToast('orderTypeErrorDesc'),
       });
       return;
     }
     if (currentPlace.type === 'existing') {
-      handleMoveExistingPlaceUp(currentPlace.originalIdx);
+      handleMoveExistingPlaceUp(currentPlace.originalIdx); // 기존 장소
     } else {
-      handleMoveNewPlaceUp(currentPlace.originalIdx);
+      handleMoveNewPlaceUp(currentPlace.originalIdx); // 새 장소
     }
   };
 
@@ -204,8 +229,8 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     const currentPlace = allPlaces[globalIdx];
     const nextPlace = allPlaces[globalIdx + 1];
     if (currentPlace.type !== nextPlace.type) {
-      toast.error('기존과 신규 간 순서 변경은 지원하지 않습니다.', {
-        description: '등록 후 변경해주세요.',
+      toast.error(tToast('orderTypeError'), {
+        description: tToast('orderTypeErrorDesc'),
       });
       return;
     }
@@ -214,26 +239,6 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     } else {
       handleMoveNewPlaceDown(currentPlace.originalIdx);
     }
-  };
-
-  /* 이미지 순서 변경 확인용 */
-  const isImageOrderChanged = () => {
-    const currentPlaces = form.getValues('places');
-    const initialPlaces = places;
-    return currentPlaces.some((current, idx) => {
-      const initial = initialPlaces[idx];
-      if (!initial) return false;
-      const currentImageIds = (current.placeImages || []).map((img: any) => img.place_image_id);
-      const initialImageIds = (initial.place_images || []).map((img: any) => img.place_image_id);
-      return JSON.stringify(currentImageIds) !== JSON.stringify(initialImageIds);
-    });
-  };
-
-  /* 순서 변경 확인용 */
-  const isOrderChanged = () => {
-    const currentIds = form.getValues('places').map((p) => p.id);
-    const initialIds = places.map((p) => p.place_id);
-    return JSON.stringify(currentIds) !== JSON.stringify(initialIds);
   };
 
   return (
@@ -316,21 +321,3 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
 };
 
 export default LogEditPage;
-
-function extractDirtyValues<T extends FieldValues>(dirtyFields: any, allValues: T): Partial<T> {
-  if (!dirtyFields || !allValues) return {};
-  if (typeof dirtyFields !== 'object' || dirtyFields === true) return allValues;
-
-  const result: any = Array.isArray(dirtyFields) ? [] : {};
-
-  for (const key in dirtyFields) {
-    if (dirtyFields[key] && allValues[key] !== undefined) {
-      result[key] =
-        dirtyFields[key] === true
-          ? allValues[key]
-          : extractDirtyValues(dirtyFields[key], allValues[key]);
-    }
-  }
-
-  return result;
-}

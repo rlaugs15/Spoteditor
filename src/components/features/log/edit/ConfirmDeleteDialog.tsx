@@ -42,7 +42,7 @@ const ConfirmDeleteDialog = ({ logTitle, logId }: ConfirmDeleteDialogProps) => {
             {t('confirmMessage')}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="flex items-center justify-center">
+        <AlertDialogFooter className="flex items-center">
           <AlertDialogCancel disabled={isPending} className="w-[100px] h-10.5">
             {t('cancel')}
           </AlertDialogCancel>
