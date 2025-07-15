@@ -123,6 +123,18 @@ export const PlusIcon = ({ className }: IconProps) => {
   );
 };
 
+export const PlusSemiboldIcon = ({ className }: IconProps) => {
+  return (
+    <Image
+      src="/icons/PlusSemibold.svg"
+      width={16}
+      height={16}
+      alt="더하기 아이콘"
+      className={className}
+    />
+  );
+};
+
 /* register header */
 export const HomeIcon = ({ className }: IconProps) => {
   return (

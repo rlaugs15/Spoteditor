@@ -1,6 +1,7 @@
 'use client';
 
 import { LogRegisterHeader } from '@/components/common/Header';
+import { PlusSemiboldIcon } from '@/components/common/Icons';
 import PlaceForm from '@/components/features/log/common/PlaceForm';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import TitledInput from '@/components/features/log/register/TitledInput';
@@ -15,7 +16,6 @@ import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues } from '@/types/log';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -104,7 +104,7 @@ const LogPage = () => {
              hover:bg-light-900 hover:text-white"
               onClick={handleAddNewPlace}
             >
-              <Image src="/icons/PlusSemibold.svg" alt="plus" className="w-4 h-4 fill=light-500" />
+              <PlusSemiboldIcon className="fill-light-500" />
               {t('addPlace')}
             </button>
           </div>
