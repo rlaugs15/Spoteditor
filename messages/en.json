@@ -30,6 +30,12 @@
     "auth": {
       "logoutSuccess": "Logout successful",
       "logoutError": "Logout failed. Please try again."
+    },
+    "PlaceDrawer": {
+      "minPlaceError": "At least one place is required.",
+      "maxPlaceError": "You can register up to 10 places.",
+      "orderTypeError": "Changing order between existing and new places is not supported.",
+      "orderTypeErrorDesc": "Please change after registration."
     }
   },
   "NotFoundPage": {
@@ -543,6 +549,14 @@
       "confirm": "Confirm",
       "actionCreate": "create",
       "actionEdit": "edit"
+    },
+    "PlaceDrawer": {
+      "title": "Move and Delete Place",
+      "description": "Place move up/down and delete drawer",
+      "moveUp": "Move Up",
+      "moveDown": "Move Down",
+      "delete": "Delete",
+      "minPlaceError": "At least one place is required."
     }
   },
   "LogEditPage": {

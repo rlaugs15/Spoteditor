@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
 
@@ -11,7 +12,9 @@ export const INITIAL_PLACE = {
   placeImages: [],
 };
 
-export function usePlacesHandlers(fields: any[], append: any, remove: any, swap: any, t: any) {
+export function usePlacesHandlers(fields: any[], append: any, remove: any, swap: any) {
+  const t = useTranslations('Toast.PlaceDrawer');
+
   /** 새 장소 추가 */
   const handleAddNewPlace = useCallback(() => {
     if (fields.length >= MAX_PLACE_COUNT) {
@@ -25,12 +28,12 @@ export function usePlacesHandlers(fields: any[], append: any, remove: any, swap:
   const handleDeletePlace = useCallback(
     (idx: number) => {
       if (fields.length <= 1) {
-        toast.error('최소 1개의 장소는 필요합니다.');
+        toast.error(t('minPlaceError'));
         return;
       }
       remove(idx);
     },
-    [fields.length, remove]
+    [fields.length, remove, t]
   );
 
   /** 장소 위로 이동 */

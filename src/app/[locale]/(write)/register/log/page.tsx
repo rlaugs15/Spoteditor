@@ -68,7 +68,7 @@ const LogPage = () => {
 
   // 장소 관련 핸들러
   const { handleAddNewPlace, handleDeletePlace, handleMovePlaceUp, handleMovePlaceDown } =
-    usePlacesHandlers(fields, append, remove, swap, t);
+    usePlacesHandlers(fields, append, remove, swap);
 
   const onSubmit = async (values: LogFormValues) => {
     // GA 이벤트 추적 - 로그 등록 시작
