@@ -7,9 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 import { ApiResponse } from '@/types/api/common';
 import { StorageBucket } from '@/types/api/storage';
 import { LogFormValues, NewPlace, NewPlaceImage } from '@/types/log';
-import pLimit from 'p-limit';
 import { performanceMonitor } from './performanceMonitor';
-
 // ===================================================================
 // 단일 이미지 업로드 (signed URL 방식)
 // ===================================================================
@@ -44,7 +42,6 @@ type UploadMultipleImagesOptions = {
   files: Blob[];
   bucketName: StorageBucket;
   folders?: string[];
-  maxConcurrency?: number;
   retryAttempts?: number;
   retryDelay?: number;
 };
@@ -94,7 +91,6 @@ export async function uploadMultipleImagesOptimized({
   files,
   bucketName,
   folders,
-  maxConcurrency = 3, // 동시 업로드 수 제한
   retryAttempts = 3, // 재시도 횟수
   retryDelay = 1000, // 재시도 간격 (ms)
 }: UploadMultipleImagesOptions): Promise<ApiResponse<string[]>> {
@@ -106,9 +102,6 @@ export async function uploadMultipleImagesOptimized({
     });
 
     performanceMonitor.start('🚀 Direct Upload로 이미지 업로드');
-
-    // 동시 업로드 제한
-    const limit = pLimit(maxConcurrency);
 
     // 재시도 로직이 포함된 업로드 함수
     const uploadWithRetry = async (file: Blob, filePath: string, attempt = 1): Promise<string> => {
@@ -141,9 +134,8 @@ export async function uploadMultipleImagesOptimized({
       const batch = files.slice(i, i + batchSize);
       const batchPaths = filePaths.slice(i, i + batchSize);
 
-      const batchPromises = batch.map((file, idx) =>
-        limit(() => uploadWithRetry(file, batchPaths[idx]))
-      );
+      // 배치 내에서 모든 파일을 동시에 업로드
+      const batchPromises = batch.map((file, idx) => uploadWithRetry(file, batchPaths[idx]));
 
       const batchResults = await Promise.allSettled(batchPromises);
 
@@ -159,7 +151,7 @@ export async function uploadMultipleImagesOptimized({
 
       // 배치 간 간격 (서버 부하 분산)
       if (i + batchSize < files.length) {
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 200)); // 간격 단축
       }
     }
 
@@ -240,33 +232,22 @@ export async function uploadPlacesOptimized(
   );
 
   // 2. 모든 이미지 파일을 하나의 배열로 수집
-  const allFiles: { file: Blob; placeId: string; placeName: string; index: number }[] = [];
-  places.forEach((place, placeIdx) => {
-    const placeId = placeDataList[placeIdx].place_id;
-    place.placeImages.forEach((img, imgIdx) => {
-      allFiles.push({
-        file: img.file,
-        placeId,
-        placeName: place.placeName,
-        index: imgIdx,
-      });
-    });
-  });
-
+  // console.log('places', places);
+  const allFiles = places.flatMap((place) => place.placeImages.map((img) => img.file));
+  // console.log('allFiles', allFiles);
   try {
     // 3. 모든 이미지를 한 번에 업로드
     const uploadResult = await uploadMultipleImagesOptimized({
-      files: allFiles.map((f) => f.file),
+      files: allFiles,
       bucketName: 'places',
       folders: [logId],
-      maxConcurrency: 3, // 동시 업로드 수 제한
-      retryAttempts: 3, // 재시도 횟수
     });
 
     if (!uploadResult.success) {
       throw new Error(uploadResult.msg || '장소 이미지 업로드 실패');
     }
 
+    // console.log('uploadResult', uploadResult);
     // 4. 업로드된 이미지들을 장소별로 분류
     const uploadedUrls = uploadResult.data;
     let urlIndex = 0;
