@@ -14,11 +14,13 @@
       "autoAddressSuccess": "사진의 위치 정보로 주소가 자동 입력되었습니다.",
       "autoAddressFailed": "위치 정보를 기반으로 주소를 찾을 수 없습니다.",
       "autoAddressSkipped": "이미 주소가 등록되어 자동 입력을 생략했습니다.",
-      "locationMissing": "등록할 장소가 선택되지 않았습니다. 다시 시도해주세요."
+      "locationMissing": "등록할 장소가 선택되지 않았습니다. 다시 시도해주세요.",
+      "placeAdded": "장소가 성공적으로 추가되었습니다.",
+      "placeAddedError": "장소 추가에 실패했습니다."
     },
     "logEdit": {
-      "success": "로그 수정 성공",
-      "error": "로그 수정 실패"
+      "success": "로그 수정이 완료되었습니다.",
+      "error": "로그 수정에 실패했습니다."
     },
     "logDelete": {
       "success": "로그가 삭제되었습니다.",

@@ -14,11 +14,13 @@
       "autoAddressSuccess": "Address has been automatically filled from photo's location.",
       "autoAddressFailed": "Failed to retrieve address from location data.",
       "autoAddressSkipped": "Address already exists. Skipping auto input.",
-      "locationMissing": "No place selected. Please try again."
+      "locationMissing": "No place selected. Please try again.",
+      "placeAdded": "Place added successfully.",
+      "placeAddedError": "Failed to add place."
     },
     "logEdit": {
-      "success": "Log updated successfully",
-      "error": "Failed to update the log"
+      "success": "Log updated successfully.",
+      "error": "Failed to update the log."
     },
     "logDelete": {
       "success": "Log deleted successfully.",

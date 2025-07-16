@@ -3,6 +3,7 @@ import { addPlacesToExistingLog } from '@/app/actions/log-register';
 import { AddedPlaceValues } from '@/types/log';
 import { uploadPlacesOptimized } from '@/utils/imageUpload';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 interface AddPlaceMutationProps {
@@ -15,23 +16,21 @@ interface AddPlaceMutationProps {
 // db 갱신 (place, place_images)
 const useAddPlaceMutation = () => {
   const queryClient = useQueryClient();
-
+  const tToast = useTranslations('Toast.logCreate');
   return useMutation({
     mutationFn: async ({ values, logId, existingOrderCount = 0 }: AddPlaceMutationProps) => {
       /* 장소 이미지 업로드 */
-      console.time('📍 추가된 장소 이미지 업로드');
       const { placeDataList, placeImageDataList } = await uploadPlacesOptimized(
         values,
         logId,
         existingOrderCount
       );
-      console.timeEnd('📍 추가된 장소 이미지 업로드');
 
       return await addPlacesToExistingLog(placeDataList, placeImageDataList);
     },
     onSuccess: ({ success }) => {
       if (success) {
-        toast.success('장소가 성공적으로 추가되었습니다.');
+        toast.success(tToast('placeAdded'));
 
         const keysToInvalidate = [logKeys.all, placeKeys.all];
 
@@ -42,7 +41,7 @@ const useAddPlaceMutation = () => {
     },
     onError: (error) => {
       console.error('장소 추가 실패:', error);
-      toast.error(error.message || '장소 추가에 실패했습니다.');
+      toast.error(tToast('placeAddedError'));
     },
   });
 };

@@ -14,6 +14,7 @@ interface LogEditMutationProps {
 
 const useLogEditMutation = () => {
   const t = useTranslations('Toast.logEdit');
+  const tToast = useTranslations('Toast.logCreate');
   const router = useRouter();
   const queryClient = useQueryClient();
   const clearTag = useLogCreationStore((state) => state.clearTag);
@@ -32,8 +33,8 @@ const useLogEditMutation = () => {
         });
 
         router.replace(`/log/${logId}`);
-        toast.success('로그가 성공적으로 수정되었습니다.', {
-          description: '페이지가 이동합니다. 잠시만 기다려 주세요.',
+        toast.success(t('success'), {
+          description: tToast('redirect'),
         });
       }
     },
