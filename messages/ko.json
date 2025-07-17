@@ -470,7 +470,7 @@
   },
   "SearchPage": {
     "input": {
-      "placeholder": "제가 찾는 건..."
+      "placeholder": "지역 및 키워드로 검색해보세요. 예) \"용인시\" 또는 \"카페\""
     },
     "result": {
       "empty": "검색 결과가 없습니다."
