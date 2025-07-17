@@ -3,6 +3,7 @@ import {
   generateFilePaths,
   GenerateFilePathsOptions,
 } from '@/app/actions/utils/genertateFilePaths';
+import { trackImageUploadEvent } from '@/lib/analytics';
 import { createClient } from '@/lib/supabase/client';
 import { ApiResponse } from '@/types/api/common';
 import { StorageBucket } from '@/types/api/storage';
@@ -27,9 +28,12 @@ export async function uploadSingleImage(
       .from(bucketName)
       .uploadToSignedUrl(path, token, file);
     if (error) throw new Error('업로드 실패');
+
+    trackImageUploadEvent(true);
     return { success: true, data: data?.fullPath };
   } catch (error) {
     console.error('Image upload failed:', error);
+    trackImageUploadEvent(false);
     return { success: false, msg: ' 이미지 업로드 실패' };
   }
 }
@@ -156,9 +160,11 @@ export async function uploadMultipleImagesOptimized({
     }
 
     performanceMonitor.end('🚀 Direct Upload로 이미지 업로드');
+    trackImageUploadEvent(true);
     return { success: true, data: results };
   } catch (error) {
     console.error('다중 이미지 업로드 실패:', error);
+    trackImageUploadEvent(false);
     return { success: false, msg: '이미지 업로드 중 오류가 발생했습니다.' };
   }
 }
@@ -270,9 +276,11 @@ export async function uploadPlacesOptimized(
       urlIndex += imageCount;
     });
 
+    trackImageUploadEvent(true);
     return { placeDataList, placeImageDataList };
   } catch (error) {
     console.error('장소 이미지 업로드 실패:', error);
+    trackImageUploadEvent(false);
     throw error;
   }
 }

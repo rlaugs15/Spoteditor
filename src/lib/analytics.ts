@@ -103,6 +103,17 @@ export const trackPlaceSearchEvent = (method: 'keyword' | 'city' | 'sigungu', ke
 };
 
 /**
+ * 이미지 업로드 결과 추적
+ */
+export const trackImageUploadEvent = (isSuccess: boolean) => {
+  trackEvent('image_upload_result', {
+    event_category: 'log_creation',
+    event_label: isSuccess ? 'success' : 'fail',
+    value: isSuccess ? 1 : 0,
+  });
+};
+
+/**
  * 페이지뷰 이벤트 추적
  */
 export const trackPageView = (pagePath: string) => {
