@@ -418,8 +418,8 @@
     "edit": "편집",
     "tab": {
       "myLog": "나의 기록",
-      "savedSpaces": "저장된 장소",
-      "savedLog": "저장된 로그"
+      "savedSpaces": "저장한 장소",
+      "savedLog": "저장한 기록"
     },
     "fallback": {
       "myLog": "나의 기록\n첫 게시물을 올려보세요!",
@@ -470,7 +470,7 @@
   },
   "SearchPage": {
     "input": {
-      "placeholder": "지역 및 키워드로 검색해보세요. 예) \"용인시\" 또는 \"카페\""
+      "placeholder": "예) \"용인시\" 또는 \"카페\" 지역 및 키워드로 검색해보세요."
     },
     "result": {
       "empty": "검색 결과가 없습니다."
