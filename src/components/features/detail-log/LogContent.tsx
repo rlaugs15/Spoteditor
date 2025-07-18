@@ -32,8 +32,8 @@ const LogContent = ({ place, idx }: LogContentProps) => {
             <MapIcon className="w-4.5 h-4.5" />
             <span className="break-words block min-w-0">{t(`${place.category}`)}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-light-400 text-text-sm web:text-text-lg">
-            <LocationIcon className="w-4.5 h-4.5 flex-shrink-0" />
+          <div className="flex items-start gap-1.5 text-light-400 text-text-sm web:text-text-lg">
+            <LocationIcon className="w-4.5 h-4.5 flex-shrink-0  mt-[4px]" />
             <span className="break-words block min-w-0">{place.address}</span>
           </div>
         </div>
