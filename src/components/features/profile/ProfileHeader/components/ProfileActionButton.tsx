@@ -2,7 +2,7 @@
 
 import FollowingButton from '@/components/common/Button/FollowingButton';
 import { Button } from '@/components/ui/button';
-import { PROFILE_PATHS } from '@/constants/pathname';
+import { REGISTER_PATHS } from '@/constants/pathname';
 import { Link } from '@/i18n/navigation';
 import { IUser } from '@/types/api/user';
 import { useTranslations } from 'next-intl';
@@ -27,7 +27,7 @@ export default function ProfileActionButton({
   return (
     <>
       {isMe ? (
-        <Link href={PROFILE_PATHS.EDITOR}>
+        <Link href={REGISTER_PATHS.MOOD}>
           <Button variant="outline" className={className}>
             {t('edit')}
           </Button>
