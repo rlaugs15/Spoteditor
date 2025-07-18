@@ -1,7 +1,6 @@
 'use client';
 
 import ConfirmDeleteDialog from '@/components/features/log/edit/ConfirmDeleteDialog';
-import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import BackButton from '../Button/BackButton';
 
