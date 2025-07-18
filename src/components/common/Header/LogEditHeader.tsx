@@ -3,6 +3,7 @@
 import ConfirmDeleteDialog from '@/components/features/log/edit/ConfirmDeleteDialog';
 import { useTranslations } from 'next-intl';
 import BackButton from '../Button/BackButton';
+import { PlusSemiboldIcon } from '../Icons';
 
 interface LogEditHeaderProps {
   city: string;
@@ -28,7 +29,7 @@ const LogEditHeader = ({ city, sigungu, logTitle, logId, onAddNewPlace }: LogEdi
             className="flex items-center justify-center gap-1.5 font-semibold text-text-md bg-black text-white rounded-full px-3 py-1.5 hover:bg-light-900 hover:text-white"
             onClick={onAddNewPlace}
           >
-            <img src="/icons/PlusSemibold.svg" alt="Plus" className="w-4 h-4" />
+            <PlusSemiboldIcon />
             {t('Register.LogPage.addPlace')}
           </button>
           {/* <Button

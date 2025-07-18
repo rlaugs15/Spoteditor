@@ -25,6 +25,7 @@ const useLogCreateMutation = () => {
   const queryClient = useQueryClient();
   const clearTag = useLogCreationStore((state) => state.clearTag);
   const t = useTranslations('Toast.logCreate');
+  const setSubmitted = useLogCreationStore((state) => state.setSubmitted);
 
   return useMutation({
     mutationFn: async (values: LogFormValues) => {
@@ -77,8 +78,6 @@ const useLogCreateMutation = () => {
         // GA 이벤트 추적 - 로그 등록 완료
         trackLogCreateEvent('complete');
 
-        clearTag();
-
         const keysToInvalidate = [logKeys.all, searchKeys.all];
 
         keysToInvalidate.forEach((key) => {
@@ -87,6 +86,8 @@ const useLogCreateMutation = () => {
 
         // router.replace(`/log/${data}`);
         router.replace(HOME);
+        setSubmitted(true);
+        clearTag();
         toast.success(t('success'), {
           description: t('redirect'),
         });

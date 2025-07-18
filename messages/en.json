@@ -13,11 +13,14 @@
       "error": "Upload failed. Please try again.",
       "autoAddressSuccess": "Address has been automatically filled from photo's location.",
       "autoAddressFailed": "Failed to retrieve address from location data.",
-      "autoAddressSkipped": "Address already exists. Skipping auto input."
+      "autoAddressSkipped": "Address already exists. Skipping auto input.",
+      "locationMissing": "No place selected. Please try again.",
+      "placeAdded": "Place added successfully.",
+      "placeAddedError": "Failed to add place."
     },
     "logEdit": {
-      "success": "Log updated successfully",
-      "error": "Failed to update the log"
+      "success": "Log updated successfully.",
+      "error": "Failed to update the log."
     },
     "logDelete": {
       "success": "Log deleted successfully.",
@@ -467,7 +470,7 @@
   },
   "SearchPage": {
     "input": {
-      "placeholder": "What are you looking for..."
+      "placeholder": "e.g. \"Seoul\" or \"cafe\" Search by region or keyword."
     },
     "result": {
       "empty": "No results found."
