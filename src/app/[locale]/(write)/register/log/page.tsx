@@ -54,6 +54,7 @@ const LogPage = () => {
     },
   });
 
+  // 주소 누락 시, 주소 등록 페이지로 이동
   useEffect(() => {
     const isAddressMissing = !country || !city || !sigungu;
 
@@ -73,12 +74,10 @@ const LogPage = () => {
     usePlacesHandlers(fields, append, remove, swap);
 
   const onSubmit = async (values: LogFormValues) => {
-    // GA 이벤트 추적 - 로그 등록 시작
     trackLogCreateEvent('start');
 
     // console.log(values, { values });
     mutate(values);
-    console.log('values', values);
   };
 
   return (

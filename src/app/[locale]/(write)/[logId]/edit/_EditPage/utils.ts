@@ -1,3 +1,4 @@
+import { PlaceWithImages } from '@/types/api/log';
 import { LogEditFormValues } from '@/types/log';
 import { FieldValues } from 'react-hook-form';
 
@@ -32,10 +33,20 @@ export function pickDirtyFields<T>(dirty: Partial<T> | undefined, keys: (keyof T
   }, {} as Partial<T>);
 }
 
-export function hasImageOrderChanged(
+/* 장소 이미지 순서 변경 확인용 */
+export function isImageOrderChanged(
   prevImages: LogEditFormValues['places'][number]['placeImages'],
   currImages: LogEditFormValues['places'][number]['placeImages']
 ) {
   if (prevImages.length !== currImages.length) return true;
   return prevImages.some((img, idx) => img.place_image_id !== currImages[idx].place_image_id);
 }
+
+/* 장소 순서 변경 확인용 */
+export const isOrderChanged = (
+  initialPlaces: PlaceWithImages[], // 초기 장소 데이터
+  currentPlaces: LogEditFormValues['places']
+) => {
+  if (currentPlaces.length !== initialPlaces.length) return true;
+  return currentPlaces.some((current, idx) => current.id !== initialPlaces[idx].id);
+};
