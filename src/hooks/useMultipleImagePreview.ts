@@ -33,23 +33,6 @@ const useMultipleImagePreview = () => {
     });
   };
 
-  const reorderPreviews = (newFileOrder: Blob[]) => {
-    setPreviews((prev) => {
-      const previewMap = new Map(prev.map((preview) => [preview.file, preview]));
-
-      const reorderedPreviews: PreviewItem[] = [];
-
-      for (const file of newFileOrder) {
-        const preview = previewMap.get(file);
-        if (preview) {
-          reorderedPreviews.push(preview);
-        }
-      }
-
-      return reorderedPreviews;
-    });
-  };
-
   const getPreviewUrl = (file: Blob | string): string => {
     if (typeof file === 'string') return file;
 
@@ -67,7 +50,6 @@ const useMultipleImagePreview = () => {
     previews,
     addFile,
     removeByFile,
-    reorderPreviews,
     getPreviewUrl,
     reset: () => {
       previews.forEach((p) => URL.revokeObjectURL(p.url));
