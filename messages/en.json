@@ -529,6 +529,7 @@
     "LogPage": {
       "loading": "Loading...",
       "addPlace": "Add place",
+      "titleLabel": "Title",
       "titlePlaceholder": "Enter a title. (Max 30 characters)",
       "coverImage": "Cover Image",
       "contentPlaceholder": "Enter the content. (Max 500 characters)",

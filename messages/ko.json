@@ -529,6 +529,7 @@
     "LogPage": {
       "loading": "로딩중...",
       "addPlace": "장소 추가",
+      "titleLabel": "제목",
       "titlePlaceholder": "제목을 입력해주세요. (최대 30자)",
       "coverImage": "커버 이미지",
       "contentPlaceholder": "내용을 입력해주세요. (최대 500자)",
