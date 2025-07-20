@@ -23,6 +23,7 @@ type Place = {
     nickname: string;
   };
   address: {
+    country: string
     city: string;
     sigungu: string;
   };

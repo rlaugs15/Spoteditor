@@ -59,6 +59,7 @@ export async function fetchPlaces({
               },
               address: {
                 select: {
+                  country: true,
                   city: true,
                   sigungu: true,
                 },
@@ -81,6 +82,7 @@ export async function fetchPlaces({
         nickname: place.log?.users.nickname?.toString() ?? '',
       },
       address: {
+        country: place.log?.address[0].country?.toString() ?? '',
         city: place.log?.address[0].city?.toString() ?? '',
         sigungu: place.log?.address[0].sigungu?.toString() ?? '',
       },
