@@ -19,7 +19,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { extractDirtyValues, hasImageOrderChanged, pickDirtyFields } from './utils';
+import { extractDirtyValues, isImageOrderChanged, isOrderChanged, pickDirtyFields } from './utils';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   const { mutateAsync: editMutate, isPending: editIsPending } = useLogEditMutation();
@@ -61,7 +61,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* 기존 장소 */
+  //---------- 기존 장소 ----------
   const {
     fields: existingPlaces,
     remove: existingPlaceRemove,
@@ -72,7 +72,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     name: 'places',
   });
 
-  // 기존 장소용
+  // 기존 장소 drawer용
   const {
     handleDeletePlace: handleDeleteExistingPlace,
     handleMovePlaceUp: handleMoveExistingPlaceUp,
@@ -94,7 +94,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
       places: currentPlaces.map((place, idx) => {
         const dirtyPlace = dirtyValues.places?.[idx];
         const prevPlace = prevPlaces[idx];
-        const imageOrderChanged = hasImageOrderChanged(prevPlace?.place_images, place.placeImages);
+        const imageOrderChanged = isImageOrderChanged(prevPlace?.place_images, place.placeImages);
 
         return {
           id: place.id,
@@ -115,7 +115,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     await editMutate({ formData, logId: logData.log_id });
   };
 
-  /* 새 장소 */
+  //---------- 새 장소 ------------
   const {
     fields: addedPlaces,
     append: addedPlaceAppend,
@@ -126,7 +126,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     name: 'addedPlace',
   });
 
-  // 새 장소용
+  // 새 장소 drawer용
   const {
     handleAddNewPlace,
     handleDeletePlace: handleDeleteNewPlace,
@@ -153,58 +153,6 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     });
   };
 
-  /* 변경 상태 확인 */
-  const getChangeStatus = () => {
-    const values = form.getValues();
-    const dirtyValues = extractDirtyValues(form.formState.dirtyFields, values);
-
-    return {
-      hasAddedPlace: values.addedPlace && values.addedPlace.length > 0,
-      hasFieldChanges: Object.keys(dirtyValues).some((key) => key !== 'addedPlace'),
-      hasOrderChanged: isOrderChanged(),
-      hasImageOrderChanged: isImageOrderChanged(),
-      dirtyValues,
-    };
-  };
-
-  /* 이미지 순서 변경 확인용 */
-  const isImageOrderChanged = () => {
-    const currentPlaces = form.getValues('places');
-    const initialPlaces = places;
-    if (currentPlaces.length !== initialPlaces.length) return true;
-    return currentPlaces.some((current, idx) => {
-      const initial = initialPlaces[idx];
-      if (!initial) return false;
-      return hasImageOrderChanged(initial.place_images, current.placeImages);
-    });
-  };
-
-  /* 순서 변경 확인용 */
-  const isOrderChanged = () => {
-    const currentPlaces = form.getValues('places');
-    const initialPlaces = places;
-
-    if (currentPlaces.length !== initialPlaces.length) return true;
-
-    return currentPlaces.some((current, idx) => current.id !== initialPlaces[idx].place_id);
-  };
-
-  const onSubmit = async (values: LogEditFormValues) => {
-    // GA 이벤트 추적 - 로그 수정 시작
-    trackLogEditEvent('start');
-
-    const { hasAddedPlace, hasFieldChanges, hasOrderChanged, hasImageOrderChanged, dirtyValues } =
-      getChangeStatus();
-
-    // 새로운 장소가 있으면 먼저 추가
-    if (hasAddedPlace) {
-      await handleAddNewPlaces(values.addedPlace);
-    }
-    // 나머지 수정사항 처리
-    if (hasFieldChanges || hasOrderChanged || hasImageOrderChanged) {
-      await handleEditExistingPlaces(dirtyValues);
-    }
-  };
   // 전체 장소(globalIdx) 기준 위로 이동
   const handleMovePlaceUpGlobal = (globalIdx: number) => {
     if (globalIdx <= 0) return;
@@ -238,6 +186,43 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
       handleMoveExistingPlaceDown(currentPlace.originalIdx);
     } else {
       handleMoveNewPlaceDown(currentPlace.originalIdx);
+    }
+  };
+
+  /* 변경 상태 확인 */
+  const getChangeStatus = () => {
+    const values = form.getValues();
+    const dirtyValues = extractDirtyValues(form.formState.dirtyFields, values);
+
+    return {
+      hasAddedPlace: values.addedPlace.length > 0, // 새로운 장소 추가
+      hasFieldChanges: Object.keys(dirtyValues).some((key) => key !== 'addedPlace'),
+      hasOrderChanged: isOrderChanged(places, form.getValues('places')),
+      isImageOrderChanged: isImageOrderChanged(
+        places.map((p) => p.place_images).flat(),
+        form
+          .getValues('places')
+          .map((p) => p.placeImages)
+          .flat()
+      ),
+      dirtyValues,
+    };
+  };
+
+  const onSubmit = async (values: LogEditFormValues) => {
+    trackLogEditEvent('start');
+
+    // 변경 상태 확인
+    const { hasAddedPlace, hasFieldChanges, hasOrderChanged, isImageOrderChanged, dirtyValues } =
+      getChangeStatus();
+
+    // 새로운 장소가 있으면 먼저 추가
+    if (hasAddedPlace) {
+      await handleAddNewPlaces(values.addedPlace);
+    }
+    // 나머지 수정사항 처리
+    if (hasFieldChanges || hasOrderChanged || isImageOrderChanged) {
+      await handleEditExistingPlaces(dirtyValues);
     }
   };
 
