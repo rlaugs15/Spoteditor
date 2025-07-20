@@ -15,7 +15,7 @@ export async function fetchBookmarkedPlaces({
   userId,
   currentPage = 1,
   pageSize = 12,
-}: PlaceBookmarkListParmas): Promise<PlacesReseponse> {
+}: PlaceBookmarkListParmas): Promise<PlacesBookmarkReseponse> {
   try {
     const safePage = Math.max(1, currentPage);
     const safeSize = Math.min(Math.max(1, pageSize), 30);
