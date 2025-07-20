@@ -84,7 +84,7 @@ const LogPage = () => {
     <div className="flex flex-col h-full">
       <LogRegisterHeader onAddNewPlace={handleAddNewPlace} />
       <Form {...form}>
-        <main className="grow bg-white pt-[54px]">
+        <main className="grow bg-white pt-[66px]">
           <TitledInput />
           <div className="flex flex-col">
             {fields.map((field, idx) => (
