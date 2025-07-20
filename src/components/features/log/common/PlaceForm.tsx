@@ -47,7 +47,7 @@ const PlaceForm = ({
   const tCategory = useTranslations('Category');
 
   return (
-    <div className="mt-6">
+    <div className="mt-6" data-place-index={globalIdx ?? idx}>
       <div className="flex justify-between">
         <span className="text-[14px] font-semibold text-black">
           {String((globalIdx ?? idx) + 1).padStart(2, '0')}

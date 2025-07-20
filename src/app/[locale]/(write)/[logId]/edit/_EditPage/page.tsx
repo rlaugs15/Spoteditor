@@ -4,7 +4,6 @@ import PlaceForm from '@/components/features/log/common/PlaceForm';
 import ConfirmRegistrationDialog from '@/components/features/log/register/ConfirmRegistrationDialog';
 import MultiTagGroup from '@/components/features/log/register/tags/MultiTagGroup';
 import TitledInput from '@/components/features/log/register/TitledInput';
-import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import useAddPlaceMutation from '@/hooks/mutations/log/useAddPlaceMutation';
 import useLogEditMutation from '@/hooks/mutations/log/useLogEditMutation';
@@ -285,8 +284,6 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
           />
         </>
       </Form>
-
-      <Button onClick={() => console.log(form.getValues())}>test</Button>
 
       {/* footer */}
       <div className="text-text-sm w-full h-9 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
