@@ -24,13 +24,13 @@ interface PlaceFormProps {
 const PlaceForm = ({
   idx,
   type = 'existing',
-  globalIdx, // 기존 + 추가장소 포함 인덱스
+  globalIdx,
   isEditPage = false,
   onDeletePlace,
   onMoveUpPlace,
   onMoveDownPlace,
 }: PlaceFormProps) => {
-  const { control, formState } = useFormContext();
+  const { control, watch, formState } = useFormContext();
   const [isChecked, setIsChecked] = useState(false);
 
   const fieldName = isEditPage
@@ -38,6 +38,10 @@ const PlaceForm = ({
       ? `places.${idx}`
       : `addedPlace.${idx}`
     : `places.${idx}`;
+
+  const locationValue = watch(`${fieldName}.location`);
+  const categoryValue = watch(`${fieldName}.category`);
+  const showCategoryError = !!locationValue && !categoryValue;
 
   const placeErrors = (formState.errors as any)[
     isEditPage ? (type === 'existing' ? 'places' : 'addedPlace') : 'places'
@@ -116,10 +120,10 @@ const PlaceForm = ({
             )}
           />
         </div>
+
         {/* Category */}
         <div className="mt-0">
           <div className="flex items-center web:items-start gap-2">
-            {/* <MapIcon className="shrink-0 pt-1" /> */}
             <FormField
               control={control}
               name={`${fieldName}.category`}
@@ -129,13 +133,16 @@ const PlaceForm = ({
                     type="single"
                     value={field.value ?? ''}
                     onValueChange={(value) => field.onChange(value)}
-                    className="flex gap-[4px] web:flex-wrap"
+                    className={cn('flex gap-[4px] web:flex-wrap')}
                   >
                     {CATEGORIES.map((category) => (
                       <ToggleGroupItem
                         key={category}
                         value={category}
-                        className="text-[12px] !text-light-300 rounded-full min-w-[50px] h-[26px] w-fit px-3 border"
+                        className={cn(
+                          'text-[12px] !text-light-300 rounded-full min-w-[50px] h-[26px] w-fit px-3 border',
+                          showCategoryError && '!text-error-500 border-error-500'
+                        )}
                       >
                         {tCategory(category)}
                       </ToggleGroupItem>

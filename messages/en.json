@@ -470,7 +470,7 @@
   },
   "SearchPage": {
     "input": {
-      "placeholder": "What are you looking for..."
+      "placeholder": "e.g. \"Seoul\" or \"cafe\" Search by region or keyword."
     },
     "result": {
       "empty": "No results found."
