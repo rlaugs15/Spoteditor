@@ -2,11 +2,123 @@
 
 import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
-import { PlaceBookmarkListParmas, PlacesReseponse } from '@/types/api/place';
+import { CACHE_REVALIDATE_TIME, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/fetchConfig';
+import {
+  PlaceBookmarkListParmas,
+  PlacesBookmarkReseponse,
+  PlacesParams,
+  PlacesReseponse,
+} from '@/types/api/place';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { prisma } from 'prisma/prisma';
 import { placeKeys } from './keys';
 import { cacheTags, globalTags } from './tags';
+
+// ===================================================================
+// 장소 리스트
+// ===================================================================
+
+export async function fetchPlaces({
+  currentPage = 1,
+  pageSize = DEFAULT_PAGE_SIZE,
+  sort = 'latest',
+}: PlacesParams): Promise<PlacesReseponse> {
+  try {
+    const safePage = Math.max(1, currentPage);
+    const safeSize = Math.min(Math.max(1, pageSize), MAX_PAGE_SIZE);
+    const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
+
+    const [places, totalCount] = await Promise.all([
+      prisma.place.findMany({
+        skip, // 앞에서 몇 개 건너뛸지
+        take: safeSize, // 가져올 데이터 수
+
+        // 정렬 기준 설정: 인기순이면 북마크 개수 기준(연결된 테이블의 개수를 기준으로 정렬), 기본은 최신순
+        orderBy:
+          sort === 'popular' ? { place_bookmark: { _count: 'desc' } } : { created_at: 'desc' },
+
+        select: {
+          place_id: true,
+          name: true,
+          log_id: true,
+
+          place_images: {
+            orderBy: { order: 'asc' },
+            take: 1,
+            select: {
+              image_path: true,
+            },
+          },
+          log: {
+            select: {
+              users: {
+                select: {
+                  user_id: true,
+                  nickname: true,
+                },
+              },
+              address: {
+                select: {
+                  city: true,
+                  sigungu: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+      // 전체 장소 수 카운트 (페이지 수 계산에 사용)
+      prisma.place.count(),
+    ]);
+
+    const filteredPlaces = places.map((place) => ({
+      place_id: place.place_id?.toString() ?? '',
+      log_id: place.log_id?.toString() ?? '',
+      place_images: place.place_images[0].image_path?.toString() ?? '',
+      name: place.name?.toString() ?? '',
+      user: {
+        user_id: place.log?.users.user_id?.toString() ?? '',
+        nickname: place.log?.users.nickname?.toString() ?? '',
+      },
+      address: {
+        city: place.log?.address[0].city?.toString() ?? '',
+        sigungu: place.log?.address[0].sigungu?.toString() ?? '',
+      },
+    }));
+
+    return {
+      success: true,
+      data: filteredPlaces,
+      meta: {
+        pagination: {
+          currentPage: safePage,
+          pageSize: safeSize,
+          totalPages: Math.ceil(totalCount / safeSize),
+          totalItems: totalCount,
+        },
+        httpStatus: 200,
+      },
+    };
+  } catch (_error) {
+    console.error(_error);
+    return {
+      success: false,
+      msg: ERROR_MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
+      errorCode: ERROR_CODES.COMMON.INTERNAL_SERVER_ERROR,
+    };
+  }
+}
+
+export async function getPlaces(params: PlacesParams) {
+  const queryKey = placeKeys.list(params);
+
+  const tagKey = cacheTags.placeList(params);
+
+  return unstable_cache(() => fetchPlaces(params), [...queryKey].filter(Boolean), {
+    tags: [tagKey, globalTags.placeAll], // 상위 그룹 태그 추가
+    revalidate: CACHE_REVALIDATE_TIME,
+  })();
+}
 
 // ===================================================================
 // 북마크 장소 리스트
