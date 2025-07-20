@@ -37,7 +37,7 @@ export default function FollowingButton({ userId, className = '' }: FollowingBut
       variant={'ghost'}
       size="s"
       className={cn(
-        'font-medium rounded-full bg-gray-50 border',
+        'text-xs rounded-full bg-gray-50 border',
         className,
         isFollowing
           ? 'bg-black hover:bg-black hover:text-white text-white'
