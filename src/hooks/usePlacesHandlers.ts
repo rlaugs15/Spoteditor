@@ -1,3 +1,4 @@
+import { scrollToPlaceAfterReorder } from '@/utils/scrollToElement';
 import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
@@ -41,6 +42,7 @@ export function usePlacesHandlers(fields: any[], append: any, remove: any, swap:
     (idx: number) => {
       if (idx <= 0) return;
       swap(idx, idx - 1);
+      scrollToPlaceAfterReorder(idx, 'up');
     },
     [swap]
   );
@@ -50,6 +52,7 @@ export function usePlacesHandlers(fields: any[], append: any, remove: any, swap:
     (idx: number) => {
       if (idx >= fields.length - 1) return;
       swap(idx, idx + 1);
+      scrollToPlaceAfterReorder(idx, 'down');
     },
     [fields.length, swap]
   );

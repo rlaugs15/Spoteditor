@@ -71,7 +71,6 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
   };
 
   const handleReorder = (newOrder: typeof fields) => {
-    // reorderPreviews(newOrder.map((item) => (item as any).file));
     replace(newOrder);
   };
 
