@@ -1,5 +1,5 @@
-import { PlaceWithImages } from '@/types/api/log';
 import { LogEditFormValues } from '@/types/log';
+import { Tables } from '@/types/supabase';
 import { FieldValues } from 'react-hook-form';
 
 /* 폼 데이터에서 변경된 필드만 추출 */
@@ -35,18 +35,24 @@ export function pickDirtyFields<T>(dirty: Partial<T> | undefined, keys: (keyof T
 
 /* 장소 이미지 순서 변경 확인용 */
 export function isImageOrderChanged(
-  prevImages: LogEditFormValues['places'][number]['placeImages'],
-  currImages: LogEditFormValues['places'][number]['placeImages']
+  prevImages: Tables<'place_images'>[], // places.map((p) => p.place_images).flat(),
+  currImages: LogEditFormValues['places'][number]['placeImages'] // form.getValues('places').map((p) => p.placeImages).flat()
 ) {
   if (prevImages.length !== currImages.length) return true;
-  return prevImages.some((img, idx) => img.place_image_id !== currImages[idx].place_image_id);
+
+  // 같은 인덱스에 있는 이미지의 place_image_id 비교
+  return prevImages.some(
+    (prevImg, idx) => prevImg?.place_image_id !== currImages[idx]?.place_image_id
+  );
 }
 
 /* 장소 순서 변경 확인용 */
 export const isOrderChanged = (
-  initialPlaces: PlaceWithImages[], // 초기 장소 데이터
+  initialPlaces: Tables<'place'>[], // 초기 장소 데이터
   currentPlaces: LogEditFormValues['places']
 ) => {
-  if (currentPlaces.length !== initialPlaces.length) return true;
-  return currentPlaces.some((current, idx) => current.id !== initialPlaces[idx].id);
+  if (initialPlaces.length !== currentPlaces.length) return true;
+
+  // 같은 인덱스에 있는 장소의 ID가 다른지 확인
+  return currentPlaces.some((current, idx) => current.id !== initialPlaces[idx]?.place_id);
 };
