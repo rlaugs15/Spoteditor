@@ -236,7 +236,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
         onAddNewPlace={handleAddNewPlace}
       />
       <Form {...form}>
-        <main className="grow bg-white pt-[54px]">
+        <main className="grow bg-white pt-[66px]">
           <TitledInput />
           <div className="flex flex-col gap-4">
             {allPlaces.map((field, globalIdx) => {
