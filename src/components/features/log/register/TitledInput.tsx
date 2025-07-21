@@ -14,8 +14,8 @@ const TitledInput = () => {
 
   return (
     // <div className="relative flex items-center mt-4">
-    <div className="space-y-1 w-full">
-      <label className="block text-[14px] font-semibold text-black mt-1">
+    <div className="space-y-1 w-full mt-1">
+      <label className="block text-[14px] font-semibold text-black">
         {t('titleLabel')}
         <span className="text-error-500"> *</span>
       </label>

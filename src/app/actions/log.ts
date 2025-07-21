@@ -2,6 +2,7 @@
 
 import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
+import { CACHE_REVALIDATE_TIME, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/fetchConfig';
 import { createClient } from '@/lib/supabase/server';
 import { ApiResponse } from '@/types/api/common';
 import { DetailLog, logBookmarkListParams, LogsParams, LogsResponse } from '@/types/api/log';
@@ -13,10 +14,6 @@ import { logKeys, searchKeys } from './keys';
 import { deleteNestedFolderFiles } from './storage';
 import { cacheTags, globalTags } from './tags';
 import { getUser } from './user';
-
-const DEFAULT_PAGE_SIZE = 12;
-const MAX_PAGE_SIZE = 30;
-const CACHE_REVALIDATE_TIME = 300; // 5분
 
 // ===================================================================
 // 단일 로그
