@@ -74,7 +74,7 @@ const PlaceForm = ({
           name={`${fieldName}.placeName`}
           render={({ field }) => (
             <div className="space-y-1">
-              <label className="block text-[14px] font-semibold text-black">
+              <label className="block text-[14px] font-semibold text-black mt-1">
                 {tLog('placeNameLabel')}
                 <span className="text-error-500"> *</span>
               </label>
@@ -99,7 +99,7 @@ const PlaceForm = ({
             name={`${fieldName}.location`}
             render={({ field }) => (
               <div className="space-y-1">
-                <label className="block text-[14px] font-semibold text-black">
+                <label className="block text-[14px] font-semibold text-black mt-1">
                   {tLog('locationLabel')}
                   <span className="text-error-500"> *</span>
                   <span className="text-[12px] font-normal text-light-300 ml-1.5">
