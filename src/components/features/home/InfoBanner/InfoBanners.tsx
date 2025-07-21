@@ -24,9 +24,9 @@ const InfoBanners = async () => {
             {t('registerCourseDescription.line2')}
             <br />
             {t('registerCourseDescription.line3')}
-            {/* <br />
-            {t('registerCourseDescription.line4')}
             <br />
+            {t('registerCourseDescription.line4')}
+            {/* <br />
             {t('registerCourseDescription.line5')} */}
           </p>
         </InfoBanner>
