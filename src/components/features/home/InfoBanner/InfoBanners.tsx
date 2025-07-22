@@ -1,4 +1,3 @@
-'use client';
 import { getTranslations } from 'next-intl/server';
 import InfoBanner from './InfoBanner';
 import RegisterLinkButtons from './RegisterLinkButtons';
