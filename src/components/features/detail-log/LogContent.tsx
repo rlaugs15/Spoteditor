@@ -34,7 +34,7 @@ const LogContent = ({ place, idx }: LogContentProps) => {
           </div>
           <div className="flex items-start gap-1.5 text-light-400 text-text-sm web:text-text-lg">
             <LocationIcon className="w-4.5 h-4.5 flex-shrink-0 mt-[4px]" />
-            <span className="break-words block min-w-0">{place.address}</span>
+            <span className="break-words block min-w-0  mt-[1.5px] web:mt-0">{place.address}</span>
           </div>
         </div>
       </section>
