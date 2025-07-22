@@ -10,9 +10,16 @@ const InfoBanners = async () => {
       {/* 왼쪽 영역 - 하단 보더 */}
       <div className="border-b border-light-100">
         <InfoBanner>
-          <div className="flex flex-col justify-between h-full text-center">
-            <TypingText />
-            <RegisterLinkButtons label={t('registerCourse')} />
+          <div className="flex flex-col justify-between h-full w-full text-center py-10 web:py-1">
+            {/* 타이핑 텍스트 영역 */}
+            <div className="w-full text-center min-h-[64px]">
+              <TypingText />
+            </div>
+
+            {/* 버튼 영역 */}
+            <div className="w-full flex justify-center">
+              <RegisterLinkButtons label={t('registerCourse')} />
+            </div>
           </div>
         </InfoBanner>
       </div>
