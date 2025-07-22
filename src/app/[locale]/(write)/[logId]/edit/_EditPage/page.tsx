@@ -286,7 +286,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
       </Form>
 
       {/* footer */}
-      <div className="text-text-sm w-full h-9 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5">
+      <div className="text-text-sm w-full h-9 rounded-md flex items-center justify-center bg-error-50 text-red-500 my-2.5 py-2">
         {t('warning.imagePolicy')}
       </div>
 
