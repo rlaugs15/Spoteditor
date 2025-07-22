@@ -5,9 +5,9 @@ const TypingText = () => {
   return (
     <TypeAnimation
       sequence={[
-        '당신의 취향이 누군가의 영감이 될 수 있어요',
+        '여행지에서, 익숙한 동네에서—\n당신의 취향이 머무는 장소로 하루를 그려보세요',
         1200,
-        'Your favorites could spark someone else’s discovery',
+        'Traveling or staying local—\ncreate your day with the places you love.',
         1200,
       ]}
       speed={40}
