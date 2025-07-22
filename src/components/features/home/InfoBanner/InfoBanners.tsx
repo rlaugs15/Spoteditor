@@ -10,7 +10,7 @@ const InfoBanners = async () => {
       {/* 왼쪽 영역 - 하단 보더 */}
       <div className="border-b border-light-100">
         <InfoBanner>
-          <div className="flex flex-col justify-between h-full">
+          <div className="flex flex-col justify-between h-full text-center">
             <TypingText />
             <RegisterLinkButtons label={t('registerCourse')} />
           </div>
