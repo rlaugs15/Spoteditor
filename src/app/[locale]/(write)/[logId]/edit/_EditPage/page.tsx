@@ -227,7 +227,7 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col">
       <LogEditHeader
         city={address[0].city}
         sigungu={address[0].sigungu}
