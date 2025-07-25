@@ -16,16 +16,19 @@ import { LogEditFormValues } from '@/types/log';
 import { createFormData } from '@/utils/formatLog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { extractDirtyValues, isImageOrderChanged, isOrderChanged, pickDirtyFields } from './utils';
 
 const LogEditPage = ({ logData }: { logData: DetailLog }) => {
+  const router = useRouter();
   const { mutateAsync: editMutate, isPending: editIsPending } = useLogEditMutation();
   const { mutateAsync: addPlaceMutate, isPending: addPlaceIsPending } = useAddPlaceMutation();
   const t = useTranslations('LogEditPage');
-  const tToast = useTranslations('Toast.PlaceDrawer');
+  const tDrawer = useTranslations('Toast.PlaceDrawer');
+  const tLogEdit = useTranslations('Toast.logEdit');
   const { title, place: places, log_tag, address, log_id } = logData;
   const initializeTags = useLogCreationStore((state) => state.initializeTags);
   const initialMoodTags = log_tag.filter((t) => t.category === 'mood').map((t) => t.tag);
@@ -159,8 +162,8 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     const currentPlace = allPlaces[globalIdx];
     const prevPlace = allPlaces[globalIdx - 1];
     if (currentPlace.type !== prevPlace.type) {
-      toast.error(tToast('orderTypeError'), {
-        description: tToast('orderTypeErrorDesc'),
+      toast.error(tDrawer('orderTypeError'), {
+        description: tDrawer('orderTypeErrorDesc'),
       });
       return;
     }
@@ -177,8 +180,8 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
     const currentPlace = allPlaces[globalIdx];
     const nextPlace = allPlaces[globalIdx + 1];
     if (currentPlace.type !== nextPlace.type) {
-      toast.error(tToast('orderTypeError'), {
-        description: tToast('orderTypeErrorDesc'),
+      toast.error(tDrawer('orderTypeError'), {
+        description: tDrawer('orderTypeErrorDesc'),
       });
       return;
     }
@@ -221,8 +224,13 @@ const LogEditPage = ({ logData }: { logData: DetailLog }) => {
       await handleAddNewPlaces(values.addedPlace);
     }
     // 나머지 수정사항 처리
-    if (hasFieldChanges || hasOrderChanged || isImageOrderChanged) {
+    else if (hasFieldChanges || hasOrderChanged || isImageOrderChanged) {
       await handleEditExistingPlaces(dirtyValues);
+    } else {
+      toast.info(tLogEdit('noChanges'), {
+        description: tLogEdit('noChangesDesc'),
+      });
+      router.back();
     }
   };
 
