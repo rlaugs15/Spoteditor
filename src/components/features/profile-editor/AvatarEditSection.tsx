@@ -62,7 +62,7 @@ export default function AvatarEditSection({ imageUrl, onFileChange }: AvatarEdit
         </button>
         <input
           type="file"
-          accept=".jpg,.jpeg,.png,.webp,.avif,.heic"
+          accept=".jpg,.jpeg,.png,.webp,.avif,.heif"
           id="image_url"
           onChange={handleFileChange}
           ref={hiddenInputRef}

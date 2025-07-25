@@ -93,7 +93,7 @@ const MultiImageForm = ({ idx, fieldName }: MultiImageFormProps) => {
         className="hidden"
         multiple
         maxLength={8}
-        accept=".jpg,.jpeg,.png,.webp,.avif,.heic"
+        accept=".jpg,.jpeg,.png,.webp,.avif,.heif"
       />
 
       <div
