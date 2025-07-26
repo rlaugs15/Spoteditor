@@ -10,18 +10,12 @@ export const globalTags = {
 
   /* 팔로우 관련 */
   followAll: 'follow:all',
-  followerAll: 'follow:follower:all',
-  followingAll: 'follow:following:all',
 
   /* 로그 관련 */
   logAll: 'log:all',
-  logListAll: 'log:list:all',
-  logBookmarkAll: 'log:bookmark:all',
 
   /* 장소 관련 */
   placeAll: 'place:all',
-  placeListAll: 'place:list:all',
-  placeBookmarkAll: 'place:bookmark:all',
 
   /* 검색 관련 */
   searchAll: 'search:list:all',

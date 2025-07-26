@@ -164,8 +164,7 @@ export async function patchUser({
     const tagsToInvalidate = [
       globalTags.userAll,
       globalTags.logAll,
-      globalTags.logListAll,
-      globalTags.logBookmarkAll,
+      globalTags.placeAll,
       globalTags.searchAll,
     ];
     tagsToInvalidate.forEach(revalidateTag);
@@ -207,18 +206,8 @@ export async function deleteUser() {
       },
     });
     /* 캐시 무효화 */
-    const tagsToInvalidate = [
-      globalTags.userAll,
-      globalTags.followAll,
-      globalTags.logAll,
-      globalTags.logListAll,
-      globalTags.logBookmarkAll,
-      globalTags.placeAll,
-      globalTags.placeListAll,
-      globalTags.placeBookmarkAll,
-      globalTags.searchAll,
-    ];
-    tagsToInvalidate.forEach(revalidateTag);
+    Object.values(globalTags).forEach(revalidateTag);
+
     return { success: true, msg: ERROR_MESSAGES.USER.DELETE_SUCCESS };
   } catch (error) {
     console.error('유저 삭제 오류', error);
