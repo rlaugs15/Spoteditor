@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { PublicUser } from '@/types/api/user';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { revalidateTag, unstable_cache } from 'next/cache';
-import { prisma } from 'prisma/prisma';
+import prisma from 'prisma/prisma';
 import { userKeys } from './keys';
 import { deleteAllFilesRecursively, deleteProfileStorageFolder } from './storage';
 import { cacheTags, globalTags } from './tags';

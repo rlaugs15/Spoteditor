@@ -10,7 +10,7 @@ import {
   PlacesReseponse,
 } from '@/types/api/place';
 import { revalidateTag, unstable_cache } from 'next/cache';
-import { prisma } from 'prisma/prisma';
+import prisma from 'prisma/prisma';
 import { placeKeys } from './keys';
 import { cacheTags, globalTags } from './tags';
 

@@ -9,7 +9,7 @@ import { DetailLog, logBookmarkListParams, LogsParams, LogsResponse } from '@/ty
 import { SearchParams, SearchResponse } from '@/types/api/search';
 import { Prisma } from '@prisma/client';
 import { revalidateTag, unstable_cache } from 'next/cache';
-import { prisma } from 'prisma/prisma';
+import prisma from 'prisma/prisma';
 import { logKeys, searchKeys } from './keys';
 import { deleteNestedFolderFiles } from './storage';
 import { cacheTags, globalTags } from './tags';
