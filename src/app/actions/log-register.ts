@@ -177,7 +177,7 @@ async function insertPlaceImageData(supabase: SupabaseClient, placeImageDataList
 
 // 캐시 무효화 함수
 function invalidateCache() {
-  const tagsToInvalidate = [globalTags.logAll, globalTags.logListAll, globalTags.searchAll];
+  const tagsToInvalidate = [globalTags.logAll, globalTags.placeAll, globalTags.searchAll];
 
   tagsToInvalidate.forEach((tag) => revalidateTag(tag));
 }

@@ -1,4 +1,4 @@
-import { logKeys, searchKeys } from '@/app/actions/keys';
+import { logKeys, placeKeys, searchKeys } from '@/app/actions/keys';
 import { createLog } from '@/app/actions/log-register';
 import { HOME } from '@/constants/pathname';
 import { useRouter } from '@/i18n/navigation';
@@ -78,7 +78,8 @@ const useLogCreateMutation = () => {
         // GA 이벤트 추적 - 로그 등록 완료
         trackLogCreateEvent('complete');
 
-        const keysToInvalidate = [logKeys.all, searchKeys.all];
+        // 캐시 무효화
+        const keysToInvalidate = [logKeys.all, placeKeys.all, searchKeys.all];
 
         keysToInvalidate.forEach((key) => {
           queryClient.removeQueries({ queryKey: key, exact: false });

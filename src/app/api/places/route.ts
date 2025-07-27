@@ -1,6 +1,8 @@
-import { getPlaces } from '@/app/actions/place';
+import { fetchPlaces } from '@/app/actions/place';
+import { globalTags } from '@/app/actions/tags';
 import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
+import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -9,7 +11,9 @@ export async function GET(req: NextRequest) {
   const pageSize = parseInt(searchParams.get('pageSize') || '12');
 
   try {
-    const result = await getPlaces({ currentPage, pageSize });
+    const result = await fetchPlaces({ currentPage, pageSize });
+
+    revalidateTag(globalTags.placeAll);
 
     if (!result.success) {
       return NextResponse.json(result, {

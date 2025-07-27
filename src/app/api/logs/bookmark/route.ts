@@ -1,6 +1,8 @@
-import { getBookmarkedLogs } from '@/app/actions/log';
+import { fetchBookmarkedLogs } from '@/app/actions/log';
+import { globalTags } from '@/app/actions/tags';
 import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
+import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -22,13 +24,15 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const result = await getBookmarkedLogs({ userId, currentPage, pageSize });
+    const result = await fetchBookmarkedLogs({ userId, currentPage, pageSize });
 
     if (!result.success) {
       return NextResponse.json(result, {
         status: 404,
       });
     }
+
+    revalidateTag(globalTags.logAll);
 
     return NextResponse.json(result, { status: result.meta?.httpStatus ?? 200 });
   } catch (_error) {
