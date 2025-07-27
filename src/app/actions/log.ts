@@ -151,7 +151,7 @@ export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
 // 로그 리스트
 // ===================================================================
 
-async function fetchLogs({
+export async function fetchLogs({
   currentPage = 1,
   pageSize = DEFAULT_PAGE_SIZE,
   sort = 'latest',
@@ -355,7 +355,7 @@ export async function revalidateBookmarkLogs() {
 // 검색 결과 로그 리스트
 // ===================================================================
 
-async function fetchSearchLogs({
+export async function fetchSearchLogs({
   keyword,
   city,
   sigungu,

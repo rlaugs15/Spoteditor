@@ -89,7 +89,7 @@ export async function getUser() {
 // ===================================================================
 // 퍼블릭 유저 정보 가져오기
 // ===================================================================
-async function fetchPublicUser(userId: string): Promise<PublicUser | null> {
+export async function fetchPublicUser(userId: string): Promise<PublicUser | null> {
   try {
     const user = await prisma.public_users.findUnique({
       where: { user_id: userId },
