@@ -216,15 +216,7 @@ async function deletePlaceImagesFromStorage(supabase: SupabaseClient, imageIds: 
 }
 
 function invalidateCache() {
-  const tagsToInvalidate = [
-    globalTags.logAll,
-    globalTags.logBookmarkAll,
-    globalTags.logListAll,
-    globalTags.placeAll,
-    globalTags.placeBookmarkAll,
-    globalTags.placeListAll,
-    globalTags.searchAll,
-  ];
+  const tagsToInvalidate = [globalTags.logAll, globalTags.placeAll, globalTags.searchAll];
 
   tagsToInvalidate.forEach((tag) => revalidateTag(tag));
 }

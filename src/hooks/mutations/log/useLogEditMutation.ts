@@ -26,6 +26,7 @@ const useLogEditMutation = () => {
 
         clearTag();
 
+        //캐시 무효화
         const keysToInvalidate = [logKeys.all, placeKeys.all, searchKeys.all];
 
         keysToInvalidate.forEach((key) => {

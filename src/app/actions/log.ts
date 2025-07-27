@@ -9,7 +9,7 @@ import { DetailLog, logBookmarkListParams, LogsParams, LogsResponse } from '@/ty
 import { SearchParams, SearchResponse } from '@/types/api/search';
 import { Prisma } from '@prisma/client';
 import { revalidateTag, unstable_cache } from 'next/cache';
-import { prisma } from 'prisma/prisma';
+import prisma from 'prisma/prisma';
 import { logKeys, searchKeys } from './keys';
 import { deleteNestedFolderFiles } from './storage';
 import { cacheTags, globalTags } from './tags';
@@ -133,13 +133,7 @@ export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
     }
 
     /* 캐시 무효화 */
-    const logTagsToInvalidate = [
-      globalTags.logAll,
-      globalTags.logListAll,
-      globalTags.logBookmarkAll,
-      globalTags.placeListAll,
-      globalTags.searchAll,
-    ];
+    const logTagsToInvalidate = [globalTags.logAll, globalTags.placeAll, globalTags.searchAll];
     logTagsToInvalidate.forEach((tag) => revalidateTag(tag));
 
     return { success: true, data: null };
@@ -157,7 +151,7 @@ export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
 // 로그 리스트
 // ===================================================================
 
-async function fetchLogs({
+export async function fetchLogs({
   currentPage = 1,
   pageSize = DEFAULT_PAGE_SIZE,
   sort = 'latest',
@@ -345,7 +339,7 @@ export async function getBookmarkedLogs(params: logBookmarkListParams) {
     {
       tags: [
         cacheTags.logBookmarkList(params), // 특정 페이지 북마크 리스트
-        globalTags.logBookmarkAll, // 전체 북마크 리스트 무효화용 상위 태그
+        globalTags.logAll, // 전체 북마크 리스트 무효화용 상위 태그
       ],
       revalidate: CACHE_REVALIDATE_TIME,
     }
@@ -354,14 +348,14 @@ export async function getBookmarkedLogs(params: logBookmarkListParams) {
 
 /* 북마크 시 서버캐시 무효화 */
 export async function revalidateBookmarkLogs() {
-  revalidateTag(globalTags.logBookmarkAll); // 특정 유저·페이지 무관하게 전체 무효화
+  revalidateTag(globalTags.logAll); // 특정 유저·페이지 무관하게 전체 무효화
 }
 
 // ===================================================================
 // 검색 결과 로그 리스트
 // ===================================================================
 
-async function fetchSearchLogs({
+export async function fetchSearchLogs({
   keyword,
   city,
   sigungu,

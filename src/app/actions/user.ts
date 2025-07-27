@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { PublicUser } from '@/types/api/user';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { revalidateTag, unstable_cache } from 'next/cache';
-import { prisma } from 'prisma/prisma';
+import prisma from 'prisma/prisma';
 import { userKeys } from './keys';
 import { deleteAllFilesRecursively, deleteProfileStorageFolder } from './storage';
 import { cacheTags, globalTags } from './tags';
@@ -89,7 +89,7 @@ export async function getUser() {
 // ===================================================================
 // 퍼블릭 유저 정보 가져오기
 // ===================================================================
-async function fetchPublicUser(userId: string): Promise<PublicUser | null> {
+export async function fetchPublicUser(userId: string): Promise<PublicUser | null> {
   try {
     const user = await prisma.public_users.findUnique({
       where: { user_id: userId },
@@ -164,8 +164,7 @@ export async function patchUser({
     const tagsToInvalidate = [
       globalTags.userAll,
       globalTags.logAll,
-      globalTags.logListAll,
-      globalTags.logBookmarkAll,
+      globalTags.placeAll,
       globalTags.searchAll,
     ];
     tagsToInvalidate.forEach(revalidateTag);
@@ -207,18 +206,8 @@ export async function deleteUser() {
       },
     });
     /* 캐시 무효화 */
-    const tagsToInvalidate = [
-      globalTags.userAll,
-      globalTags.followAll,
-      globalTags.logAll,
-      globalTags.logListAll,
-      globalTags.logBookmarkAll,
-      globalTags.placeAll,
-      globalTags.placeListAll,
-      globalTags.placeBookmarkAll,
-      globalTags.searchAll,
-    ];
-    tagsToInvalidate.forEach(revalidateTag);
+    Object.values(globalTags).forEach(revalidateTag);
+
     return { success: true, msg: ERROR_MESSAGES.USER.DELETE_SUCCESS };
   } catch (error) {
     console.error('유저 삭제 오류', error);

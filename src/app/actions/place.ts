@@ -10,7 +10,7 @@ import {
   PlacesReseponse,
 } from '@/types/api/place';
 import { revalidateTag, unstable_cache } from 'next/cache';
-import { prisma } from 'prisma/prisma';
+import prisma from 'prisma/prisma';
 import { placeKeys } from './keys';
 import { cacheTags, globalTags } from './tags';
 
@@ -231,7 +231,7 @@ export async function getBookmarkedPlaces(params: PlaceBookmarkListParmas) {
   return unstable_cache(() => fetchBookmarkedPlaces(params), [...placeKeys.bookmarkList(params)], {
     tags: [
       cacheTags.placeBookmarkList(params), // 개별 사용자별 태그
-      globalTags.placeBookmarkAll, // 전체 북마크 무효화용 태그
+      globalTags.placeAll, // 전체 북마크 무효화용 태그
     ],
     revalidate: 300,
   })();
@@ -239,5 +239,5 @@ export async function getBookmarkedPlaces(params: PlaceBookmarkListParmas) {
 
 /* 북마크 시 서버캐시 무효화 */
 export async function revalidateBookmarkPlaces() {
-  revalidateTag(globalTags.placeBookmarkAll);
+  revalidateTag(globalTags.placeAll);
 }
