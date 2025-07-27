@@ -2,19 +2,33 @@
 
 import { Button } from '@/components/ui/button';
 import { useRouter } from '@/i18n/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { useEffect } from 'react';
 interface ErrorTemplateProps {
   title?: string;
   message?: string;
+  invalidateKeys?: string[];
 }
 
 export default function ErrorTemplate({
   title = '찾으시는 페이지를 찾을 수 없습니다.',
   message = 'URL 주소를 확인해주세요.',
+  invalidateKeys,
 }: ErrorTemplateProps) {
   const router = useRouter();
   const t = useTranslations('NotFoundPage');
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (invalidateKeys && queryClient) {
+      invalidateKeys.forEach((key) => {
+        queryClient.removeQueries({ queryKey: [key] });
+      });
+    }
+  }, [invalidateKeys, queryClient]);
+
   const handleClick = () => router.replace('/');
   return (
     <main className="flex flex-col items-center justify-center h-dvh grow">
