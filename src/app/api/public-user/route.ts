@@ -1,4 +1,4 @@
-import { getPublicUser } from '@/app/actions/user';
+import { fetchPublicUser } from '@/app/actions/user';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const user = await getPublicUser(userId);
+    const user = await fetchPublicUser(userId);
     return NextResponse.json({ user });
   } catch (_error) {
     console.error(_error);

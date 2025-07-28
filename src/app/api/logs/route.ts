@@ -1,6 +1,8 @@
-import { getLogs } from '@/app/actions/log';
+import { fetchLogs } from '@/app/actions/log';
+import { globalTags } from '@/app/actions/tags';
 import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
+import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -11,7 +13,9 @@ export async function GET(req: NextRequest) {
   const pageSize = parseInt(searchParams.get('pageSize') || '12');
 
   try {
-    const result = await getLogs({ userId, currentPage, pageSize });
+    const result = await fetchLogs({ userId, currentPage, pageSize });
+
+    revalidateTag(globalTags.logAll)
 
     if (!result.success) {
       return NextResponse.json(result, {

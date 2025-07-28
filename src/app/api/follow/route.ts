@@ -2,7 +2,7 @@ import { getUser } from '@/app/actions/user';
 import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from 'prisma/prisma';
+import prisma from 'prisma/prisma';
 
 /*
   팔로우 관계 설명:

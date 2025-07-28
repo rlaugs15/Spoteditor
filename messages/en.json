@@ -20,7 +20,9 @@
     },
     "logEdit": {
       "success": "Log updated successfully.",
-      "error": "Failed to update the log."
+      "error": "Failed to update the log.",
+      "noChanges": "No changes have been made.",
+      "noChangesDesc": "Returning to the previous page."
     },
     "logDelete": {
       "success": "Log deleted successfully.",
@@ -408,9 +410,10 @@
     },
     "registerCourse": "Write",
     "registerCourseDescription": {
-      "line1": "Your small moment could brighten someone’s whole day.",
-      "line2": "Share your favorite places, experiences, and personal tastes —",
-      "line3": "your own unique moment."
+      "line1": "A café you love, a street you wander, a hidden gem you found.",
+      "line2": "Map out a day with the places you love.",
+      "line3": "The places you cherish—",
+      "line4": "they might become someone’s trip, a date, or memory."
     }
   },
   "ProfilePage": {

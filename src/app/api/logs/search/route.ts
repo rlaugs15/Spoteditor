@@ -1,6 +1,8 @@
-import { getSearchLogs } from '@/app/actions/log';
+import { fetchSearchLogs } from '@/app/actions/log';
+import { globalTags } from '@/app/actions/tags';
 import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
+import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -13,13 +15,15 @@ export async function GET(req: NextRequest) {
   const pageSize = parseInt(searchParams.get('pageSize') || '12', 12);
 
   try {
-    const result = await getSearchLogs({
+    const result = await fetchSearchLogs({
       keyword,
       city,
       sigungu,
       currentPage,
       pageSize,
     });
+
+    revalidateTag(globalTags.searchAll);
 
     return NextResponse.json(result, { status: 200 });
   } catch (_error) {
