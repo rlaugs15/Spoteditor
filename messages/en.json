@@ -51,9 +51,9 @@
     "button": "Go to Home"
   },
   "LoginModal": {
-    "title": "Spoteditor",
+    "title": "Placesurf",
     "login": "Login",
-    "description": "Log in now and stay updated with the latest news\nfrom Spoteditor every day.",
+    "description": "Log in now and stay updated with the latest news\nfrom Placesurf every day.",
     "agreementNotice": {
       "beforeLinks": "By logging in, you agree to the",
       "middle": "and",
@@ -197,11 +197,11 @@
   },
   "TermsPage": {
     "title": "Terms of Service",
-    "subtitle": "Terms of Service for TheSpotEditor",
+    "subtitle": "Terms of Service for Placesurf",
     "articles": {
       "1": {
         "title": "Article 1 (Purpose)",
-        "description": "These terms set forth the conditions and procedures for using the service provided by Kitform (the “Company”) through TheSpotEditor (the “Service”)."
+        "description": "These terms set forth the conditions and procedures for using the service provided by Kitform (the “Company”) through Placesurf (the “Service”)."
       },
       "2": {
         "title": "Article 2 (Definitions)",
@@ -395,7 +395,7 @@
   "HomePage": {
     "title1": "Not sure where to go?",
     "title2": "Meet curated courses made by trend-savvy",
-    "title3": "spot editors Just for you!",
+    "title3": "Placesurf Just for you!",
     "citySearchForm": {
       "cityLabel": "Where do you want to go?",
       "sigunguLabel": "Search more specifically!",

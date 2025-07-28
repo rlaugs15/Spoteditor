@@ -7,7 +7,7 @@ const Footer = () => {
       <ContactLink />
 
       <div className="flex flex-col web:flex-row gap-3 justify-between text-light-600">
-        <p>©2025 Spoteditor. All Rights are reserved️</p>
+        <p>©2025 Placesurf. All Rights are reserved️</p>
         <FooterPolicyLinks />
       </div>
     </footer>

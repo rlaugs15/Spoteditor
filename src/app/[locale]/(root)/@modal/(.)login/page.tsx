@@ -13,7 +13,7 @@ export default async function LoginModal() {
         <XButton />
       </ModalHeader>
       <section className="flex flex-col text-center items-center self-stretch">
-        <h1 className="font-prompt text-3xl font-bold mb-10">Spoteditor</h1>
+        <h1 className="font-prompt text-3xl font-bold mb-10">Placesurf</h1>
         <h2 className="font-bold text-lg web:text-xl mb-3">{t('login')}</h2>
         <p className="text-center text-text-sm text-light-700">
           {' '}

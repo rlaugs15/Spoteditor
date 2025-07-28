@@ -8,14 +8,14 @@ export default function NoticeDetailPage() {
     <main className="flex justify-center w-full h-[140vh]">
       <div className="max-w-[724px] w-full">
         <NoticeDetailHeader
-          title="스팟에디터 ‘서비스 이용약관’ 변경에 
+          title="플레이스서프 ‘서비스 이용약관’ 변경에 
 대한 안내"
           time="2025.03.15"
         />
         <section>
           <NoticeDetailContent
-            content="안녕하세요. 스팟에디터 팀입니다. 스팟에디터를 이용해주시는 회원 여러분께 진심으로
-        감사드리며, 스팟에디터 ‘서비스 이용약관’ 변경에 관한 안내 말씀 드립니다. 아래의 ‘서비스
+            content="안녕하세요. 플레이스서프 팀입니다. 플레이스서프를 이용해주시는 회원 여러분께 진심으로
+        감사드리며, 플레이스서프 ‘서비스 이용약관’ 변경에 관한 안내 말씀 드립니다. 아래의 ‘서비스
         이용약관’ 변경사항을 확인하시고, 서비스 이용에 참고 부탁 드리겠습니다."
           />
           <div className="mx-4">
