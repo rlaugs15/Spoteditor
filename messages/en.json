@@ -51,9 +51,9 @@
     "button": "Go to Home"
   },
   "LoginModal": {
-    "title": "Spoteditor",
+    "title": "Placesurf",
     "login": "Login",
-    "description": "Log in now and stay updated with the latest news\nfrom Spoteditor every day.",
+    "description": "Log in now and stay updated with the latest news\nfrom Placesurf every day.",
     "agreementNotice": {
       "beforeLinks": "By logging in, you agree to the",
       "middle": "and",
@@ -197,11 +197,11 @@
   },
   "TermsPage": {
     "title": "Terms of Service",
-    "subtitle": "Terms of Service for TheSpotEditor",
+    "subtitle": "Terms of Service for Placesurf",
     "articles": {
       "1": {
         "title": "Article 1 (Purpose)",
-        "description": "These terms set forth the conditions and procedures for using the service provided by Kitform (the “Company”) through TheSpotEditor (the “Service”)."
+        "description": "These terms set forth the conditions and procedures for using the service provided by Kitform (the “Company”) through Placesurf (the “Service”)."
       },
       "2": {
         "title": "Article 2 (Definitions)",

@@ -10,8 +10,8 @@ import { setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
-  title: 'Spoteditor',
-  description: '어디 갈지 고민될 땐? 감각있는 Spoteditor에서 리얼 코스를 만나보세요!',
+  title: 'Placesurf',
+  description: '어디 갈지 고민될 땐? 감각있는 Placesurf에서 리얼 코스를 만나보세요!',
 };
 
 export default async function RootLayout({
