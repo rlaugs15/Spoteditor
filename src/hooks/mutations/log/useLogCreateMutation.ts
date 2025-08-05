@@ -1,5 +1,5 @@
 import { logKeys, placeKeys, searchKeys } from '@/app/actions/keys';
-import { createLog } from '@/app/actions/log-register';
+import { createLog, ILocale } from '@/app/actions/log-register';
 import { HOME } from '@/constants/pathname';
 import { useRouter } from '@/i18n/navigation';
 import { trackLogCreateEvent } from '@/lib/analytics';
@@ -7,7 +7,7 @@ import { useLogCreationStore } from '@/stores/logCreationStore';
 import { LogFormValues, NewPlace, NewPlaceImage } from '@/types/log';
 import { uploadPlacesOptimized } from '@/utils/imageUpload';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 // 로그 등록 위해 서버로 보낼 데이터 (db 갱신용)
@@ -18,9 +18,12 @@ export type LogCreatePayload = {
   address: LogFormValues['address'];
   placeDataList: NewPlace[];
   placeImageDataList: NewPlaceImage[];
+  locale: ILocale;
 };
 
 const useLogCreateMutation = () => {
+  const locale = useLocale();
+
   const router = useRouter();
   const queryClient = useQueryClient();
   const clearTag = useLogCreationStore((state) => state.clearTag);
@@ -45,6 +48,7 @@ const useLogCreateMutation = () => {
         address: values.address,
         placeDataList,
         placeImageDataList,
+        locale: locale === 'en' ? 'en' : 'ko',
       };
 
       // 3. 로그 등록
