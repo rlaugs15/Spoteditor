@@ -6,14 +6,9 @@ import { getTranslations } from 'next-intl/server';
 
 export default async function NotFound() {
   const t = await getTranslations('NotFoundPage');
+  await revalidateLogs();
+  await revalidatePlaces();
   return (
-    <ErrorTemplate
-      message={t('logMessage')}
-      invalidateKeys={[logKeys.all[0], placeKeys.all[0]]}
-      onMountEffect={() => {
-        revalidateLogs();
-        revalidatePlaces();
-      }}
-    />
+    <ErrorTemplate message={t('logMessage')} invalidateKeys={[logKeys.all[0], placeKeys.all[0]]} />
   );
 }
