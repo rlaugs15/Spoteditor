@@ -4,15 +4,24 @@ import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { CACHE_REVALIDATE_TIME, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/fetchConfig';
 import {
+  BookmarkPlace,
+  Place,
   PlaceBookmarkListParmas,
   PlacesBookmarkReseponse,
   PlacesParams,
   PlacesReseponse,
 } from '@/types/api/place';
+import { getLocale } from 'next-intl/server';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import prisma from 'prisma/prisma';
 import { placeKeys } from './keys';
 import { cacheTags, globalTags } from './tags';
+import {
+  getBookmarkedPlacesFindArgsEn,
+  getBookmarkedPlacesFindArgsKo,
+  getPlacesFindArgsEn,
+  getPlacesFindArgsKo,
+} from './utils/placeService';
 
 // ===================================================================
 // 장소 리스트
@@ -24,55 +33,54 @@ export async function fetchPlaces({
   sort = 'latest',
 }: PlacesParams): Promise<PlacesReseponse> {
   try {
+    const locale = await getLocale();
+    const isEn = locale === 'en';
+
     const safePage = Math.max(1, currentPage);
     const safeSize = Math.min(Math.max(1, pageSize), MAX_PAGE_SIZE);
     const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
 
-    const [places, totalCount] = await Promise.all([
-      prisma.place.findMany({
-        skip, // 앞에서 몇 개 건너뛸지
-        take: safeSize, // 가져올 데이터 수
+    //매핑 전 타입찾기
+    let places: any[] = [];
+    let totalCount: number = 0;
 
-        // 정렬 기준 설정: 인기순이면 북마크 개수 기준(연결된 테이블의 개수를 기준으로 정렬), 기본은 최신순
-        orderBy:
-          sort === 'popular' ? { place_bookmark: { _count: 'desc' } } : { created_at: 'desc' },
+    if (isEn) {
+      const placesFindArgs = getPlacesFindArgsEn({ skip, safeSize, sort });
+      const [dbPlaces, dbTotalCount] = await Promise.all([
+        prisma.place_en.findMany(placesFindArgs),
+        // 전체 장소 수 카운트 (페이지 수 계산에 사용)
+        prisma.place_en.count(),
+      ]);
 
-        select: {
-          place_id: true,
-          name: true,
-          log_id: true,
+      places = dbPlaces.map((item) => {
+        const log = item.log_en;
 
-          place_images: {
-            orderBy: { order: 'asc' },
-            take: 1,
-            select: {
-              image_path: true,
-            },
-          },
-          log: {
-            select: {
-              users: {
-                select: {
-                  user_id: true,
-                  nickname: true,
-                },
-              },
-              address: {
-                select: {
-                  country: true,
-                  city: true,
-                  sigungu: true,
-                },
-              },
-            },
-          },
-        },
-      }),
-      // 전체 장소 수 카운트 (페이지 수 계산에 사용)
-      prisma.place.count(),
-    ]);
+        return {
+          place_id: item.place_id,
+          name: item.name,
+          place_images: item.place_images_en,
+          log: log
+            ? {
+                users: log.users,
+                address: log.address_en,
+              }
+            : null,
+        };
+      });
+      totalCount = dbTotalCount;
+    } else {
+      const placesFindArgs = getPlacesFindArgsKo({ skip, safeSize, sort });
+      const [dbPlaces, dbTotalCount] = await Promise.all([
+        prisma.place.findMany(placesFindArgs),
+        // 전체 장소 수 카운트 (페이지 수 계산에 사용)
+        prisma.place.count(),
+      ]);
 
-    const filteredPlaces = places.map((place) => ({
+      places = dbPlaces;
+      totalCount = dbTotalCount;
+    }
+
+    const filteredPlaces: Place[] = places.map((place) => ({
       place_id: place.place_id?.toString() ?? '',
       log_id: place.log_id?.toString() ?? '',
       place_images: place.place_images[0].image_path?.toString() ?? '',
@@ -131,58 +139,58 @@ export async function fetchBookmarkedPlaces({
   pageSize = 12,
 }: PlaceBookmarkListParmas): Promise<PlacesBookmarkReseponse> {
   try {
+    const locale = await getLocale();
+    const isEn = locale === 'en';
+
     const safePage = Math.max(1, currentPage);
     const safeSize = Math.min(Math.max(1, pageSize), 30);
     const skip = (safePage - 1) * safeSize;
 
-    const bookmarkedPlaces = await prisma.place_bookmark.findMany({
-      where: { user_id: userId },
-      skip,
-      take: pageSize,
-      orderBy: {
-        place: {
-          created_at: 'desc',
-        },
-      },
-      include: {
-        place: {
-          select: {
-            place_id: true,
-            name: true,
-            description: true,
-            address: true,
-            category: true,
-            place_images: {
-              orderBy: { order: 'asc' },
-              take: 1, // 대표 이미지 한 장만
-              select: {
-                image_path: true,
-                order: true,
-                place_id: true,
-                place_image_id: true,
-              },
-            },
-            log: {
-              select: {
-                log_id: true,
-                users: {
-                  select: {
-                    user_id: true,
-                    nickname: true, // 작성자 이름
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-    // 전체 로그북마크 수 카운트 (페이지 수 계산에 사용)
-    const totalCount = await prisma.log_bookmark.count({
-      where: { user_id: userId },
-    });
+    let bookmarkedPlaces: any[] = [];
+    let totalCount = 0;
 
-    const filteredPlaces = bookmarkedPlaces.map((boolmark) => {
+    if (isEn) {
+      const bookmarkedPlacesFindArgs = getBookmarkedPlacesFindArgsEn({ userId, skip, pageSize });
+      const [dbBookmarkedPlaces, dbTotalCount] = await Promise.all([
+        prisma.place_bookmark_en.findMany(bookmarkedPlacesFindArgs),
+        prisma.log_bookmark_en.count({
+          where: { user_id: userId },
+        }),
+      ]);
+
+      bookmarkedPlaces = bookmarkedPlaces = dbBookmarkedPlaces.map((item) => {
+        const place = item.place_en;
+
+        return {
+          place_id: place.place_id,
+          name: place.name,
+          description: place.description,
+          address: place.address,
+          category: place.category,
+          place_images: place.place_images_en,
+          log: place.log_en
+            ? {
+                log_id: place.log_en.log_id,
+                users: place.log_en.users,
+              }
+            : null,
+        };
+      });
+      totalCount = dbTotalCount;
+    } else {
+      const bookmarkedPlacesFindArgs = getBookmarkedPlacesFindArgsKo({ userId, skip, pageSize });
+      const [dbBookmarkedPlaces, dbTotalCount] = await Promise.all([
+        prisma.place_bookmark.findMany(bookmarkedPlacesFindArgs),
+        prisma.log_bookmark.count({
+          where: { user_id: userId },
+        }),
+      ]);
+
+      bookmarkedPlaces = dbBookmarkedPlaces;
+      totalCount = dbTotalCount;
+    }
+
+    const filteredPlaces: BookmarkPlace[] = bookmarkedPlaces.map((boolmark) => {
       const place = boolmark.place;
       const image = place?.place_images?.[0];
       return {

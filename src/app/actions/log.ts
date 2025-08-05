@@ -4,59 +4,51 @@ import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { CACHE_REVALIDATE_TIME, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/fetchConfig';
 import { createClient } from '@/lib/supabase/server';
-import { ApiResponse } from '@/types/api/common';
+import { ApiResponse, LogWithUserAndAddress } from '@/types/api/common';
 import { DetailLog, logBookmarkListParams, LogsParams, LogsResponse } from '@/types/api/log';
 import { SearchParams, SearchResponse } from '@/types/api/search';
-import { Prisma } from '@prisma/client';
+import { getLocale } from 'next-intl/server';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import prisma from 'prisma/prisma';
 import { logKeys, searchKeys } from './keys';
 import { deleteNestedFolderFiles } from './storage';
 import { cacheTags, globalTags } from './tags';
 import { getUser } from './user';
+import {
+  getBookmarkedLogsFindArgsEn,
+  getBookmarkedLogsFindArgsKo,
+  getLogFindArgsEn,
+  getLogFindArgsKo,
+  getLogInclude,
+  getSearchLogsFindArgsEn,
+  getSearchLogsFindArgsKo,
+  getWhereConditionEn,
+  getWhereConditionKo,
+} from './utils/logService';
 
 // ===================================================================
 // 단일 로그
 // ===================================================================
 
 export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
+  const locale = await getLocale();
+  const include = getLogInclude(locale);
+
   try {
-    const log = await prisma.log.findUnique({
-      where: { log_id: logId },
-      include: {
-        users: {
-          select: {
-            nickname: true,
-            image_url: true,
-          },
-        },
-        place: {
-          include: {
-            place_images: {
-              orderBy: { order: 'asc' },
-            },
-            _count: { select: { place_bookmark: true } },
-          },
-          orderBy: {
-            order: 'asc',
-          },
-        },
-        log_tag: {
-          select: {
-            category: true,
-            tag: true,
-          },
-        },
-        address: {
-          select: {
-            country: true,
-            city: true,
-            sigungu: true,
-          },
-        },
-        _count: { select: { log_bookmark: true } },
-      },
-    });
+    let log;
+
+    //영문, 국문 분기
+    if (locale === 'en') {
+      log = await prisma.log_en.findUnique({
+        where: { log_id: logId },
+        include,
+      });
+    } else {
+      log = await prisma.log.findUnique({
+        where: { log_id: logId },
+        include,
+      });
+    }
 
     if (!log) {
       return {
@@ -158,6 +150,9 @@ export async function fetchLogs({
   userId,
 }: LogsParams): Promise<LogsResponse> {
   try {
+    const locale = await getLocale();
+    const isEn = locale === 'en';
+
     const safePage = Math.max(1, currentPage);
     const safeSize = Math.min(Math.max(1, pageSize), MAX_PAGE_SIZE);
     const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
@@ -165,52 +160,39 @@ export async function fetchLogs({
     /* userId가 있을 경우 마이로그에서 쓸 로그리스트 반환 */
     const where = userId ? { user_id: userId } : undefined;
 
-    const [logs, totalCount] = await Promise.all([
-      prisma.log.findMany({
-        skip, // 앞에서 몇 개 건너뛸지
-        take: safeSize, // 가져올 데이터 수
-        where,
+    let logs: LogWithUserAndAddress[] = [];
+    let totalCount: number = 0;
 
-        // 정렬 기준 설정: 인기순이면 북마크 개수 기준(연결된 테이블의 개수를 기준으로 정렬), 기본은 최신순
-        orderBy: sort === 'popular' ? { log_bookmark: { _count: 'desc' } } : { created_at: 'desc' },
-        select: {
-          log_id: true,
-          title: true,
-          place: {
-            take: 1,
-            orderBy: {
-              order: 'asc',
-            },
-            select: {
-              place_images: {
-                take: 1,
-                orderBy: {
-                  order: 'asc',
-                },
-                select: {
-                  image_path: true,
-                },
-              },
-            },
-          },
-          users: {
-            select: {
-              user_id: true,
-              nickname: true,
-            },
-          },
-          address: {
-            select: {
-              country: true,
-              city: true,
-              sigungu: true,
-            },
-          },
-        },
-      }),
-      // 전체 로그 수 카운트 (페이지 수 계산에 사용)
-      prisma.log.count({ where }),
-    ]);
+    //영문, 국문 분기
+    if (isEn) {
+      const logFindArgs = getLogFindArgsEn({ skip, safeSize, sort, where });
+      const [dbLogs, dbTalCount] = await Promise.all([
+        prisma.log_en.findMany(logFindArgs),
+        // 전체 로그 수 카운트 (페이지 수 계산에 사용)
+        prisma.log_en.count({ where }),
+      ]);
+
+      logs = dbLogs.map((log) => ({
+        log_id: log.log_id,
+        title: log.title,
+        users: log.users,
+        address: log.address_en,
+        place: log.place_en.map((p) => ({
+          place_images: p.place_images_en,
+        })),
+      }));
+      totalCount = dbTalCount;
+    } else {
+      const logFindArgs = getLogFindArgsKo({ skip, safeSize, sort, where });
+
+      const [dbLogs, dbTotalCount] = await Promise.all([
+        prisma.log.findMany(logFindArgs),
+        prisma.log_en.count({ where }),
+      ]);
+
+      logs = dbLogs;
+      totalCount = dbTotalCount;
+    }
 
     return {
       success: true,
@@ -255,63 +237,83 @@ export async function fetchBookmarkedLogs({
   pageSize = DEFAULT_PAGE_SIZE,
 }: logBookmarkListParams): Promise<LogsResponse> {
   try {
+    const locale = await getLocale();
+    const isEn = locale === 'en';
+
     const safePage = Math.max(1, currentPage);
     const safeSize = Math.min(Math.max(1, pageSize), MAX_PAGE_SIZE);
     const skip = (safePage - 1) * safeSize;
 
-    const bookmarkedLogs = await prisma.log_bookmark.findMany({
-      where: { user_id: userId },
-      skip,
-      take: pageSize,
-      orderBy: {
-        log: {
-          created_at: 'desc',
-        },
-      },
-      include: {
-        log: {
-          select: {
-            log_id: true,
-            title: true,
-            place: {
-              take: 1,
-              select: {
-                place_images: {
-                  take: 1,
-                  select: {
-                    image_path: true,
-                  },
-                },
-              },
-            },
-            users: {
-              select: {
-                user_id: true,
-                nickname: true,
-              },
-            },
-            address: {
-              select: {
-                country: true,
-                city: true,
-                sigungu: true,
-              },
-            },
-          },
-        },
-      },
-    });
+    let bookmarkedLogs: LogWithUserAndAddress[] = [];
+    let totalCount: number = 0;
 
-    // 전체 로그북마크 수 카운트 (페이지 수 계산에 사용)
-    const totalCount = await prisma.log_bookmark.count({
-      where: { user_id: userId },
-    });
+    //영문, 국문 분기
+    if (isEn) {
+      const bookmarkedLogsFindArgs = getBookmarkedLogsFindArgsEn({
+        userId,
+        skip,
+        pageSize,
+      });
 
-    //실제로 존재하는 log만 필터링, 예: 로그가 삭제된 북마크가 있을 경우
-    const filterBookmarkedLogs = bookmarkedLogs.map((b) => b.log).filter(Boolean);
+      const [dbBookmarkedLogs, dbTotalCount] = await Promise.all([
+        prisma.log_bookmark_en.findMany(bookmarkedLogsFindArgs),
+        prisma.log_bookmark_en.count({
+          where: { user_id: userId },
+        }),
+      ]);
+
+      bookmarkedLogs = dbBookmarkedLogs
+        .map((log) => {
+          const logEn = log.log_en;
+          if (!logEn) return null;
+
+          return {
+            log_id: logEn.log_id,
+            title: logEn.title,
+            users: logEn.users,
+            place: logEn.place_en.map((place) => ({
+              place_images: place.place_images_en,
+            })),
+            address: logEn.address_en,
+          };
+        })
+        .filter(Boolean);
+      totalCount = dbTotalCount;
+    } else {
+      const bookmarkedLogsFindArgs = getBookmarkedLogsFindArgsKo({
+        userId,
+        skip,
+        pageSize,
+      });
+      const [dbBookmarkedLogs, dbTotalCount] = await Promise.all([
+        prisma.log_bookmark.findMany(bookmarkedLogsFindArgs),
+        prisma.log_bookmark.count({
+          where: { user_id: userId },
+        }),
+      ]);
+
+      bookmarkedLogs = dbBookmarkedLogs
+        .map((item) => {
+          const log = item.log;
+          if (!log) return null;
+
+          return {
+            log_id: log.log_id,
+            title: log.title,
+            users: log.users,
+            place: log.place.map((p) => ({
+              place_images: p.place_images,
+            })),
+            address: log.address,
+          };
+        })
+        .filter(Boolean);
+      totalCount = dbTotalCount;
+    }
+
     return {
       success: true,
-      data: filterBookmarkedLogs,
+      data: bookmarkedLogs,
       meta: {
         pagination: {
           currentPage: safePage,
@@ -364,100 +366,49 @@ export async function fetchSearchLogs({
   sort = 'latest',
 }: SearchParams): Promise<SearchResponse> {
   try {
+    const locale = await getLocale();
+    const isEn = locale === 'en';
+
     const safePage = Math.max(1, currentPage);
     const safeSize = Math.min(Math.max(1, pageSize), MAX_PAGE_SIZE);
     const skip = (safePage - 1) * safeSize; // 몇 개 건너뛸지 계산
 
-    // 검색 조건 구성
-    const searchConditions = [];
+    let searchData: LogWithUserAndAddress[] = [];
+    let totalCount: number = 0;
 
-    if (keyword) {
-      searchConditions.push({
-        OR: [
-          { title: { contains: keyword, mode: 'insensitive' } },
-          { place: { some: { name: { contains: keyword, mode: 'insensitive' } } } },
-          {
-            address: {
-              some: {
-                city: { contains: keyword, mode: 'insensitive' },
-              },
-            },
-          },
-          {
-            address: {
-              some: {
-                sigungu: { contains: keyword, mode: 'insensitive' },
-              },
-            },
-          },
-        ],
-      });
+    if (isEn) {
+      const whereCondition = getWhereConditionEn({ keyword, city, sigungu });
+      const searchLogsFindArgs = getSearchLogsFindArgsEn({ skip, safeSize, sort, whereCondition });
+      const [dbSearchData, dbTotalCount] = await Promise.all([
+        prisma.log_en.findMany(searchLogsFindArgs),
+        prisma.log_en.count({
+          where: whereCondition,
+        }),
+      ]);
+
+      searchData = dbSearchData.map((log) => ({
+        log_id: log.log_id,
+        title: log.title,
+        users: log.users,
+        place: log.place_en.map((p) => ({
+          place_images: p.place_images_en,
+        })),
+        address: log.address_en,
+      }));
+      totalCount = dbTotalCount;
+    } else {
+      const whereCondition = getWhereConditionKo({ keyword, city, sigungu });
+      const searchLogsFindArgs = getSearchLogsFindArgsKo({ skip, safeSize, sort, whereCondition });
+      const [dbSearchData, dbTotalCount] = await Promise.all([
+        prisma.log.findMany(searchLogsFindArgs),
+        prisma.log.count({
+          where: whereCondition,
+        }),
+      ]);
+
+      searchData = dbSearchData;
+      totalCount = dbTotalCount;
     }
-
-    if (city) {
-      searchConditions.push({
-        address: {
-          some: {
-            city: { equals: city },
-          },
-        },
-      });
-    }
-
-    if (sigungu) {
-      searchConditions.push({
-        address: {
-          some: {
-            sigungu: { contains: sigungu, mode: 'insensitive' },
-          },
-        },
-      });
-    }
-
-    const whereCondition =
-      searchConditions.length > 0 ? { AND: searchConditions as Prisma.logWhereInput[] } : {};
-
-    const [searchData, totalCount] = await Promise.all([
-      prisma.log.findMany({
-        skip, // 앞에서 몇 개 건너뛸지
-        take: safeSize, // 가져올 데이터 수
-        where: whereCondition,
-
-        // 정렬 기준 설정: 인기순이면 북마크 개수 기준(연결된 테이블의 개수를 기준으로 정렬), 기본은 최신순
-        orderBy: sort === 'popular' ? { log_bookmark: { _count: 'desc' } } : { created_at: 'desc' },
-        select: {
-          log_id: true,
-          title: true,
-          place: {
-            take: 1,
-            select: {
-              place_images: {
-                take: 1,
-                select: {
-                  image_path: true,
-                },
-              },
-            },
-          },
-          users: {
-            select: {
-              user_id: true,
-              nickname: true,
-            },
-          },
-          address: {
-            select: {
-              country: true,
-              city: true,
-              sigungu: true,
-            },
-          },
-        },
-      }),
-      prisma.log.count({
-        where: whereCondition,
-      }),
-    ]);
 
     if (!searchData || searchData.length === 0) {
       return {

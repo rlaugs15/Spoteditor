@@ -13,7 +13,7 @@ interface BookmarkPlace extends IBookmarkPlace {
   image: PlaceImage;
 }
 
-type Place = {
+export type Place = {
   place_id: string;
   log_id: string;
   name: string;
@@ -23,7 +23,7 @@ type Place = {
     nickname: string;
   };
   address: {
-    country: string
+    country: string;
     city: string;
     sigungu: string;
   };
