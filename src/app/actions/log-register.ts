@@ -8,7 +8,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { revalidateTag } from 'next/cache';
 import { globalTags } from './tags';
 
-export type ILocale = 'ko' | 'en';
+export type ILocale = string;
 
 /* 로그 등록 */
 export async function createLog(values: LogCreatePayload) {

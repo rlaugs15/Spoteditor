@@ -1,5 +1,3 @@
-'use server';
-
 import { Sort } from '@/types/api/common';
 import { Prisma } from '@prisma/client';
 

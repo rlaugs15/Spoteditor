@@ -4,6 +4,7 @@ import { ERROR_CODES } from '@/constants/errorCode';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { CACHE_REVALIDATE_TIME, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/fetchConfig';
 import { createClient } from '@/lib/supabase/server';
+import { setLocaleTable } from '@/lib/utils';
 import { ApiResponse, LogWithUserAndAddress } from '@/types/api/common';
 import { DetailLog, logBookmarkListParams, LogsParams, LogsResponse } from '@/types/api/log';
 import { SearchParams, SearchResponse } from '@/types/api/search';
@@ -11,6 +12,7 @@ import { getLocale } from 'next-intl/server';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import prisma from 'prisma/prisma';
 import { logKeys, searchKeys } from './keys';
+import { ILocale } from './log-register';
 import { deleteNestedFolderFiles } from './storage';
 import { cacheTags, globalTags } from './tags';
 import { getUser } from './user';
@@ -89,8 +91,9 @@ export async function revalidateLog(logId: string) {
 // 로그 삭제
 // ===================================================================
 
-export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
+export async function deleteLog(logId: string, locale: ILocale): Promise<ApiResponse<null>> {
   const me = await getUser();
+  const table = setLocaleTable('log', locale);
   if (!me) {
     return {
       success: false,
@@ -106,7 +109,7 @@ export async function deleteLog(logId: string): Promise<ApiResponse<null>> {
     if (!user) throw new Error('유저 정보 없음');
 
     // 로그 삭제
-    const { error: logDeleteError } = await supabase.from('log').delete().eq('log_id', logId);
+    const { error: logDeleteError } = await supabase.from(table).delete().eq('log_id', logId);
     if (logDeleteError) {
       console.error('로그 삭제 실패', logDeleteError);
       throw new Error('로그 삭제 실패');
