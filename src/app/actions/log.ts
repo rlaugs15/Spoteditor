@@ -32,8 +32,7 @@ import {
 // 단일 로그
 // ===================================================================
 
-export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
-  const locale = await getLocale();
+export async function fetchLog(logId: string, locale: string): Promise<ApiResponse<DetailLog>> {
   const include = getLogInclude(locale);
 
   try {
@@ -76,8 +75,9 @@ export async function fetchLog(logId: string): Promise<ApiResponse<DetailLog>> {
 
 /* 로그 상세 조회 */
 export async function getLog(logId: string) {
-  return unstable_cache(() => fetchLog(logId), [...cacheTags.logDetail(logId)], {
-    tags: [cacheTags.logDetail(logId), globalTags.logAll], // 상위 그룹 태그 추가
+  const locale = await getLocale();
+  return unstable_cache(() => fetchLog(logId, locale), [...cacheTags.logDetail(logId, locale)], {
+    tags: [cacheTags.logDetail(logId, locale), globalTags.logAll], // 상위 그룹 태그 추가
     revalidate: CACHE_REVALIDATE_TIME,
   })();
 }
@@ -151,9 +151,9 @@ export async function fetchLogs({
   pageSize = DEFAULT_PAGE_SIZE,
   sort = 'latest',
   userId,
+  locale,
 }: LogsParams): Promise<LogsResponse> {
   try {
-    const locale = await getLocale();
     const isEn = locale === 'en';
 
     const safePage = Math.max(1, currentPage);
@@ -190,7 +190,7 @@ export async function fetchLogs({
 
       const [dbLogs, dbTotalCount] = await Promise.all([
         prisma.log.findMany(logFindArgs),
-        prisma.log_en.count({ where }),
+        prisma.log.count({ where }),
       ]);
 
       logs = dbLogs;
@@ -221,11 +221,18 @@ export async function fetchLogs({
 }
 
 export async function getLogs(params: LogsParams) {
-  const queryKey = params.userId ? logKeys.listByUser(params) : logKeys.list(params);
+  const locale = await getLocale();
+  const localeParams = { ...params, locale };
 
-  const tagKey = params.userId ? cacheTags.logListByUser(params) : cacheTags.logList(params);
+  const queryKey = localeParams.userId
+    ? logKeys.listByUser(localeParams)
+    : logKeys.list(localeParams);
 
-  return unstable_cache(() => fetchLogs(params), [...queryKey].filter(Boolean), {
+  const tagKey = localeParams.userId
+    ? cacheTags.logListByUser(localeParams)
+    : cacheTags.logList(localeParams);
+
+  return unstable_cache(() => fetchLogs(localeParams), [...queryKey].filter(Boolean), {
     tags: [tagKey, globalTags.logAll], // 상위 그룹 태그 추가
     revalidate: CACHE_REVALIDATE_TIME,
   })();
@@ -238,9 +245,9 @@ export async function fetchBookmarkedLogs({
   userId,
   currentPage = 1,
   pageSize = DEFAULT_PAGE_SIZE,
+  locale,
 }: logBookmarkListParams): Promise<LogsResponse> {
   try {
-    const locale = await getLocale();
     const isEn = locale === 'en';
 
     const safePage = Math.max(1, currentPage);
@@ -338,12 +345,14 @@ export async function fetchBookmarkedLogs({
 }
 
 export async function getBookmarkedLogs(params: logBookmarkListParams) {
+  const locale = await getLocale();
+  const localeParams = { ...params, locale };
   return unstable_cache(
-    () => fetchBookmarkedLogs(params),
-    [...logKeys.bookmarkList(params)].filter(Boolean),
+    () => fetchBookmarkedLogs(localeParams),
+    [...logKeys.bookmarkList(localeParams)].filter(Boolean),
     {
       tags: [
-        cacheTags.logBookmarkList(params), // 특정 페이지 북마크 리스트
+        cacheTags.logBookmarkList(localeParams), // 특정 페이지 북마크 리스트
         globalTags.logAll, // 전체 북마크 리스트 무효화용 상위 태그
       ],
       revalidate: CACHE_REVALIDATE_TIME,
@@ -367,9 +376,9 @@ export async function fetchSearchLogs({
   currentPage = 1,
   pageSize = DEFAULT_PAGE_SIZE,
   sort = 'latest',
+  locale,
 }: SearchParams): Promise<SearchResponse> {
   try {
-    const locale = await getLocale();
     const isEn = locale === 'en';
 
     const safePage = Math.max(1, currentPage);
@@ -445,12 +454,14 @@ export async function fetchSearchLogs({
 }
 
 export async function getSearchLogs(params: SearchParams) {
+  const locale = await getLocale();
+  const localeParams = { ...params, locale };
   return unstable_cache(
-    () => fetchSearchLogs(params),
-    [...searchKeys.list(params)].filter(Boolean),
+    () => fetchSearchLogs(localeParams),
+    [...searchKeys.list(localeParams)].filter(Boolean),
     {
       tags: [
-        cacheTags.searchList(params), // 조건별로 구분되는 태그
+        cacheTags.searchList(localeParams), // 조건별로 구분되는 태그
         globalTags.searchAll, // 전체 무효화용 상위 태그
       ],
       revalidate: CACHE_REVALIDATE_TIME,

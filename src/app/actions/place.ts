@@ -31,9 +31,9 @@ export async function fetchPlaces({
   currentPage = 1,
   pageSize = DEFAULT_PAGE_SIZE,
   sort = 'latest',
+  locale,
 }: PlacesParams): Promise<PlacesReseponse> {
   try {
-    const locale = await getLocale();
     const isEn = locale === 'en';
 
     const safePage = Math.max(1, currentPage);
@@ -120,11 +120,14 @@ export async function fetchPlaces({
 }
 
 export async function getPlaces(params: PlacesParams) {
-  const queryKey = placeKeys.list(params);
+  const locale = await getLocale();
+  const localeParams = { ...params, locale };
 
-  const tagKey = cacheTags.placeList(params);
+  const queryKey = placeKeys.list(localeParams);
 
-  return unstable_cache(() => fetchPlaces(params), [...queryKey].filter(Boolean), {
+  const tagKey = cacheTags.placeList(localeParams);
+
+  return unstable_cache(() => fetchPlaces(localeParams), [...queryKey].filter(Boolean), {
     tags: [tagKey, globalTags.placeAll], // 상위 그룹 태그 추가
     revalidate: CACHE_REVALIDATE_TIME,
   })();
@@ -137,9 +140,9 @@ export async function fetchBookmarkedPlaces({
   userId,
   currentPage = 1,
   pageSize = 12,
+  locale,
 }: PlaceBookmarkListParmas): Promise<PlacesBookmarkReseponse> {
   try {
-    const locale = await getLocale();
     const isEn = locale === 'en';
 
     const safePage = Math.max(1, currentPage);
@@ -236,13 +239,20 @@ export async function fetchBookmarkedPlaces({
 }
 
 export async function getBookmarkedPlaces(params: PlaceBookmarkListParmas) {
-  return unstable_cache(() => fetchBookmarkedPlaces(params), [...placeKeys.bookmarkList(params)], {
-    tags: [
-      cacheTags.placeBookmarkList(params), // 개별 사용자별 태그
-      globalTags.placeAll, // 전체 북마크 무효화용 태그
-    ],
-    revalidate: 300,
-  })();
+  const locale = await getLocale();
+  const localeParams = { ...params, locale };
+
+  return unstable_cache(
+    () => fetchBookmarkedPlaces(localeParams),
+    [...placeKeys.bookmarkList(localeParams)],
+    {
+      tags: [
+        cacheTags.placeBookmarkList(localeParams), // 개별 사용자별 태그
+        globalTags.placeAll, // 전체 북마크 무효화용 태그
+      ],
+      revalidate: 300,
+    }
+  )();
 }
 
 /* 북마크 시 서버캐시 무효화 */
