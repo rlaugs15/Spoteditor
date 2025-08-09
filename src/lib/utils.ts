@@ -20,6 +20,10 @@ export function setLocaleTable(base: string, locale: ILocale) {
   return locale === 'en' ? `${base}_en` : base;
 }
 
+export function getSchema(locale: ILocale) {
+  return locale === 'en' ? 'en' : 'public';
+}
+
 /* URLSearchParams로 변환해 API 요청용 쿼리스트링(query string) 으로 만들어주는 유틸 함수 */
 export function toQueryString(params: Record<string, any>): string {
   const query = new URLSearchParams();

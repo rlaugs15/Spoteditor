@@ -1,6 +1,7 @@
 import { logKeys, placeKeys, searchKeys } from '@/app/actions/keys';
 import { createLog, ILocale } from '@/app/actions/log-register';
 import { HOME } from '@/constants/pathname';
+import useUser from '@/hooks/queries/user/useUser';
 import { useRouter } from '@/i18n/navigation';
 import { trackLogCreateEvent } from '@/lib/analytics';
 import { useLogCreationStore } from '@/stores/logCreationStore';
@@ -13,6 +14,7 @@ import { toast } from 'sonner';
 // 로그 등록 위해 서버로 보낼 데이터 (db 갱신용)
 export type LogCreatePayload = {
   logId: string;
+  userId: string;
   logTitle: LogFormValues['logTitle'];
   tags: LogFormValues['tags'];
   address: LogFormValues['address'];
@@ -29,6 +31,8 @@ const useLogCreateMutation = () => {
   const clearTag = useLogCreationStore((state) => state.clearTag);
   const t = useTranslations('Toast.logCreate');
   const setSubmitted = useLogCreationStore((state) => state.setSubmitted);
+  //일단 유저 아이디 추가
+  const me = useUser();
 
   return useMutation({
     mutationFn: async (values: LogFormValues) => {
@@ -43,6 +47,7 @@ const useLogCreateMutation = () => {
       // 2. 이미지 업로드 후 페이로드 생성
       const logCreatePayload: LogCreatePayload = {
         logId,
+        userId: String(me.data?.user_id),
         logTitle: values.logTitle,
         tags: values.tags,
         address: values.address,

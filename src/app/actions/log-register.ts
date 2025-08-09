@@ -2,7 +2,7 @@
 
 import { LogCreatePayload } from '@/hooks/mutations/log/useLogCreateMutation';
 import { createClient } from '@/lib/supabase/server';
-import { setLocaleTable } from '@/lib/utils';
+import { getSchema, setLocaleTable } from '@/lib/utils';
 import { LogFormValues, NewAddress, NewLog, NewPlace, NewPlaceImage } from '@/types/log';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { revalidateTag } from 'next/cache';
@@ -21,7 +21,7 @@ export async function createLog(values: LogCreatePayload) {
     if (!user) throw new Error('유저 없음');
 
     // 로그 데이터 삽입
-    await performDatabaseInserts(supabase, values, values.locale);
+    await performDatabaseInserts(supabase, { ...values, userId: user.id }, values.locale);
 
     // 캐시 무효화
     invalidateCache();
@@ -74,6 +74,7 @@ async function performDatabaseInserts(
   const logData: NewLog = {
     log_id: values.logId,
     title: values.logTitle,
+    user_id: values.userId,
   };
   await insertLogData(supabase, logData, locale);
 
@@ -122,8 +123,12 @@ async function performPlaceInserts(
 
 // 로그 데이터 삽입
 async function insertLogData(supabase: SupabaseClient, logData: NewLog, locale: ILocale) {
+  const isEn = locale === 'en';
+  const schema = isEn ? 'en' : 'public';
+
   const table = setLocaleTable('log', locale);
-  const { error } = await supabase.from(table).insert(logData);
+
+  const { error } = await supabase.schema(schema).from(table).insert(logData);
   if (error) {
     console.error(`로그 테이블(${table}) 삽입 실패:`, error);
     throw new Error('로그 테이블 삽입 실패');
@@ -143,8 +148,9 @@ async function insertTagsData(
       : [{ category, tag, log_id: logId }]
   );
 
+  const schema = getSchema(locale);
   const table = setLocaleTable('log_tag', locale);
-  const { error } = await supabase.from(table).insert(tagsData);
+  const { error } = await supabase.schema(schema).from(table).insert(tagsData);
   if (error) {
     console.error(`태그 테이블(${table}) 삽입 실패:`, error);
     throw new Error('태그 테이블 삽입 실패');
@@ -162,8 +168,10 @@ async function insertAddressData(
     log_id: logId,
     ...address,
   };
+
+  const schema = getSchema(locale);
   const table = setLocaleTable('address', locale);
-  const { error } = await supabase.from(table).insert(addressData);
+  const { error } = await supabase.schema(schema).from(table).insert(addressData);
   if (error) {
     console.error(`주소 테이블(${table}) 삽입 실패:`, error);
     throw new Error('주소 테이블 삽입 실패');
@@ -176,8 +184,9 @@ async function insertPlaceData(
   placeDataList: NewPlace[],
   locale: ILocale
 ) {
+  const schema = getSchema(locale);
   const table = setLocaleTable('place', locale);
-  const { error } = await supabase.from(table).insert(placeDataList);
+  const { error } = await supabase.schema(schema).from(table).insert(placeDataList);
   if (error) {
     console.error('장소 테이블 삽입 실패:', error);
     throw new Error('장소 테이블 삽입 실패');
@@ -190,8 +199,9 @@ async function insertPlaceImageData(
   placeImageDataList: NewPlaceImage[],
   locale: ILocale
 ) {
+  const schema = getSchema(locale);
   const table = setLocaleTable('place_images', locale);
-  const { error } = await supabase.from(table).insert(placeImageDataList);
+  const { error } = await supabase.schema(schema).from(table).insert(placeImageDataList);
   if (error) {
     console.error('장소 이미지 테이블 삽입 실패:', error);
     throw new Error('장소 이미지 테이블 삽입 실패');

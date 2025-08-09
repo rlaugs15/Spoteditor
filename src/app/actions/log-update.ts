@@ -1,6 +1,6 @@
 'use server';
 import { createClient } from '@/lib/supabase/server';
-import { setLocaleTable } from '@/lib/utils';
+import { getSchema, setLocaleTable } from '@/lib/utils';
 import { LogEditFormValues } from '@/types/log';
 import { parseFormData } from '@/utils/formatLog';
 import { SupabaseClient } from '@supabase/supabase-js';
@@ -48,8 +48,10 @@ async function performDatabaseUpdates(
 ) {
   // 1. 로그 데이터 업데이트
   if (parseResult.logTitle) {
+    const schema = getSchema(locale);
     const table = setLocaleTable('log', locale);
     const { error: logError } = await supabase
+      .schema(schema)
       .from(table)
       .update({ title: parseResult.logTitle })
       .eq('log_id', logId);
@@ -102,10 +104,12 @@ async function updateTags(supabase: SupabaseClient, logId: string, tags: any, lo
     const categoryTags = tags[category];
     if (!categoryTags?.length) return;
 
+    const schema = getSchema(locale);
     const table = setLocaleTable('log_tag', locale);
 
     // 기존 태그 삭제
     const { error: deleteError } = await supabase
+      .schema(schema)
       .from(table)
       .delete()
       .eq('log_id', logId)
@@ -120,7 +124,7 @@ async function updateTags(supabase: SupabaseClient, logId: string, tags: any, lo
       category,
     }));
 
-    const { error: insertError } = await supabase.from(table).insert(newTags);
+    const { error: insertError } = await supabase.schema(schema).from(table).insert(newTags);
 
     if (insertError) throw new Error(`${category} 태그 삽입 실패`);
   };
@@ -130,7 +134,9 @@ async function updateTags(supabase: SupabaseClient, logId: string, tags: any, lo
 
 // 장소 업데이트 함수
 async function updatePlaces(supabase: SupabaseClient, places: any[], locale: ILocale) {
+  const schema = getSchema(locale);
   const table = setLocaleTable('place', locale);
+
   const updatePromises = places.map(async (place) => {
     const placeData: Record<string, any> = {};
     if (place.placeName) placeData.name = place.placeName;
@@ -141,6 +147,7 @@ async function updatePlaces(supabase: SupabaseClient, places: any[], locale: ILo
     placeData.updated_at = new Date();
 
     const { error: placeError } = await supabase
+      .schema(schema)
       .from(table)
       .update(placeData)
       .eq('place_id', place.id);
@@ -158,10 +165,12 @@ async function updatePlaces(supabase: SupabaseClient, places: any[], locale: ILo
 
 // 이미지 순서 업데이트 함수
 async function updateImageOrders(supabase: SupabaseClient, placeImages: any[], locale: ILocale) {
+  const schema = getSchema(locale);
   const table = setLocaleTable('place_images', locale);
 
   const updatePromises = placeImages.map(async (image: any, index: number) => {
     const { error } = await supabase
+      .schema(schema)
       .from(table)
       .update({ order: index + 1 })
       .eq('place_image_id', image.place_image_id);
@@ -174,10 +183,11 @@ async function updateImageOrders(supabase: SupabaseClient, placeImages: any[], l
 
 // DB에서 장소 삭제
 async function deletePlacesFromDB(supabase: SupabaseClient, placeIds: string[], locale: ILocale) {
+  const schema = getSchema(locale);
   const table = setLocaleTable('place', locale);
 
   const deletePromises = placeIds.map(async (placeId) => {
-    const { error } = await supabase.from(table).delete().eq('place_id', placeId);
+    const { error } = await supabase.schema(schema).from(table).delete().eq('place_id', placeId);
 
     if (error) throw new Error(`장소 ${placeId} 삭제 실패`);
   });
@@ -204,8 +214,13 @@ async function deletePlaceImagesFromDB(
   imageIds: number[],
   locale: ILocale
 ) {
+  const schema = getSchema(locale);
   const table = setLocaleTable('place_images', locale);
-  const { error } = await supabase.from(table).delete().in('place_image_id', imageIds);
+  const { error } = await supabase
+    .schema(schema)
+    .from(table)
+    .delete()
+    .in('place_image_id', imageIds);
   if (error) throw new Error('place_images 삭제 실패');
 }
 
@@ -215,9 +230,11 @@ async function deletePlaceImagesFromStorage(
   imageIds: number[],
   locale: ILocale
 ) {
+  const schema = getSchema(locale);
   const table = setLocaleTable('place_images', locale);
   // 삭제할 이미지 정보 조회
   const { data: deletedImages, error: fetchError } = await supabase
+    .schema(schema)
     .from(table)
     .select('image_path')
     .in('place_image_id', imageIds);
