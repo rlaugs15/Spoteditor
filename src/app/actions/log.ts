@@ -35,6 +35,10 @@ import {
   getWhereConditionKo,
 } from './utils/logService';
 
+export async function revalidateLogs() {
+  revalidateTag(globalTags.logAll);
+}
+
 // ===================================================================
 // 단일 로그
 // ===================================================================

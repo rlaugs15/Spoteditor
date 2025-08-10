@@ -1,13 +1,13 @@
 import { logKeys, placeKeys } from '@/app/actions/keys';
-import { globalTags } from '@/app/actions/tags';
+import { revalidateLogs } from '@/app/actions/log';
+import { revalidatePlaces } from '@/app/actions/place';
 import ErrorTemplate from '@/components/common/ErrorTemplate';
 import { getTranslations } from 'next-intl/server';
-import { revalidateTag } from 'next/cache';
 
 export default async function NotFound() {
-  revalidateTag(globalTags.logAll);
-  revalidateTag(globalTags.placeAll);
   const t = await getTranslations('NotFoundPage');
+  await revalidateLogs();
+  await revalidatePlaces();
   return (
     <ErrorTemplate message={t('logMessage')} invalidateKeys={[logKeys.all[0], placeKeys.all[0]]} />
   );

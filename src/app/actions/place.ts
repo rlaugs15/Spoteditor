@@ -25,6 +25,10 @@ import {
   mapBookmarkPlaceKo,
 } from './utils/placeService';
 
+export async function revalidatePlaces() {
+  revalidateTag(globalTags.placeAll);
+}
+
 // ===================================================================
 // 장소 리스트
 // ===================================================================

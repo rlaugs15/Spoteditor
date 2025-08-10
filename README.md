@@ -1,4 +1,4 @@
-# [Placesurf](https://www.placesurf.xyz/)
+# [Placesurf](https://www.Placesurf.xyz/)
 
 **계획된 일정, 완벽한 하루**
 
