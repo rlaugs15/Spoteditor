@@ -1,4 +1,5 @@
 import { Sort } from '@/types/api/common';
+import { BookmarkPlace } from '@/types/api/place';
 import { Prisma } from '@prisma/client';
 
 // ===================================================================
@@ -9,6 +10,22 @@ interface getPlacesFindArgs {
   skip: number;
   safeSize: number;
   sort: Sort;
+}
+export function mapmarkPlacesEn(place: any) {
+  const log = place.log_en;
+
+  return {
+    place_id: place.place_id,
+    log_id: place.log_id,
+    name: place.name,
+    place_images: place.place_images_en,
+    log: log
+      ? {
+          users: log.users,
+          address: log.address_en,
+        }
+      : null,
+  };
 }
 
 export function getPlacesFindArgsKo({ skip, safeSize, sort }: getPlacesFindArgs) {
@@ -107,6 +124,55 @@ interface GetBookmarkedPlacesFindArgsProps {
   userId: string;
   skip: number;
   pageSize: number;
+}
+
+export function mapBookmarkPlaceKo(bookmark: any): BookmarkPlace {
+  const place = bookmark.place_en;
+  const log = place.log_en;
+  const image = place?.place_images_en[0];
+
+  return {
+    place_id: place.place_id,
+    log_id: log?.log_id ?? null,
+    user: {
+      user_id: log?.users.user_id ?? '',
+      nickname: log?.users.nickname ?? null,
+    },
+    name: place.name,
+    address: place.address,
+    description: place.description,
+    category: place.category,
+    image: {
+      image_path: image?.image_path ?? null,
+      order: image?.order ?? null,
+      place_id: image?.place_id ?? null,
+      place_image_id: image?.place_image_id ? Number(image.place_image_id) : 0,
+    },
+  };
+}
+export function mapBookmarkPlaceEn(bookmark: any): BookmarkPlace {
+  const place = bookmark.place_en;
+  const log = place.log_en;
+  const image = place?.place_images_en[0];
+
+  return {
+    place_id: place.place_id,
+    log_id: log?.log_id ?? null,
+    user: {
+      user_id: log?.users.user_id ?? '',
+      nickname: log?.users.nickname ?? null,
+    },
+    name: place.name,
+    address: place.address,
+    description: place.description,
+    category: place.category,
+    image: {
+      image_path: image?.image_path ?? null,
+      order: image?.order ?? null,
+      place_id: image?.place_id ?? null,
+      place_image_id: image?.place_image_id ? Number(image.place_image_id) : 0,
+    },
+  };
 }
 
 export function getBookmarkedPlacesFindArgsKo({

@@ -21,6 +21,8 @@ import {
   getBookmarkedPlacesFindArgsKo,
   getPlacesFindArgsEn,
   getPlacesFindArgsKo,
+  mapBookmarkPlaceEn,
+  mapBookmarkPlaceKo,
 } from './utils/placeService';
 
 // ===================================================================
@@ -52,14 +54,14 @@ export async function fetchPlaces({
         prisma.place_en.count(),
       ]);
 
-      places = dbPlaces.map((item) => {
-        const log = item.log_en;
+      places = dbPlaces.map((place) => {
+        const log = place.log_en;
 
         return {
-          place_id: item.place_id,
-          log_id: item.log_id,
-          name: item.name,
-          place_images: item.place_images_en,
+          place_id: place.place_id,
+          log_id: place.log_id,
+          name: place.name,
+          place_images: place.place_images_en,
           log: log
             ? {
                 users: log.users,
@@ -162,30 +164,7 @@ export async function fetchBookmarkedPlaces({
           where: { user_id: userId },
         }),
       ]);
-      bookmarkedPlaces = dbBookmarkedPlaces.map((bookmark) => {
-        const place = bookmark.place_en;
-        const log = place.log_en;
-        const image = place?.place_images_en[0];
-
-        return {
-          place_id: place.place_id,
-          log_id: log?.log_id ?? null,
-          user: {
-            user_id: log?.users.user_id ?? '',
-            nickname: log?.users.nickname ?? null,
-          },
-          name: place.name,
-          address: place.address,
-          description: place.description,
-          category: place.category,
-          image: {
-            image_path: image?.image_path ?? null,
-            order: image?.order ?? null,
-            place_id: image?.place_id ?? null,
-            place_image_id: image?.place_image_id ? Number(image.place_image_id) : 0,
-          },
-        };
-      });
+      bookmarkedPlaces = dbBookmarkedPlaces.map(mapBookmarkPlaceEn);
       totalCount = dbTotalCount;
     } else {
       const bookmarkedPlacesFindArgs = getBookmarkedPlacesFindArgsKo({ userId, skip, pageSize });
@@ -196,30 +175,7 @@ export async function fetchBookmarkedPlaces({
         }),
       ]);
 
-      bookmarkedPlaces = dbBookmarkedPlaces.map((bookmark) => {
-        const place = bookmark.place;
-        const log = place.log;
-        const image = place?.place_images[0];
-
-        return {
-          place_id: place.place_id,
-          log_id: log?.log_id ?? null,
-          user: {
-            user_id: log?.users.user_id ?? '',
-            nickname: log?.users.nickname ?? null,
-          },
-          name: place.name,
-          address: place.address,
-          description: place.description,
-          category: place.category,
-          image: {
-            image_path: image?.image_path ?? null,
-            order: image?.order ?? null,
-            place_id: image?.place_id ?? null,
-            place_image_id: image?.place_image_id ? Number(image.place_image_id) : 0,
-          },
-        };
-      });
+      bookmarkedPlaces = dbBookmarkedPlaces.map(mapBookmarkPlaceKo);
       totalCount = dbTotalCount;
     }
 
