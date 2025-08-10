@@ -16,7 +16,7 @@ async function fetchLogBookmarkCheck(logId: string, locale: string): Promise<Boo
 export default function useLogBookmarkCheck({ logId, userId }: UseLogBookmarkCheckProps) {
   const locale = useLocale();
   return useQuery<BookmarkResponse>({
-    queryKey: logKeys.bookmarkStatus(logId, String(userId)),
+    queryKey: logKeys.bookmarkStatus(logId, String(userId), locale),
     queryFn: () => fetchLogBookmarkCheck(logId, locale),
     enabled: !!userId,
   });

@@ -56,9 +56,13 @@ export async function fetchLog(logId: string, locale: string): Promise<ApiRespon
         log_id: dbLog?.log_id,
         log_tag: (dbLog?.log_tag_en ?? []).map((tag) => tag),
         place: (dbLog?.place_en ?? []).map((place) => ({
+          place_id: place.place_id,
           address: place.address,
           category: place.category,
+          name: place.name,
+          order: place.order,
           created_at: place.created_at,
+          updated_at: place.updated_at,
           description: place.description,
           log_id: place.log_id,
           place_images: place.place_images_en.map((img) => ({
@@ -67,6 +71,9 @@ export async function fetchLog(logId: string, locale: string): Promise<ApiRespon
             order: img.order,
             image_path: img.image_path,
           })),
+          _count: {
+            place_bookmark: place._count.place_bookmark_en,
+          },
         })) as unknown as PlaceWithImages[],
         title: dbLog?.title,
         user_id: dbLog?.user_id,
@@ -86,7 +93,6 @@ export async function fetchLog(logId: string, locale: string): Promise<ApiRespon
       });
       log = dbLog as unknown as DetailLog;
     }
-    console.log('서버 로그', log);
 
     if (!log) {
       return {

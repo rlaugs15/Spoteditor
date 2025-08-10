@@ -26,15 +26,15 @@ export default function useLogBookmarkMutation(onToggle?: (newStatus: boolean) =
     mutationFn: (params: LogBookmarkCheckParams) => fetchLogBookmark({ ...params, locale }),
     onMutate: async ({ logId, isBookmark }: LogBookmarkCheckParams) => {
       await queryClient.cancelQueries({
-        queryKey: logKeys.bookmarkStatus(logId, String(user?.user_id)),
+        queryKey: logKeys.bookmarkStatus(logId, String(user?.user_id), locale),
       });
 
       const previousbookmarkStatus = queryClient.getQueryData(
-        logKeys.bookmarkStatus(logId, String(user?.user_id))
+        logKeys.bookmarkStatus(logId, String(user?.user_id), locale)
       );
 
       queryClient.setQueryData(
-        logKeys.bookmarkStatus(logId, String(user?.user_id)),
+        logKeys.bookmarkStatus(logId, String(user?.user_id), locale),
         (old: BookmarkResponse) => ({
           ...old,
           isBookmark: !isBookmark,
@@ -49,14 +49,14 @@ export default function useLogBookmarkMutation(onToggle?: (newStatus: boolean) =
     onError: (_error, variables, context) => {
       if (context?.previousbookmarkStatus) {
         queryClient.setQueryData(
-          logKeys.bookmarkStatus(variables.logId, String(user?.user_id)),
+          logKeys.bookmarkStatus(variables.logId, String(user?.user_id), locale),
           context.previousbookmarkStatus
         );
       }
     },
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: logKeys.bookmarkStatus(variables.logId, String(user?.user_id)),
+        queryKey: logKeys.bookmarkStatus(variables.logId, String(user?.user_id), locale),
       });
     },
   });

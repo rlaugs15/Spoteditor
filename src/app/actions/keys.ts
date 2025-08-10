@@ -92,8 +92,8 @@ export const logKeys = {
     ),
 
   // 특정 로그 북마크 상태
-  bookmarkStatus: (logId: string, userId: string) =>
-    safeKey(...logKeys.all, 'bookmark-status', logId, `user-${userId}`),
+  bookmarkStatus: (logId: string, userId: string, locale: string) =>
+    safeKey(...logKeys.all, 'bookmark-status', `locale-${locale}`, logId, `user-${userId}`),
 };
 
 // ============================================================================
