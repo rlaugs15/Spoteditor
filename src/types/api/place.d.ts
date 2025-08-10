@@ -44,6 +44,7 @@ export interface PlaceBookmarkListParmas extends PaginationParams {
 export interface PlaceBookmarkParams {
   placeId: string;
   isBookmark: boolean;
+  locale?: string;
 }
 
 //사진 메타에이터 장소 타입

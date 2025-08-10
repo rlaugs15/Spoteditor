@@ -137,6 +137,7 @@ export async function getPlaces(params: PlacesParams) {
 // ===================================================================
 // 북마크 장소 리스트
 // ===================================================================
+
 export async function fetchBookmarkedPlaces({
   userId,
   currentPage = 1,
@@ -150,7 +151,7 @@ export async function fetchBookmarkedPlaces({
     const safeSize = Math.min(Math.max(1, pageSize), 30);
     const skip = (safePage - 1) * safeSize;
 
-    let bookmarkedPlaces: any[] = [];
+    let bookmarkedPlaces: BookmarkPlace[] = [];
     let totalCount = 0;
 
     if (isEn) {
@@ -161,23 +162,28 @@ export async function fetchBookmarkedPlaces({
           where: { user_id: userId },
         }),
       ]);
-
-      bookmarkedPlaces = bookmarkedPlaces = dbBookmarkedPlaces.map((item) => {
-        const place = item.place_en;
+      bookmarkedPlaces = dbBookmarkedPlaces.map((bookmark) => {
+        const place = bookmark.place_en;
+        const log = place.log_en;
+        const image = place?.place_images_en[0];
 
         return {
           place_id: place.place_id,
+          log_id: log?.log_id ?? null,
+          user: {
+            user_id: log?.users.user_id ?? '',
+            nickname: log?.users.nickname ?? null,
+          },
           name: place.name,
-          description: place.description,
           address: place.address,
+          description: place.description,
           category: place.category,
-          place_images: place.place_images_en,
-          log: place.log_en
-            ? {
-                log_id: place.log_en.log_id,
-                users: place.log_en.users,
-              }
-            : null,
+          image: {
+            image_path: image?.image_path ?? null,
+            order: image?.order ?? null,
+            place_id: image?.place_id ?? null,
+            place_image_id: image?.place_image_id ? Number(image.place_image_id) : 0,
+          },
         };
       });
       totalCount = dbTotalCount;
@@ -190,35 +196,36 @@ export async function fetchBookmarkedPlaces({
         }),
       ]);
 
-      bookmarkedPlaces = dbBookmarkedPlaces;
+      bookmarkedPlaces = dbBookmarkedPlaces.map((bookmark) => {
+        const place = bookmark.place;
+        const log = place.log;
+        const image = place?.place_images[0];
+
+        return {
+          place_id: place.place_id,
+          log_id: log?.log_id ?? null,
+          user: {
+            user_id: log?.users.user_id ?? '',
+            nickname: log?.users.nickname ?? null,
+          },
+          name: place.name,
+          address: place.address,
+          description: place.description,
+          category: place.category,
+          image: {
+            image_path: image?.image_path ?? null,
+            order: image?.order ?? null,
+            place_id: image?.place_id ?? null,
+            place_image_id: image?.place_image_id ? Number(image.place_image_id) : 0,
+          },
+        };
+      });
       totalCount = dbTotalCount;
     }
 
-    const filteredPlaces: BookmarkPlace[] = bookmarkedPlaces.map((boolmark) => {
-      const place = boolmark.place;
-      const image = place?.place_images?.[0];
-      return {
-        place_id: place?.place_id?.toString() ?? '',
-        log_id: place?.log?.log_id?.toString() as string,
-        user: {
-          user_id: place?.log?.users?.user_id ?? '',
-          nickname: place?.log?.users?.nickname ?? null,
-        },
-        name: place?.name ?? '',
-        description: place?.description ?? '',
-        address: place?.address ?? '',
-        category: place?.category ?? '',
-        image: {
-          image_path: image?.image_path ?? null,
-          order: image?.order ?? null,
-          place_id: image?.place_id?.toString() ?? null,
-          place_image_id: image?.place_image_id ? Number(image.place_image_id) : 0,
-        },
-      };
-    });
     return {
       success: true,
-      data: filteredPlaces,
+      data: bookmarkedPlaces,
       meta: {
         pagination: {
           currentPage: safePage,

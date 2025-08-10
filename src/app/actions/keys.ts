@@ -133,8 +133,8 @@ export const placeKeys = {
     ),
 
   // 특정 장소 북마크 상태
-  bookmarkStatus: (placeId: string, userId: string) =>
-    safeKey(...placeKeys.all, 'bookmark-status', placeId, `user-${userId}`),
+  bookmarkStatus: (placeId: string, userId: string, locale: string) =>
+    safeKey(...placeKeys.all, 'bookmark-status', `locale-${locale}`, placeId, `user-${userId}`),
 };
 
 // ============================================================================
