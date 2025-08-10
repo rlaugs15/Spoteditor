@@ -6,7 +6,13 @@ import { CACHE_REVALIDATE_TIME, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/const
 import { createClient } from '@/lib/supabase/server';
 import { setLocaleTable } from '@/lib/utils';
 import { ApiResponse, LogWithUserAndAddress } from '@/types/api/common';
-import { DetailLog, logBookmarkListParams, LogsParams, LogsResponse } from '@/types/api/log';
+import {
+  DetailLog,
+  logBookmarkListParams,
+  LogsParams,
+  LogsResponse,
+  PlaceWithImages,
+} from '@/types/api/log';
 import { SearchParams, SearchResponse } from '@/types/api/search';
 import { getLocale } from 'next-intl/server';
 import { revalidateTag, unstable_cache } from 'next/cache';
@@ -21,7 +27,8 @@ import {
   getBookmarkedLogsFindArgsKo,
   getLogFindArgsEn,
   getLogFindArgsKo,
-  getLogInclude,
+  getLogsFindArgsEn,
+  getLogsFindArgsKo,
   getSearchLogsFindArgsEn,
   getSearchLogsFindArgsKo,
   getWhereConditionEn,
@@ -33,23 +40,53 @@ import {
 // ===================================================================
 
 export async function fetchLog(logId: string, locale: string): Promise<ApiResponse<DetailLog>> {
-  const include = getLogInclude(locale);
-
   try {
-    let log;
+    let log: DetailLog;
 
     //영문, 국문 분기
     if (locale === 'en') {
-      log = await prisma.log_en.findUnique({
+      const logFindArgs = getLogFindArgsEn();
+      const dbLog = await prisma.log_en.findUnique({
         where: { log_id: logId },
-        include,
+        include: logFindArgs,
       });
+      log = {
+        address: (dbLog?.address_en ?? []).map((address) => address),
+        created_at: dbLog?.created_at,
+        log_id: dbLog?.log_id,
+        log_tag: (dbLog?.log_tag_en ?? []).map((tag) => tag),
+        place: (dbLog?.place_en ?? []).map((place) => ({
+          address: place.address,
+          category: place.category,
+          created_at: place.created_at,
+          description: place.description,
+          log_id: place.log_id,
+          place_images: place.place_images_en.map((img) => ({
+            place_id: img.place_id,
+            place_image_id: img.place_image_id,
+            order: img.order,
+            image_path: img.image_path,
+          })),
+        })) as unknown as PlaceWithImages[],
+        title: dbLog?.title,
+        user_id: dbLog?.user_id,
+        users: {
+          image_url: dbLog?.users.image_url,
+          nickname: dbLog?.users.nickname,
+        },
+        _count: {
+          log_bookmark: dbLog?._count.log_bookmark_en,
+        },
+      } as unknown as DetailLog;
     } else {
-      log = await prisma.log.findUnique({
+      const logFindArgs = getLogFindArgsKo();
+      const dbLog = await prisma.log.findUnique({
         where: { log_id: logId },
-        include,
+        include: logFindArgs,
       });
+      log = dbLog as unknown as DetailLog;
     }
+    console.log('서버 로그', log);
 
     if (!log) {
       return {
@@ -168,7 +205,7 @@ export async function fetchLogs({
 
     //영문, 국문 분기
     if (isEn) {
-      const logFindArgs = getLogFindArgsEn({ skip, safeSize, sort, where });
+      const logFindArgs = getLogsFindArgsEn({ skip, safeSize, sort, where });
       const [dbLogs, dbTalCount] = await Promise.all([
         prisma.log_en.findMany(logFindArgs),
         // 전체 로그 수 카운트 (페이지 수 계산에 사용)
@@ -186,7 +223,7 @@ export async function fetchLogs({
       }));
       totalCount = dbTalCount;
     } else {
-      const logFindArgs = getLogFindArgsKo({ skip, safeSize, sort, where });
+      const logFindArgs = getLogsFindArgsKo({ skip, safeSize, sort, where });
 
       const [dbLogs, dbTotalCount] = await Promise.all([
         prisma.log.findMany(logFindArgs),

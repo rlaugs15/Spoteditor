@@ -57,6 +57,7 @@ export async function fetchPlaces({
 
         return {
           place_id: item.place_id,
+          log_id: item.log_id,
           name: item.name,
           place_images: item.place_images_en,
           log: log
@@ -81,18 +82,18 @@ export async function fetchPlaces({
     }
 
     const filteredPlaces: Place[] = places.map((place) => ({
-      place_id: place.place_id?.toString() ?? '',
-      log_id: place.log_id?.toString() ?? '',
-      place_images: place.place_images[0].image_path?.toString() ?? '',
-      name: place.name?.toString() ?? '',
+      place_id: place.place_id,
+      log_id: place.log_id,
+      place_images: place.place_images[0].image_path,
+      name: place.name,
       user: {
-        user_id: place.log?.users.user_id?.toString() ?? '',
-        nickname: place.log?.users.nickname?.toString() ?? '',
+        user_id: place.log?.users.user_id,
+        nickname: place.log?.users.nickname,
       },
       address: {
-        country: place.log?.address[0].country?.toString() ?? '',
-        city: place.log?.address[0].city?.toString() ?? '',
-        sigungu: place.log?.address[0].sigungu?.toString() ?? '',
+        country: place.log?.address[0].country,
+        city: place.log?.address[0].city,
+        sigungu: place.log?.address[0].sigungu,
       },
     }));
 

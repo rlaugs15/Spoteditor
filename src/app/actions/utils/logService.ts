@@ -1,8 +1,11 @@
 import { Sort } from '@/types/api/common';
 import { Prisma } from '@prisma/client';
 
-export function getLogInclude(locale: string) {
-  const isEn = locale === 'en';
+// ===================================================================
+// 단일 로그
+// ===================================================================
+
+export function getLogFindArgsKo() {
   return {
     users: {
       select: {
@@ -10,28 +13,28 @@ export function getLogInclude(locale: string) {
         image_url: true,
       },
     },
-    [isEn ? 'place_en' : 'place']: {
+    place: {
       include: {
-        [isEn ? 'place_images_en' : 'place_images']: {
-          orderBy: { order: 'asc' },
+        place_images: {
+          orderBy: { order: Prisma.SortOrder.asc },
         },
         _count: {
           select: {
-            [isEn ? 'place_bookmark_en' : 'place_bookmark']: true,
+            place_bookmark: true,
           },
         },
       },
       orderBy: {
-        order: 'asc',
+        order: Prisma.SortOrder.asc,
       },
     },
-    [isEn ? 'log_tag_en' : 'log_tag']: {
+    log_tag: {
       select: {
         category: true,
         tag: true,
       },
     },
-    [isEn ? 'address_en' : 'address']: {
+    address: {
       select: {
         country: true,
         city: true,
@@ -40,11 +43,59 @@ export function getLogInclude(locale: string) {
     },
     _count: {
       select: {
-        [isEn ? 'log_bookmark_en' : 'log_bookmark']: true,
+        log_bookmark: true,
       },
     },
   };
 }
+
+export function getLogFindArgsEn() {
+  return {
+    users: {
+      select: {
+        nickname: true,
+        image_url: true,
+      },
+    },
+    place_en: {
+      include: {
+        place_images_en: {
+          orderBy: { order: Prisma.SortOrder.asc },
+        },
+        _count: {
+          select: {
+            place_bookmark_en: true,
+          },
+        },
+      },
+      orderBy: {
+        order: Prisma.SortOrder.asc,
+      },
+    },
+    log_tag_en: {
+      select: {
+        category: true,
+        tag: true,
+      },
+    },
+    address_en: {
+      select: {
+        country: true,
+        city: true,
+        sigungu: true,
+      },
+    },
+    _count: {
+      select: {
+        log_bookmark_en: true,
+      },
+    },
+  };
+}
+
+// ===================================================================
+// 로그 리스트
+// ===================================================================
 
 interface GetLogsSelectProps {
   skip: number;
@@ -57,11 +108,7 @@ interface GetLogsSelectProps {
   sort: Sort;
 }
 
-// ===================================================================
-// 로그 리스트
-// ===================================================================
-
-export function getLogFindArgsKo({ skip, safeSize, where, sort }: GetLogsSelectProps) {
+export function getLogsFindArgsKo({ skip, safeSize, where, sort }: GetLogsSelectProps) {
   return {
     skip,
     take: safeSize,
@@ -103,7 +150,7 @@ export function getLogFindArgsKo({ skip, safeSize, where, sort }: GetLogsSelectP
   };
 }
 
-export function getLogFindArgsEn({ skip, safeSize, where, sort }: GetLogsSelectProps) {
+export function getLogsFindArgsEn({ skip, safeSize, where, sort }: GetLogsSelectProps) {
   return {
     skip, // 앞에서 몇 개 건너뛸지
     take: safeSize, // 가져올 데이터 수
