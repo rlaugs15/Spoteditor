@@ -33,7 +33,7 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
         />
         <>
           {logData.place.map((place, idx) => (
-            <LogContent key={place.place_id} place={place} idx={idx + 1} />
+            <LogContent key={place.log_id} place={place} idx={idx + 1} />
           ))}
         </>
       </main>
