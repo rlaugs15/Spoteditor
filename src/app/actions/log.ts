@@ -131,6 +131,9 @@ export async function revalidateLog(logId: string) {
 export async function deleteLog(logId: string, locale: ILocale): Promise<ApiResponse<null>> {
   const me = await getUser();
   const table = setLocaleTable('log', locale);
+  const isEn = locale === 'en';
+  const schema = isEn ? 'en' : 'public';
+
   if (!me) {
     return {
       success: false,
@@ -146,7 +149,11 @@ export async function deleteLog(logId: string, locale: ILocale): Promise<ApiResp
     if (!user) throw new Error('유저 정보 없음');
 
     // 로그 삭제
-    const { error: logDeleteError } = await supabase.from(table).delete().eq('log_id', logId);
+    const { error: logDeleteError } = await supabase
+      .schema(schema)
+      .from(table)
+      .delete()
+      .eq('log_id', logId);
     if (logDeleteError) {
       console.error('로그 삭제 실패', logDeleteError);
       throw new Error('로그 삭제 실패');
