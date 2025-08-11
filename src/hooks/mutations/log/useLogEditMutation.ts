@@ -4,7 +4,7 @@ import { useRouter } from '@/i18n/navigation';
 import { trackLogEditEvent } from '@/lib/analytics';
 import { useLogCreationStore } from '@/stores/logCreationStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 interface LogEditMutationProps {
@@ -18,8 +18,13 @@ const useLogEditMutation = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const clearTag = useLogCreationStore((state) => state.clearTag);
+
+  const locale = useLocale();
+  const normalizedLocale = locale === 'en' ? 'en' : 'ko';
+
   return useMutation({
-    mutationFn: ({ formData, logId }: LogEditMutationProps) => updateLog(formData, logId),
+    mutationFn: ({ formData, logId }: LogEditMutationProps) =>
+      updateLog(formData, logId, normalizedLocale),
     onSuccess: ({ success }, { logId }) => {
       if (success) {
         trackLogEditEvent('complete');
