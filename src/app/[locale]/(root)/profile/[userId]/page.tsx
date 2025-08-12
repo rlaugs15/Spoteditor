@@ -15,7 +15,7 @@ export default async function Page({ params }: ProfilepageProps) {
   const user = isMe ? me : await getPublicUser(userId);
 
   if (!user) {
-    notFound();
+    return notFound();
   }
   return (
     <main className="pt-7.5 web:pt-15 mx-4 web:mx-12.5 mb-35 web:mb-25">

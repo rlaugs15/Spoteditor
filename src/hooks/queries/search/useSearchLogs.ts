@@ -16,7 +16,7 @@ export default function useSearchLogs(params: SearchParams) {
   const localeParams = { ...params, locale };
   return useQuery({
     queryKey: searchKeys.list(localeParams),
-    queryFn: () => fetchuseSearch(params),
+    queryFn: () => fetchuseSearch(localeParams),
     placeholderData: keepPreviousData,
     enabled: (params.keyword ?? '').length > 0, // 검색어가 있을 때만
   });
