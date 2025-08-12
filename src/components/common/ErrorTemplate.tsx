@@ -50,7 +50,6 @@ export default function ErrorTemplate({
         <h5 className="text-center">{message ? message : t('defaultMessage')}</h5>
       </div>
       <Button className="rounded-full mt-5" size={'lg'} onClick={handleClick}>
-        홈으로 이동
         {t('button')}
       </Button>
     </main>
