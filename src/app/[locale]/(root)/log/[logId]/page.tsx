@@ -15,9 +15,10 @@ interface LogDetailPageProps {
 const LogDetailPage = async ({ params }: LogDetailPageProps) => {
   const { logId } = await params;
   const result = await getLog(logId);
-  if (!result.success) {
-    notFound();
+  if (!result.success || !result.data.place[0]) {
+    return notFound();
   }
+
   const { data: logData } = result;
   const user = await getUser();
   const isAuthor = user?.user_id === logData.user_id;
