@@ -415,13 +415,13 @@ interface GetSearchLogsFindArgsKoProps {
   skip: number;
   safeSize: number;
   sort: Sort;
-  whereCondition: Prisma.logWhereInput | {};
+  whereCondition: Prisma.logWhereInput;
 }
 interface GetSearchLogsFindArgsEnProps {
   skip: number;
   safeSize: number;
   sort: Sort;
-  whereCondition: Prisma.log_enWhereInput | {};
+  whereCondition: Prisma.log_enWhereInput;
 }
 
 export function getSearchLogsFindArgsKo({
