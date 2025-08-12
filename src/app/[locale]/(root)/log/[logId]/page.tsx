@@ -16,7 +16,7 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
   const { logId } = await params;
   const result = await getLog(logId);
   if (!result.success) {
-    notFound();
+    return notFound();
   }
   const { data: logData } = result;
   const user = await getUser();
@@ -24,7 +24,7 @@ const LogDetailPage = async ({ params }: LogDetailPageProps) => {
 
   return (
     <div>
-      <LogThumbnail logData={logData} isAuthor={isAuthor} />
+    <LogThumbnail logData={logData} isAuthor={isAuthor} />
       <main className="flex flex-col px-4 web:px-[50px] pb-[200px]">
         <LogAuthorIntro
           userId={logData.user_id}
