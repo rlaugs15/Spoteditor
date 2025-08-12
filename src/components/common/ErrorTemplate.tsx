@@ -51,6 +51,7 @@ export default function ErrorTemplate({
       </div>
       <Button className="rounded-full mt-5" size={'lg'} onClick={handleClick}>
         홈으로 이동
+        {t('button')}
       </Button>
     </main>
   );
