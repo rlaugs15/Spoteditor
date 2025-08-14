@@ -1,3 +1,5 @@
+export const SITE_URL = 'https://placesurf.xyz';
+
 export const HOME = '/';
 
 // register

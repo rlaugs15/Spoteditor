@@ -4,12 +4,64 @@ import LogAuthorIntro from '@/components/features/detail-log/LogAuthorIntro';
 import LogContent from '@/components/features/detail-log/LogContent';
 import LogDetailActions from '@/components/features/detail-log/LogDetailActions';
 import LogThumbnail from '@/components/features/detail-log/LogThumbnail';
+import { SITE_URL } from '@/constants/pathname';
+import { getStoragePublicImage } from '@/utils/getStorageImage';
+import { Metadata, ResolvingMetadata } from 'next';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 export interface LogIdParams {
   logId: string;
 }
 interface LogDetailPageProps {
   params: Promise<LogIdParams>;
+}
+
+export async function generateMetadata(
+  { params }: LogDetailPageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { logId } = await params;
+  const t = await getTranslations('NotFoundPage');
+  const locale = await getLocale();
+  const ogLocale = locale === 'ko' ? 'ko_KR' : 'en_US';
+
+  // 게시물 데이터 가져오기
+  const result = await getLog(logId);
+  if (!result.success || !result.data.place[0]) {
+    return {
+      title: t('title'),
+      description: t('logMessage'),
+    };
+  }
+
+  const log = result.data;
+  const title = log.place[0]?.name || '';
+  const description = log.place[0].description || '';
+  const rawPath = log.place[0]?.place_images?.[0]?.image_path;
+  const thumbnail = rawPath ? getStoragePublicImage(rawPath) : '/favicons/android-icon-192x192.png';
+
+  // 부모 메타데이터 이미지 가져오기
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/log/${logId}`,
+      siteName: 'Placesurf',
+      images: [{ url: thumbnail }, ...previousImages],
+      type: 'article',
+      locale: ogLocale,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [{ url: thumbnail }],
+    },
+  };
 }
 
 const LogDetailPage = async ({ params }: LogDetailPageProps) => {

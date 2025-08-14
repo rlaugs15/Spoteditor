@@ -10,8 +10,23 @@ import { setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
-  title: 'Placesurf',
+  metadataBase: new URL('https://placesurf.xyz'),
+  title: {
+    default: 'Placesurf',
+    template: '%s | Placesurf',
+  },
   description: '어디 갈지 고민될 땐? 감각있는 Placesurf에서 리얼 코스를 만나보세요!',
+  alternates: {
+    canonical: '/',
+    languages: { ko: '/ko', en: '/en' }, // i18n hreflang
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    images: ['/favicons/android-icon-192x192.png'],
+  },
 };
 
 export default async function RootLayout({
