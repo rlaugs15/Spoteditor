@@ -2,11 +2,68 @@ import { searchKeys } from '@/app/actions/keys';
 import { getSearchLogs } from '@/app/actions/log';
 import { SectionTitle } from '@/components/common/SectionBlock';
 import SearchContent from '@/components/features/search/SearchContent';
+import { SITE_URL } from '@/constants/pathname';
 import { getQueryClient } from '@/lib/utils';
+import { getStoragePublicImage } from '@/utils/getStorageImage';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { Metadata, ResolvingMetadata } from 'next';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 interface SearchPageProps {
   searchParams: Promise<{ keyword: string; page: string }>;
+}
+
+export async function generateMetadata(
+  { searchParams }: SearchPageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { keyword, page } = await searchParams;
+
+  const parsedPage = Number(page);
+  const currentPage = isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage;
+
+  const t = await getTranslations('NotFoundPage');
+  const locale = await getLocale();
+  const ogLocale = locale === 'ko' ? 'ko_KR' : 'en_US';
+
+  // 게시물 데이터 가져오기
+  const result = await getSearchLogs({
+    keyword,
+    currentPage,
+    pageSize: 16,
+  });
+
+  if (!result.success) {
+    return {
+      title: t('title'),
+      description: t('logMessage'),
+    };
+  }
+
+  const log = result.data;
+  const title = log[0]?.title || '';
+  const rawPath = log[0]?.place[0].place_images[0].image_path;
+  const thumbnail = rawPath ? getStoragePublicImage(rawPath) : '/favicons/android-icon-192x192.png';
+
+  // 부모 메타데이터 이미지 가져오기
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title,
+    openGraph: {
+      title,
+      url: `${SITE_URL}/search?keyword=${keyword}`,
+      siteName: 'Placesurf',
+      images: [{ url: thumbnail }, ...previousImages],
+      type: 'article',
+      locale: ogLocale,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      images: [{ url: thumbnail }],
+    },
+  };
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
