@@ -127,9 +127,9 @@ interface GetBookmarkedPlacesFindArgsProps {
 }
 
 export function mapBookmarkPlaceKo(bookmark: any): BookmarkPlace {
-  const place = bookmark.place_en;
-  const log = place.log_en;
-  const image = place?.place_images_en[0];
+  const place = bookmark.place;
+  const log = place.log;
+  const image = place?.place_images[0];
 
   return {
     place_id: place.place_id,
