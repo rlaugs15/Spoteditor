@@ -41,7 +41,7 @@ export async function generateMetadata(
   }
 
   const log = result.data;
-  const title = log[0]?.title || '';
+  const title = keyword || '';
   const rawPath = log[0]?.place[0].place_images[0].image_path;
   const thumbnail = rawPath ? getStoragePublicImage(rawPath) : '/favicons/android-icon-192x192.png';
 
