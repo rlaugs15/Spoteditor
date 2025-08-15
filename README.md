@@ -1,11 +1,11 @@
-# [Placesurf](https://www.Placesurf.xyz/)
+# [Spoteditor](https://spoteditor.vercel.app/)
 
 **계획된 일정, 완벽한 하루**
 
 낯선 곳을 여행할 때마다 맛집, 액티비티, 주변 명소를 찾느라 한참을 검색하곤 했어요.  
 만약 이 도시를 잘 아는 친구가 **내 코스를 계획해준다면?**
 
-**Placesurf**는 사용자가 여러 장소를 선택하고, 이미지와 설명을 추가해 하나의 ‘로그’ 단위로 발행하는 SNS 기반 웹 어플리케이션입니다.
+**Spoteditor**는 사용자가 여러 장소를 선택하고, 이미지와 설명을 추가해 하나의 ‘로그’ 단위로 발행하는 SNS 기반 웹 어플리케이션입니다.
 
 <br/>
 
@@ -66,31 +66,18 @@
 
 1. [**서버-클라이언트 데이터 공유 전략 (Next.js 15 + TanStack Query)**](https://github.com/project2025-a/project2025-next/wiki/%EC%84%9C%EB%B2%84%E2%80%90%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B3%B5%EC%9C%A0-%EC%A0%84%EB%9E%B5-%28Next.js-15---TanStack-Query%29)
 
-2. [**드롭박스 오픈 시 테두리 깜빡임 현상 해결**](https://github.com/project2025-a/project2025-next/wiki/%EB%93%9C%EB%A1%AD%EB%B0%95%EC%8A%A4-%EC%98%A4%ED%94%88-%EC%8B%9C-%ED%85%8C%EB%91%90%EB%A6%AC-%EA%B9%9C%EB%B9%A1%EC%9D%B4%EB%8A%94-%ED%98%84%EC%83%81)
+- **SSR + CSR 하이브리드 전략으로 데이터 최신성·UX 개선**
+  - 초기 로딩은 SSR로, 이후 최신 데이터는 CSR로 보완하는 구조를 설계
+  - SSR의 빠른 첫 렌더링과 SEO, CSR의 최신성·인터랙션 장점을 결합해 `글 작성 직후 목록 미반영`, `첫 로딩은 빠르지만 클릭 시 지연` 등의 문제를 해소
 
-   - Framer Motion 관련 GPU 레이어 문제로 인한 UI 깜빡임을 해결한 사례입니다.
+2. [**이미지 업로드 속도 개선 (11,009ms 단축)**](https://github.com/project2025-a/project2025-next/wiki/%ED%94%84%EB%A1%9C%ED%95%84%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C-%EC%86%8D%EB%8F%84%EA%B0%9C%EC%84%A0)
 
-3. [**프로필 페이지 이미지 업로드 속도 개선 (11,009ms 단축)**](https://github.com/project2025-a/project2025-next/wiki/%ED%94%84%EB%A1%9C%ED%95%84%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C-%EC%86%8D%EB%8F%84%EA%B0%9C%EC%84%A0)
+   - 업로드 방식을 변경해 이미지 업로드 속도를 1.28초 → 0.27초로 약 3배 단축
 
-   - 업로드 방식을 변경해 이미지 업로드 속도를 약 3배 빠르게 개선했습니다.
+3. [**다국어 콘텐츠 구조 분리**](https://github.com/rlaugs15/Spoteditor/wiki/%EB%8B%A4%EA%B5%AD%EC%96%B4-%EC%BD%98%ED%85%90%EC%B8%A0-%EA%B5%AC%EC%A1%B0-%EB%B6%84%EB%A6%AC)
 
-4. [**이미지 업로드 최적화 트러블슈팅 (react-image-file-resizer → browser-image-compression)**](https://nayah.tistory.com/190)
-
-   - 라이브러리 변경으로 화질 저하 없이 파일 크기를 80% 이상 줄였습니다.
-
-5. [**react-hook-form 개선기 (Next.js 마이그레이션)**](https://nayah.tistory.com/195)
-
-6. [**Supabase Storage 이미지 업로드: 서버 액션에서 Signed URL 전환 경험 및 문제 해결**](https://nayah.tistory.com/196)
-
-   - 서버 액션에서 Blob 대신 Signed URL로 이미지 업로드 방식을 전환하며 겪은 문제와 해결법입니다.
-
-7. [**Supabase Storage 단일/중첩 폴더 이미지 삭제 로직 및 구현 방법**](https://nayah.tistory.com/197)
-
-   - 단일 및 중첩된 폴더 구조의 이미지 삭제를 구현하는 방법을 정리했습니다.
-
-8. [**중첩 객체 ↔ FormData 유틸 함수 제작기**](https://nayah.tistory.com/198)
-
-   - 복잡한 중첩 객체를 FormData로 변환하고 다시 객체로 복원하는 유틸 함수 제작 과정을 정리했습니다.
+- 한 DB에 `auth`(공통 계정) + `public`(KR) + `en`(EN) 다중 스키마를 적용
+- **국문/영문 콘텐츠를 완전 격리**하면서 **로그인 세션은 공유**
 
 <br/>
 
@@ -113,7 +100,7 @@
 ### 1. 프로젝트 클론
 
 ```
-git clone https://github.com/project2025-a/project2025-next.git
+git clone https://github.com/rlaugs15/Spoteditor.git
 ```
 
 ### 2. 의존성 설치
