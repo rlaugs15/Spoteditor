@@ -10,12 +10,12 @@ import { setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://placesurf.xyz'),
+  metadataBase: new URL('https://spoteditor.vercel.app'),
   title: {
-    default: 'Placesurf',
-    template: '%s | Placesurf',
+    default: 'Spoteditor',
+    template: '%s | Spoteditor',
   },
-  description: '어디 갈지 고민될 땐? 감각있는 Placesurf에서 리얼 코스를 만나보세요!',
+  description: '어디 갈지 고민될 땐? 감각있는 Spoteditor에서 리얼 코스를 만나보세요!',
   alternates: {
     canonical: '/',
     languages: { ko: '/ko', en: '/en' }, // i18n hreflang
